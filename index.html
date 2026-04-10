@@ -1754,14 +1754,69 @@ function scrollToTop() {
   onScroll();
 })();
 
+/* RFQ form submission via FormSubmit.co (no backend required).
+   Primary recipient: ceodon@gmail.com
+   CC: ceodon69@gmail.com
+   First submission requires a one-time activation click in the email
+   FormSubmit sends to the primary address. */
+const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
+const RFQ_CC = 'ceodon69@gmail.com';
+const MODEL_LABELS = {
+  mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
+  mDL10XD: 'DL-10XD', mDL12XD: 'DL-12XD', mDL16XD: 'DL-16XD'
+};
+
 function submitRFQ() {
   const v = (id) => document.getElementById(id).value.trim();
-  const checks = ['mDL10X','mDL12X','mDL16X','mDL10XD','mDL12XD','mDL16XD'].filter(id => document.getElementById(id).checked);
+  const selected = Object.entries(MODEL_LABELS)
+    .filter(([id]) => document.getElementById(id).checked)
+    .map(([, name]) => name);
+
   if (!v('fFirst') || !v('fLast') || !v('fCo') || !v('fEmail')) { alert('Please fill in all required fields.'); return; }
   if (!v('fEmail').includes('@')) { alert('Please enter a valid email address.'); return; }
-  if (!checks.length) { alert('Please select at least one model of interest.'); return; }
-  document.getElementById('rfqFields').style.display = 'none';
-  document.getElementById('rfqSuccess').style.display = 'block';
+  if (!selected.length) { alert('Please select at least one model of interest.'); return; }
+
+  const sendBtn = document.querySelector('#rfqFields .btn-navy');
+  const originalLabel = sendBtn.innerHTML;
+  sendBtn.innerHTML = 'Sending\u2026';
+  sendBtn.disabled = true;
+
+  const payload = {
+    _cc: RFQ_CC,
+    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')})`,
+    _template: 'table',
+    _captcha: 'false',
+    'First Name': v('fFirst'),
+    'Last Name': v('fLast'),
+    'Company': v('fCo'),
+    'Email': v('fEmail'),
+    'Phone': v('fPhone') || '(not provided)',
+    'Models of Interest': selected.join(', '),
+    'Estimated Quantity': v('fQty') || '(not specified)',
+    'Preferred Terms': v('fTerms') || '(default CIF Baltimore, T/T)',
+    'Message / Requirements': v('fMsg') || '(none)',
+    'Source': 'ceodon.github.io/ergsn'
+  };
+
+  fetch(RFQ_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data && (data.success === 'true' || data.success === true)) {
+      document.getElementById('rfqFields').style.display = 'none';
+      document.getElementById('rfqSuccess').style.display = 'block';
+    } else {
+      throw new Error((data && data.message) || 'Submission failed');
+    }
+  })
+  .catch(err => {
+    alert('Sorry, your inquiry could not be sent right now.\n\nPlease email us directly at info@ergsn.com or try again in a moment.\n\n(' + err.message + ')');
+    sendBtn.innerHTML = originalLabel;
+    sendBtn.disabled = false;
+  });
 }
 </script>
 </body>
