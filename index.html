@@ -29,7 +29,58 @@
 <meta name="twitter:image:alt" content="ERGSN CO., LTD. — modern workplace and document security">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- LCP image preload (hero background) -->
+<link rel="preload" as="image" href="images/hero-workplace.webp" type="image/webp" fetchpriority="high">
+<link rel="preload" as="image" href="images/hero-workplace.jpg" type="image/jpeg">
+
+<!-- Structured data: Organization + Product catalog -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ERGSN CO., LTD.",
+  "alternateName": "ERGSN",
+  "url": "https://ceodon.github.io/ergsn/",
+  "logo": "https://ceodon.github.io/ergsn/favicon.svg",
+  "description": "Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders for U.S. commercial and institutional buyers.",
+  "foundingDate": "2013",
+  "foundingLocation": {"@type": "Place", "name": "Seoul, Republic of Korea"},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu",
+    "addressLocality": "Seoul",
+    "postalCode": "04623",
+    "addressCountry": "KR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+82-10-5288-0006",
+    "email": "info@ergsn.com",
+    "contactType": "sales",
+    "areaServed": "US",
+    "availableLanguage": ["English","Korean"]
+  },
+  "sameAs": []
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "ERGSN DL Series Cross-Cut Paper Shredders",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"item":{"@type":"Product","name":"ERGSN DL-10X Crosscut Paper Shredder","model":"DL-10X","sku":"DL10X","mpn":"RS-2200A","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-10x.jpg","description":"Level 3 / P-4 entry mid-sized cross-cut paper shredder. 20-24 sheet capacity, 10-3/4 inch entry, all-metal chain drive, oil-free operation."}},
+    {"@type":"ListItem","position":2,"item":{"@type":"Product","name":"ERGSN DL-12X Crosscut Paper Shredder","model":"DL-12X","sku":"DL12X","mpn":"RS-3300A","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-12x.jpg","description":"Level 3 / P-4 mid-sized office cross-cut paper shredder. 26 sheet capacity, 12-1/4 inch entry, 30-gallon waste bin, HIPAA compliant."}},
+    {"@type":"ListItem","position":3,"item":{"@type":"Product","name":"ERGSN DL-16X Departmental Crosscut Shredder","model":"DL-16X","sku":"DL16X","mpn":"RS-3890A","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-16x.jpg","description":"Level 3 / P-4 large office departmental cross-cut shredder. 26 sheet capacity, 16-1/4 inch entry, 35-gallon waste bin, 2.5 Hp motor."}},
+    {"@type":"ListItem","position":4,"item":{"@type":"Product","name":"ERGSN DL-10XD High Volume Crosscut Shredder","model":"DL-10XD","sku":"DL10XD","mpn":"RS-6602A","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-10xd.jpg","description":"Level 3 / P-4 high-capacity 10 inch class cross-cut shredder. 40-42 sheet capacity, 2.5 Hp motor, 30-gallon waste bin."}},
+    {"@type":"ListItem","position":5,"item":{"@type":"Product","name":"ERGSN DL-12XD High Capacity Crosscut Shredder","model":"DL-12XD","sku":"DL12XD","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-12xd.jpg","description":"Level 3 / P-4 high-capacity 12 inch class cross-cut shredder. Up to 45 sheets per pass, 2.3 Hp motor, HIPAA compliant."}},
+    {"@type":"ListItem","position":6,"item":{"@type":"Product","name":"ERGSN DL-16XD Flagship Industrial Shredder","model":"DL-16XD","sku":"DL16XD","mpn":"RS-8200A","category":"Paper Shredder","brand":{"@type":"Brand","name":"ERGSN"},"manufacturer":{"@type":"Organization","name":"ERGSN CO., LTD."},"image":"https://ceodon.github.io/ergsn/images/products/dl-16xd.jpg","description":"Flagship Level 3 / P-4 industrial cross-cut shredder. Up to 90 sheets per pass at 31 FPM, 3.25 Hp motor, 45-gallon waste bin, 115V/30A for U.S. commercial use."}}
+  ]
+}
+</script>
 <style>
 /* ── TOKENS ───────────────────────────────── */
 :root {
@@ -59,7 +110,7 @@
 @media (max-width: 760px) {
   :root { --bottom-cta-h: 60px; }
 }
-body.has-compare { --compare-h: 76px; }
+body:has(.compare-btn.active) { --compare-h: 76px; }
 
 /* ── RESET ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,20 +132,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: clamp(36px, 5vw, 64px);
   font-weight: 700; line-height: .96;
   letter-spacing: -.01em; color: var(--navy);
+  text-wrap: balance;
 }
 .h-lg {
   font-family: var(--fc);
   font-size: clamp(28px, 3.5vw, 46px);
   font-weight: 700; line-height: 1;
   color: var(--navy);
+  text-wrap: balance;
 }
 .h-md {
   font-family: var(--fc);
   font-size: clamp(18px, 2vw, 26px);
   font-weight: 700; line-height: 1.1;
   color: var(--navy);
+  text-wrap: balance;
 }
-.body-lg { font-size: clamp(15px,1.2vw,17px); font-weight: 300; color: var(--tx-mid); line-height: 1.75; }
+.body-lg { font-size: clamp(15px,1.2vw,17px); font-weight: 300; color: var(--tx-mid); line-height: 1.75; text-wrap: pretty; }
 .body-sm { font-size: 14px; color: var(--tx-mid); line-height: 1.65; }
 
 /* ── LAYOUT ──────────────────────────────── */
@@ -208,6 +262,7 @@ section { scroll-margin-top: var(--nav-h); }
 ════════════════════════════════════════ */
 #home {
   min-height: 100vh;
+  min-height: 100dvh;
   padding-top: var(--nav-h);
   background: var(--navy);
   display: flex; flex-direction: column;
@@ -216,7 +271,14 @@ section { scroll-margin-top: var(--nav-h); }
 #home::before {
   content: '';
   position: absolute; inset: 0;
-  background: url('images/hero-workplace.jpg') center/cover no-repeat;
+  background-image: url('images/hero-workplace.jpg');
+  background-image: image-set(
+    url('images/hero-workplace.webp') type('image/webp'),
+    url('images/hero-workplace.jpg') type('image/jpeg')
+  );
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   animation: kenBurns 28s ease-in-out infinite alternate;
   transform-origin: center center;
   will-change: transform;
@@ -353,6 +415,8 @@ section { scroll-margin-top: var(--nav-h); }
   cursor: pointer; position: relative;
   transition: box-shadow .18s, background .18s;
   outline: none;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
 }
 .product-card::after {
   content: '';
@@ -461,7 +525,8 @@ section { scroll-margin-top: var(--nav-h); }
   transition: transform .3s ease;
   box-shadow: 0 -10px 30px -10px rgba(0,0,0,.3);
 }
-.compare-tray.open { transform: translateY(0); }
+.compare-tray.open,
+.compare-tray:has(.compare-chip) { transform: translateY(0); }
 .compare-tray-left {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1;
   min-width: 0;
@@ -504,13 +569,9 @@ section { scroll-margin-top: var(--nav-h); }
   .compare-tray .btn-gold { padding: 8px 14px; font-size: 11px; }
 }
 
-/* COMPARE MODAL (shares modal-overlay shell) */
-.compare-modal {
-  background: var(--white);
-  max-width: 1100px; width: 100%;
-  margin: auto; border-radius: var(--radius);
-  overflow: hidden;
-  animation: modalIn .22s ease;
+/* COMPARE MODAL (wider variant of modal-dialog) */
+dialog.modal-dialog.compare-modal {
+  width: min(1100px, calc(100vw - 2rem));
 }
 .compare-modal-hd {
   background: var(--navy);
@@ -623,24 +684,37 @@ section { scroll-margin-top: var(--nav-h); }
 }
 
 /* ════════════════════════════════════════
-   MODAL
+   MODAL — Native <dialog>
 ════════════════════════════════════════ */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(8,18,38,.88); z-index: 990;
-  overflow-y: auto; padding: clamp(1rem,3vw,2rem);
-  backdrop-filter: blur(6px);
-  align-items: flex-start; justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal {
+dialog.modal-dialog {
   background: var(--white);
-  max-width: 900px; width: 100%;
-  margin: auto; border-radius: var(--radius);
+  color: var(--tx-dark);
+  width: min(900px, calc(100vw - 2rem));
+  max-width: 100%;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0; border: none;
+  border-radius: var(--radius);
   overflow: hidden;
-  animation: modalIn .22s ease;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.5);
 }
-@keyframes modalIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+dialog.modal-dialog[open] { animation: modalIn .28s ease; }
+dialog.modal-dialog::backdrop {
+  background: rgba(8,18,38,.88);
+  backdrop-filter: blur(6px);
+  animation: backdropIn .22s ease;
+}
+@keyframes modalIn    { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes backdropIn { from{opacity:0} to{opacity:1} }
+body:has(dialog.modal-dialog[open]) { overflow: hidden; }
+
+/* View Transitions API — smooth cross-fade when modals open/close */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: .25s;
+  animation-timing-function: ease;
+}
 .modal-hd {
   background: var(--navy); padding: clamp(1.25rem,3vw,2rem) clamp(1.25rem,3vw,2.5rem);
   display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
@@ -960,7 +1034,7 @@ section { scroll-margin-top: var(--nav-h); }
 .hero-actions{ animation: fadeUp .55s ease .24s both; }
 .hero-stats  { animation: fadeUp .55s ease .32s both; }
 
-/* SCROLL REVEAL */
+/* SCROLL REVEAL — JS-driven baseline */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -972,8 +1046,23 @@ section { scroll-margin-top: var(--nav-h); }
   opacity: 1;
   transform: translateY(0);
 }
+/* SCROLL-DRIVEN upgrade when browser supports view timelines */
+@supports (animation-timeline: view()) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    animation: revealIn linear forwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 38%;
+    transition: none;
+  }
+  .reveal.in { animation: none; opacity: 1; transform: none; }
+}
+@keyframes revealIn {
+  to { opacity: 1; transform: translateY(0); }
+}
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; transform: none; transition: none; animation: none; }
 }
 </style>
 </head>
@@ -1173,15 +1262,16 @@ section { scroll-margin-top: var(--nav-h); }
 </section>
 
 <!-- ══ MODAL ═══════════════════════════════ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modalContent"></div>
-</div>
+<dialog class="modal-dialog" id="productModal"></dialog>
 
 <!-- ══ ABOUT ════════════════════════════════ -->
 <section id="about">
   <div class="container about-inner">
     <figure class="about-visual reveal">
-      <img src="images/about-workplace.jpg" alt="Modern office workplace environment" loading="lazy">
+      <picture>
+        <source srcset="images/about-workplace.webp" type="image/webp">
+        <img src="images/about-workplace.jpg" alt="Modern office workplace environment" loading="lazy" decoding="async">
+      </picture>
       <figcaption class="about-visual-overlay">
         <span class="label">The Future Workplace</span>
         <p class="about-visual-caption">Document security, engineered for the modern office.</p>
@@ -1352,9 +1442,7 @@ section { scroll-margin-top: var(--nav-h); }
 </div>
 
 <!-- ══ COMPARE MODAL ═══════════════════════════ -->
-<div class="modal-overlay" id="compareOverlay" onclick="closeCompareOutside(event)">
-  <div class="compare-modal" id="compareModalContent"></div>
-</div>
+<dialog class="modal-dialog compare-modal" id="compareModal"></dialog>
 
 <!-- ══ MOBILE CTA BAR ══════════════════════════ -->
 <div class="mobile-cta-bar" aria-label="Quick contact">
@@ -1414,11 +1502,20 @@ const P = {
   }
 };
 
+/* ── MODAL (native <dialog>) ─────────────── */
+const productModal = document.getElementById('productModal');
+const compareModal = document.getElementById('compareModal');
+
+function withViewTransition(fn) {
+  if (document.startViewTransition) document.startViewTransition(fn);
+  else fn();
+}
+
 function openModal(id) {
   const p = P[id]; if (!p) return;
   const specs = p.specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
   const feats = p.features.map(f => `<li>${f}</li>`).join('');
-  document.getElementById('modalContent').innerHTML = `
+  productModal.innerHTML = `
     <div class="modal-hd">
       <div class="modal-hd-text">
         <p class="modal-model">${p.model}</p>
@@ -1440,19 +1537,13 @@ function openModal(id) {
       <a href="#rfq" class="btn btn-gold" onclick="closeModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
     </div>`;
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  withViewTransition(() => productModal.showModal());
 }
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  withViewTransition(() => { if (productModal.open) productModal.close(); });
 }
-function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Escape') return;
-  if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
-  else closeModal();
-});
+// Click outside the card (on ::backdrop) closes the dialog
+productModal.addEventListener('click', (e) => { if (e.target === productModal) closeModal(); });
 
 function toggleMenu() {
   const h = document.getElementById('ham');
@@ -1468,6 +1559,8 @@ function closeMenu() {
 (function initReveal(){
   const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
+  // Modern path: let CSS handle reveal via animation-timeline: view()
+  if (CSS && CSS.supports && CSS.supports('animation-timeline: view()')) return;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced || !('IntersectionObserver' in window)) {
     els.forEach(el => el.classList.add('in'));
@@ -1563,9 +1656,8 @@ function renderCompareTray() {
   chips.innerHTML = compareState.map(id =>
     `<span class="compare-chip">${P[id].model}<button type="button" aria-label="Remove ${P[id].model}" onclick="removeCompare('${id}')">&times;</button></span>`
   ).join('');
-  if (compareState.length > 0) tray.classList.add('open');
-  else tray.classList.remove('open');
-  document.body.classList.toggle('has-compare', compareState.length > 0);
+  // Tray visibility driven by CSS :has(.compare-chip)
+  // Back-to-top offset driven by CSS :has(.compare-btn.active) on body
 }
 
 function openCompareModal() {
@@ -1585,7 +1677,7 @@ function openCompareModal() {
       <td>${k}</td>
       ${specMap.map(m => `<td>${m[k] !== undefined ? m[k] : '<span class="ct-empty">&mdash;</span>'}</td>`).join('')}
     </tr>`).join('');
-  document.getElementById('compareModalContent').innerHTML = `
+  compareModal.innerHTML = `
     <div class="compare-modal-hd">
       <div>
         <h3>Compare Models</h3>
@@ -1603,18 +1695,14 @@ function openCompareModal() {
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
       <a href="#rfq" class="btn btn-gold" onclick="closeCompareModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
     </div>`;
-  document.getElementById('compareOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  withViewTransition(() => compareModal.showModal());
 }
 
 function closeCompareModal() {
-  document.getElementById('compareOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  withViewTransition(() => { if (compareModal.open) compareModal.close(); });
 }
 
-function closeCompareOutside(ev) {
-  if (ev.target.id === 'compareOverlay') closeCompareModal();
-}
+compareModal.addEventListener('click', (e) => { if (e.target === compareModal) closeCompareModal(); });
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
