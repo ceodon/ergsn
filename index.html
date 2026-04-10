@@ -203,11 +203,32 @@ section { scroll-margin-top: var(--nav-h); }
 #home {
   min-height: 100vh;
   padding-top: var(--nav-h);
-  background:
-    linear-gradient(135deg, rgba(11,29,56,.94) 0%, rgba(11,29,56,.82) 55%, rgba(18,34,66,.78) 100%),
-    url('images/hero-workplace.jpg') center/cover no-repeat;
+  background: var(--navy);
   display: flex; flex-direction: column;
   position: relative; overflow: hidden;
+}
+#home::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('images/hero-workplace.jpg') center/cover no-repeat;
+  animation: kenBurns 28s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+  z-index: 0;
+}
+#home::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(11,29,56,.94) 0%, rgba(11,29,56,.82) 55%, rgba(18,34,66,.78) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes kenBurns {
+  0%   { transform: scale(1)    translate(0, 0); }
+  100% { transform: scale(1.12) translate(-1.5%, -1%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #home::before { animation: none; }
 }
 .hero-grid-bg {
   position: absolute; inset: 0; pointer-events: none;
@@ -215,18 +236,20 @@ section { scroll-margin-top: var(--nav-h); }
     linear-gradient(rgba(200,147,42,.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(200,147,42,.04) 1px, transparent 1px);
   background-size: 56px 56px;
+  z-index: 2;
 }
 .hero-accent {
   position: absolute; bottom: 0; right: 0;
   width: 45%; height: 80%;
   background: linear-gradient(135deg, transparent 40%, rgba(200,147,42,.04) 100%);
   pointer-events: none;
+  z-index: 2;
 }
 .hero-body {
   flex: 1;
   display: flex; align-items: center;
   padding: clamp(3rem,6vh,6rem) 0 clamp(2rem,4vh,4rem);
-  position: relative; z-index: 1;
+  position: relative; z-index: 3;
 }
 .hero-layout {
   display: grid;
@@ -281,7 +304,7 @@ section { scroll-margin-top: var(--nav-h); }
 .trust-bar {
   background: rgba(255,255,255,.03);
   border-top: 1px solid rgba(255,255,255,.06);
-  position: relative; z-index: 1;
+  position: relative; z-index: 3;
 }
 .trust-inner {
   padding: .9rem 0;
@@ -797,7 +820,7 @@ section { scroll-margin-top: var(--nav-h); }
           </div>
         </div>
         <div class="hero-stats">
-          <div class="hero-stat"><span class="stat-num">20+</span><span class="stat-lbl">Years Manufacturing</span></div>
+          <div class="hero-stat"><span class="stat-num count" data-count="20" data-suffix="+">20+</span><span class="stat-lbl">Years Manufacturing</span></div>
           <div class="hero-stat"><span class="stat-num">CIF</span><span class="stat-lbl">Baltimore Port</span></div>
           <div class="hero-stat"><span class="stat-num">GSA</span><span class="stat-lbl">Schedule Listed</span></div>
           <div class="hero-stat"><span class="stat-num">P-4</span><span class="stat-lbl">Security Level</span></div>
@@ -948,10 +971,10 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="body-lg">Every ERGSN shredder uses an all-metal chain drive &mdash; eliminating the nylon and plastic gears found in lower-quality alternatives. Machines built to operate reliably for years, not months.</p>
         <p class="body-lg">Long-term supply partner of Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders.</p>
         <div class="kpi-grid">
-          <div class="kpi-cell"><p class="kpi-num">6</p><p class="kpi-lbl">DL Series Models</p></div>
+          <div class="kpi-cell"><p class="kpi-num count" data-count="6">6</p><p class="kpi-lbl">DL Series Models</p></div>
           <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl">Baltimore Port Terms</p></div>
           <div class="kpi-cell"><p class="kpi-num">P-4</p><p class="kpi-lbl">Security Level</p></div>
-          <div class="kpi-cell"><p class="kpi-num">100%</p><p class="kpi-lbl">All-Metal Construction</p></div>
+          <div class="kpi-cell"><p class="kpi-num count" data-count="100" data-suffix="%">100%</p><p class="kpi-lbl">All-Metal Construction</p></div>
         </div>
       </div>
       <div>
@@ -1208,6 +1231,41 @@ function closeMenu() {
     });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
   els.forEach(el => io.observe(el));
+})();
+
+(function initCounters(){
+  const nums = document.querySelectorAll('.count');
+  if (!nums.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) return;
+  // reset each counter to 0 before it scrolls into view
+  nums.forEach(el => {
+    const suffix = el.dataset.suffix || '';
+    el.textContent = '0' + suffix;
+  });
+  const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+  const animate = (el) => {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1400;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / duration);
+      const val = Math.round(easeOutCubic(p) * target);
+      el.textContent = val + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(el => io.observe(el));
 })();
 
 function scrollToTop() {
