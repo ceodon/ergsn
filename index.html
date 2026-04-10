@@ -1512,6 +1512,23 @@ function withViewTransition(fn) {
   else fn();
 }
 
+/* Route a Request-a-Quote click from the product or compare modal
+   into the RFQ form: pre-check the relevant model checkboxes, close
+   any open modal, then smooth-scroll to the form. */
+function requestQuote(ids) {
+  const arr = Array.isArray(ids) ? ids : [ids];
+  arr.forEach(id => {
+    const cb = document.getElementById('m' + id.toUpperCase());
+    if (cb) cb.checked = true;
+  });
+  closeModal();
+  closeCompareModal();
+  setTimeout(() => {
+    document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+  }, 120);
+  return false;
+}
+
 function openModal(id) {
   const p = P[id]; if (!p) return;
   const specs = p.specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
@@ -1535,7 +1552,7 @@ function openModal(id) {
       <p class="modal-desc">${p.desc}</p>
     </div>
     <div class="modal-ft">
-      <a href="#rfq" class="btn btn-gold" onclick="closeModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
+      <a href="#rfq" class="btn btn-gold" onclick="return requestQuote('${id}')">Request a Quote</a>
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
     </div>`;
   withViewTransition(() => {
@@ -1704,7 +1721,7 @@ function openCompareModal() {
     </div>
     <div class="compare-modal-ft">
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
-      <a href="#rfq" class="btn btn-gold" onclick="closeCompareModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
+      <a href="#rfq" class="btn btn-gold" onclick='return requestQuote(${JSON.stringify(compareState)})'>Request a Quote</a>
     </div>`;
   withViewTransition(() => {
     document.getElementById('compareOverlay').classList.add('open');
