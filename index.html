@@ -569,9 +569,13 @@ section { scroll-margin-top: var(--nav-h); }
   .compare-tray .btn-gold { padding: 8px 14px; font-size: 11px; }
 }
 
-/* COMPARE MODAL (wider variant of modal-dialog) */
-dialog.modal-dialog.compare-modal {
-  width: min(1100px, calc(100vw - 2rem));
+/* COMPARE MODAL (shares modal-overlay shell, wider card) */
+.compare-modal {
+  background: var(--white);
+  max-width: 1100px; width: 100%;
+  margin: auto; border-radius: var(--radius);
+  overflow: hidden;
+  animation: modalIn .22s ease;
 }
 .compare-modal-hd {
   background: var(--navy);
@@ -684,29 +688,25 @@ dialog.modal-dialog.compare-modal {
 }
 
 /* ════════════════════════════════════════
-   MODAL — Native <dialog>
+   MODAL
 ════════════════════════════════════════ */
-dialog.modal-dialog {
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(8,18,38,.88); z-index: 990;
+  overflow-y: auto; padding: clamp(1rem,3vw,2rem);
+  backdrop-filter: blur(6px);
+  align-items: flex-start; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
   background: var(--white);
-  color: var(--tx-dark);
-  width: min(900px, calc(100vw - 2rem));
-  max-width: 100%;
-  max-height: calc(100dvh - 2rem);
-  margin: auto;
-  padding: 0; border: none;
-  border-radius: var(--radius);
+  max-width: 900px; width: 100%;
+  margin: auto; border-radius: var(--radius);
   overflow: hidden;
+  animation: modalIn .22s ease;
   box-shadow: 0 30px 80px -20px rgba(0,0,0,.5);
 }
-dialog.modal-dialog[open] { animation: modalIn .28s ease; }
-dialog.modal-dialog::backdrop {
-  background: rgba(8,18,38,.88);
-  backdrop-filter: blur(6px);
-  animation: backdropIn .22s ease;
-}
-@keyframes modalIn    { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-@keyframes backdropIn { from{opacity:0} to{opacity:1} }
-body:has(dialog.modal-dialog[open]) { overflow: hidden; }
+@keyframes modalIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
 /* View Transitions API — smooth cross-fade when modals open/close */
 @view-transition { navigation: auto; }
@@ -1262,7 +1262,9 @@ body:has(dialog.modal-dialog[open]) { overflow: hidden; }
 </section>
 
 <!-- ══ MODAL ═══════════════════════════════ -->
-<dialog class="modal-dialog" id="productModal"></dialog>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
 
 <!-- ══ ABOUT ════════════════════════════════ -->
 <section id="about">
@@ -1442,7 +1444,9 @@ body:has(dialog.modal-dialog[open]) { overflow: hidden; }
 </div>
 
 <!-- ══ COMPARE MODAL ═══════════════════════════ -->
-<dialog class="modal-dialog compare-modal" id="compareModal"></dialog>
+<div class="modal-overlay" id="compareOverlay" onclick="closeCompareOutside(event)">
+  <div class="compare-modal" id="compareModalContent"></div>
+</div>
 
 <!-- ══ MOBILE CTA BAR ══════════════════════════ -->
 <div class="mobile-cta-bar" aria-label="Quick contact">
@@ -1502,10 +1506,7 @@ const P = {
   }
 };
 
-/* ── MODAL (native <dialog>) ─────────────── */
-const productModal = document.getElementById('productModal');
-const compareModal = document.getElementById('compareModal');
-
+/* ── MODAL ───────────────────────────────── */
 function withViewTransition(fn) {
   if (document.startViewTransition) document.startViewTransition(fn);
   else fn();
@@ -1515,7 +1516,7 @@ function openModal(id) {
   const p = P[id]; if (!p) return;
   const specs = p.specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
   const feats = p.features.map(f => `<li>${f}</li>`).join('');
-  productModal.innerHTML = `
+  document.getElementById('modalContent').innerHTML = `
     <div class="modal-hd">
       <div class="modal-hd-text">
         <p class="modal-model">${p.model}</p>
@@ -1537,13 +1538,23 @@ function openModal(id) {
       <a href="#rfq" class="btn btn-gold" onclick="closeModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
     </div>`;
-  withViewTransition(() => productModal.showModal());
+  withViewTransition(() => {
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
 }
 function closeModal() {
-  withViewTransition(() => { if (productModal.open) productModal.close(); });
+  withViewTransition(() => {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  });
 }
-// Click outside the card (on ::backdrop) closes the dialog
-productModal.addEventListener('click', (e) => { if (e.target === productModal) closeModal(); });
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
+  else if (document.getElementById('modalOverlay').classList.contains('open')) closeModal();
+});
 
 function toggleMenu() {
   const h = document.getElementById('ham');
@@ -1677,7 +1688,7 @@ function openCompareModal() {
       <td>${k}</td>
       ${specMap.map(m => `<td>${m[k] !== undefined ? m[k] : '<span class="ct-empty">&mdash;</span>'}</td>`).join('')}
     </tr>`).join('');
-  compareModal.innerHTML = `
+  document.getElementById('compareModalContent').innerHTML = `
     <div class="compare-modal-hd">
       <div>
         <h3>Compare Models</h3>
@@ -1695,14 +1706,22 @@ function openCompareModal() {
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
       <a href="#rfq" class="btn btn-gold" onclick="closeCompareModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
     </div>`;
-  withViewTransition(() => compareModal.showModal());
+  withViewTransition(() => {
+    document.getElementById('compareOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
 }
 
 function closeCompareModal() {
-  withViewTransition(() => { if (compareModal.open) compareModal.close(); });
+  withViewTransition(() => {
+    document.getElementById('compareOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  });
 }
 
-compareModal.addEventListener('click', (e) => { if (e.target === compareModal) closeCompareModal(); });
+function closeCompareOutside(ev) {
+  if (ev.target.id === 'compareOverlay') closeCompareModal();
+}
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
