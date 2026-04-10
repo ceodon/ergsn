@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERGSN CO., LTD. — Industrial Shredder Manufacturer, Seoul Korea</title>
+<meta name="description" content="ERGSN CO., LTD. manufactures heavy-duty cross-cut paper shredders for commercial and institutional use. GSA Schedule listed. CIF Baltimore export to the USA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1f3c;
+  --navy-mid: #1a3560;
+  --navy-light: #254a84;
+  --accent: #c8932a;
+  --accent-light: #e8a830;
+  --steel: #4a6080;
+  --steel-light: #8ea6c4;
+  --off-white: #f4f6f9;
+  --white: #ffffff;
+  --text-dark: #0d1f3c;
+  --text-mid: #3a4f6a;
+  --text-light: #6b7e96;
+  --border: #d4dde8;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: var(--white);
+}
+
+/* ─── NAVIGATION ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--navy);
+  border-bottom: 2px solid var(--accent);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  height: 36px;
+  filter: brightness(0) invert(1);
+}
+
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.nav-logo-sub {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--steel-light);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent-light); }
+
+.nav-cta {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  padding: 8px 20px;
+  border-radius: 2px;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--accent-light) !important; }
+
+/* ─── HERO ─── */
+#home {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 68px;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(200,147,42,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,147,42,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 12px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+  color: var(--accent);
+  display: block;
+}
+
+.hero-desc {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--steel-light);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  padding: 14px 32px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+.btn-outline {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 14px 32px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-stat {
+  background: rgba(13,31,60,0.6);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--steel-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 6px;
+  display: block;
+}
+
+.trust-bar {
+  background: var(--navy-mid);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.trust-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--steel-light);
+  letter-spacing: 0.04em;
+}
+
+.trust-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── SECTIONS ─── */
+section { scroll-margin-top: 68px; }
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+}
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+}
+
+.section-desc {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text-mid);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ─── PRODUCTS ─── */
+#products { background: var(--off-white); }
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.product-card {
+  background: var(--white);
+  padding: 2rem;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-card:hover {
+  box-shadow: 0 0 0 2px var(--accent);
+  z-index: 1;
+}
+
+.product-card-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--steel);
+  margin-bottom: 1rem;
+}
+
+.product-card-model {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.product-card-partno {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 1.25rem;
+}
+
+.product-card-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.product-spec-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.spec-mini-item {}
+.spec-mini-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+.spec-mini-val {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.product-card-link {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.product-card-link::after { content: '→'; }
+.product-card-link:hover { color: var(--navy); }
+
+/* ─── PRODUCT DETAIL MODAL ─── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,31,60,0.85);
+  z-index: 200;
+  overflow-y: auto;
+  padding: 2rem 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+.modal {
+  background: var(--white);
+  max-width: 860px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+}
+
+.modal-header {
+  background: var(--navy);
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--steel-light);
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  margin-top: 4px;
+}
+.modal-close:hover { color: var(--white); }
+
+.modal-model {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+
+.modal-subtitle {
+  font-size: 14px;
+  color: var(--steel-light);
+  margin-top: 4px;
+}
+
+.modal-body {
+  padding: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.modal-section-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 6px;
+  margin-bottom: 1rem;
+}
+
+.spec-table { width: 100%; border-collapse: collapse; }
+.spec-table tr { border-bottom: 1px solid var(--border); }
+.spec-table td {
+  padding: 8px 0;
+  font-size: 14px;
+  vertical-align: top;
+}
+.spec-table td:first-child {
+  font-weight: 500;
+  color: var(--text-light);
+  width: 48%;
+  padding-right: 1rem;
+}
+.spec-table td:last-child { color: var(--navy); font-weight: 400; }
+
+.feature-list { list-style: none; }
+.feature-list li {
+  font-size: 14px;
+  color: var(--text-mid);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--off-white);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+.feature-list li::before {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.modal-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+}
+
+.modal-footer {
+  padding: 1.5rem 2.5rem;
+  background: var(--off-white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ─── ABOUT ─── */
+#about { background: var(--white); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-body {
+  font-size: 16px;
+  color: var(--text-mid);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.about-highlights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.highlight-card {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+}
+
+.highlight-num {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.highlight-label {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.ceo-card {
+  background: var(--navy);
+  padding: 2.5rem;
+  position: sticky;
+  top: 88px;
+}
+
+.ceo-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.ceo-title {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.ceo-quote {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--steel-light);
+  line-height: 1.8;
+  font-style: italic;
+  border-left: 2px solid var(--accent);
+  padding-left: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.company-details {
+  font-size: 13px;
+  color: var(--steel-light);
+  line-height: 2;
+}
+
+.company-detail-label {
+  font-weight: 500;
+  color: var(--steel-light);
+  width: 60px;
+  display: inline-block;
+}
+
+/* ─── COMPLIANCE ─── */
+#compliance { background: var(--off-white); }
+
+.compliance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+.compliance-card {
+  background: var(--white);
+  padding: 2rem;
+  text-align: center;
+}
+
+.compliance-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--navy);
+  border-radius: 50%;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compliance-icon-inner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  position: relative;
+}
+
+.compliance-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+
+.compliance-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ─── RFQ ─── */
+#rfq { background: var(--navy); }
+
+.rfq-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.rfq-left .section-title { color: var(--white); }
+.rfq-left .section-desc { color: var(--steel-light); }
+
+.rfq-contact-list {
+  margin-top: 2.5rem;
+  list-style: none;
+}
+
+.rfq-contact-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.rfq-contact-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  width: 60px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.rfq-contact-val {
+  font-size: 14px;
+  color: var(--steel-light);
+  line-height: 1.5;
+}
+
+.rfq-form {
+  background: var(--white);
+  padding: 2.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.form-label span { color: var(--accent); margin-left: 2px; }
+
+.form-input, .form-select, .form-textarea {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-dark);
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--navy);
+  background: var(--white);
+}
+
+.form-textarea { min-height: 100px; resize: vertical; }
+
+.form-model-checkboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.model-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.model-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--navy);
+  flex-shrink: 0;
+}
+
+.model-checkbox-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.form-submit {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+  padding: 16px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+.form-submit:hover { background: var(--navy-light); }
+
+.form-note {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 1rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ─── SUCCESS MESSAGE ─── */
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.form-success-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--off-white);
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.form-success h3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+
+.form-success p {
+  font-size: 15px;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: #070f1e;
+  padding: 3rem 2rem 2rem;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 2rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.footer-logo img {
+  height: 32px;
+  filter: brightness(0) invert(1);
+}
+
+.footer-about {
+  font-size: 13px;
+  color: #5a6e88;
+  line-height: 1.7;
+}
+
+.footer-heading {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.footer-list { list-style: none; }
+.footer-list li { margin-bottom: 8px; }
+.footer-list a {
+  font-size: 14px;
+  color: #5a6e88;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-list a:hover { color: var(--steel-light); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #3a4e62;
+}
+
+.footer-swift {
+  font-size: 11px;
+  color: #3a4e62;
+  background: rgba(255,255,255,0.03);
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-stats { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .ceo-card { position: static; }
+  .rfq-inner { grid-template-columns: 1fr; }
+  .modal-body { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+  .about-highlights { grid-template-columns: 1fr 1fr; }
+  .compliance-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-tag { animation: fadeUp 0.6s ease both; }
+.hero-title { animation: fadeUp 0.6s ease 0.1s both; }
+.hero-desc { animation: fadeUp 0.6s ease 0.2s both; }
+.hero-actions { animation: fadeUp 0.6s ease 0.3s both; }
+.hero-stats { animation: fadeUp 0.6s ease 0.4s both; }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMoAAABNCAIAAABosmyfAAACCklEQVR4nO3YzWoUQRSG4XNOVQ/G4EYUMrgQV268/4vwLgRRJCRZ9UTsn8/FJJkoaojwEYzvQy2qoRa1eKnurpQUgEc99AbwmJEXjMgLRuQFI/KCEXnBiLxgRF4wIi8YkReMyAtG5AUj8oIRecGIvGBEXjAiLxiRF4zIC0bkBSPyghF5wYi8YEReMCIvGJEXjMgLRuQFI/KCEXnBiLxgRF4wIi8YkReMyAtG5AUj8oIRecGIvGBEXjAiLxiRF4zIC0bk9WAk/ZNzxX5ovZ7/fj154W/l3Uu6fxd4XG6q0t2FkRfu5fp1eHiMP1RGXriX5XZeighJqoiW+YvIyAsHkm4+zKdpqqrWmqRlWfb1rPoWWhSKiNZaRIRC6qFc1zUiev+hKPLCgaR9JRExDMM+LEmZqav0lqylojJz1VRZVZWRUrv9w3iDvHBwOy9J8zzP87zb7cZxrKrMVOyqqffeqrXeeu+996qlZQzDUPXzRQR5/W+uzphlWVuVFFpVbVrnRarMTYvc7abTs4v3Hz6en5+dfv70bBPv3r559fL58dFmWca2UVO0iK/jnMPTSfVlnC8u1+2Lk9fb7ZPSJi9DY+bxNB19BxUa1iih4TzAAAAAAElFTkSuQmCC" alt="ERGSN">
+      <span class="nav-logo-text">ERGSN<span class="nav-logo-sub">CO., LTD. — Seoul, Korea</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#compliance">Compliance</a></li>
+      <li><a href="#rfq" class="nav-cta">Request Quote</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <span class="hero-tag">Made in Korea · Est. Seoul</span>
+      <h1 class="hero-title">Industrial<br>Shredders<span>Built to Last.</span></h1>
+      <p class="hero-desc">ERGSN manufactures heavy-duty cross-cut paper shredders for U.S. commercial and institutional buyers. All-metal construction, oil-free operation, HIPAA compliant — available on GSA Schedule.</p>
+      <div class="hero-actions">
+        <a href="#products" class="btn-primary">View Products</a>
+        <a href="#rfq" class="btn-outline">Request a Quote</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">20+</span>
+        <span class="hero-stat-label">Years Manufacturing</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">CIF</span>
+        <span class="hero-stat-label">Baltimore Port Delivery</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">GSA</span>
+        <span class="hero-stat-label">Schedule Listed</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">P-4</span>
+        <span class="hero-stat-label">Security Level</span>
+      </div>
+    </div>
+  </div>
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><span class="trust-dot"></span>All-Metal Chain Drive</div>
+      <div class="trust-item"><span class="trust-dot"></span>Oil-Free Operation</div>
+      <div class="trust-item"><span class="trust-dot"></span>HIPAA Compliant</div>
+      <div class="trust-item"><span class="trust-dot"></span>GSA Schedule</div>
+      <div class="trust-item"><span class="trust-dot"></span>CIF Baltimore Export</div>
+      <div class="trust-item"><span class="trust-dot"></span>T/T Payment Accepted</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-inner">
+    <div class="products-header">
+      <div>
+        <p class="section-label">DL Series</p>
+        <h2 class="section-title">Cross-Cut Shredders</h2>
+        <p class="section-desc">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
+      </div>
+    </div>
+
+    <div class="product-grid">
+
+      <!-- DL-12X -->
+      <div class="product-card" onclick="openModal('dl12x')">
+        <p class="product-card-tag">Mid-Sized Office</p>
+        <p class="product-card-model">DL-12X</p>
+        <p class="product-card-partno">Part No: DL12X (RS-3300A)</p>
+        <p class="product-card-desc">Level 3 / P-4 Cross Cut shredder built for long-term durability in mid-sized office environments.</p>
+        <div class="product-spec-mini">
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Entry Width</p>
+            <p class="spec-mini-val">12-1/4"</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Sheet Capacity</p>
+            <p class="spec-mini-val">26 sheets</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Waste Bin</p>
+            <p class="spec-mini-val">30 gal</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Motor</p>
+            <p class="spec-mini-val">2.2 Hp</p>
+          </div>
+        </div>
+        <a href="#" class="product-card-link" onclick="event.preventDefault(); openModal('dl12x')">View Full Specs</a>
+      </div>
+
+      <!-- DL-16X -->
+      <div class="product-card" onclick="openModal('dl16x')">
+        <p class="product-card-tag">Large Office / Departmental</p>
+        <p class="product-card-model">DL-16X</p>
+        <p class="product-card-partno">Part No: DL16X (RS-3890A)</p>
+        <p class="product-card-desc">Widest entry in the DL cross-cut series — engineered for high-volume departmental shredding.</p>
+        <div class="product-spec-mini">
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Entry Width</p>
+            <p class="spec-mini-val">16-1/4"</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Sheet Capacity</p>
+            <p class="spec-mini-val">26 sheets</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Waste Bin</p>
+            <p class="spec-mini-val">35 gal</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Motor</p>
+            <p class="spec-mini-val">2.5 Hp</p>
+          </div>
+        </div>
+        <a href="#" class="product-card-link" onclick="event.preventDefault(); openModal('dl16x')">View Full Specs</a>
+      </div>
+
+      <!-- DL-12XD -->
+      <div class="product-card" onclick="openModal('dl12xd')">
+        <p class="product-card-tag">High-Capacity 12" Class</p>
+        <p class="product-card-model">DL-12XD</p>
+        <p class="product-card-partno">Part No: DL12XD (RS-3300A XD)</p>
+        <p class="product-card-desc">Highest sheet capacity in the 12" class — up to 45 sheets per pass for demanding workloads.</p>
+        <div class="product-spec-mini">
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Entry Width</p>
+            <p class="spec-mini-val">12-1/4"</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Sheet Capacity</p>
+            <p class="spec-mini-val">45 sheets</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Waste Bin</p>
+            <p class="spec-mini-val">30 gal</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Motor</p>
+            <p class="spec-mini-val">2.3 Hp</p>
+          </div>
+        </div>
+        <a href="#" class="product-card-link" onclick="event.preventDefault(); openModal('dl12xd')">View Full Specs</a>
+      </div>
+
+      <!-- DL-16XD -->
+      <div class="product-card" onclick="openModal('dl16xd')">
+        <p class="product-card-tag">Heavy-Duty Industrial</p>
+        <p class="product-card-model">DL-16XD</p>
+        <p class="product-card-partno">Part No: DL16XD (RS-8200A)</p>
+        <p class="product-card-desc">The flagship industrial model — maximum throughput and durability for continuous heavy-duty operation.</p>
+        <div class="product-spec-mini">
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Entry Width</p>
+            <p class="spec-mini-val">16-1/4"</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Sheet Capacity</p>
+            <p class="spec-mini-val">45+ sheets</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Voltage</p>
+            <p class="spec-mini-val">115V / 60Hz</p>
+          </div>
+          <div class="spec-mini-item">
+            <p class="spec-mini-label">Amperage</p>
+            <p class="spec-mini-val">30 Amp</p>
+          </div>
+        </div>
+        <a href="#" class="product-card-link" onclick="event.preventDefault(); openModal('dl16xd')">View Full Specs</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAIL MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <p class="section-label">Who We Are</p>
+        <h2 class="section-title">Korean Precision.<br>American Standards.</h2>
+        <p class="about-body">ERGSN CO., LTD. is a Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders. Headquartered in Joong-gu, Seoul, we design and produce the DL Series cross-cut shredders to meet the rigorous demands of U.S. commercial, healthcare, legal, and government procurement.</p>
+        <p class="about-body">Every ERGSN shredder is built with all-metal chain drive mechanisms — eliminating nylon and plastic gears found in lower-quality alternatives. Our engineering philosophy prioritizes durability over disposability: machines that operate reliably for years, not months.</p>
+        <p class="about-body">We have maintained a long-term supply relationship with Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders. Our export documentation, compliance certifications, and T/T payment terms are designed for frictionless U.S. import operations.</p>
+        <div class="about-highlights">
+          <div class="highlight-card">
+            <p class="highlight-num">4</p>
+            <p class="highlight-label">DL Series Models</p>
+          </div>
+          <div class="highlight-card">
+            <p class="highlight-num">CIF</p>
+            <p class="highlight-label">Baltimore Port Terms</p>
+          </div>
+          <div class="highlight-card">
+            <p class="highlight-num">P-4</p>
+            <p class="highlight-label">Security Level</p>
+          </div>
+          <div class="highlight-card">
+            <p class="highlight-num">100%</p>
+            <p class="highlight-label">All-Metal Construction</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ceo-card">
+          <p class="ceo-name">Donald Lee</p>
+          <p class="ceo-title">President &amp; CEO, ERGSN CO., LTD.</p>
+          <p class="ceo-quote">"We build shredders the way Korean manufacturers have always approached precision engineering — with the understanding that a machine's real value is proven over years of daily use, not at the point of sale."</p>
+          <div class="company-details">
+            <p><span class="company-detail-label">Address</span>#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea</p>
+            <p style="margin-top:8px"><span class="company-detail-label">Tel</span>+82-10-5288-0006</p>
+            <p style="margin-top:4px"><span class="company-detail-label">Fax</span>+82-50-4048-0006</p>
+            <p style="margin-top:4px"><span class="company-detail-label">Email</span>info@ergsn.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section id="compliance">
+  <div class="section-inner">
+    <p class="section-label">Certifications &amp; Standards</p>
+    <h2 class="section-title">Built for U.S. Compliance</h2>
+    <p class="section-desc">ERGSN shredders are engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.</p>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-icon"><div class="compliance-icon-inner"></div></div>
+        <p class="compliance-title">HIPAA Compliant</p>
+        <p class="compliance-desc">All DL Series models meet HIPAA document destruction requirements for healthcare data security.</p>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon"><div class="compliance-icon-inner"></div></div>
+        <p class="compliance-title">GSA Schedule</p>
+        <p class="compliance-desc">Available on U.S. General Services Administration schedule — eligible for federal agency procurement.</p>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon"><div class="compliance-icon-inner"></div></div>
+        <p class="compliance-title">Level 3 / P-4</p>
+        <p class="compliance-desc">DIN 66399 and NIST compliant shred particle size — 5/64" × 1-3/16" cross-cut particles.</p>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon"><div class="compliance-icon-inner"></div></div>
+        <p class="compliance-title">HS Code 8472.90</p>
+        <p class="compliance-desc">Properly classified under U.S. import tariff schedule — streamlined customs clearance at Baltimore Port.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RFQ FORM -->
+<section id="rfq">
+  <div class="rfq-inner">
+    <div class="rfq-left">
+      <p class="section-label" style="color:var(--accent)">Get in Touch</p>
+      <h2 class="section-title">Request a Quote</h2>
+      <p class="section-desc" style="color:var(--steel-light)">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time).</p>
+      <ul class="rfq-contact-list">
+        <li>
+          <span class="rfq-contact-label">Email</span>
+          <span class="rfq-contact-val">info@ergsn.com<br><small>ceodon69@gmail.com (current)</small></span>
+        </li>
+        <li>
+          <span class="rfq-contact-label">Tel</span>
+          <span class="rfq-contact-val">+82-10-5288-0006</span>
+        </li>
+        <li>
+          <span class="rfq-contact-label">Fax</span>
+          <span class="rfq-contact-val">+82-50-4048-0006</span>
+        </li>
+        <li>
+          <span class="rfq-contact-label">Terms</span>
+          <span class="rfq-contact-val">CIF Baltimore · T/T Remittance<br>50% advance, balance before shipment</span>
+        </li>
+        <li>
+          <span class="rfq-contact-label">Lead</span>
+          <span class="rfq-contact-val">4–6 weeks after advance payment</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="rfq-form" id="rfq-form-container">
+      <div id="rfq-form-fields">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name <span>*</span></label>
+            <input type="text" class="form-input" id="f-firstname" placeholder="Greg">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name <span>*</span></label>
+            <input type="text" class="form-input" id="f-lastname" placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company Name <span>*</span></label>
+          <input type="text" class="form-input" id="f-company" placeholder="Capital Shredder Corp.">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email <span>*</span></label>
+            <input type="email" class="form-input" id="f-email" placeholder="you@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-input" id="f-phone" placeholder="+1 (301) 770-3900">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Models of Interest <span>*</span></label>
+          <div class="form-model-checkboxes">
+            <label class="model-checkbox">
+              <input type="checkbox" id="m-dl12x">
+              <span class="model-checkbox-label">DL-12X</span>
+            </label>
+            <label class="model-checkbox">
+              <input type="checkbox" id="m-dl16x">
+              <span class="model-checkbox-label">DL-16X</span>
+            </label>
+            <label class="model-checkbox">
+              <input type="checkbox" id="m-dl12xd">
+              <span class="model-checkbox-label">DL-12XD</span>
+            </label>
+            <label class="model-checkbox">
+              <input type="checkbox" id="m-dl16xd">
+              <span class="model-checkbox-label">DL-16XD</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Estimated Quantity</label>
+            <input type="text" class="form-input" id="f-qty" placeholder="e.g. 20–50 units">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Delivery Terms</label>
+            <select class="form-select" id="f-terms">
+              <option value="">Select terms</option>
+              <option value="cif-baltimore">CIF Baltimore</option>
+              <option value="fob-busan">FOB Busan</option>
+              <option value="other">Other (specify below)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message / Special Requirements</label>
+          <textarea class="form-textarea" id="f-message" placeholder="Required delivery date, voltage specifications, special packaging, etc."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitRFQ()">Send Inquiry →</button>
+        <p class="form-note">Your inquiry is sent directly to ERGSN CO., LTD. in Seoul.<br>We reply within 1 business day (KST, UTC+9).</p>
+      </div>
+      <div class="form-success" id="rfq-success">
+        <div class="form-success-icon">✓</div>
+        <h3>Inquiry Received</h3>
+        <p>Thank you. We have received your RFQ and will respond within 1 business day (Seoul time, UTC+9).<br><br>For urgent inquiries, please contact us directly at <strong>+82-10-5288-0006</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMoAAABNCAIAAABosmyfAAACCklEQVR4nO3YzWoUQRSG4XNOVQ/G4EYUMrgQV268/4vwLgRRJCRZ9UTsn8/FJJkoaojwEYzvQy2qoRa1eKnurpQUgEc99AbwmJEXjMgLRuQFI/KCEXnBiLxgRF4wIi8YkReMyAtG5AUj8oIRecGIvGBEXjAiLxiRF4zIC0bkBSPyghF5wYi8YEReMCIvGJEXjMgLRuQFI/KCEXnBiLxgRF4wIi8YkReMyAtG5AUj8oIRecGIvGBEXjAiLxiRF4zIC0bk9WAk/ZNzxX5ovZ7/fj154W/l3Uu6fxd4XG6q0t2FkRfu5fp1eHiMP1RGXriX5XZeighJqoiW+YvIyAsHkm4+zKdpqqrWmqRlWfb1rPoWWhSKiNZaRIRC6qFc1zUiev+hKPLCgaR9JRExDMM+LEmZqav0lqylojJz1VRZVZWRUrv9w3iDvHBwOy9J8zzP87zb7cZxrKrMVOyqqffeqrXeeu+996qlZQzDUPXzRQR5/W+uzphlWVuVFFpVbVrnRarMTYvc7abTs4v3Hz6en5+dfv70bBPv3r559fL58dFmWca2UVO0iK/jnMPTSfVlnC8u1+2Lk9fb7ZPSJi9DY+bxNB19BxUa1iih4TzAAAAAAElFTkSuQmCC" alt="ERGSN">
+          <span style="font-family:var(--font-display);font-size:16px;font-weight:600;color:#fff;letter-spacing:0.06em">ERGSN CO., LTD.</span>
+        </div>
+        <p class="footer-about">Industrial shredder manufacturer and exporter.<br>#503 Susong BD, 12-21, Seoae-ro 5-gil,<br>Joong-gu, Seoul 04623, Republic of Korea</p>
+      </div>
+      <div>
+        <p class="footer-heading">Products</p>
+        <ul class="footer-list">
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl12x'),300)">DL-12X Shredder</a></li>
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl16x'),300)">DL-16X Shredder</a></li>
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl12xd'),300)">DL-12XD Shredder</a></li>
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl16xd'),300)">DL-16XD Shredder</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">Company</p>
+        <ul class="footer-list">
+          <li><a href="#about">About ERGSN</a></li>
+          <li><a href="#compliance">Compliance & Certifications</a></li>
+          <li><a href="#rfq">Request a Quote</a></li>
+          <li><a href="mailto:info@ergsn.com">info@ergsn.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 ERGSN CO., LTD. All rights reserved. · Made in Korea</p>
+      <p class="footer-swift">Bank: KEB Hana Bank · Acct: 246-910004-08432 · SWIFT: HNBNKRSE (verify before use)</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const products = {
+  dl12x: {
+    model: 'DL-12X',
+    subtitle: 'Level 3 / P-4 Cross Cut — Mid-Sized Office Shredder',
+    partno: 'DL12X (RS-3300A)',
+    specs: [
+      ['Cut Type','Level 3 / P-4 Cross Cut'],
+      ['Entry Width','12-1/4"'],
+      ['Sheet Capacity','Up to 26 sheets'],
+      ['Shred Particle Size','5/64" × 1-3/16"'],
+      ['Shredding Speed','22 FPM (Feet Per Minute)'],
+      ['Motor (Peak)','2.2 Hp'],
+      ['Waste Capacity','30 Gallons'],
+      ['Dimensions (H×W×D)','33" × 20" × 18"'],
+      ['Oil Required','No (Oil-Free)'],
+      ['Operation Mode','Automatic Start/Stop or Manual'],
+      ['Cabinet Material','Heavy Duty All Metal'],
+      ['Mobility','Swivel Casters'],
+      ['Energy Feature','Energy Saving Standby Mode'],
+      ['Compliance','HIPAA Compliant — GSA Schedule'],
+    ],
+    features: [
+      'All-Metal Chain Drive — no nylon or plastic internal gears',
+      'Oil-Free Operation — environmentally friendly, lower long-term cost',
+      'Contactless Thermally Protected Motor — high performance, quiet operation',
+      'Load Indicator Display — prevents overfeeding',
+      'Automatic Reverse — prevents paper jams',
+      'Energy Saving Standby Mode — reduces power consumption',
+      'Safety Interlock Switches — shuts off when bin is full or door is open',
+      'Heavy Duty All-Metal Cabinet on Swivel Casters — easy mobility',
+      'Dual Operation Modes — Automatic Start/Stop or Manual Shredding',
+      'HIPAA Compliant — available on GSA Schedule',
+    ],
+    desc: 'The DL-12X is a Level 3 / P-4 Cross Cut Paper Shredder built for long-term durability. With a shred particle size of 5/64 × 1-3/16 inches for added security and a true 12-1/4" throat opening, it allows easy feeding of paper in any direction. An Enhanced Cutter Design, Large Steel Gears, and an All-Metal Chain Drive ensure no internal nylon or plastic gears are used — unlike lower-quality shredders. Oil-free operation reduces maintenance costs and environmental impact. Suitable for mid-sized office environments.'
+  },
+  dl16x: {
+    model: 'DL-16X',
+    subtitle: 'Level 3 / P-4 Cross Cut — Large Office / Departmental Shredder',
+    partno: 'DL16X (RS-3890A)',
+    specs: [
+      ['Cut Type','Level 3 / P-4 Cross Cut'],
+      ['Entry Width','16-1/4"'],
+      ['Sheet Capacity','Up to 26 sheets'],
+      ['Shred Particle Size','5/64" × 1-3/16"'],
+      ['Shredding Speed','22 FPM (Feet Per Minute)'],
+      ['Motor (Peak)','2.5 Hp'],
+      ['Waste Capacity','35 Gallons'],
+      ['Dimensions (H×W×D)','35" × 23" × 20"'],
+      ['Oil Required','No (Oil-Free)'],
+      ['Operation Mode','Automatic Start/Stop or Manual'],
+      ['Cabinet Material','Heavy Duty All Metal'],
+      ['Mobility','Swivel Casters'],
+      ['Energy Feature','Energy Saving Standby Mode'],
+      ['Compliance','HIPAA Compliant — GSA Schedule'],
+    ],
+    features: [
+      'Widest entry width (16-1/4") in the DL cross-cut series — ideal for departmental use',
+      'All-Metal Chain Drive — no nylon or plastic internal gears',
+      'Oil-Free Operation — environmentally friendly, lower long-term cost',
+      'Contactless Thermally Protected Motor — high performance, quiet operation',
+      'Larger 35-Gallon Waste Bin — less frequent emptying for high-volume users',
+      'Load Indicator Display — prevents overfeeding',
+      'Automatic Reverse — prevents paper jams',
+      'Energy Saving Standby Mode — reduces power consumption',
+      'Safety Interlock Switches — shuts off when bin is full or door is open',
+      'HIPAA Compliant — available on GSA Schedule',
+    ],
+    desc: 'The DL-16X is a Level 3 / P-4 Cross Cut Paper Shredder designed for departmental-level, high-volume shredding. With a wide 16-1/4" entry width and a sheet capacity of up to 26 sheets at 22 FPM, it is ideal for busy office environments. Like the DL-12X, it features an All-Metal Chain Drive with Large Steel Gears, requiring no oil and no plastic gears. Its 35-gallon waste bin and robust 2.5 Hp motor make it the workhorse of the DL series.'
+  },
+  dl12xd: {
+    model: 'DL-12XD',
+    subtitle: 'Level 3 / P-4 Cross Cut — High-Capacity 12" Class Shredder',
+    partno: 'DL12XD (RS-3300A XD)',
+    specs: [
+      ['Cut Type','Level 3 / P-4 Cross Cut'],
+      ['Entry Width','12-1/4"'],
+      ['Sheet Capacity','Up to 45 sheets'],
+      ['Shred Particle Size','5/32" × 1-3/16"'],
+      ['Shredding Speed','22 FPM (Feet Per Minute)'],
+      ['Motor (Peak)','2.3 Hp'],
+      ['Waste Capacity','30 Gallons'],
+      ['Dimensions (H×W×D)','33" × 20" × 18"'],
+      ['Oil Required','No (Oil-Free)'],
+      ['Operation Mode','Automatic Start/Stop or Manual'],
+      ['Cabinet Material','Heavy Duty All Metal'],
+      ['Mobility','Swivel Casters'],
+      ['Energy Feature','Energy Saving Standby Mode'],
+      ['Compliance','HIPAA Compliant — GSA Schedule'],
+    ],
+    features: [
+      'Highest sheet capacity in the 12" class — up to 45 sheets per pass',
+      'All-Metal Chain Drive — no nylon or plastic internal gears',
+      'Oil-Free Operation — environmentally friendly, lower long-term cost',
+      'Contactless Thermally Protected Motor — high performance, quiet operation',
+      'Load Indicator Display — prevents overfeeding at high sheet loads',
+      'Automatic Reverse — prevents paper jams even under heavy use',
+      'Energy Saving Standby Mode — reduces power consumption',
+      'Safety Interlock Switches — shuts off when bin is full or door is open',
+      'Heavy Duty All-Metal Cabinet on Swivel Casters — easy mobility',
+      'HIPAA Compliant — available on GSA Schedule',
+    ],
+    desc: 'The DL-12XD is a Level 3 / P-4 Cross Cut Paper Shredder offering the highest sheet capacity in the mid-size DL series. With an outstanding 45-sheet capacity and a finer shred particle of 5/32 × 1-3/16 inches, it is built for departments requiring both throughput and a higher level of document security. The 12-1/4" throat opening provides flexible feeding in any direction. Its Enhanced Cutter Design, Large Steel Gears, and All-Metal Chain Drive guarantee no nylon or plastic internal gears — delivering superior durability.'
+  },
+  dl16xd: {
+    model: 'DL-16XD',
+    subtitle: 'Heavy-Duty Industrial Shredder — Flagship Model',
+    partno: 'DL16XD (RS-8200A)',
+    specs: [
+      ['Cut Type','Cross Cut'],
+      ['Entry Width','16-1/4"'],
+      ['Sheet Capacity','45+ sheets'],
+      ['Shredding Speed','22 FPM (Feet Per Minute)'],
+      ['Voltage','115V Single Phase, 60Hz'],
+      ['Amperage','30 Amp'],
+      ['Plug Type','NEMA L5-30P Locking Plug'],
+      ['Cord','12/3 SO/SOWA, Black, 10 Feet'],
+      ['Oil Required','No (Oil-Free)'],
+      ['Cabinet Material','Heavy Duty All Metal'],
+      ['Mobility','Swivel Casters'],
+      ['Packaging','Individual Crate'],
+      ['Compliance','HIPAA Compliant — GSA Schedule'],
+    ],
+    features: [
+      'Flagship industrial model — maximum throughput for continuous operation',
+      'Widest entry in the DL series at 16-1/4" — handles large format documents',
+      'All-Metal Chain Drive — no nylon or plastic internal gears',
+      'Oil-Free Operation — environmentally friendly, lower long-term cost',
+      '115V / 60Hz / 30A — wired for U.S. industrial electrical standards (NEMA L5-30P)',
+      'Individually crated for secure international freight',
+      'Safety Interlock Switches — shuts off when bin is full or door is open',
+      'HIPAA Compliant — available on GSA Schedule',
+    ],
+    desc: 'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder, engineered for continuous heavy-duty operation. Pre-wired for U.S. electrical standards at 115V/60Hz/30A with NEMA L5-30P locking plug and 12/3 cord, it is ready for direct installation in U.S. commercial and industrial facilities. Individually crated for secure ocean freight, the DL-16XD represents ERGSN\'s highest-capacity offering for institutional buyers requiring maximum throughput.'
+  }
+};
+
+function openModal(id) {
+  const p = products[id];
+  if (!p) return;
+  const specsHTML = p.specs.map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  const featuresHTML = p.features.map(f => `<li>${f}</li>`).join('');
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <div>
+        <p class="modal-model">${p.model}</p>
+        <p class="modal-subtitle">${p.subtitle}</p>
+        <p class="modal-subtitle" style="margin-top:4px;color:var(--accent);font-size:12px;letter-spacing:0.08em">Part No: ${p.partno}</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <p class="modal-section-title">Technical Specifications</p>
+        <table class="spec-table"><tbody>${specsHTML}</tbody></table>
+      </div>
+      <div>
+        <p class="modal-section-title">Key Features &amp; Benefits</p>
+        <ul class="feature-list">${featuresHTML}</ul>
+      </div>
+    </div>
+    <div style="padding:0 2.5rem 2rem">
+      <p class="modal-section-title">Product Description</p>
+      <p class="modal-desc">${p.desc}</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#rfq" class="btn-primary" onclick="closeModal(); setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),100); return false;">Request a Quote</a>
+      <span style="font-size:13px;color:var(--text-light)">CIF Baltimore · T/T Payment · 4–6 weeks lead time</span>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function submitRFQ() {
+  const first = document.getElementById('f-firstname').value.trim();
+  const last = document.getElementById('f-lastname').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const models = ['dl12x','dl16x','dl12xd','dl16xd'].filter(m => document.getElementById('m-'+m).checked).map(m => m.toUpperCase().replace('DL','DL-'));
+
+  if (!first || !last || !company || !email) {
+    alert('Please fill in all required fields (Name, Company, Email).');
+    return;
+  }
+  if (models.length === 0) {
+    alert('Please select at least one model of interest.');
+    return;
+  }
+  if (!email.includes('@')) {
+    alert('Please enter a valid email address.');
+    return;
+  }
+
+  document.getElementById('rfq-form-fields').style.display = 'none';
+  document.getElementById('rfq-success').style.display = 'block';
+}
+</script>
+</body>
+</html>
