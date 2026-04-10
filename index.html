@@ -53,7 +53,13 @@
   --nav-h: 70px;
   --radius: 3px;
   --gap: clamp(12px, 2vw, 24px);
+  --bottom-cta-h: 0px;
+  --compare-h: 0px;
 }
+@media (max-width: 760px) {
+  :root { --bottom-cta-h: 60px; }
+}
+body.has-compare { --compare-h: 76px; }
 
 /* ── RESET ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -397,15 +403,39 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .spec-lbl { font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); }
 .spec-val { font-family: var(--fc); font-size: 15px; font-weight: 700; color: var(--navy); }
+.card-foot {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
 .card-cta {
   font-family: var(--fc); font-size: 12px; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--gold); display: flex; align-items: center; gap: 6px;
-  transition: color .15s; margin-top: auto;
+  transition: color .15s;
 }
 .card-cta::after { content: '\2192'; transition: transform .15s; }
 .product-card:hover .card-cta::after { transform: translateX(4px); }
 .card-cta:hover { color: var(--navy); }
+
+/* COMPARE BUTTON (per card) */
+.compare-btn {
+  font-family: var(--fc); font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--tx-lt); background: transparent;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 10px 6px 8px;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: color .15s, border-color .15s, background .15s;
+  z-index: 4; position: relative;
+  flex-shrink: 0;
+}
+.compare-btn svg { width: 11px; height: 11px; transition: transform .2s; }
+.compare-btn:hover { color: var(--navy); border-color: var(--navy); }
+.compare-btn.active {
+  color: var(--white); background: var(--navy); border-color: var(--navy);
+}
+.compare-btn.active svg { transform: rotate(45deg); }
 
 /* BADGE — 신모델 표시 */
 .card-badge {
@@ -414,6 +444,182 @@ section { scroll-margin-top: var(--nav-h); }
   letter-spacing: .12em; text-transform: uppercase;
   background: var(--gold); color: var(--white);
   padding: 3px 8px; border-radius: 1px;
+  z-index: 4;
+}
+
+/* COMPARE TRAY */
+.compare-tray {
+  position: fixed; left: 0; right: 0;
+  bottom: var(--bottom-cta-h);
+  background: var(--navy);
+  border-top: 2px solid var(--gold);
+  padding: 14px clamp(16px,3vw,32px);
+  display: flex; align-items: center; gap: clamp(12px,2vw,24px);
+  flex-wrap: wrap; justify-content: space-between;
+  z-index: 850;
+  transform: translateY(100%);
+  transition: transform .3s ease;
+  box-shadow: 0 -10px 30px -10px rgba(0,0,0,.3);
+}
+.compare-tray.open { transform: translateY(0); }
+.compare-tray-left {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1;
+  min-width: 0;
+}
+.compare-tray-label {
+  font-family: var(--fc); font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--steel-lt); white-space: nowrap;
+}
+.compare-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.compare-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--fc); font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  background: rgba(255,255,255,.08);
+  color: var(--white);
+  padding: 5px 6px 5px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.compare-chip button {
+  color: var(--steel-lt); font-size: 14px; line-height: 1;
+  padding: 0 4px; transition: color .15s;
+}
+.compare-chip button:hover { color: var(--gold-light); }
+.compare-tray-actions { display: flex; align-items: center; gap: 10px; }
+.compare-tray .btn-clear {
+  font-family: var(--fc); font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--steel-lt); transition: color .15s;
+}
+.compare-tray .btn-clear:hover { color: var(--gold-light); }
+.compare-tray .btn-gold { padding: 10px 20px; font-size: 12px; }
+.compare-tray .btn-gold:disabled {
+  background: rgba(200,147,42,.3); cursor: not-allowed;
+}
+@media (max-width: 520px) {
+  .compare-tray { padding: 12px 16px; gap: 10px; }
+  .compare-tray-label { display: none; }
+  .compare-tray .btn-gold { padding: 8px 14px; font-size: 11px; }
+}
+
+/* COMPARE MODAL (shares modal-overlay shell) */
+.compare-modal {
+  background: var(--white);
+  max-width: 1100px; width: 100%;
+  margin: auto; border-radius: var(--radius);
+  overflow: hidden;
+  animation: modalIn .22s ease;
+}
+.compare-modal-hd {
+  background: var(--navy);
+  padding: clamp(1.25rem,3vw,1.75rem) clamp(1.25rem,3vw,2rem);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+}
+.compare-modal-hd h3 {
+  font-family: var(--fc); font-size: clamp(22px,3vw,32px);
+  font-weight: 700; color: var(--white); line-height: 1;
+}
+.compare-modal-hd .modal-sub { margin-top: 6px; }
+.compare-modal-bd {
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+.compare-table thead th {
+  position: sticky; top: 0;
+  background: var(--off);
+  border-bottom: 2px solid var(--gold);
+  padding: 1rem clamp(12px,1.5vw,18px);
+  text-align: left;
+  vertical-align: bottom;
+  z-index: 1;
+}
+.compare-table thead th:first-child {
+  background: var(--white);
+  border-bottom-color: var(--border);
+  width: 22%;
+  min-width: 140px;
+}
+.compare-table .ct-img {
+  width: 100%; max-width: 170px;
+  aspect-ratio: 4/3;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px; margin: 0 0 10px;
+}
+.compare-table .ct-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.compare-table .ct-model {
+  font-family: var(--fc); font-size: clamp(18px,2vw,24px);
+  font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 4px;
+}
+.compare-table .ct-part { font-size: 10px; color: var(--tx-lt); letter-spacing: .05em; }
+.compare-table tbody tr { border-bottom: 1px solid var(--off); }
+.compare-table tbody tr:hover { background: #fbfcfd; }
+.compare-table tbody td {
+  padding: 10px clamp(12px,1.5vw,18px);
+  font-size: 13px; color: var(--navy); vertical-align: top;
+}
+.compare-table tbody td:first-child {
+  font-family: var(--fc);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--tx-lt);
+  background: var(--white);
+}
+.compare-table .ct-empty { color: var(--tx-lt); font-style: italic; }
+.compare-modal-ft {
+  padding: 1rem clamp(1.25rem,3vw,2rem);
+  background: var(--off); border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  justify-content: space-between;
+}
+.compare-modal-ft .modal-ft-note { font-size: 12px; color: var(--tx-lt); }
+
+/* MOBILE STICKY CTA BAR */
+.mobile-cta-bar {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: 60px;
+  background: var(--navy);
+  border-top: 2px solid var(--gold);
+  z-index: 860;
+  padding: 0 16px;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 -8px 24px -8px rgba(0,0,0,.35);
+}
+.mobile-cta-bar a {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--fc); font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border-radius: var(--radius);
+  padding: 11px 10px;
+  transition: background .15s, color .15s;
+}
+.mobile-cta-bar a svg { width: 14px; height: 14px; flex-shrink: 0; }
+.mobile-cta-bar .mcta-call {
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,.3);
+}
+.mobile-cta-bar .mcta-call:active { background: rgba(255,255,255,.08); }
+.mobile-cta-bar .mcta-quote {
+  background: var(--gold);
+  color: var(--white);
+}
+.mobile-cta-bar .mcta-quote:active { background: var(--gold-light); }
+@media (max-width: 760px) {
+  .mobile-cta-bar { display: flex; }
 }
 
 /* ════════════════════════════════════════
@@ -456,7 +662,7 @@ section { scroll-margin-top: var(--nav-h); }
 #toTop {
   position: fixed;
   right: clamp(16px, 3vw, 32px);
-  bottom: clamp(16px, 3vw, 32px);
+  bottom: calc(clamp(16px, 3vw, 32px) + var(--bottom-cta-h) + var(--compare-h));
   width: 48px; height: 48px;
   background: var(--navy);
   color: var(--gold);
@@ -853,7 +1059,7 @@ section { scroll-margin-top: var(--nav-h); }
 
     <div class="product-grid" id="productGrid">
 
-      <div class="product-card reveal" style="--i:0" tabindex="0" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter')openModal('dl10x')">
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="dl10x" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl10x')">
         <div class="card-image"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Entry Mid-Sized Office</p>
         <p class="card-model">DL-10X</p>
@@ -865,10 +1071,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">20 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.2 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-10X to compare" onclick="event.stopPropagation();toggleCompare('dl10x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
-      <div class="product-card reveal" style="--i:1" tabindex="0" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter')openModal('dl12x')">
+      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="dl12x" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl12x')">
         <div class="card-image"><img src="images/products/dl-12x.jpg" alt="ERGSN DL-12X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Mid-Sized Office</p>
         <p class="card-model">DL-12X</p>
@@ -880,10 +1089,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">30 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.2 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-12X to compare" onclick="event.stopPropagation();toggleCompare('dl12x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
-      <div class="product-card reveal" style="--i:2" tabindex="0" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter')openModal('dl16x')">
+      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="dl16x" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl16x')">
         <div class="card-image"><img src="images/products/dl-16x.jpg" alt="ERGSN DL-16X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Large Office / Departmental</p>
         <p class="card-model">DL-16X</p>
@@ -895,10 +1107,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">35 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.5 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-16X to compare" onclick="event.stopPropagation();toggleCompare('dl16x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
-      <div class="product-card reveal" style="--i:3" tabindex="0" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter')openModal('dl10xd')">
+      <div class="product-card reveal" style="--i:3" tabindex="0" data-model="dl10xd" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl10xd')">
         <div class="card-image"><img src="images/products/dl-10xd.jpg" alt="ERGSN DL-10XD high volume crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 10" Class</p>
         <p class="card-model">DL-10XD</p>
@@ -910,10 +1125,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">30 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.5 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-10XD to compare" onclick="event.stopPropagation();toggleCompare('dl10xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
-      <div class="product-card reveal" style="--i:4" tabindex="0" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter')openModal('dl12xd')">
+      <div class="product-card reveal" style="--i:4" tabindex="0" data-model="dl12xd" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl12xd')">
         <div class="card-image"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
@@ -925,10 +1143,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">30 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.3 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-12XD to compare" onclick="event.stopPropagation();toggleCompare('dl12xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
-      <div class="product-card reveal" style="--i:5" tabindex="0" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter')openModal('dl16xd')">
+      <div class="product-card reveal" style="--i:5" tabindex="0" data-model="dl16xd" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl16xd')">
         <span class="card-badge">Flagship</span>
         <div class="card-image"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD flagship industrial shredder" loading="lazy"></div>
         <p class="card-tag">Heavy-Duty Industrial</p>
@@ -941,7 +1162,10 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">45 gal</p></div>
           <div><p class="spec-lbl">Motor</p><p class="spec-val">3.25 Hp</p></div>
         </div>
-        <span class="card-cta">View Full Specs</span>
+        <div class="card-foot">
+          <span class="card-cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add DL-16XD to compare" onclick="event.stopPropagation();toggleCompare('dl16xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
       </div>
 
     </div>
@@ -1115,6 +1339,29 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </footer>
 
+<!-- ══ COMPARE TRAY ════════════════════════════ -->
+<div class="compare-tray" id="compareTray" aria-live="polite" aria-label="Compare tray">
+  <div class="compare-tray-left">
+    <span class="compare-tray-label">Comparing</span>
+    <div class="compare-chips" id="compareChips"></div>
+  </div>
+  <div class="compare-tray-actions">
+    <button type="button" class="btn-clear" onclick="clearCompare()">Clear</button>
+    <button type="button" class="btn btn-gold" id="compareGo" onclick="openCompareModal()">Compare <span id="compareCount">0</span> Models</button>
+  </div>
+</div>
+
+<!-- ══ COMPARE MODAL ═══════════════════════════ -->
+<div class="modal-overlay" id="compareOverlay" onclick="closeCompareOutside(event)">
+  <div class="compare-modal" id="compareModalContent"></div>
+</div>
+
+<!-- ══ MOBILE CTA BAR ══════════════════════════ -->
+<div class="mobile-cta-bar" aria-label="Quick contact">
+  <a href="tel:+821052880006" class="mcta-call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</a>
+  <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Request Quote</a>
+</div>
+
 <!-- ══ BACK TO TOP ═════════════════════════════ -->
 <button id="toTop" type="button" aria-label="Back to top" onclick="scrollToTop()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
@@ -1201,7 +1448,11 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
+  else closeModal();
+});
 
 function toggleMenu() {
   const h = document.getElementById('ham');
@@ -1267,6 +1518,103 @@ function closeMenu() {
   }, { threshold: 0.5 });
   nums.forEach(el => io.observe(el));
 })();
+
+/* ── COMPARE ─────────────────────────────── */
+const COMPARE_MAX = 4;
+const compareState = [];
+
+function toggleCompare(id, btn) {
+  const idx = compareState.indexOf(id);
+  if (idx > -1) {
+    compareState.splice(idx, 1);
+    btn.classList.remove('active');
+  } else {
+    if (compareState.length >= COMPARE_MAX) {
+      alert(`You can compare up to ${COMPARE_MAX} models at a time.`);
+      return;
+    }
+    compareState.push(id);
+    btn.classList.add('active');
+  }
+  renderCompareTray();
+}
+
+function removeCompare(id) {
+  const idx = compareState.indexOf(id);
+  if (idx > -1) compareState.splice(idx, 1);
+  const btn = document.querySelector(`.product-card[data-model="${id}"] .compare-btn`);
+  if (btn) btn.classList.remove('active');
+  renderCompareTray();
+}
+
+function clearCompare() {
+  compareState.length = 0;
+  document.querySelectorAll('.compare-btn.active').forEach(b => b.classList.remove('active'));
+  renderCompareTray();
+}
+
+function renderCompareTray() {
+  const tray = document.getElementById('compareTray');
+  const chips = document.getElementById('compareChips');
+  const count = document.getElementById('compareCount');
+  const go = document.getElementById('compareGo');
+  count.textContent = compareState.length;
+  go.disabled = compareState.length < 2;
+  chips.innerHTML = compareState.map(id =>
+    `<span class="compare-chip">${P[id].model}<button type="button" aria-label="Remove ${P[id].model}" onclick="removeCompare('${id}')">&times;</button></span>`
+  ).join('');
+  if (compareState.length > 0) tray.classList.add('open');
+  else tray.classList.remove('open');
+  document.body.classList.toggle('has-compare', compareState.length > 0);
+}
+
+function openCompareModal() {
+  if (compareState.length < 2) return;
+  const items = compareState.map(id => P[id]);
+  const allKeys = [];
+  items.forEach(it => it.specs.forEach(([k]) => { if (!allKeys.includes(k)) allKeys.push(k); }));
+  const specMap = items.map(it => Object.fromEntries(it.specs));
+  const headCells = items.map(it => `
+    <th>
+      <div class="ct-img"><img src="${it.img}" alt="ERGSN ${it.model}" loading="lazy"></div>
+      <p class="ct-model">${it.model}</p>
+      <p class="ct-part">Part No: ${it.part}</p>
+    </th>`).join('');
+  const rows = allKeys.map(k => `
+    <tr>
+      <td>${k}</td>
+      ${specMap.map(m => `<td>${m[k] !== undefined ? m[k] : '<span class="ct-empty">&mdash;</span>'}</td>`).join('')}
+    </tr>`).join('');
+  document.getElementById('compareModalContent').innerHTML = `
+    <div class="compare-modal-hd">
+      <div>
+        <h3>Compare Models</h3>
+        <p class="modal-sub">Side-by-side technical specifications &mdash; ${items.length} models</p>
+      </div>
+      <button class="modal-close" onclick="closeCompareModal()" aria-label="Close">\u2715</button>
+    </div>
+    <div class="compare-modal-bd">
+      <table class="compare-table">
+        <thead><tr><th>Specification</th>${headCells}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="compare-modal-ft">
+      <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
+      <a href="#rfq" class="btn btn-gold" onclick="closeCompareModal();setTimeout(()=>document.getElementById('rfq').scrollIntoView({behavior:'smooth'}),80);return false;">Request a Quote</a>
+    </div>`;
+  document.getElementById('compareOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCompareModal() {
+  document.getElementById('compareOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeCompareOutside(ev) {
+  if (ev.target.id === 'compareOverlay') closeCompareModal();
+}
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
