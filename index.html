@@ -311,7 +311,7 @@ section { scroll-margin-top: var(--nav-h); }
 .card-image {
   margin: calc(clamp(1.25rem,2.5vw,2rem) * -1) calc(clamp(1.25rem,2.5vw,2rem) * -1) 1.25rem;
   aspect-ratio: 4 / 3;
-  background: linear-gradient(180deg, #f5f8fc 0%, #e8eef6 100%);
+  background: var(--white);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   padding: 1rem;
@@ -321,7 +321,6 @@ section { scroll-margin-top: var(--nav-h); }
   max-width: 100%; max-height: 100%;
   object-fit: contain;
   transition: transform .35s ease;
-  filter: drop-shadow(0 6px 14px rgba(11,29,56,.18));
 }
 .product-card:hover .card-image img { transform: scale(1.05); }
 .card-tag {
@@ -398,7 +397,7 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .modal-close:hover { background: rgba(255,255,255,.1); color: var(--white); }
 .modal-image-row {
-  background: linear-gradient(180deg, #f5f8fc 0%, #e8eef6 100%);
+  background: var(--white);
   border-bottom: 1px solid var(--border);
   padding: clamp(1.5rem,3vw,2.5rem);
   display: flex; align-items: center; justify-content: center;
@@ -407,7 +406,6 @@ section { scroll-margin-top: var(--nav-h); }
 .modal-image-row img {
   max-width: 100%; max-height: clamp(200px, 28vh, 320px);
   object-fit: contain;
-  filter: drop-shadow(0 14px 30px rgba(11,29,56,.22));
 }
 .modal-bd {
   padding: clamp(1.25rem,3vw,2.5rem);
@@ -822,7 +820,7 @@ section { scroll-margin-top: var(--nav-h); }
         <div class="card-image"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
-        <p class="card-part">Part No: DL12XD (RS-3300A XD)</p>
+        <p class="card-part">Part No: DL12XD</p>
         <p class="card-desc">Highest sheet capacity in the 12" class &mdash; up to 45 sheets per pass for demanding workloads.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">12-1/4"</p></div>
@@ -839,12 +837,12 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">Heavy-Duty Industrial</p>
         <p class="card-model">DL-16XD</p>
         <p class="card-part">Part No: DL16XD (RS-8200A)</p>
-        <p class="card-desc">Flagship industrial model &mdash; maximum throughput for continuous heavy-duty operation.</p>
+        <p class="card-desc">Flagship industrial model &mdash; up to 90 sheets per pass at 31 FPM for continuous heavy-duty operation.</p>
         <div class="card-specs">
-          <div><p class="spec-lbl">Entry Width</p><p class="spec-val">16-1/4"</p></div>
-          <div><p class="spec-lbl">Sheet Capacity</p><p class="spec-val">45+ sheets</p></div>
-          <div><p class="spec-lbl">Voltage</p><p class="spec-val">115V/60Hz</p></div>
-          <div><p class="spec-lbl">Amperage</p><p class="spec-val">30 Amp</p></div>
+          <div><p class="spec-lbl">Entry Width</p><p class="spec-val">16"</p></div>
+          <div><p class="spec-lbl">Sheet Capacity</p><p class="spec-val">Up to 90 sheets</p></div>
+          <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">45 gal</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">3.25 Hp</p></div>
         </div>
         <span class="card-cta">View Full Specs</span>
       </div>
@@ -1050,18 +1048,18 @@ const P = {
     desc:'The DL-10XD is a high-volume Level 3 / P-4 Cross Cut Paper Shredder in ERGSN\u2019s 10\u201d class. Engineered for departments needing high throughput without the larger 12\u201d or 16\u201d footprint, it delivers up to 42 sheets per pass with a 2.5 Hp motor and 30-gallon waste bin. All-Metal Chain Drive and Large Steel Gears guarantee long-term reliability, while oil-free operation minimizes maintenance. Ideal for legal, healthcare, and financial offices with steady high-volume shred loads.'
   },
   dl12xd: {
-    model:'DL-12XD', sub:'Level 3 / P-4 Cross Cut \u2014 High-Capacity 12\u201d Class', part:'DL12XD (RS-3300A XD)',
+    model:'DL-12XD', sub:'Level 3 / P-4 Cross Cut \u2014 High-Capacity 12\u201d Class', part:'DL12XD',
     img:'images/products/dl-12xd.jpg',
     specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','12-1/4\u201d'],['Sheet Capacity','Up to 45 sheets'],['Shred Size','5/32\u201d \u00d7 1\u20113/16\u201d'],['Speed','22 FPM'],['Motor','2.3 Hp'],['Waste Bin','30 Gallons'],['Dimensions','33\u201d \u00d7 20\u201d \u00d7 18\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['Highest sheet capacity in 12\u201d class \u2014 up to 45 sheets per pass','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','Load Indicator Display \u2014 prevents overfeeding at high loads','Automatic Reverse \u2014 prevents jams under heavy use','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','All-Metal Cabinet on Swivel Casters \u2014 easy mobility','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-12XD offers the highest sheet capacity in the 12\u201d mid-size class. With 45 sheets per pass and a finer shred of 5/32 \u00d7 1\u20113/16 inches, it is built for departments requiring both throughput and higher document security. Enhanced Cutter Design, Large Steel Gears, and All-Metal Chain Drive deliver zero nylon or plastic gears \u2014 superior durability guaranteed.'
   },
   dl16xd: {
-    model:'DL-16XD', sub:'Heavy-Duty Industrial Shredder \u2014 Flagship Model', part:'DL16XD (RS-8200A)',
+    model:'DL-16XD', sub:'Level 3 / P-4 Cross Cut \u2014 High Volume Flagship Industrial', part:'DL16XD (RS-8200A)',
     img:'images/products/dl-16xd.jpg',
-    specs:[['Cut Type','Cross Cut'],['Entry Width','16-1/4\u201d'],['Sheet Capacity','45+ sheets'],['Speed','22 FPM'],['Voltage','115V Single Phase, 60Hz'],['Amperage','30 Amp'],['Plug','NEMA L5-30P Locking'],['Cord','12/3 SO/SOWA, 10 ft'],['Oil Required','No (Oil-Free)'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Packaging','Individual Crate'],['Compliance','HIPAA \u2014 GSA Schedule']],
-    features:['Flagship model \u2014 maximum throughput for continuous operation','Widest entry 16-1/4\u201d \u2014 handles large-format documents','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','115V / 60Hz / 30A \u2014 U.S. electrical standards (NEMA L5-30P)','Individually crated for secure ocean freight','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
-    desc:'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder engineered for continuous heavy-duty operation. Pre-wired for U.S. electrical standards at 115V/60Hz/30A with NEMA L5-30P locking plug and 12/3 cord, it installs directly in U.S. commercial and industrial facilities. Individually crated for secure ocean freight \u2014 ERGSN\'s highest-capacity offering for institutional buyers.'
+    specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','16\u201d'],['Sheet Capacity','Up to 90 sheets'],['Shred Size','5/32\u201d \u00d7 1-3/4\u201d'],['Speed','31 FPM'],['Motor','3.25 Hp'],['Waste Bin','45 Gallons'],['Dimensions','42\u201d \u00d7 34\u201d \u00d7 39\u201d'],['Voltage','115V, 30 Amp'],['Plug','NEMA L5-30P Locking'],['Cord','12/3 SO/SOWA, 10 ft'],['Oil Required','No (Oil-Free)'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Packaging','Individual Crate'],['Compliance','HIPAA \u2014 GSA Schedule']],
+    features:['Flagship high-volume model \u2014 up to 90 sheets per pass at 31 FPM','3.25 Hp motor \u2014 highest-power DL Series shredder','45-Gallon waste bin \u2014 extended runtime between empties','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','115V / 30 Amp \u2014 U.S. electrical standards (NEMA L5-30P)','Individually crated for secure ocean freight','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
+    desc:'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder engineered for continuous heavy-duty operation. With up to 90 sheets per pass at 31 FPM and a 3.25 Hp motor, it delivers the highest throughput in the DL Series. Pre-wired for U.S. electrical standards at 115V / 30A with NEMA L5-30P locking plug and 12/3 cord, it installs directly in U.S. commercial and industrial facilities. A 45-gallon waste bin minimizes downtime, and the unit is individually crated for secure ocean freight.'
   }
 };
 
