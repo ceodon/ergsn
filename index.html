@@ -730,6 +730,22 @@ section { scroll-margin-top: var(--nav-h); }
 .hero-desc   { animation: fadeUp .55s ease .16s both; }
 .hero-actions{ animation: fadeUp .55s ease .24s both; }
 .hero-stats  { animation: fadeUp .55s ease .32s both; }
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s ease, transform .7s ease;
+  transition-delay: calc(var(--i, 0) * 80ms);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
 </style>
 </head>
 <body>
@@ -804,7 +820,7 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ PRODUCTS ════════════════════════════ -->
 <section id="products">
   <div class="container products-inner">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="section-head-text">
         <span class="label">DL Series</span>
         <h2 class="h-lg">Cross-Cut Shredders</h2>
@@ -814,7 +830,7 @@ section { scroll-margin-top: var(--nav-h); }
 
     <div class="product-grid" id="productGrid">
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter')openModal('dl10x')">
+      <div class="product-card reveal" style="--i:0" tabindex="0" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter')openModal('dl10x')">
         <div class="card-image"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Entry Mid-Sized Office</p>
         <p class="card-model">DL-10X</p>
@@ -829,7 +845,7 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter')openModal('dl12x')">
+      <div class="product-card reveal" style="--i:1" tabindex="0" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter')openModal('dl12x')">
         <div class="card-image"><img src="images/products/dl-12x.jpg" alt="ERGSN DL-12X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Mid-Sized Office</p>
         <p class="card-model">DL-12X</p>
@@ -844,7 +860,7 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter')openModal('dl16x')">
+      <div class="product-card reveal" style="--i:2" tabindex="0" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter')openModal('dl16x')">
         <div class="card-image"><img src="images/products/dl-16x.jpg" alt="ERGSN DL-16X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Large Office / Departmental</p>
         <p class="card-model">DL-16X</p>
@@ -859,7 +875,7 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter')openModal('dl10xd')">
+      <div class="product-card reveal" style="--i:3" tabindex="0" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter')openModal('dl10xd')">
         <div class="card-image"><img src="images/products/dl-10xd.jpg" alt="ERGSN DL-10XD high volume crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 10" Class</p>
         <p class="card-model">DL-10XD</p>
@@ -874,7 +890,7 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter')openModal('dl12xd')">
+      <div class="product-card reveal" style="--i:4" tabindex="0" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter')openModal('dl12xd')">
         <div class="card-image"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
@@ -889,7 +905,7 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
-      <div class="product-card" tabindex="0" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter')openModal('dl16xd')">
+      <div class="product-card reveal" style="--i:5" tabindex="0" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter')openModal('dl16xd')">
         <span class="card-badge">Flagship</span>
         <div class="card-image"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD flagship industrial shredder" loading="lazy"></div>
         <p class="card-tag">Heavy-Duty Industrial</p>
@@ -917,7 +933,7 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ ABOUT ════════════════════════════════ -->
 <section id="about">
   <div class="container about-inner">
-    <figure class="about-visual">
+    <figure class="about-visual reveal">
       <img src="images/about-workplace.jpg" alt="Modern office workplace environment" loading="lazy">
       <figcaption class="about-visual-overlay">
         <span class="label">The Future Workplace</span>
@@ -925,7 +941,7 @@ section { scroll-margin-top: var(--nav-h); }
       </figcaption>
     </figure>
     <div class="about-grid">
-      <div class="about-copy">
+      <div class="about-copy reveal">
         <span class="label">Who We Are</span>
         <h2 class="h-lg">Korean Precision.<br>American Standards.</h2>
         <p class="body-lg">ERGSN CO., LTD. is a Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders. We design and produce the DL Series cross-cut shredders to meet the rigorous demands of U.S. commercial, healthcare, legal, and government procurement.</p>
@@ -939,7 +955,7 @@ section { scroll-margin-top: var(--nav-h); }
         </div>
       </div>
       <div>
-        <div class="ceo-card">
+        <div class="ceo-card reveal" style="--i:1">
           <div class="ceo-logo-row">
             <span class="ceo-logo-text"><span class="e">E</span>RGSN</span>
           </div>
@@ -961,14 +977,16 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ COMPLIANCE ═══════════════════════════ -->
 <section id="compliance">
   <div class="container compliance-inner">
-    <span class="label">Certifications &amp; Standards</span>
-    <h2 class="h-lg" style="margin:.6rem 0 1rem">Built for U.S. Compliance</h2>
-    <p class="body-lg" style="max-width:560px">Engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.</p>
+    <div class="reveal">
+      <span class="label">Certifications &amp; Standards</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Built for U.S. Compliance</h2>
+      <p class="body-lg" style="max-width:560px">Engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.</p>
+    </div>
     <div class="comp-grid">
-      <div class="comp-card"><div class="comp-icon"></div><p class="comp-title">HIPAA Compliant</p><p class="comp-desc">All DL Series models meet HIPAA document destruction requirements for healthcare data security.</p></div>
-      <div class="comp-card"><div class="comp-icon"></div><p class="comp-title">GSA Schedule</p><p class="comp-desc">Available on U.S. General Services Administration schedule &mdash; eligible for federal procurement.</p></div>
-      <div class="comp-card"><div class="comp-icon"></div><p class="comp-title">Level 3 / P-4</p><p class="comp-desc">DIN 66399 compliant shred particle size &mdash; 5/64&quot; &times; 1&#8209;3/16&quot; cross-cut particles.</p></div>
-      <div class="comp-card"><div class="comp-icon"></div><p class="comp-title">HS 8472.90</p><p class="comp-desc">Properly classified under U.S. import tariff schedule &mdash; streamlined customs at Baltimore Port.</p></div>
+      <div class="comp-card reveal" style="--i:0"><div class="comp-icon"></div><p class="comp-title">HIPAA Compliant</p><p class="comp-desc">All DL Series models meet HIPAA document destruction requirements for healthcare data security.</p></div>
+      <div class="comp-card reveal" style="--i:1"><div class="comp-icon"></div><p class="comp-title">GSA Schedule</p><p class="comp-desc">Available on U.S. General Services Administration schedule &mdash; eligible for federal procurement.</p></div>
+      <div class="comp-card reveal" style="--i:2"><div class="comp-icon"></div><p class="comp-title">Level 3 / P-4</p><p class="comp-desc">DIN 66399 compliant shred particle size &mdash; 5/64&quot; &times; 1&#8209;3/16&quot; cross-cut particles.</p></div>
+      <div class="comp-card reveal" style="--i:3"><div class="comp-icon"></div><p class="comp-title">HS 8472.90</p><p class="comp-desc">Properly classified under U.S. import tariff schedule &mdash; streamlined customs at Baltimore Port.</p></div>
     </div>
   </div>
 </section>
@@ -977,7 +995,7 @@ section { scroll-margin-top: var(--nav-h); }
 <section id="rfq">
   <div class="container rfq-inner">
     <div class="rfq-grid">
-      <div class="rfq-info">
+      <div class="rfq-info reveal">
         <span class="label">Get in Touch</span>
         <h2 class="h-lg" style="margin:.6rem 0 1rem;color:var(--white)">Request a Quote</h2>
         <p class="body-lg" style="color:var(--steel-lt)">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).</p>
@@ -989,7 +1007,7 @@ section { scroll-margin-top: var(--nav-h); }
           <li><span class="rfq-cl">Lead</span><span class="rfq-cv">4&ndash;6 weeks after advance payment</span></li>
         </ul>
       </div>
-      <div class="rfq-form" id="rfqFormWrap">
+      <div class="rfq-form reveal" style="--i:1" id="rfqFormWrap">
         <div id="rfqFields">
           <div class="f-row">
             <div class="f-grp"><label class="f-lbl">First Name <span>*</span></label><input type="text" class="f-in" id="fFirst" placeholder="Greg"></div>
@@ -1172,6 +1190,25 @@ function closeMenu() {
   document.getElementById('ham').classList.remove('open');
   document.getElementById('mobileMenu').classList.remove('open');
 }
+
+(function initReveal(){
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(el => io.observe(el));
+})();
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
