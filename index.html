@@ -181,7 +181,9 @@ section { scroll-margin-top: var(--nav-h); }
 #home {
   min-height: 100vh;
   padding-top: var(--nav-h);
-  background: var(--navy);
+  background:
+    linear-gradient(135deg, rgba(11,29,56,.94) 0%, rgba(11,29,56,.82) 55%, rgba(18,34,66,.78) 100%),
+    url('images/hero-workplace.jpg') center/cover no-repeat;
   display: flex; flex-direction: column;
   position: relative; overflow: hidden;
 }
@@ -416,6 +418,37 @@ section { scroll-margin-top: var(--nav-h); }
 ════════════════════════════════════════ */
 #about { background: var(--white); }
 .about-inner { padding: clamp(3.5rem,7vh,6rem) 0; }
+.about-visual {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: clamp(2.5rem,5vh,4rem);
+  aspect-ratio: 21 / 9;
+  box-shadow: 0 20px 50px -22px rgba(11,29,56,.35);
+}
+.about-visual img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+.about-visual:hover img { transform: scale(1.03); }
+.about-visual-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(11,29,56,.72) 0%, rgba(11,29,56,.35) 55%, rgba(11,29,56,.1) 100%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: clamp(1.25rem,3vw,2.5rem);
+  gap: .5rem;
+  border-left: 3px solid var(--gold);
+}
+.about-visual-overlay .label { color: var(--gold-light); }
+.about-visual-caption {
+  font-family: var(--fc);
+  font-size: clamp(20px,2.4vw,32px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--white);
+  max-width: 640px;
+}
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -766,6 +799,13 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ ABOUT ════════════════════════════════ -->
 <section id="about">
   <div class="container about-inner">
+    <figure class="about-visual">
+      <img src="images/about-workplace.jpg" alt="Modern office workplace environment" loading="lazy">
+      <figcaption class="about-visual-overlay">
+        <span class="label">The Future Workplace</span>
+        <p class="about-visual-caption">Document security, engineered for the modern office.</p>
+      </figcaption>
+    </figure>
     <div class="about-grid">
       <div class="about-copy">
         <span class="label">Who We Are</span>
@@ -908,7 +948,6 @@ section { scroll-margin-top: var(--nav-h); }
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">&copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea</p>
-      <p class="footer-swift">KEB Hana Bank &middot; Acct: 246-910004-08432 &middot; SWIFT: HNBNKRSE (verify before use)</p>
     </div>
   </div>
 </footer>
