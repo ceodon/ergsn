@@ -308,6 +308,22 @@ section { scroll-margin-top: var(--nav-h); }
   box-shadow: inset 0 0 0 2px var(--gold);
   z-index: 1;
 }
+.card-image {
+  margin: calc(clamp(1.25rem,2.5vw,2rem) * -1) calc(clamp(1.25rem,2.5vw,2rem) * -1) 1.25rem;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(180deg, #f5f8fc 0%, #e8eef6 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  overflow: hidden;
+}
+.card-image img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  transition: transform .35s ease;
+  filter: drop-shadow(0 6px 14px rgba(11,29,56,.18));
+}
+.product-card:hover .card-image img { transform: scale(1.05); }
 .card-tag {
   font-family: var(--fc); font-size: 10px; font-weight: 600;
   letter-spacing: .14em; text-transform: uppercase;
@@ -381,6 +397,18 @@ section { scroll-margin-top: var(--nav-h); }
   transition: background .15s, color .15s;
 }
 .modal-close:hover { background: rgba(255,255,255,.1); color: var(--white); }
+.modal-image-row {
+  background: linear-gradient(180deg, #f5f8fc 0%, #e8eef6 100%);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(1.5rem,3vw,2.5rem);
+  display: flex; align-items: center; justify-content: center;
+  min-height: clamp(220px, 30vh, 340px);
+}
+.modal-image-row img {
+  max-width: 100%; max-height: clamp(200px, 28vh, 320px);
+  object-fit: contain;
+  filter: drop-shadow(0 14px 30px rgba(11,29,56,.22));
+}
 .modal-bd {
   padding: clamp(1.25rem,3vw,2.5rem);
   display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem,3vw,2.5rem);
@@ -730,7 +758,23 @@ section { scroll-margin-top: var(--nav-h); }
 
     <div class="product-grid" id="productGrid">
 
+      <div class="product-card" tabindex="0" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter')openModal('dl10x')">
+        <div class="card-image"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></div>
+        <p class="card-tag">Entry Mid-Sized Office</p>
+        <p class="card-model">DL-10X</p>
+        <p class="card-part">Part No: DL10X (RS-2200A)</p>
+        <p class="card-desc">Level 3 / P-4 Cross Cut with extra-small 1/12" &times; 5/8" particles &mdash; compact footprint for small to mid-sized offices.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Entry Width</p><p class="spec-val">10-3/4"</p></div>
+          <div><p class="spec-lbl">Sheet Capacity</p><p class="spec-val">20&ndash;24 sheets</p></div>
+          <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">20 gal</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">2.2 Hp</p></div>
+        </div>
+        <span class="card-cta">View Full Specs</span>
+      </div>
+
       <div class="product-card" tabindex="0" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter')openModal('dl12x')">
+        <div class="card-image"><img src="images/products/dl-12x.jpg" alt="ERGSN DL-12X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Mid-Sized Office</p>
         <p class="card-model">DL-12X</p>
         <p class="card-part">Part No: DL12X (RS-3300A)</p>
@@ -745,6 +789,7 @@ section { scroll-margin-top: var(--nav-h); }
       </div>
 
       <div class="product-card" tabindex="0" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter')openModal('dl16x')">
+        <div class="card-image"><img src="images/products/dl-16x.jpg" alt="ERGSN DL-16X crosscut paper shredder" loading="lazy"></div>
         <p class="card-tag">Large Office / Departmental</p>
         <p class="card-model">DL-16X</p>
         <p class="card-part">Part No: DL16X (RS-3890A)</p>
@@ -758,7 +803,23 @@ section { scroll-margin-top: var(--nav-h); }
         <span class="card-cta">View Full Specs</span>
       </div>
 
+      <div class="product-card" tabindex="0" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter')openModal('dl10xd')">
+        <div class="card-image"><img src="images/products/dl-10xd.jpg" alt="ERGSN DL-10XD high volume crosscut shredder" loading="lazy"></div>
+        <p class="card-tag">High-Capacity 10" Class</p>
+        <p class="card-model">DL-10XD</p>
+        <p class="card-part">Part No: DL10XD (RS-6602A)</p>
+        <p class="card-desc">High-volume 10" class shredder &mdash; up to 42 sheets per pass in a compact form factor.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Entry Width</p><p class="spec-val">10-1/4"</p></div>
+          <div><p class="spec-lbl">Sheet Capacity</p><p class="spec-val">40&ndash;42 sheets</p></div>
+          <div><p class="spec-lbl">Waste Bin</p><p class="spec-val">30 gal</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">2.5 Hp</p></div>
+        </div>
+        <span class="card-cta">View Full Specs</span>
+      </div>
+
       <div class="product-card" tabindex="0" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter')openModal('dl12xd')">
+        <div class="card-image"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></div>
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
         <p class="card-part">Part No: DL12XD (RS-3300A XD)</p>
@@ -774,6 +835,7 @@ section { scroll-margin-top: var(--nav-h); }
 
       <div class="product-card" tabindex="0" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter')openModal('dl16xd')">
         <span class="card-badge">Flagship</span>
+        <div class="card-image"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD flagship industrial shredder" loading="lazy"></div>
         <p class="card-tag">Heavy-Duty Industrial</p>
         <p class="card-model">DL-16XD</p>
         <p class="card-part">Part No: DL16XD (RS-8200A)</p>
@@ -814,7 +876,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="body-lg">Every ERGSN shredder uses an all-metal chain drive &mdash; eliminating the nylon and plastic gears found in lower-quality alternatives. Machines built to operate reliably for years, not months.</p>
         <p class="body-lg">Long-term supply partner of Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders.</p>
         <div class="kpi-grid">
-          <div class="kpi-cell"><p class="kpi-num">4</p><p class="kpi-lbl">DL Series Models</p></div>
+          <div class="kpi-cell"><p class="kpi-num">6</p><p class="kpi-lbl">DL Series Models</p></div>
           <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl">Baltimore Port Terms</p></div>
           <div class="kpi-cell"><p class="kpi-num">P-4</p><p class="kpi-lbl">Security Level</p></div>
           <div class="kpi-cell"><p class="kpi-num">100%</p><p class="kpi-lbl">All-Metal Construction</p></div>
@@ -885,8 +947,10 @@ section { scroll-margin-top: var(--nav-h); }
           <div class="f-grp">
             <label class="f-lbl">Models of Interest <span>*</span></label>
             <div class="model-grid">
+              <label class="model-cb"><input type="checkbox" id="mDL10X"><span class="model-cb-lbl">DL-10X</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL12X"><span class="model-cb-lbl">DL-12X</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL16X"><span class="model-cb-lbl">DL-16X</span></label>
+              <label class="model-cb"><input type="checkbox" id="mDL10XD"><span class="model-cb-lbl">DL-10XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL12XD"><span class="model-cb-lbl">DL-12XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL16XD"><span class="model-cb-lbl">DL-16XD</span></label>
             </div>
@@ -930,8 +994,10 @@ section { scroll-margin-top: var(--nav-h); }
       <div>
         <p class="footer-col-title">Products</p>
         <ul class="footer-links">
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl10x'),200)">DL-10X Shredder</a></li>
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl12x'),200)">DL-12X Shredder</a></li>
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl16x'),200)">DL-16X Shredder</a></li>
+          <li><a href="#products" onclick="setTimeout(()=>openModal('dl10xd'),200)">DL-10XD Shredder</a></li>
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl12xd'),200)">DL-12XD Shredder</a></li>
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl16xd'),200)">DL-16XD Shredder</a></li>
         </ul>
@@ -955,26 +1021,44 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ DATA + JS ══════════════════════════════ -->
 <script>
 const P = {
+  dl10x: {
+    model:'DL-10X', sub:'Level 3 / P-4 Cross Cut \u2014 Entry Mid-Sized Office Shredder', part:'DL10X (RS-2200A)',
+    img:'images/products/dl-10x.jpg',
+    specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','10-3/4\u201d'],['Sheet Capacity','20\u201324 sheets'],['Shred Size','1/12\u201d \u00d7 5/8\u201d particles'],['Speed','22 FPM'],['Motor','2.2 Hp'],['Waste Bin','20 Gallons'],['Dimensions','30\u201d \u00d7 18\u201d \u00d7 16\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
+    features:['Extra-small 1/12\u201d \u00d7 5/8\u201d particle \u2014 added document security','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','Load Indicator Display \u2014 prevents overfeeding','Automatic Reverse \u2014 prevents paper jams','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','All-Metal Cabinet on Swivel Casters \u2014 easy mobility','HIPAA Compliant \u2014 GSA Schedule'],
+    desc:'The DL-10X is ERGSN\u2019s entry-level mid-sized Level 3 / P-4 Cross Cut Paper Shredder. Built around the same Enhanced Cutter Design, Large Steel Gears, and All-Metal Chain Drive as the rest of the DL series, the DL-10X delivers extra-small 1/12\u201d \u00d7 5/8\u201d particles for added security in a compact 30\u201d \u00d7 18\u201d \u00d7 16\u201d footprint. Ideal for small to mid-sized offices that require higher security and long-term durability at a smaller form factor.'
+  },
   dl12x: {
     model:'DL-12X', sub:'Level 3 / P-4 Cross Cut \u2014 Mid-Sized Office Shredder', part:'DL12X (RS-3300A)',
+    img:'images/products/dl-12x.jpg',
     specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','12-1/4\u201d'],['Sheet Capacity','Up to 26 sheets'],['Shred Size','5/64\u201d \u00d7 1\u20113/16\u201d'],['Speed','22 FPM'],['Motor','2.2 Hp'],['Waste Bin','30 Gallons'],['Dimensions','33\u201d \u00d7 20\u201d \u00d7 18\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','Load Indicator Display \u2014 prevents overfeeding','Automatic Reverse \u2014 prevents paper jams','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','All-Metal Cabinet on Swivel Casters \u2014 easy mobility','Dual Modes: Automatic Start/Stop or Manual','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-12X is a Level 3 / P-4 Cross Cut Paper Shredder built for long-term durability. With a shred particle of 5/64 \u00d7 1\u20113/16 inches and a true 12-1/4\u201d throat opening, it allows easy feeding in any direction. An Enhanced Cutter Design, Large Steel Gears, and All-Metal Chain Drive ensure zero nylon or plastic gears. Oil-free operation reduces maintenance costs. Suitable for mid-sized office environments.'
   },
   dl16x: {
     model:'DL-16X', sub:'Level 3 / P-4 Cross Cut \u2014 Large Office / Departmental', part:'DL16X (RS-3890A)',
+    img:'images/products/dl-16x.jpg',
     specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','16-1/4\u201d'],['Sheet Capacity','Up to 26 sheets'],['Shred Size','5/64\u201d \u00d7 1\u20113/16\u201d'],['Speed','22 FPM'],['Motor','2.5 Hp'],['Waste Bin','35 Gallons'],['Dimensions','35\u201d \u00d7 23\u201d \u00d7 20\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['Widest entry (16-1/4\u201d) in DL cross-cut series \u2014 departmental use','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','35-Gallon Waste Bin \u2014 less frequent emptying','Load Indicator Display \u2014 prevents overfeeding','Automatic Reverse \u2014 prevents paper jams','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-16X is a Level 3 / P-4 Cross Cut Paper Shredder designed for departmental high-volume shredding. With a wide 16-1/4\u201d entry and up to 26 sheets at 22 FPM, it handles busy office environments with ease. All-Metal Chain Drive with Large Steel Gears requires no oil. The 35-gallon waste bin and robust 2.5 Hp motor make it the workhorse of the DL series.'
   },
+  dl10xd: {
+    model:'DL-10XD', sub:'Level 3 / P-4 Cross Cut \u2014 High-Capacity 10\u201d Class', part:'DL10XD (RS-6602A)',
+    img:'images/products/dl-10xd.jpg',
+    specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','10-1/4\u201d'],['Sheet Capacity','40\u201342 sheets'],['Shred Size','5/32\u201d \u00d7 1\u20113/16\u201d'],['Speed','22 FPM'],['Motor','2.5 Hp'],['Waste Bin','30 Gallons'],['Dimensions','38\u201d \u00d7 20\u201d \u00d7 18\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
+    features:['High-capacity 10\u201d class \u2014 up to 42 sheets per pass in a compact footprint','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','Load Indicator Display \u2014 prevents overfeeding at high loads','Automatic Reverse \u2014 prevents jams under heavy use','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','All-Metal Cabinet on Swivel Casters \u2014 easy mobility','HIPAA Compliant \u2014 GSA Schedule'],
+    desc:'The DL-10XD is a high-volume Level 3 / P-4 Cross Cut Paper Shredder in ERGSN\u2019s 10\u201d class. Engineered for departments needing high throughput without the larger 12\u201d or 16\u201d footprint, it delivers up to 42 sheets per pass with a 2.5 Hp motor and 30-gallon waste bin. All-Metal Chain Drive and Large Steel Gears guarantee long-term reliability, while oil-free operation minimizes maintenance. Ideal for legal, healthcare, and financial offices with steady high-volume shred loads.'
+  },
   dl12xd: {
     model:'DL-12XD', sub:'Level 3 / P-4 Cross Cut \u2014 High-Capacity 12\u201d Class', part:'DL12XD (RS-3300A XD)',
+    img:'images/products/dl-12xd.jpg',
     specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','12-1/4\u201d'],['Sheet Capacity','Up to 45 sheets'],['Shred Size','5/32\u201d \u00d7 1\u20113/16\u201d'],['Speed','22 FPM'],['Motor','2.3 Hp'],['Waste Bin','30 Gallons'],['Dimensions','33\u201d \u00d7 20\u201d \u00d7 18\u201d'],['Oil Required','No (Oil-Free)'],['Operation','Auto / Manual'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Energy','Standby Mode'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['Highest sheet capacity in 12\u201d class \u2014 up to 45 sheets per pass','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','Contactless Thermally Protected Motor \u2014 quiet, high performance','Load Indicator Display \u2014 prevents overfeeding at high loads','Automatic Reverse \u2014 prevents jams under heavy use','Energy Saving Standby Mode','Safety Interlock Switches \u2014 full bin / open door shut-off','All-Metal Cabinet on Swivel Casters \u2014 easy mobility','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-12XD offers the highest sheet capacity in the 12\u201d mid-size class. With 45 sheets per pass and a finer shred of 5/32 \u00d7 1\u20113/16 inches, it is built for departments requiring both throughput and higher document security. Enhanced Cutter Design, Large Steel Gears, and All-Metal Chain Drive deliver zero nylon or plastic gears \u2014 superior durability guaranteed.'
   },
   dl16xd: {
     model:'DL-16XD', sub:'Heavy-Duty Industrial Shredder \u2014 Flagship Model', part:'DL16XD (RS-8200A)',
+    img:'images/products/dl-16xd.jpg',
     specs:[['Cut Type','Cross Cut'],['Entry Width','16-1/4\u201d'],['Sheet Capacity','45+ sheets'],['Speed','22 FPM'],['Voltage','115V Single Phase, 60Hz'],['Amperage','30 Amp'],['Plug','NEMA L5-30P Locking'],['Cord','12/3 SO/SOWA, 10 ft'],['Oil Required','No (Oil-Free)'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Packaging','Individual Crate'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['Flagship model \u2014 maximum throughput for continuous operation','Widest entry 16-1/4\u201d \u2014 handles large-format documents','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','115V / 60Hz / 30A \u2014 U.S. electrical standards (NEMA L5-30P)','Individually crated for secure ocean freight','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder engineered for continuous heavy-duty operation. Pre-wired for U.S. electrical standards at 115V/60Hz/30A with NEMA L5-30P locking plug and 12/3 cord, it installs directly in U.S. commercial and industrial facilities. Individually crated for secure ocean freight \u2014 ERGSN\'s highest-capacity offering for institutional buyers.'
@@ -994,6 +1078,7 @@ function openModal(id) {
       </div>
       <button class="modal-close" onclick="closeModal()" aria-label="Close">\u2715</button>
     </div>
+    ${p.img ? `<div class="modal-image-row"><img src="${p.img}" alt="ERGSN ${p.model} shredder" loading="lazy"></div>` : ''}
     <div class="modal-bd">
       <div><p class="modal-sec-title">Technical Specifications</p><table class="spec-tbl"><tbody>${specs}</tbody></table></div>
       <div><p class="modal-sec-title">Key Features &amp; Benefits</p><ul class="feat-list">${feats}</ul></div>
@@ -1029,7 +1114,7 @@ function closeMenu() {
 
 function submitRFQ() {
   const v = (id) => document.getElementById(id).value.trim();
-  const checks = ['mDL12X','mDL16X','mDL12XD','mDL16XD'].filter(id => document.getElementById(id).checked);
+  const checks = ['mDL10X','mDL12X','mDL16X','mDL10XD','mDL12XD','mDL16XD'].filter(id => document.getElementById(id).checked);
   if (!v('fFirst') || !v('fLast') || !v('fCo') || !v('fEmail')) { alert('Please fill in all required fields.'); return; }
   if (!v('fEmail').includes('@')) { alert('Please enter a valid email address.'); return; }
   if (!checks.length) { alert('Please select at least one model of interest.'); return; }
