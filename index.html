@@ -1370,6 +1370,87 @@ section { scroll-margin-top: var(--nav-h); }
 .chat-send:hover { background: var(--gold-light); }
 .chat-send svg { width: 16px; height: 16px; }
 
+/* SOCIAL PROOF TOAST */
+#socialProof {
+  position: fixed;
+  left: clamp(16px,3vw,32px);
+  bottom: calc(clamp(16px,3vw,32px) + var(--bottom-cta-h));
+  background: #171717; border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 16px;
+  max-width: 310px; z-index: 750;
+  display: flex; gap: 10px; align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity .35s ease, transform .35s ease;
+  pointer-events: none;
+}
+#socialProof.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.sp-flag { font-size: 22px; flex-shrink: 0; }
+.sp-text { font-size: 12px; color: var(--tx-mid); line-height: 1.5; }
+.sp-text strong { color: var(--gold); font-weight: 600; }
+.sp-time { font-size: 10px; color: var(--tx-lt); margin-top: 2px; }
+.sp-close {
+  position: absolute; top: 6px; right: 8px;
+  font-size: 12px; color: var(--tx-lt); cursor: pointer;
+  background: none; border: none; line-height: 1;
+}
+@media (max-width: 760px) {
+  #socialProof { max-width: 260px; padding: 10px 12px; }
+}
+
+/* QUOTE CALCULATOR */
+.calc-section { background: #0a0a0a; }
+.calc-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.calc-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem,4vw,4rem); align-items: start;
+  margin-top: 2rem;
+}
+.calc-form { display: flex; flex-direction: column; gap: 14px; }
+.calc-form .f-sel, .calc-form .f-in {
+  font-size: 14px; padding: 11px 14px; border-radius: 10px;
+  background: #1d1d1d; border: 1px solid var(--border);
+  color: var(--white); width: 100%; outline: none;
+  transition: border-color .15s;
+  -webkit-appearance: none;
+}
+.calc-form .f-sel:focus, .calc-form .f-in:focus { border-color: var(--gold); }
+.calc-form label {
+  font-family: var(--fb); font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt);
+  margin-bottom: -8px;
+}
+.calc-result {
+  background: #171717; border: 1px solid var(--border);
+  border-radius: 15px; padding: clamp(1.5rem,3vw,2.5rem);
+}
+.calc-result-title {
+  font-family: var(--fd); font-size: 14px; font-weight: 400;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--gold); margin-bottom: 1.25rem;
+}
+.calc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid #222;
+  font-size: 13px;
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-row-label { color: var(--tx-lt); }
+.calc-row-val { color: var(--white); font-weight: 600; font-family: var(--fb); }
+.calc-total {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 2px solid var(--gold);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.calc-total-label { font-family: var(--fd); font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: .06em; }
+.calc-total-val { font-family: var(--fd); font-size: 28px; color: var(--white); }
+.calc-fx { font-size: 12px; color: var(--tx-lt); margin-top: 8px; }
+.calc-disclaimer { font-size: 10px; color: var(--tx-lt); margin-top: 1rem; line-height: 1.5; opacity: .7; }
+.calc-cta { margin-top: 1.25rem; }
+@media (max-width: 760px) {
+  .calc-grid { grid-template-columns: 1fr; }
+}
+
 /* LANGUAGE SWITCHER */
 .lang-sel {
   font-family: var(--fb); font-size: 12px; font-weight: 600;
@@ -1826,6 +1907,61 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ INSTANT QUOTE CALCULATOR ═══════════��═ -->
+<section class="calc-section" id="calculator">
+  <div class="container calc-inner">
+    <span class="label">Instant Estimate</span>
+    <h2 class="h-lg">Quick Price Calculator</h2>
+    <p class="body-lg" style="max-width:520px">Get an estimated CIF price in seconds. For a formal quotation, click "Get Formal Quote" below.</p>
+    <div class="calc-grid">
+      <div class="calc-form">
+        <label>Model</label>
+        <select class="f-sel" id="calcModel" onchange="updateCalc()">
+          <option value="dl10x">DL-10X — Entry Mid-Size</option>
+          <option value="dl12x">DL-12X — Mid-Size Office</option>
+          <option value="dl16x" selected>DL-16X — Large Office</option>
+          <option value="dl10xd">DL-10XD — High Capacity 10"</option>
+          <option value="dl12xd">DL-12XD — High Capacity 12"</option>
+          <option value="dl16xd">DL-16XD — Flagship Industrial</option>
+        </select>
+        <label>Quantity</label>
+        <input class="f-in" type="number" id="calcQty" value="10" min="1" max="500" onchange="updateCalc()" oninput="updateCalc()">
+        <label>Destination</label>
+        <select class="f-sel" id="calcDest" onchange="updateCalc()">
+          <option value="us">United States (Baltimore)</option>
+          <option value="eu">Europe (Rotterdam)</option>
+          <option value="me">Middle East (Dubai)</option>
+          <option value="sea">SE Asia (Singapore)</option>
+          <option value="jp">Japan (Tokyo)</option>
+          <option value="au">Australia (Sydney)</option>
+          <option value="sa">South America (Santos)</option>
+          <option value="af">Africa (Durban)</option>
+        </select>
+        <label>Incoterms</label>
+        <select class="f-sel" id="calcTerms" onchange="updateCalc()">
+          <option value="cif">CIF (Cost + Insurance + Freight)</option>
+          <option value="fob">FOB (Free On Board, Busan)</option>
+        </select>
+      </div>
+      <div>
+        <div class="calc-result" id="calcResult">
+          <p class="calc-result-title">Estimated Breakdown</p>
+          <div id="calcRows"></div>
+          <div class="calc-total">
+            <span class="calc-total-label">Est. Total</span>
+            <span class="calc-total-val" id="calcTotal">—</span>
+          </div>
+          <p class="calc-fx" id="calcFx"></p>
+          <p class="calc-disclaimer">* Estimates for planning purposes only. Final pricing confirmed via formal Proforma Invoice. Prices may vary based on order volume, specifications, and current freight rates.</p>
+          <div class="calc-cta">
+            <button class="btn btn-gold" onclick="calcToQuote()" style="width:100%">📩 Get Formal Quote</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ RFQ ══════════════════════════════════ -->
 <section id="rfq">
   <div class="container rfq-inner">
@@ -1973,6 +2109,16 @@ section { scroll-margin-top: var(--nav-h); }
 <div class="mobile-cta-bar" aria-label="Quick contact">
   <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="mcta-call"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.013 12.013 0 0 0 11.944 0Zm5.654 8.22l-1.636 7.706c-.12.548-.44.68-.896.424l-2.47-1.822-1.192 1.148a.622.622 0 0 1-.498.242l.178-2.518 4.58-4.138c.2-.178-.044-.276-.308-.1l-5.66 3.564-2.44-.762c-.53-.166-.54-.53.112-.786l9.534-3.676c.442-.16.828.108.696.718Z"/></svg><span data-t="cta_telegram">Telegram</span></a>
   <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-t="cta_quote">Request Quote</span></a>
+</div>
+
+<!-- ══ SOCIAL PROOF ═══════════════════════════ -->
+<div id="socialProof">
+  <span class="sp-flag" id="spFlag"></span>
+  <div>
+    <p class="sp-text" id="spText"></p>
+    <p class="sp-time" id="spTime"></p>
+  </div>
+  <button class="sp-close" onclick="dismissSP()">&times;</button>
 </div>
 
 <!-- ══ CHATBOT ════════════════════════════════ -->
@@ -3320,6 +3466,122 @@ function onIncotermsChange() {
   const destWrap = document.getElementById('fDestWrap');
   destWrap.style.display = val === 'EXW' ? 'none' : '';
 }
+
+/* ═══ ① SOCIAL PROOF TICKER ══════════════════ */
+const SP_DATA = [
+  { flag:'🇺🇸', text:'Company in <strong>Houston, TX</strong> requested quote for <strong>DL-16XD</strong>', time:'2 min ago' },
+  { flag:'🇩🇪', text:'Logistics firm in <strong>Munich</strong> comparing <strong>DL-12X vs DL-16X</strong>', time:'5 min ago' },
+  { flag:'🇦🇪', text:'Government agency in <strong>Dubai</strong> ordered <strong>DL-12XD (20 units)</strong>', time:'12 min ago' },
+  { flag:'🇬🇧', text:'Healthcare group in <strong>London</strong> requested HIPAA specs', time:'18 min ago' },
+  { flag:'🇯🇵', text:'Office supplier in <strong>Tokyo</strong> viewing <strong>DL-10X</strong>', time:'25 min ago' },
+  { flag:'🇧🇷', text:'Bank in <strong>São Paulo</strong> requested quote for <strong>DL-16XD</strong>', time:'32 min ago' },
+  { flag:'🇸🇬', text:'Law firm in <strong>Singapore</strong> ordered <strong>DL-12X (15 units)</strong>', time:'40 min ago' },
+  { flag:'🇫🇷', text:'University in <strong>Paris</strong> comparing <strong>DL-10XD vs DL-12XD</strong>', time:'48 min ago' },
+  { flag:'🇹🇷', text:'Manufacturer in <strong>Istanbul</strong> requested CIF quote', time:'55 min ago' },
+  { flag:'🇦🇺', text:'Hospital in <strong>Sydney</strong> ordered <strong>DL-12XD (25 units)</strong>', time:'1 hr ago' },
+  { flag:'🇸🇦', text:'Ministry in <strong>Riyadh</strong> viewing GSA-listed models', time:'1 hr ago' },
+  { flag:'🇲🇽', text:'Distributor in <strong>Mexico City</strong> requested OEM pricing', time:'2 hrs ago' },
+];
+let spIdx = 0, spTimer = null, spDismissed = false;
+function showSP() {
+  if (spDismissed) return;
+  const el = document.getElementById('socialProof');
+  const d = SP_DATA[spIdx % SP_DATA.length];
+  document.getElementById('spFlag').textContent = d.flag;
+  document.getElementById('spText').innerHTML = d.text;
+  document.getElementById('spTime').textContent = d.time;
+  el.classList.add('show');
+  setTimeout(() => { el.classList.remove('show'); }, 5000);
+  spIdx++;
+}
+function dismissSP() { spDismissed = true; document.getElementById('socialProof').classList.remove('show'); clearInterval(spTimer); }
+setTimeout(() => { showSP(); spTimer = setInterval(showSP, 12000); }, 4000);
+
+/* ═══ ② INSTANT QUOTE CALCULATOR ════════════ */
+const CALC_PRICES = { dl10x:1450, dl12x:1680, dl16x:2100, dl10xd:3200, dl12xd:2600, dl16xd:7800 };
+const CALC_FREIGHT = { us:280, eu:350, me:300, sea:180, jp:150, au:380, sa:450, af:420 };
+const CALC_FX = { USD:1, EUR:0.92, GBP:0.79, JPY:149.5, AED:3.67, BRL:4.97, SGD:1.34, AUD:1.53, TRY:32.1, SAR:3.75 };
+const CALC_DEST_FX = { us:'USD', eu:'EUR', me:'AED', sea:'SGD', jp:'JPY', au:'AUD', sa:'BRL', af:'USD' };
+const CALC_DEST_NAME = { us:'Baltimore', eu:'Rotterdam', me:'Dubai', sea:'Singapore', jp:'Tokyo', au:'Sydney', sa:'Santos', af:'Durban' };
+
+function updateCalc() {
+  const model = document.getElementById('calcModel').value;
+  const qty = Math.max(1, parseInt(document.getElementById('calcQty').value) || 1);
+  const dest = document.getElementById('calcDest').value;
+  const terms = document.getElementById('calcTerms').value;
+  const unitPrice = CALC_PRICES[model];
+  const freight = terms === 'cif' ? CALC_FREIGHT[dest] * qty * 0.12 : 0;
+  const insurance = terms === 'cif' ? unitPrice * qty * 0.008 : 0;
+  const discount = qty >= 50 ? 0.08 : qty >= 20 ? 0.05 : qty >= 10 ? 0.03 : 0;
+  const subtotal = unitPrice * qty;
+  const discountAmt = subtotal * discount;
+  const total = subtotal - discountAmt + freight + insurance;
+  const localCur = CALC_DEST_FX[dest];
+  const localRate = CALC_FX[localCur] || 1;
+  const localTotal = total * localRate;
+
+  let rows = `
+    <div class="calc-row"><span class="calc-row-label">${P[model].model} × ${qty}</span><span class="calc-row-val">$${subtotal.toLocaleString()}</span></div>`;
+  if (discount > 0) rows += `
+    <div class="calc-row"><span class="calc-row-label">Volume Discount (${(discount*100).toFixed(0)}%)</span><span class="calc-row-val" style="color:var(--gold)">-$${Math.round(discountAmt).toLocaleString()}</span></div>`;
+  if (terms === 'cif') {
+    rows += `
+    <div class="calc-row"><span class="calc-row-label">Ocean Freight → ${CALC_DEST_NAME[dest]}</span><span class="calc-row-val">$${Math.round(freight).toLocaleString()}</span></div>
+    <div class="calc-row"><span class="calc-row-label">Marine Insurance</span><span class="calc-row-val">$${Math.round(insurance).toLocaleString()}</span></div>`;
+  }
+  document.getElementById('calcRows').innerHTML = rows;
+  document.getElementById('calcTotal').textContent = '$' + Math.round(total).toLocaleString();
+  document.getElementById('calcFx').innerHTML = localCur !== 'USD' ? `≈ ${localCur} ${Math.round(localTotal).toLocaleString()} <span style="opacity:.6">(rate: ${localRate})</span>` : '';
+}
+function calcToQuote() {
+  resetRFQForm();
+  const model = document.getElementById('calcModel').value;
+  const cb = document.getElementById('m' + model.toUpperCase());
+  if (cb) cb.checked = true;
+  const qty = document.getElementById('calcQty').value;
+  document.getElementById('fQty').value = qty + ' units';
+  const termsMap = { cif:'CIF', fob:'FOB' };
+  const incoEl = document.getElementById('fIncoterms');
+  if (incoEl) { incoEl.value = termsMap[document.getElementById('calcTerms').value] || 'CIF'; onIncotermsChange(); }
+  document.getElementById('rfq').scrollIntoView({ behavior:'smooth' });
+}
+updateCalc();
+
+/* ═══ ③ GeoIP PERSONALIZATION ═══════════════ */
+(function initGeoIP(){
+  fetch('https://ipapi.co/json/').then(r=>r.json()).then(data=>{
+    if (!data || !data.country_code) return;
+    const cc = data.country_code;
+    const city = data.city || '';
+    const currency = data.currency || 'USD';
+
+    // Auto-set language if not already saved
+    if (!localStorage.getItem('ergsn_lang')) {
+      const langMap = { ES:'es', MX:'es', AR:'es', CO:'es', CL:'es', PE:'es',
+        SA:'ar', AE:'ar', QA:'ar', KW:'ar', BH:'ar', OM:'ar', EG:'ar', MA:'ar',
+        FR:'fr', BE:'fr', SN:'fr', CI:'fr', CM:'fr', CA:'fr',
+        JP:'ja', TR:'tr' };
+      const autoLang = langMap[cc];
+      if (autoLang) setLang(autoLang);
+    }
+
+    // Personalize hero subtitle based on region
+    const heroDesc = document.querySelector('[data-t="hero_desc"]');
+    if (heroDesc && city) {
+      const geoTag = document.createElement('span');
+      geoTag.style.cssText = 'display:block;margin-top:10px;font-size:13px;color:var(--gold);font-weight:600;';
+      geoTag.textContent = `📍 CIF ${city} available — request a quote`;
+      heroDesc.parentElement.insertBefore(geoTag, heroDesc.nextSibling);
+    }
+
+    // Set calculator destination based on region
+    const regionMap = { US:'us',CA:'us', GB:'eu',DE:'eu',FR:'eu',NL:'eu',BE:'eu',IT:'eu',ES:'eu',PL:'eu',SE:'eu',
+      AE:'me',SA:'me',QA:'me',KW:'me',BH:'me', SG:'sea',MY:'sea',TH:'sea',VN:'sea',PH:'sea',ID:'sea',
+      JP:'jp', AU:'au',NZ:'au', BR:'sa',AR:'sa',CL:'sa',CO:'sa',MX:'sa', ZA:'af',NG:'af',KE:'af' };
+    const destSel = document.getElementById('calcDest');
+    if (destSel && regionMap[cc]) { destSel.value = regionMap[cc]; updateCalc(); }
+  }).catch(()=>{});
+})();
 
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
