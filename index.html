@@ -1224,13 +1224,13 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .map-port:hover { opacity: 1; }
 .map-label {
-  font-family: var(--fb); font-size: 8px; font-weight: 600;
-  fill: rgba(255,255,255,.75); text-anchor: middle;
+  font-family: var(--fb); font-size: 10px; font-weight: 600;
+  fill: rgba(255,255,255,.8); text-anchor: middle;
   pointer-events: none;
 }
 .map-origin-label {
-  font-family: var(--fd); font-size: 11px; font-weight: 400;
-  fill: var(--gold); text-anchor: middle; letter-spacing: .08em;
+  font-family: var(--fd); font-size: 14px; font-weight: 400;
+  fill: var(--gold); text-anchor: middle; letter-spacing: .1em;
   text-transform: uppercase;
 }
 .map-ship {
@@ -1252,8 +1252,8 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .map-info-lbl { font-size: 11px; color: var(--steel); margin-top: 4px; }
 @media (max-width: 600px) {
-  .map-label { font-size: 6px; }
-  .map-origin-label { font-size: 9px; }
+  .map-label { font-size: 8px; }
+  .map-origin-label { font-size: 11px; }
 }
 
 /* ════════════════════════════════════════
@@ -1671,76 +1671,107 @@ section { scroll-margin-top: var(--nav-h); }
     <h2 class="h-lg" data-t="map_title">Seoul to the World</h2>
     <p class="body-lg" style="max-width:560px;margin:0 auto" data-t="map_desc">ERGSN ships from Seoul to every major port worldwide — CIF terms, on schedule. Select any destination and request a quote.</p>
     <div class="map-svg-wrap">
-      <svg viewBox="0 0 1000 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Continents (simplified outlines) -->
-        <path class="map-land" d="M140,85 Q180,55 240,65 Q290,70 310,85 Q330,95 340,115 Q310,130 290,155 Q265,175 240,185 Q225,200 210,185 L190,195 Q170,230 160,215 Q140,195 135,165 Q125,140 130,115 Z"/>
-        <path class="map-land" d="M260,135 Q275,125 295,130 Q310,140 305,160 Q290,165 275,155 Z"/>
-        <path class="map-land" d="M225,260 Q240,240 265,245 Q285,260 290,290 Q300,330 290,360 Q275,385 255,390 Q235,380 225,355 Q215,330 210,300 Q215,275 225,260 Z"/>
-        <path class="map-land" d="M430,60 Q460,50 500,55 Q540,50 575,65 Q600,75 610,55 Q640,50 660,60 Q680,55 695,65 Q700,80 690,95 Q670,115 660,95 Q640,75 620,80 Q605,95 590,85 Q560,100 530,95 Q500,100 480,95 Q460,85 445,95 Q430,85 430,60 Z"/>
-        <path class="map-land" d="M480,115 Q495,105 520,110 Q545,105 560,115 Q570,130 555,145 Q540,140 530,150 Q515,155 505,140 Q490,135 480,115 Z"/>
-        <path class="map-land" d="M495,155 Q520,140 555,150 Q575,160 590,175 Q600,195 590,215 Q575,235 555,250 Q530,265 510,255 Q495,240 490,210 Q485,180 495,155 Z"/>
-        <path class="map-land" d="M630,105 Q660,90 710,95 Q760,100 800,115 Q830,125 860,110 Q875,105 890,115 Q870,135 850,140 Q820,150 790,140 Q760,135 740,150 Q720,160 695,155 Q670,150 655,135 Q640,120 630,105 Z"/>
-        <path class="map-land" d="M765,165 Q790,155 815,160 Q835,170 840,190 Q835,215 815,225 Q790,230 770,220 Q755,200 760,180 Z"/>
-        <path class="map-land" d="M840,340 Q870,320 900,330 Q920,345 910,370 Q890,385 865,380 Q845,365 840,340 Z"/>
-        <path class="map-land" d="M880,110 Q895,100 915,108 Q930,115 925,130 Q910,140 895,135 Q880,125 880,110 Z"/>
+      <svg viewBox="0 0 1000 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- ═══ ASIA-CENTERED WORLD MAP ═══ -->
+        <!-- Left edge: ~30°W  Center: ~120°E (Korea)  Right edge: ~330°E -->
 
-        <!-- Shipping Routes from Korea (curved paths) -->
-        <defs>
-          <path id="r_la"       d="M855,148 Q950,100 1000,130 Q1050,160 172,156" />
-          <path id="r_balt"     d="M855,148 Q950,90 1000,110 Q1050,130 289,142" />
-          <path id="r_rott"     d="M855,148 Q800,100 700,90 Q600,85 510,106" />
-          <path id="r_hamb"     d="M855,148 Q790,95 690,85 Q600,80 528,98" />
-          <path id="r_dubai"    d="M855,148 Q800,160 740,180 Q690,195 653,181" />
-          <path id="r_sing"     d="M855,148 Q830,180 810,210 Q795,240 789,247" />
-          <path id="r_tokyo"    d="M855,148 Q870,140 882,148 Q890,155 889,153" />
-          <path id="r_sydney"   d="M855,148 Q870,200 880,270 Q885,320 870,345" />
-          <path id="r_santos"   d="M855,148 Q900,80 950,120 Q1000,200 372,317" />
-          <path id="r_durban"   d="M855,148 Q790,170 700,210 Q630,260 586,333" />
-          <path id="r_mumbai"   d="M855,148 Q800,150 740,160 Q700,170 670,185" />
-          <path id="r_jakarta"  d="M855,148 Q840,190 820,230 Q800,260 785,270" />
-        </defs>
+        <!-- Europe -->
+        <path class="map-land" d="M60,90 Q70,75 95,70 Q120,68 140,78 Q155,82 165,72 Q180,65 190,72 Q195,82 185,92 Q170,100 158,95 Q150,108 140,115 Q125,125 110,118 Q95,130 80,122 Q65,110 60,90 Z"/>
+        <!-- British Isles -->
+        <path class="map-land" d="M62,72 Q70,65 78,70 Q82,78 74,82 Q66,80 62,72 Z"/>
+        <!-- Scandinavia -->
+        <path class="map-land" d="M115,38 Q125,30 140,35 Q150,42 155,55 Q148,68 138,65 Q128,55 120,50 Z"/>
+        <!-- Africa -->
+        <path class="map-land" d="M100,145 Q120,135 145,140 Q165,145 180,160 Q190,180 195,210 Q198,245 190,280 Q180,310 165,340 Q150,365 140,380 Q125,385 115,370 Q105,345 100,310 Q95,270 98,235 Q95,200 92,175 Q90,155 100,145 Z"/>
+        <!-- Madagascar -->
+        <path class="map-land" d="M188,330 Q195,322 198,340 Q196,355 190,350 Q185,340 188,330 Z"/>
+        <!-- Russia / CIS -->
+        <path class="map-land" d="M190,55 Q230,40 280,38 Q330,35 380,40 Q430,38 470,45 Q510,42 540,50 Q560,55 550,65 Q530,70 500,68 Q460,72 430,65 Q400,70 370,65 Q340,68 310,72 Q280,68 250,72 Q220,68 200,75 Q190,70 190,55 Z"/>
+        <!-- Middle East -->
+        <path class="map-land" d="M195,145 Q215,135 240,140 Q255,148 250,165 Q242,180 225,185 Q210,178 200,165 Q195,155 195,145 Z"/>
+        <!-- India -->
+        <path class="map-land" d="M280,170 Q300,155 320,162 Q335,175 330,200 Q322,230 310,255 Q295,270 285,258 Q275,240 272,215 Q270,190 280,170 Z"/>
+        <!-- China -->
+        <path class="map-land" d="M350,85 Q380,75 420,80 Q460,78 480,90 Q490,105 480,120 Q465,135 445,145 Q420,155 395,148 Q370,140 355,125 Q345,108 350,85 Z"/>
+        <!-- Korean Peninsula -->
+        <path class="map-land" d="M460,118 Q468,108 475,115 Q478,128 472,140 Q465,145 460,135 Q458,125 460,118 Z" style="stroke:var(--gold);stroke-width:1.2"/>
+        <!-- Japan -->
+        <path class="map-land" d="M488,105 Q496,95 502,108 Q505,122 498,135 Q490,140 486,130 Q484,118 488,105 Z"/>
+        <!-- Southeast Asia mainland -->
+        <path class="map-land" d="M380,165 Q400,155 420,162 Q435,175 430,195 Q420,215 405,225 Q390,220 380,205 Q372,188 380,165 Z"/>
+        <!-- Indonesia / Malay -->
+        <path class="map-land" d="M365,248 Q385,240 410,245 Q435,248 460,252 Q480,258 490,268 Q475,275 455,272 Q430,268 405,272 Q380,268 365,258 Q360,252 365,248 Z"/>
+        <!-- Philippines -->
+        <path class="map-land" d="M450,185 Q458,178 462,190 Q460,205 454,200 Q448,192 450,185 Z"/>
+        <!-- Australia -->
+        <path class="map-land" d="M460,340 Q490,320 530,325 Q560,332 575,350 Q580,370 570,390 Q555,405 530,410 Q500,408 480,395 Q462,378 458,360 Q456,348 460,340 Z"/>
+        <!-- New Zealand -->
+        <path class="map-land" d="M590,388 Q598,380 602,392 Q600,405 594,400 Z"/>
+        <!-- North America -->
+        <path class="map-land" d="M720,55 Q760,40 810,45 Q860,50 900,65 Q930,80 940,105 Q945,130 935,155 Q920,170 900,178 Q880,185 860,175 Q845,190 830,200 Q810,210 795,205 Q780,195 770,180 Q755,165 745,145 Q735,120 730,95 Q725,75 720,55 Z"/>
+        <!-- Greenland -->
+        <path class="map-land" d="M680,25 Q710,18 730,28 Q738,42 725,50 Q710,48 695,40 Q682,35 680,25 Z"/>
+        <!-- Central America -->
+        <path class="map-land" d="M800,210 Q815,205 825,215 Q830,228 820,238 Q810,235 805,225 Z"/>
+        <!-- South America -->
+        <path class="map-land" d="M830,255 Q855,240 880,250 Q900,265 910,290 Q915,320 905,355 Q892,385 875,405 Q855,418 840,410 Q825,395 820,370 Q815,340 818,310 Q820,280 830,255 Z"/>
 
-        <!-- Route lines -->
-        <use href="#r_la"      class="map-route" style="animation-duration:22s"/>
-        <use href="#r_balt"    class="map-route" style="animation-duration:26s"/>
-        <use href="#r_rott"    class="map-route" style="animation-duration:24s"/>
-        <use href="#r_hamb"    class="map-route" style="animation-duration:24s"/>
-        <use href="#r_dubai"   class="map-route" style="animation-duration:20s"/>
-        <use href="#r_sing"    class="map-route" style="animation-duration:16s"/>
-        <use href="#r_tokyo"   class="map-route" style="animation-duration:8s"/>
-        <use href="#r_sydney"  class="map-route" style="animation-duration:20s"/>
-        <use href="#r_santos"  class="map-route" style="animation-duration:28s"/>
-        <use href="#r_durban"  class="map-route" style="animation-duration:22s"/>
-        <use href="#r_mumbai"  class="map-route" style="animation-duration:18s"/>
-        <use href="#r_jakarta" class="map-route" style="animation-duration:16s"/>
+        <!-- ═══ SHIPPING ROUTES FROM KOREA ═══ -->
+        <!-- Korea origin: x=468, y=130 -->
 
-        <!-- Animated ships (6 visible at once, staggered) -->
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q950,100 1050,130');animation:ship1 10s linear infinite"/>
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q800,100 700,90 Q600,85 510,106');animation:ship1 12s linear infinite;animation-delay:-4s"/>
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q800,160 740,180 Q690,195 653,181');animation:ship1 9s linear infinite;animation-delay:-2s"/>
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q830,180 810,210 Q795,240 789,247');animation:ship1 7s linear infinite;animation-delay:-1s"/>
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q870,200 880,270 Q885,320 870,345');animation:ship1 9s linear infinite;animation-delay:-5s"/>
-        <polygon class="map-ship" points="-4,-3 4,0 -4,3" style="offset-path:path('M855,148 Q790,170 700,210 Q630,260 586,333');animation:ship1 11s linear infinite;animation-delay:-3s"/>
+        <!-- Westward routes -->
+        <path class="map-route" d="M468,130 Q350,100 240,130 Q160,148 94,107" style="animation-duration:24s"/>
+        <path class="map-route" d="M468,130 Q360,105 250,108 Q170,100 111,98" style="animation-duration:24s"/>
+        <path class="map-route" d="M468,130 Q380,140 300,155 Q250,168 236,172" style="animation-duration:20s"/>
+        <path class="map-route" d="M468,130 Q390,145 330,168 Q305,185 295,210" style="animation-duration:18s"/>
+        <path class="map-route" d="M468,130 Q370,150 280,195 Q200,260 165,345" style="animation-duration:22s"/>
 
-        <!-- Origin — Korea (pulsing) -->
-        <circle class="map-origin-pulse" cx="855" cy="148" r="5"/>
-        <circle class="map-origin" cx="855" cy="148" r="4"/>
-        <text class="map-origin-label" x="855" y="136">KOREA</text>
+        <!-- Southward routes -->
+        <path class="map-route" d="M468,130 Q450,170 420,210 Q400,240 385,248" style="animation-duration:16s"/>
+        <path class="map-route" d="M468,130 Q460,180 445,230 Q435,260 430,268" style="animation-duration:16s"/>
+        <path class="map-route" d="M468,130 Q470,200 480,280 Q490,330 510,348" style="animation-duration:20s"/>
 
-        <!-- Destination ports -->
-        <circle class="map-port" cx="172" cy="156" r="3"/><text class="map-label" x="172" y="170">Los Angeles</text>
-        <circle class="map-port" cx="289" cy="142" r="3"/><text class="map-label" x="289" y="156">Baltimore</text>
-        <circle class="map-port" cx="275" cy="130" r="2.5"/><text class="map-label" x="275" y="123">New York</text>
-        <circle class="map-port" cx="510" cy="106" r="3"/><text class="map-label" x="510" y="100">Rotterdam</text>
-        <circle class="map-port" cx="528" cy="98" r="2.5"/><text class="map-label" x="528" y="92">Hamburg</text>
-        <circle class="map-port" cx="653" cy="181" r="3"/><text class="map-label" x="653" y="195">Dubai</text>
-        <circle class="map-port" cx="670" cy="185" r="2.5"/><text class="map-label" x="685" y="180">Mumbai</text>
-        <circle class="map-port" cx="789" cy="247" r="3"/><text class="map-label" x="789" y="261">Singapore</text>
-        <circle class="map-port" cx="785" cy="270" r="2.5"/><text class="map-label" x="785" y="284">Jakarta</text>
-        <circle class="map-port" cx="889" cy="153" r="2.5"/><text class="map-label" x="889" y="167">Tokyo</text>
-        <circle class="map-port" cx="870" cy="345" r="3"/><text class="map-label" x="870" y="359">Sydney</text>
-        <circle class="map-port" cx="372" cy="317" r="2.5"/><text class="map-label" x="372" y="331">Santos</text>
-        <circle class="map-port" cx="586" cy="333" r="2.5"/><text class="map-label" x="586" y="347">Durban</text>
+        <!-- Eastward routes (across Pacific) -->
+        <path class="map-route" d="M468,130 Q480,125 495,120" style="animation-duration:6s"/>
+        <path class="map-route" d="M468,130 Q550,95 650,110 Q730,130 780,160" style="animation-duration:22s"/>
+        <path class="map-route" d="M468,130 Q560,90 670,100 Q780,115 870,155" style="animation-duration:26s"/>
+        <path class="map-route" d="M468,130 Q570,80 690,120 Q810,200 870,300" style="animation-duration:28s"/>
+
+        <!-- ═══ ANIMATED SHIPS ═══ -->
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q350,100 240,130 Q160,148 94,107');animation:ship1 12s linear infinite"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q380,140 300,155 Q250,168 236,172');animation:ship1 9s linear infinite;animation-delay:-3s"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q450,170 420,210 Q400,240 385,248');animation:ship1 7s linear infinite;animation-delay:-1s"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q470,200 480,280 Q490,330 510,348');animation:ship1 9s linear infinite;animation-delay:-5s"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q550,95 650,110 Q730,130 780,160');animation:ship1 10s linear infinite;animation-delay:-2s"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q560,90 670,100 Q780,115 870,155');animation:ship1 12s linear infinite;animation-delay:-4s"/>
+        <polygon class="map-ship" points="-5,-3 5,0 -5,3" style="offset-path:path('M468,130 Q370,150 280,195 Q200,260 165,345');animation:ship1 11s linear infinite;animation-delay:-6s"/>
+
+        <!-- ═══ ORIGIN — KOREA (pulsing) ═══ -->
+        <circle class="map-origin-pulse" cx="468" cy="130" r="6"/>
+        <circle class="map-origin" cx="468" cy="130" r="5"/>
+        <text class="map-origin-label" x="468" y="117" style="font-size:13px">KOREA</text>
+
+        <!-- ═══ DESTINATION PORTS ═══ -->
+        <!-- Europe -->
+        <circle class="map-port" cx="94" cy="107" r="3"/><text class="map-label" x="94" y="100">Rotterdam</text>
+        <circle class="map-port" cx="111" cy="98" r="3"/><text class="map-label" x="111" y="91">Hamburg</text>
+        <!-- Middle East -->
+        <circle class="map-port" cx="236" cy="172" r="3"/><text class="map-label" x="236" y="185">Dubai</text>
+        <!-- South Asia -->
+        <circle class="map-port" cx="295" cy="210" r="3"/><text class="map-label" x="295" y="224">Mumbai</text>
+        <!-- SE Asia -->
+        <circle class="map-port" cx="385" cy="248" r="3"/><text class="map-label" x="385" y="262">Singapore</text>
+        <circle class="map-port" cx="430" cy="268" r="3"/><text class="map-label" x="430" y="282">Jakarta</text>
+        <!-- East Asia -->
+        <circle class="map-port" cx="495" cy="120" r="3"/><text class="map-label" x="495" y="113">Tokyo</text>
+        <!-- Oceania -->
+        <circle class="map-port" cx="510" cy="348" r="3"/><text class="map-label" x="510" y="362">Sydney</text>
+        <!-- Americas -->
+        <circle class="map-port" cx="780" cy="160" r="3"/><text class="map-label" x="780" y="174">Los Angeles</text>
+        <circle class="map-port" cx="870" cy="155" r="3"/><text class="map-label" x="870" y="148">Baltimore</text>
+        <circle class="map-port" cx="870" cy="300" r="3"/><text class="map-label" x="870" y="314">Santos</text>
+        <!-- Africa -->
+        <circle class="map-port" cx="165" cy="345" r="3"/><text class="map-label" x="165" y="359">Durban</text>
       </svg>
     </div>
     <div class="map-info-cards reveal">
