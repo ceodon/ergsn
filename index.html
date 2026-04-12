@@ -1239,22 +1239,22 @@ section { scroll-margin-top: var(--nav-h); }
 ════════════════════════════════════════ */
 #chatToggle {
   position: fixed;
-  left: clamp(16px,3vw,32px);
-  bottom: calc(clamp(16px,3vw,32px) + var(--bottom-cta-h));
+  right: clamp(16px,3vw,32px);
+  bottom: calc(clamp(16px,3vw,32px) + var(--bottom-cta-h) + var(--chat-lift, 0px));
   width: 52px; height: 52px;
   background: var(--gold); color: #0f1110;
   border: none; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 6px 24px rgba(52,210,152,.4);
   cursor: pointer; z-index: 800;
-  transition: transform .2s, box-shadow .2s;
+  transition: bottom .3s ease, transform .2s, box-shadow .2s;
 }
 #chatToggle:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(52,210,152,.55); }
 #chatToggle svg { width: 24px; height: 24px; }
 #chatPanel {
   position: fixed;
-  left: clamp(16px,3vw,32px);
-  bottom: calc(80px + var(--bottom-cta-h));
+  right: clamp(16px,3vw,32px);
+  bottom: calc(84px + var(--bottom-cta-h) + var(--chat-lift, 0px));
   width: min(360px, calc(100vw - 32px));
   max-height: 480px;
   background: #171717; border: 1px solid var(--border);
@@ -1262,6 +1262,7 @@ section { scroll-margin-top: var(--nav-h); }
   box-shadow: 0 20px 60px rgba(0,0,0,.6);
   z-index: 810;
   display: none; flex-direction: column;
+  transition: bottom .3s ease;
 }
 #chatPanel.open { display: flex; }
 .chat-hd {
@@ -2286,9 +2287,11 @@ function scrollToTop() {
 (function initToTop(){
   const btn = document.getElementById('toTop');
   if (!btn) return;
+  const root = document.documentElement;
   const onScroll = () => {
-    if (window.scrollY > 400) btn.classList.add('visible');
-    else btn.classList.remove('visible');
+    const show = window.scrollY > 400;
+    if (show) { btn.classList.add('visible'); root.style.setProperty('--chat-lift', 'calc(var(--compare-h) + 60px)'); }
+    else { btn.classList.remove('visible'); root.style.setProperty('--chat-lift', '0px'); }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
