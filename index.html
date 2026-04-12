@@ -2391,7 +2391,7 @@ async function handleChatInput() {
 
   if (match && match.confidence >= 4) {
     // High confidence → respond directly
-    const intent = match.best.entry;
+    const intent = match.best;
     if (intent.resp) {
       chatBotMsg(intent.resp, () => {
         if (intent.intent === 'price' || intent.intent === 'quote') {
