@@ -1690,14 +1690,76 @@ section { scroll-margin-top: var(--nav-h); }
           <div class="f-row">
             <div class="f-grp"><label class="f-lbl">Est. Quantity</label><input type="text" class="f-in" id="fQty" placeholder="e.g. 20&ndash;50 units"></div>
             <div class="f-grp">
-              <label class="f-lbl">Delivery Terms</label>
-              <select class="f-sel" id="fTerms">
+              <label class="f-lbl">Incoterms</label>
+              <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()">
                 <option value="">Select&hellip;</option>
-                <option>CIF Baltimore</option>
-                <option>FOB Busan</option>
-                <option>Other (specify below)</option>
+                <optgroup label="Most Common">
+                  <option value="FOB">FOB (Free On Board)</option>
+                  <option value="CIF" selected>CIF (Cost, Insurance &amp; Freight)</option>
+                  <option value="CFR">CFR (Cost &amp; Freight)</option>
+                  <option value="EXW">EXW (Ex Works)</option>
+                </optgroup>
+                <optgroup label="Other Terms">
+                  <option value="FCA">FCA (Free Carrier)</option>
+                  <option value="CPT">CPT (Carriage Paid To)</option>
+                  <option value="CIP">CIP (Carriage &amp; Insurance Paid To)</option>
+                  <option value="DAP">DAP (Delivered At Place)</option>
+                  <option value="DPU">DPU (Delivered at Place Unloaded)</option>
+                  <option value="DDP">DDP (Delivered Duty Paid)</option>
+                </optgroup>
               </select>
             </div>
+          </div>
+          <div class="f-grp" id="fPortWrap">
+            <label class="f-lbl">Destination Port / Place</label>
+            <select class="f-sel" id="fPort">
+              <option value="">Select port&hellip;</option>
+              <optgroup label="🇺🇸 United States">
+                <option value="Baltimore, MD">Baltimore, MD</option>
+                <option value="Los Angeles, CA">Los Angeles / Long Beach, CA</option>
+                <option value="New York, NY">New York / New Jersey</option>
+                <option value="Savannah, GA">Savannah, GA</option>
+                <option value="Houston, TX">Houston, TX</option>
+                <option value="Seattle, WA">Seattle / Tacoma, WA</option>
+                <option value="Norfolk, VA">Norfolk, VA</option>
+                <option value="Charleston, SC">Charleston, SC</option>
+                <option value="Miami, FL">Miami, FL</option>
+                <option value="Oakland, CA">Oakland, CA</option>
+              </optgroup>
+              <optgroup label="🇪🇺 Europe">
+                <option value="Rotterdam, NL">Rotterdam, Netherlands</option>
+                <option value="Hamburg, DE">Hamburg, Germany</option>
+                <option value="Antwerp, BE">Antwerp, Belgium</option>
+                <option value="Felixstowe, UK">Felixstowe, UK</option>
+                <option value="Barcelona, ES">Barcelona, Spain</option>
+                <option value="Genoa, IT">Genoa, Italy</option>
+                <option value="Le Havre, FR">Le Havre, France</option>
+                <option value="Piraeus, GR">Piraeus, Greece</option>
+              </optgroup>
+              <optgroup label="🌏 Asia-Pacific">
+                <option value="Tokyo, JP">Tokyo / Yokohama, Japan</option>
+                <option value="Shanghai, CN">Shanghai, China</option>
+                <option value="Singapore, SG">Singapore</option>
+                <option value="Hong Kong, HK">Hong Kong</option>
+                <option value="Sydney, AU">Sydney, Australia</option>
+                <option value="Bangkok, TH">Bangkok, Thailand</option>
+                <option value="Ho Chi Minh, VN">Ho Chi Minh City, Vietnam</option>
+                <option value="Manila, PH">Manila, Philippines</option>
+              </optgroup>
+              <optgroup label="🌍 Middle East / Africa">
+                <option value="Dubai, AE">Jebel Ali / Dubai, UAE</option>
+                <option value="Jeddah, SA">Jeddah, Saudi Arabia</option>
+                <option value="Durban, ZA">Durban, South Africa</option>
+                <option value="Lagos, NG">Lagos, Nigeria</option>
+              </optgroup>
+              <optgroup label="🌎 Americas">
+                <option value="Vancouver, CA">Vancouver, Canada</option>
+                <option value="Santos, BR">Santos, Brazil</option>
+                <option value="Manzanillo, MX">Manzanillo, Mexico</option>
+                <option value="Colon, PA">Colon, Panama</option>
+              </optgroup>
+              <option value="Other">Other (specify in message)</option>
+            </select>
           </div>
           <div class="f-grp"><label class="f-lbl">Message / Special Requirements</label><textarea class="f-ta" id="fMsg" placeholder="Delivery date, voltage specs, packaging, etc."></textarea></div>
           <button class="btn btn-navy" onclick="submitRFQ()">Send Inquiry &rarr;</button>
@@ -2302,6 +2364,12 @@ function scrollToTop() {
    CC: ceodon69@gmail.com
    First submission requires a one-time activation click in the email
    FormSubmit sends to the primary address. */
+function onIncotermsChange() {
+  const val = document.getElementById('fIncoterms').value;
+  const portWrap = document.getElementById('fPortWrap');
+  portWrap.style.display = val === 'EXW' ? 'none' : '';
+}
+
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
 const MODEL_LABELS = {
@@ -2326,7 +2394,7 @@ function submitRFQ() {
 
   const payload = {
     _cc: RFQ_CC,
-    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')})`,
+    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${v('fIncoterms')||'CIF'} ${v('fPort')||''}`.trim(),
     _template: 'table',
     _captcha: 'false',
     'First Name': v('fFirst'),
@@ -2336,7 +2404,8 @@ function submitRFQ() {
     'Phone': v('fPhone') || '(not provided)',
     'Models of Interest': selected.join(', '),
     'Estimated Quantity': v('fQty') || '(not specified)',
-    'Preferred Terms': v('fTerms') || '(default CIF Baltimore, T/T)',
+    'Incoterms': v('fIncoterms') || 'CIF',
+    'Destination Port': v('fIncoterms') === 'EXW' ? 'N/A (Ex Works)' : (v('fPort') || '(not specified)'),
     'Message / Requirements': v('fMsg') || '(none)',
     'Source': 'ceodon.github.io/ergsn'
   };
