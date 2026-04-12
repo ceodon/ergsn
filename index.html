@@ -2265,11 +2265,27 @@ function runShredSim(){
 
 /* ═══ ④ CHATBOT ═════════════════════════════ */
 /* ═══ HYBRID CHATBOT — Level 2 + Level 3 Ready ═════════ */
-// Level 3 (Claude API): set endpoint to enable. null = disabled (Level 2 only).
-// To activate: deploy a Cloudflare Worker proxy, then set the URL here.
 const CLAUDE_API_ENDPOINT = null;
 
-let chatContext = { lastModel: null };
+// ── Context memory: last model + 5-turn history + discussed topics ──
+let chatContext = { lastModel: null, history: [], topics: [] };
+function ctxPush(role, text) {
+  chatContext.history.push({ role, text });
+  if (chatContext.history.length > 10) chatContext.history.shift();
+}
+function ctxTopic(t) { if (!chatContext.topics.includes(t)) { chatContext.topics.push(t); if (chatContext.topics.length > 8) chatContext.topics.shift(); } }
+
+// ── Multilingual bot phrases ──
+const CHAT_L = {
+  en:{greet:"How can I help?",followup:"You might also want to know:",fallback:"I can help with:",human:"Talk to a Human",quote:"Set Up Quote",specs:"View Full Specs",techNote:""},
+  es:{greet:"¿Cómo puedo ayudarle?",followup:"También podría interesarle:",fallback:"Puedo ayudarle con:",human:"Hablar con una Persona",quote:"Solicitar Cotización",specs:"Ver Especificaciones",techNote:"\n\n(Detalles técnicos en inglés para precisión)"},
+  ar:{greet:"كيف يمكنني مساعدتك؟",followup:"قد يهمك أيضاً:",fallback:"يمكنني المساعدة في:",human:"التحدث مع شخص",quote:"طلب عرض سعر",specs:"عرض المواصفات",techNote:"\n\n(التفاصيل التقنية بالإنجليزية للدقة)"},
+  fr:{greet:"Comment puis-je vous aider ?",followup:"Vous pourriez aussi vouloir savoir :",fallback:"Je peux vous aider avec :",human:"Parler à un humain",quote:"Demander un Devis",specs:"Voir les Spécifications",techNote:"\n\n(Détails techniques en anglais pour plus de précision)"},
+  ja:{greet:"どのようなご用件でしょうか？",followup:"こちらもご参考ください：",fallback:"以下のご質問にお答えできます：",human:"担当者に相談",quote:"見積もり依頼",specs:"詳細仕様を見る",techNote:"\n\n(技術詳細は正確性のため英語で記載)"},
+  tr:{greet:"Size nasıl yardımcı olabilirim?",followup:"Şunları da öğrenmek isteyebilirsiniz:",fallback:"Şu konularda yardımcı olabilirim:",human:"Bir Kişiyle Konuşun",quote:"Teklif Talep Et",specs:"Teknik Özellikleri Gör",techNote:"\n\n(Teknik detaylar doğruluk için İngilizce)"}
+};
+function cl(key) { const lang = document.documentElement.lang || 'en'; return (CHAT_L[lang] && CHAT_L[lang][key]) || CHAT_L.en[key] || ''; }
+
 const MODEL_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
 
 function findModelInText(text) {
@@ -2303,19 +2319,19 @@ const KB = [
   { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
   { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
   { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
-  { intent:'hipaa', kw:['hipaa','healthcare','medical','hospital','patient','health','phi','protected'], resp:"All DL Series models are HIPAA compliant. They produce cross-cut particles at Level 3 / P-4 security, meeting HIPAA document destruction requirements for Protected Health Information (PHI).\n\nFor healthcare facilities, we recommend:\n• DL-12X (26 sheets) — standard clinics\n• DL-12XD (45 sheets) — high-volume hospitals" },
-  { intent:'gsa', kw:['gsa','government','federal','schedule','procurement','sam.gov','contract'], resp:"ERGSN shredders are listed on the U.S. GSA Schedule, making them eligible for direct federal procurement. This means:\n• Streamlined purchasing for government agencies\n• Pre-negotiated pricing\n• Simplified acquisition process\n\nContact us with your agency details for GSA-specific pricing." },
-  { intent:'security', kw:['security','p-4','level 3','din','66399','classification','particle','shred size'], resp:"All DL Series models meet DIN 66399 Level 3 / P-4 security:\n• Standard models (X): 5/64\" × 1-3/16\" particles\n• High-capacity models (XD): 5/32\" × 1-3/16\" particles\n• DL-10X special: 1/12\" × 5/8\" (extra-fine)\n• DL-16XD: 5/32\" × 1-3/4\" particles\n\nP-4 is the most widely required level for commercial and government use." },
-  { intent:'oil', kw:['oil','oil-free','lubrication','lubricant','maintenance cost'], resp:"All DL Series shredders are 100% oil-free. This means:\n• No shredder oil purchases (saves ~$200/year per machine)\n• No oil residue on shredded particles\n• Cleaner operation — ideal for healthcare/food-adjacent offices\n• Reduced fire risk from oil-soaked paper waste\n• Lower total cost of ownership" },
-  { intent:'chain', kw:['chain','drive','metal','gear','nylon','plastic','durability','construction','quality'], resp:"Every ERGSN shredder uses an all-metal chain drive with large steel gears — zero nylon or plastic internal components.\n\nWhy this matters:\n• Nylon gears wear out in 1-2 years under heavy use\n• Metal gears last 10+ years\n• Chain drive eliminates gear-tooth breakage\n• Result: machines built for years of daily operation, not months" },
-  { intent:'shipping', kw:['shipping','delivery','lead time','how long','when','weeks','transit','freight'], resp:"Standard lead time: 4-6 weeks from advance payment.\n• Manufacturing: 2-3 weeks\n• Ocean freight (Seoul → your port): 2-4 weeks\n• Individual crating for secure transport\n\nWe ship CIF to any major port worldwide. The DL-16XD is individually crated for extra protection during ocean freight." },
-  { intent:'incoterms', kw:['incoterm','cif','fob','exw','cfr','fca','dap','ddp','trade term'], resp:"We support all major Incoterms 2020:\n• CIF (most popular) — we handle freight + insurance to your port\n• FOB — you arrange freight from Korean port\n• EXW — pickup from our Seoul facility\n• CFR, FCA, DAP, DDP — also available\n\nCIF is recommended for first-time buyers — we handle all logistics." },
+  { intent:'hipaa', kw:['hipaa','healthcare','medical','hospital','patient','health','phi','protected'], followUp:['security','oil','recommend'], resp:"All DL Series models are HIPAA compliant. They produce cross-cut particles at Level 3 / P-4 security, meeting HIPAA document destruction requirements for Protected Health Information (PHI).\n\nFor healthcare facilities, we recommend:\n�� DL-12X (26 sheets) — standard clinics\n• DL-12XD (45 sheets) — high-volume hospitals" },
+  { intent:'gsa', kw:['gsa','government','federal','schedule','procurement','sam.gov','contract'], followUp:['hipaa','shipping','payment'], resp:"ERGSN shredders are listed on the U.S. GSA Schedule, making them eligible for direct federal procurement. This means:\n• Streamlined purchasing for government agencies\n• Pre-negotiated pricing\n• Simplified acquisition process\n\nContact us with your agency details for GSA-specific pricing." },
+  { intent:'security', kw:['security','p-4','level 3','din','66399','classification','particle','shred size'], followUp:['hipaa','chain','compare'], resp:"All DL Series models meet DIN 66399 Level 3 / P-4 security:\n�� Standard models (X): 5/64\" × 1-3/16\" particles\n• High-capacity models (XD): 5/32\" × 1-3/16\" particles\n• DL-10X special: 1/12\" × 5/8\" (extra-fine)\n• DL-16XD: 5/32\" × 1-3/4\" particles\n\nP-4 is the most widely required level for commercial and government use." },
+  { intent:'oil', kw:['oil','oil-free','lubrication','lubricant','maintenance cost'], followUp:['chain','warranty','price'], resp:"All DL Series shredders are 100% oil-free. This means:\n• No shredder oil purchases (saves ~$200/year per machine)\n• No oil residue on shredded particles\n• Cleaner operation — ideal for healthcare/food-adjacent offices\n• Reduced fire risk from oil-soaked paper waste\n• Lower total cost of ownership" },
+  { intent:'chain', kw:['chain','drive','metal','gear','nylon','plastic','durability','construction','quality'], followUp:['oil','warranty','competitor'], resp:"Every ERGSN shredder uses an all-metal chain drive with large steel gears — zero nylon or plastic internal components.\n\nWhy this matters:\n• Nylon gears wear out in 1-2 years under heavy use\n• Metal gears last 10+ years\n• Chain drive eliminates gear-tooth breakage\n• Result: machines built for years of daily operation, not months" },
+  { intent:'shipping', kw:['shipping','delivery','lead time','how long','when','weeks','transit','freight'], followUp:['incoterms','payment','quote'], resp:"Standard lead time: 4-6 weeks from advance payment.\n• Manufacturing: 2-3 weeks\n• Ocean freight (Seoul → your port): 2-4 weeks\n• Individual crating for secure transport\n\nWe ship CIF to any major port worldwide. The DL-16XD is individually crated for extra protection during ocean freight." },
+  { intent:'incoterms', kw:['incoterm','cif','fob','exw','cfr','fca','dap','ddp','trade term'], followUp:['shipping','payment','quote'], resp:"We support all major Incoterms 2020:\n• CIF (most popular) — we handle freight + insurance to your port\n• FOB — you arrange freight from Korean port\n• EXW — pickup from our Seoul facility\n• CFR, FCA, DAP, DDP — also available\n\nCIF is recommended for first-time buyers — we handle all logistics." },
   { intent:'payment', kw:['payment','t/t','wire','transfer','deposit','advance','terms','pay'], resp:"Payment terms:\n• 50% advance via T/T (wire transfer) upon order confirmation\n• 50% balance before shipment\n• Bank: provided on Proforma Invoice\n\nWe issue a formal Proforma Invoice after receiving your RFQ." },
-  { intent:'voltage', kw:['voltage','volt','amp','electric','power','plug','nema','wire','220v','110v','115v'], resp:"Standard voltage: 115V / 60Hz (U.S. standard)\n• DL-10X to DL-12XD: standard 15A outlet\n• DL-16XD: 115V / 30A with NEMA L5-30P locking plug, 12/3 SO/SOWA cord (10ft)\n\nFor 220V/50Hz markets, custom voltage configurations may be available — please specify in your quote request." },
+  { intent:'voltage', kw:['voltage','volt','amp','electric','power','plug','nema','wire','220v','110v','115v'], followUp:['custom','spec','quote'], resp:"Standard voltage: 115V / 60Hz (U.S. standard)\n• DL-10X to DL-12XD: standard 15A outlet\n• DL-16XD: 115V / 30A with NEMA L5-30P locking plug, 12/3 SO/SOWA cord (10ft)\n\nFor 220V/50Hz markets, custom voltage configurations may be available — please specify in your quote request." },
   { intent:'warranty', kw:['warranty','guarantee','repair','defect','broken','issue','problem'], resp:"ERGSN provides manufacturer warranty on all DL Series models. Warranty terms are specified on the Proforma Invoice per order.\n\nAll-metal chain drive construction means significantly fewer mechanical failures compared to plastic-gear alternatives. Our machines are designed for 10+ years of reliable operation." },
   { intent:'company', kw:['ergsn','company','about','who','history','founded','korea','seoul','manufacturer'], resp:"ERGSN CO., LTD.\n• Founded: 2013, Seoul, Korea\n• Specialty: Heavy-duty industrial paper shredders\n• Export partner: Capital Shredder Corp. (Rockville, MD)\n• Certifications: HIPAA, GSA Schedule, DIN 66399\n• Products: 6 DL Series models (10\" to 16\" class)\n• Trade terms: CIF worldwide, T/T payment" },
   { intent:'contact', kw:['contact','email','phone','telegram','reach','call','address'], resp:"ERGSN CO., LTD.\n📍 #503 Susong BD, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea\n📧 info@ergsn.com\n📱 +82-10-5288-0006\n💬 Telegram: @ceodon\n📠 Fax: +82-50-4048-0006" },
-  { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
+  { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], followUp:['chain','oil','quote'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
   { intent:'custom', kw:['custom','oem','odm','private label','brand','modify','special'], resp:"We offer OEM/ODM possibilities for qualified distributors:\n• Custom branding / private label\n• Voltage modifications (115V/220V)\n• Custom packaging specifications\n• Volume-based pricing\n\nMinimum order quantities apply. Please submit an RFQ with your specific requirements." },
   { intent:'capacity', kw:['office','people','employees','volume','capacity','daily','many','sheets per day'], resp:null, handler:'handleCapacity' },
   { intent:'spec', kw:['spec','specification','detail','feature','info about','tell me about'], resp:null, handler:'handleSpec' },
@@ -2375,71 +2391,134 @@ async function callClaudeAPI(text) {
   } catch(e) { return null; }
 }
 
+function showFollowUp(intent) {
+  if (!intent.followUp || !intent.followUp.length) return;
+  const unused = intent.followUp.filter(t => !chatContext.topics.includes(t));
+  if (!unused.length) return;
+  setTimeout(() => {
+    const body = document.getElementById('chatBody');
+    const div = document.createElement('div'); div.className = 'chat-options';
+    div.style.cssText = 'border-top:1px solid #292929;padding-top:8px;margin-top:6px;';
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:10px;color:var(--tx-lt);display:block;margin-bottom:6px;';
+    label.textContent = cl('followup');
+    div.appendChild(label);
+    unused.slice(0,3).forEach(t => {
+      const kb = KB.find(k => k.intent === t); if (!kb) return;
+      const b = document.createElement('button'); b.className = 'chat-opt';
+      b.textContent = kb.intent.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+      b.onclick = () => { div.remove(); chatUserMsg(b.textContent); respondToIntent(kb, b.textContent); };
+      div.appendChild(b);
+    });
+    body.appendChild(div); body.scrollTop = body.scrollHeight;
+  }, 400);
+}
+
+function respondToIntent(intent, text) {
+  ctxTopic(intent.intent);
+  const techNote = cl('techNote');
+  if (intent.resp) {
+    // Model-specific enrichment: if context has a model and response is generic
+    let response = intent.resp;
+    if (chatContext.lastModel && intent.intent === 'voltage') {
+      const p = P[chatContext.lastModel];
+      const v = p.specs.find(s => s[0].toLowerCase().includes('volt'));
+      const a = p.specs.find(s => s[0].toLowerCase().includes('amp'));
+      if (v || a) response = `For the ${p.model}:\n• ${v ? v[0]+': '+v[1] : ''}\n${a ? '• '+a[0]+': '+a[1] : ''}\n\n` + response;
+    }
+    chatBotMsg(response + techNote, () => {
+      if (intent.intent === 'price' || intent.intent === 'quote') {
+        chatOpts([{ label: cl('quote') + ' →', action: () => chatStep('start') }]);
+      } else {
+        showFollowUp(intent);
+      }
+    });
+  } else if (intent.handler) {
+    window[intent.handler](text);
+  }
+}
+
 async function handleChatInput() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
   chatUserMsg(text);
+  ctxPush('user', text);
 
-  // Check if a model name is mentioned → update context
+  // Update model context
   const mentioned = findModelInText(text);
   if (mentioned) chatContext.lastModel = mentioned;
 
-  // Level 2: intent matching with synonym expansion
+  // Composite intent: collect ALL matching intents above threshold
   const match = matchIntent(text);
+  const allMatches = match ? match.top3.filter(r => r.score >= 4) : [];
 
-  if (match && match.confidence >= 4) {
-    // High confidence → respond directly
-    const intent = match.best;
-    if (intent.resp) {
-      chatBotMsg(intent.resp, () => {
-        if (intent.intent === 'price' || intent.intent === 'quote') {
-          chatOpts([{ label: 'Set Up Quote →', action: () => chatStep('start') }]);
-        }
+  // If 2+ strong intents, handle composite
+  if (allMatches.length >= 2) {
+    const intents = allMatches.map(r => r.entry);
+    let combined = '';
+    intents.forEach((intent, i) => {
+      ctxTopic(intent.intent);
+      if (intent.resp) {
+        combined += (i > 0 ? '\n\n---\n\n' : '') + intent.resp;
+      }
+    });
+    if (combined) {
+      chatBotMsg(combined + cl('techNote'), () => {
+        const lastIntent = intents[intents.length - 1];
+        showFollowUp(lastIntent);
       });
-    } else if (intent.handler) {
-      window[intent.handler](text);
+      ctxPush('bot', combined);
+      return;
     }
+  }
+
+  // Single high-confidence intent
+  if (match && match.confidence >= 4) {
+    respondToIntent(match.best, text);
+    ctxPush('bot', match.best.resp || match.best.intent);
     return;
   }
 
-  // Level 3: try Claude API if configured
+  // Context-aware: if user asks about "it" / "this" / "that" with a context model
+  if (chatContext.lastModel && /\b(it|this|that|its|the model)\b/i.test(text)) {
+    handleSpec(text);
+    return;
+  }
+
+  // Level 3: Claude API if configured
   if (CLAUDE_API_ENDPOINT) {
     const body = document.getElementById('chatBody');
     const typing = document.createElement('div');
     typing.className = 'chat-typing';
     typing.innerHTML = '<span></span><span></span><span></span>';
-    body.appendChild(typing);
-    body.scrollTop = body.scrollHeight;
+    body.appendChild(typing); body.scrollTop = body.scrollHeight;
     const reply = await callClaudeAPI(text);
     typing.remove();
-    if (reply) { chatBotMsg(reply); return; }
+    if (reply) { chatBotMsg(reply); ctxPush('bot', reply); return; }
   }
 
-  // Smart fallback: suggest closest matching topics
+  // Smart fallback with partial matches
   if (match && match.top3.length > 0) {
     const suggestions = match.top3.map(r => r.entry);
-    chatBotMsg("I'm not 100% sure what you mean, but I may be able to help with one of these:", () => {
+    chatBotMsg(cl('fallback'), () => {
       chatOpts(suggestions.map(s => ({
         label: s.intent.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),
-        action: () => {
-          if (s.resp) chatBotMsg(s.resp);
-          else if (s.handler) window[s.handler](text);
-        }
-      })).concat([{ label: 'Talk to a Human', action: () => showHumanContact() }]));
+        action: () => { respondToIntent(s, text); }
+      })).concat([{ label: cl('human'), action: () => showHumanContact() }]));
     });
     return;
   }
 
-  // No match at all → helpful fallback
-  chatBotMsg("I don't have information on that specific topic yet. Here's what I can help with:", () => {
+  // No match → topic menu
+  chatBotMsg(cl('fallback'), () => {
     chatOpts([
       { label: 'Product Specs', action: () => handleQuoteChat() },
-      { label: 'HIPAA / GSA', action: () => { const h = KB.find(k=>k.intent==='hipaa'); if(h) chatBotMsg(h.resp); }},
-      { label: 'Shipping & Trade', action: () => { const s = KB.find(k=>k.intent==='shipping'); if(s) chatBotMsg(s.resp); }},
-      { label: 'Get a Quote', action: () => chatStep('start') },
-      { label: 'Talk to a Human', action: () => showHumanContact() }
+      { label: 'HIPAA / GSA', action: () => respondToIntent(KB.find(k=>k.intent==='hipaa'),'') },
+      { label: 'Shipping & Trade', action: () => respondToIntent(KB.find(k=>k.intent==='shipping'),'') },
+      { label: cl('quote'), action: () => chatStep('start') },
+      { label: cl('human'), action: () => showHumanContact() }
     ]);
   });
 }
@@ -2463,13 +2542,16 @@ function handleSpec(text) {
     return;
   }
   chatContext.lastModel = id;
+  ctxTopic('spec');
   const p = P[id];
-  chatBotMsg(`${p.model} — ${p.sub}\nPart No: ${p.part}\n\n${fmtSpecs(id)}`, () => {
+  chatBotMsg(`${p.model} — ${p.sub}\nPart No: ${p.part}\n\n${fmtSpecs(id)}${cl('techNote')}`, () => {
     chatOpts([
-      { label: `Full Specs`, action: () => { toggleChat(); openModal(id); }},
-      { label: 'Request Quote', action: () => { chatState.model=id; chatAskIncoterms(); }},
+      { label: cl('specs'), action: () => { toggleChat(); openModal(id); }},
+      { label: cl('quote') + ' →', action: () => { chatState.model=id; chatAskIncoterms(); }},
+      { label: 'Compare', action: () => chatBotMsg("Type: \"Compare " + p.model + " vs [other model]\"") },
     ]);
   });
+  ctxPush('bot', p.model + ' specs');
 }
 
 function handleCompareText(text) {
@@ -2488,19 +2570,29 @@ function handleCompareText(text) {
 }
 
 function handleCapacity(text) {
+  const lower = text.toLowerCase();
   const num = parseInt(text.match(/(\d+)/)?.[1] || '0');
+  // Composite: check if HIPAA/GSA is also mentioned
+  const needsHipaa = /hipaa|medical|hospital|health/i.test(lower);
+  const needsGsa = /gsa|government|federal/i.test(lower);
   let rec;
-  if (num <= 15) rec = text.toLowerCase().includes('high') || num > 100 ? 'dl10xd' : 'dl10x';
-  else if (num <= 50) rec = text.toLowerCase().includes('heavy') || text.toLowerCase().includes('high') ? 'dl16x' : 'dl12x';
-  else rec = text.toLowerCase().includes('space') || text.toLowerCase().includes('compact') ? 'dl12xd' : 'dl16xd';
+  if (num <= 15) rec = lower.includes('high') || num > 100 ? 'dl10xd' : 'dl10x';
+  else if (num <= 50) rec = lower.includes('heavy') || lower.includes('high') ? 'dl16x' : 'dl12x';
+  else rec = lower.includes('space') || lower.includes('compact') ? 'dl12xd' : 'dl16xd';
+  if (needsHipaa && rec === 'dl10x') rec = 'dl12x';
   chatContext.lastModel = rec;
+  ctxTopic('recommend');
   const p = P[rec];
-  chatBotMsg(`Based on your needs, I recommend the ${p.model}.\n\n${p.sub}\n• ${p.specs.find(s=>s[0]==='Sheet Capacity')?.[1] || ''} capacity\n• ${p.specs.find(s=>s[0]==='Entry Width')?.[1] || ''} entry width\n• ${p.specs.find(s=>s[0]==='Motor')?.[1] || ''} motor`, () => {
+  let response = `Based on your needs, I recommend the ${p.model}.\n\n${p.sub}\n• ${p.specs.find(s=>s[0]==='Sheet Capacity')?.[1] || ''} capacity\n• ${p.specs.find(s=>s[0]==='Entry Width')?.[1] || ''} entry width\n• ${p.specs.find(s=>s[0]==='Motor')?.[1] || ''} motor`;
+  if (needsHipaa) response += '\n\n✓ HIPAA Compliant — P-4 security level for PHI destruction';
+  if (needsGsa) response += '\n✓ GSA Schedule listed — eligible for federal procurement';
+  chatBotMsg(response + cl('techNote'), () => {
     chatOpts([
-      { label: `View ${p.model} Specs`, action: () => { toggleChat(); openModal(rec); }},
-      { label: 'Set Up Quote →', action: () => { chatState.model=rec; chatAskIncoterms(); }},
+      { label: cl('specs'), action: () => { toggleChat(); openModal(rec); }},
+      { label: cl('quote') + ' →', action: () => { chatState.model=rec; chatAskIncoterms(); }},
     ]);
   });
+  ctxPush('bot', 'recommended ' + p.model);
 }
 
 function handleRecommendText(text) { handleCapacity(text); }
