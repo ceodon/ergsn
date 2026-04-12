@@ -1875,7 +1875,32 @@ function withViewTransition(fn) {
 /* Route a Request-a-Quote click from the product or compare modal
    into the RFQ form: pre-check the relevant model checkboxes, close
    any open modal, then smooth-scroll to the form. */
+function resetRFQForm() {
+  const fields = document.getElementById('rfqFields');
+  const success = document.getElementById('rfqSuccess');
+  if (success.style.display === 'block') {
+    success.style.display = 'none';
+    fields.style.display = '';
+    // Clear all inputs
+    fields.querySelectorAll('.f-in, .f-ta').forEach(el => el.value = '');
+    // Uncheck all model checkboxes
+    fields.querySelectorAll('.model-cb input').forEach(el => el.checked = false);
+    // Reset selects to placeholder
+    ['fIncoterms','fCountry','fPort'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.selectedIndex = 0; }
+    });
+    document.getElementById('fPort').disabled = true;
+    onIncotermsChange();
+    chatLocked = null;
+    // Re-enable send button
+    const btn = fields.querySelector('.btn-navy');
+    if (btn) { btn.innerHTML = 'Send Inquiry &rarr;'; btn.disabled = false; }
+  }
+}
+
 function requestQuote(ids) {
+  resetRFQForm();
   const arr = Array.isArray(ids) ? ids : [ids];
   arr.forEach(id => {
     const cb = document.getElementById('m' + id.toUpperCase());
