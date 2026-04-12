@@ -3512,18 +3512,14 @@ function updateCalc() {
   const unitPrice = CALC_PRICES[model];
   const freight = terms === 'cif' ? CALC_FREIGHT[dest] * qty * 0.12 : 0;
   const insurance = terms === 'cif' ? unitPrice * qty * 0.008 : 0;
-  const discount = qty >= 50 ? 0.08 : qty >= 20 ? 0.05 : qty >= 10 ? 0.03 : 0;
   const subtotal = unitPrice * qty;
-  const discountAmt = subtotal * discount;
-  const total = subtotal - discountAmt + freight + insurance;
+  const total = subtotal + freight + insurance;
   const localCur = CALC_DEST_FX[dest];
   const localRate = CALC_FX[localCur] || 1;
   const localTotal = total * localRate;
 
   let rows = `
     <div class="calc-row"><span class="calc-row-label">${P[model].model} × ${qty}</span><span class="calc-row-val">$${subtotal.toLocaleString()}</span></div>`;
-  if (discount > 0) rows += `
-    <div class="calc-row"><span class="calc-row-label">Volume Discount (${(discount*100).toFixed(0)}%)</span><span class="calc-row-val" style="color:var(--gold)">-$${Math.round(discountAmt).toLocaleString()}</span></div>`;
   if (terms === 'cif') {
     rows += `
     <div class="calc-row"><span class="calc-row-label">Ocean Freight → ${CALC_DEST_NAME[dest]}</span><span class="calc-row-val">$${Math.round(freight).toLocaleString()}</span></div>
