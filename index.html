@@ -1677,7 +1677,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div class="f-grp"><label class="f-lbl">Company <span>*</span></label><input type="text" class="f-in" id="fCo" placeholder="Capital Shredder Corp."></div>
           <div class="f-row">
             <div class="f-grp"><label class="f-lbl">Email <span>*</span></label><input type="email" class="f-in" id="fEmail" placeholder="you@company.com"></div>
-            <div class="f-grp"><label class="f-lbl">Phone</label><input type="tel" class="f-in" id="fPhone" placeholder="+1 (301) 770-3900"></div>
+            <div class="f-grp"><label class="f-lbl">Phone</label><input type="tel" class="f-in" id="fPhone" placeholder="+1 (301) 770-3900" autocomplete="off"></div>
           </div>
           <div class="f-grp">
             <label class="f-lbl">Models of Interest <span>*</span></label>
@@ -2175,30 +2175,26 @@ function clearChat() {
   startChat();
 }
 
+let chatLocked = null;
+
 function applyQuoteFields() {
-  // Model checkbox
   const cb = document.getElementById('m' + chatState.model.toUpperCase());
   if (cb) cb.checked = true;
 
-  // Incoterms
   const incoEl = document.getElementById('fIncoterms');
   if (incoEl && chatState.incoterm && chatState.incoterm !== 'Other') {
-    // Remove disabled placeholder so browser cannot reset to it
     const ph = incoEl.querySelector('option[disabled]');
     if (ph) ph.disabled = false;
     incoEl.value = chatState.incoterm;
     onIncotermsChange();
   }
 
-  // Country
   const countryEl = document.getElementById('fCountry');
   if (countryEl && chatState.country) {
     const ph = countryEl.querySelector('option[disabled]');
     if (ph) ph.disabled = false;
     countryEl.value = chatState.country;
     onCountryChange();
-
-    // Port
     if (chatState.port) {
       const portEl = document.getElementById('fPort');
       if (portEl) {
@@ -2208,17 +2204,47 @@ function applyQuoteFields() {
       }
     }
   }
+
+  chatLocked = {
+    incoterm: chatState.incoterm,
+    country: chatState.country,
+    port: chatState.port
+  };
 }
+
+// Guard: block browser autofill from overwriting chatbot values
+// User click (pointerdown) = intentional change → unlock
+// No click before change = autofill → revert
+(function initFieldGuards(){
+  ['fIncoterms','fCountry','fPort'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let userClicked = false;
+    el.addEventListener('pointerdown', () => { userClicked = true; });
+    el.addEventListener('mousedown', () => { userClicked = true; });
+    el.addEventListener('change', () => {
+      if (chatLocked && !userClicked) {
+        if (id === 'fIncoterms') { el.value = chatLocked.incoterm; onIncotermsChange(); }
+        if (id === 'fCountry') {
+          el.value = chatLocked.country;
+          onCountryChange();
+          const portEl = document.getElementById('fPort');
+          if (portEl && chatLocked.port) portEl.value = chatLocked.port;
+        }
+        if (id === 'fPort') { el.value = chatLocked.port; }
+      } else if (userClicked) {
+        chatLocked = null;
+      }
+      userClicked = false;
+    });
+  });
+})();
 
 function chatPrefillAndQuote() {
   toggleChat();
   setTimeout(() => {
     document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
-    // Apply immediately after scroll starts
     setTimeout(applyQuoteFields, 500);
-    // Re-apply to catch any browser autofill/reset interference
-    setTimeout(applyQuoteFields, 1500);
-    setTimeout(applyQuoteFields, 3000);
   }, 150);
 }
 
