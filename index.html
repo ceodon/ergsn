@@ -1349,6 +1349,26 @@ section { scroll-margin-top: var(--nav-h); }
 .chat-typing span:nth-child(2) { animation-delay: .15s; }
 .chat-typing span:nth-child(3) { animation-delay: .3s; }
 @keyframes typingDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+.chat-input-row {
+  display: flex; gap: 8px; padding: 10px 14px;
+  border-top: 1px solid var(--border); background: #111;
+}
+.chat-input {
+  flex: 1; background: #1d1d1d; border: 1px solid var(--border);
+  color: var(--white); border-radius: 20px; padding: 9px 16px;
+  font-family: var(--fb); font-size: 13px; outline: none;
+  transition: border-color .15s;
+}
+.chat-input:focus { border-color: var(--gold); }
+.chat-input::placeholder { color: var(--tx-lt); }
+.chat-send {
+  background: var(--gold); color: #0f1110; border: none;
+  border-radius: 50%; width: 34px; height: 34px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s;
+}
+.chat-send:hover { background: var(--gold-light); }
+.chat-send svg { width: 16px; height: 16px; }
 
 /* LANGUAGE SWITCHER */
 .lang-sel {
@@ -1967,6 +1987,10 @@ section { scroll-margin-top: var(--nav-h); }
     <button class="chat-close" onclick="toggleChat()">&times;</button>
   </div>
   <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Type a question..." autocomplete="off" onkeydown="if(event.key==='Enter')handleChatInput()">
+    <button class="chat-send" onclick="handleChatInput()" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+  </div>
 </div>
 
 <!-- ══ BACK TO TOP ═════════════════════════════ -->
@@ -2240,6 +2264,157 @@ function runShredSim(){
 }
 
 /* ═══ ④ CHATBOT ═════════════════════════════ */
+/* ═══ SMART CHATBOT — Intent Engine ═════════ */
+let chatContext = { lastModel: null };
+const MODEL_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
+
+function findModelInText(text) {
+  const t = text.toLowerCase().replace(/[- ]/g,'');
+  for (const id of MODEL_IDS) {
+    if (t.includes(id) || t.includes(id.replace('dl','dl-'))) return id;
+  }
+  const aliases = {dl10x:'10x',dl12x:'12x',dl16x:/(^|\s)16x(\s|$)/,dl10xd:'10xd',dl12xd:'12xd',dl16xd:'16xd'};
+  for (const [id,pat] of Object.entries(aliases)) {
+    if (typeof pat === 'string' ? t.includes(pat) : pat.test(t)) return id;
+  }
+  return null;
+}
+
+function fmtSpecs(id) {
+  const p = P[id]; if (!p) return '';
+  return p.specs.slice(0,8).map(([k,v]) => `• ${k}: ${v}`).join('\n');
+}
+
+function fmtCompare(a,b) {
+  const pa=P[a], pb=P[b]; if(!pa||!pb) return null;
+  const keys=[]; pa.specs.forEach(([k])=>{if(!keys.includes(k))keys.push(k)}); pb.specs.forEach(([k])=>{if(!keys.includes(k))keys.push(k)});
+  const ma=Object.fromEntries(pa.specs), mb=Object.fromEntries(pb.specs);
+  let t = `${pa.model} vs ${pb.model}:\n`;
+  keys.slice(0,10).forEach(k => { t += `• ${k}: ${ma[k]||'—'} vs ${mb[k]||'—'}\n`; });
+  return t;
+}
+
+const KB = [
+  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Product Advisor. You can ask me anything about our DL Series shredders, trade terms, compliance, or request a quote. How can I help?" },
+  { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
+  { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
+  { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
+  { intent:'hipaa', kw:['hipaa','healthcare','medical','hospital','patient','health','phi','protected'], resp:"All DL Series models are HIPAA compliant. They produce cross-cut particles at Level 3 / P-4 security, meeting HIPAA document destruction requirements for Protected Health Information (PHI).\n\nFor healthcare facilities, we recommend:\n• DL-12X (26 sheets) — standard clinics\n• DL-12XD (45 sheets) — high-volume hospitals" },
+  { intent:'gsa', kw:['gsa','government','federal','schedule','procurement','sam.gov','contract'], resp:"ERGSN shredders are listed on the U.S. GSA Schedule, making them eligible for direct federal procurement. This means:\n• Streamlined purchasing for government agencies\n• Pre-negotiated pricing\n• Simplified acquisition process\n\nContact us with your agency details for GSA-specific pricing." },
+  { intent:'security', kw:['security','p-4','level 3','din','66399','classification','particle','shred size'], resp:"All DL Series models meet DIN 66399 Level 3 / P-4 security:\n• Standard models (X): 5/64\" × 1-3/16\" particles\n• High-capacity models (XD): 5/32\" × 1-3/16\" particles\n• DL-10X special: 1/12\" × 5/8\" (extra-fine)\n• DL-16XD: 5/32\" × 1-3/4\" particles\n\nP-4 is the most widely required level for commercial and government use." },
+  { intent:'oil', kw:['oil','oil-free','lubrication','lubricant','maintenance cost'], resp:"All DL Series shredders are 100% oil-free. This means:\n• No shredder oil purchases (saves ~$200/year per machine)\n• No oil residue on shredded particles\n• Cleaner operation — ideal for healthcare/food-adjacent offices\n• Reduced fire risk from oil-soaked paper waste\n• Lower total cost of ownership" },
+  { intent:'chain', kw:['chain','drive','metal','gear','nylon','plastic','durability','construction','quality'], resp:"Every ERGSN shredder uses an all-metal chain drive with large steel gears — zero nylon or plastic internal components.\n\nWhy this matters:\n• Nylon gears wear out in 1-2 years under heavy use\n• Metal gears last 10+ years\n• Chain drive eliminates gear-tooth breakage\n• Result: machines built for years of daily operation, not months" },
+  { intent:'shipping', kw:['shipping','delivery','lead time','how long','when','weeks','transit','freight'], resp:"Standard lead time: 4-6 weeks from advance payment.\n• Manufacturing: 2-3 weeks\n• Ocean freight (Seoul → your port): 2-4 weeks\n• Individual crating for secure transport\n\nWe ship CIF to any major port worldwide. The DL-16XD is individually crated for extra protection during ocean freight." },
+  { intent:'incoterms', kw:['incoterm','cif','fob','exw','cfr','fca','dap','ddp','trade term'], resp:"We support all major Incoterms 2020:\n• CIF (most popular) — we handle freight + insurance to your port\n• FOB — you arrange freight from Korean port\n• EXW — pickup from our Seoul facility\n• CFR, FCA, DAP, DDP — also available\n\nCIF is recommended for first-time buyers — we handle all logistics." },
+  { intent:'payment', kw:['payment','t/t','wire','transfer','deposit','advance','terms','pay'], resp:"Payment terms:\n• 50% advance via T/T (wire transfer) upon order confirmation\n• 50% balance before shipment\n• Bank: provided on Proforma Invoice\n\nWe issue a formal Proforma Invoice after receiving your RFQ." },
+  { intent:'voltage', kw:['voltage','volt','amp','electric','power','plug','nema','wire','220v','110v','115v'], resp:"Standard voltage: 115V / 60Hz (U.S. standard)\n• DL-10X to DL-12XD: standard 15A outlet\n• DL-16XD: 115V / 30A with NEMA L5-30P locking plug, 12/3 SO/SOWA cord (10ft)\n\nFor 220V/50Hz markets, custom voltage configurations may be available — please specify in your quote request." },
+  { intent:'warranty', kw:['warranty','guarantee','repair','defect','broken','issue','problem'], resp:"ERGSN provides manufacturer warranty on all DL Series models. Warranty terms are specified on the Proforma Invoice per order.\n\nAll-metal chain drive construction means significantly fewer mechanical failures compared to plastic-gear alternatives. Our machines are designed for 10+ years of reliable operation." },
+  { intent:'company', kw:['ergsn','company','about','who','history','founded','korea','seoul','manufacturer'], resp:"ERGSN CO., LTD.\n• Founded: 2013, Seoul, Korea\n• Specialty: Heavy-duty industrial paper shredders\n• Export partner: Capital Shredder Corp. (Rockville, MD)\n• Certifications: HIPAA, GSA Schedule, DIN 66399\n• Products: 6 DL Series models (10\" to 16\" class)\n• Trade terms: CIF worldwide, T/T payment" },
+  { intent:'contact', kw:['contact','email','phone','telegram','reach','call','address'], resp:"ERGSN CO., LTD.\n📍 #503 Susong BD, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea\n📧 info@ergsn.com\n📱 +82-10-5288-0006\n💬 Telegram: @ceodon\n📠 Fax: +82-50-4048-0006" },
+  { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
+  { intent:'custom', kw:['custom','oem','odm','private label','brand','modify','special'], resp:"We offer OEM/ODM possibilities for qualified distributors:\n• Custom branding / private label\n• Voltage modifications (115V/220V)\n• Custom packaging specifications\n• Volume-based pricing\n\nMinimum order quantities apply. Please submit an RFQ with your specific requirements." },
+  { intent:'capacity', kw:['office','people','employees','volume','capacity','daily','many','sheets per day'], resp:null, handler:'handleCapacity' },
+  { intent:'spec', kw:['spec','specification','detail','feature','info about','tell me about'], resp:null, handler:'handleSpec' },
+  { intent:'compare', kw:['compare','vs','versus','difference','better','or'], resp:null, handler:'handleCompareText' },
+  { intent:'recommend', kw:['recommend','suggest','which','best','right','need','looking for','suitable'], resp:null, handler:'handleRecommendText' },
+  { intent:'quote', kw:['quote','rfq','inquiry','order','buy','purchase','get a quote'], resp:null, handler:'handleQuoteChat' },
+  { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd'], resp:null, handler:'handleSpec' }
+];
+
+function matchIntent(text) {
+  const lower = text.toLowerCase();
+  let best = null, bestScore = 0;
+  for (const entry of KB) {
+    let score = 0;
+    for (const kw of entry.kw) {
+      if (lower.includes(kw)) score += kw.length;
+    }
+    if (score > bestScore) { bestScore = score; best = entry; }
+  }
+  return bestScore > 0 ? best : null;
+}
+
+function handleChatInput() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  chatUserMsg(text);
+
+  const intent = matchIntent(text);
+  if (!intent) {
+    chatBotMsg("I can help with product specs, model comparisons, compliance (HIPAA/GSA), trade terms, shipping info, and quote requests. Try asking something like:\n\n• \"Tell me about the DL-16XD\"\n• \"Compare DL-12X vs DL-16X\"\n• \"Is it HIPAA compliant?\"\n• \"How long is shipping?\"\n• \"I need a quote\"");
+    return;
+  }
+
+  if (intent.resp) {
+    chatBotMsg(intent.resp, () => {
+      if (intent.intent === 'price' || intent.intent === 'quote') {
+        chatOpts([{ label: 'Set Up Quote →', action: () => chatStep('start') }]);
+      }
+    });
+  } else if (intent.handler) {
+    window[intent.handler](text);
+  }
+}
+
+function handleSpec(text) {
+  const id = findModelInText(text) || chatContext.lastModel;
+  if (!id) {
+    chatBotMsg("Which model would you like to know about?", () => {
+      chatOpts(MODEL_IDS.map(mid => ({ label: P[mid].model, action: () => { chatContext.lastModel=mid; handleSpec(mid); }})));
+    });
+    return;
+  }
+  chatContext.lastModel = id;
+  const p = P[id];
+  chatBotMsg(`${p.model} — ${p.sub}\nPart No: ${p.part}\n\n${fmtSpecs(id)}`, () => {
+    chatOpts([
+      { label: `Full Specs`, action: () => { toggleChat(); openModal(id); }},
+      { label: 'Request Quote', action: () => { chatState.model=id; chatAskIncoterms(); }},
+    ]);
+  });
+}
+
+function handleCompareText(text) {
+  const found = [];
+  for (const id of MODEL_IDS) { if (findModelInText(text) === id || text.toLowerCase().includes(id.replace('dl','dl-'))) found.push(id); }
+  if (found.length < 2) {
+    const t = text.toLowerCase();
+    for (const id of MODEL_IDS) { if (t.includes(P[id].model.toLowerCase().replace('-',''))) found.push(id); }
+  }
+  if (found.length >= 2) {
+    const result = fmtCompare(found[0], found[1]);
+    chatBotMsg(result || "Could not compare those models.");
+  } else {
+    chatBotMsg("Which two models would you like to compare? For example: \"Compare DL-12X vs DL-16XD\"");
+  }
+}
+
+function handleCapacity(text) {
+  const num = parseInt(text.match(/(\d+)/)?.[1] || '0');
+  let rec;
+  if (num <= 15) rec = text.toLowerCase().includes('high') || num > 100 ? 'dl10xd' : 'dl10x';
+  else if (num <= 50) rec = text.toLowerCase().includes('heavy') || text.toLowerCase().includes('high') ? 'dl16x' : 'dl12x';
+  else rec = text.toLowerCase().includes('space') || text.toLowerCase().includes('compact') ? 'dl12xd' : 'dl16xd';
+  chatContext.lastModel = rec;
+  const p = P[rec];
+  chatBotMsg(`Based on your needs, I recommend the ${p.model}.\n\n${p.sub}\n• ${p.specs.find(s=>s[0]==='Sheet Capacity')?.[1] || ''} capacity\n• ${p.specs.find(s=>s[0]==='Entry Width')?.[1] || ''} entry width\n• ${p.specs.find(s=>s[0]==='Motor')?.[1] || ''} motor`, () => {
+    chatOpts([
+      { label: `View ${p.model} Specs`, action: () => { toggleChat(); openModal(rec); }},
+      { label: 'Set Up Quote →', action: () => { chatState.model=rec; chatAskIncoterms(); }},
+    ]);
+  });
+}
+
+function handleRecommendText(text) { handleCapacity(text); }
+
+function handleQuoteChat() {
+  chatBotMsg("Let's set up your quote! First, which model are you interested in?", () => {
+    chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatState.model=id; chatContext.lastModel=id; chatAskIncoterms(); }})));
+  });
+}
+
 const CHAT_TREE = {
   start: {
     msg: "Hi! I'm the ERGSN Product Advisor. I'll help you find the right shredder and set up a quote. How large is your office?",
