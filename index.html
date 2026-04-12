@@ -2151,12 +2151,26 @@ function chatFinalize() {
   const dest = chatState.incoterm === 'EXW' ? 'Ex Works (Seoul)' : `${chatState.incoterm} ${chatState.port}, ${chatState.country}`;
   chatBotMsg(`Perfect! ${m.model} \u2014 ${dest}. Ready to request a quote?`, () => {
     chatOpts([
-      { label: 'Request Quote', action: () => { chatPrefillAndQuote(); }},
-      { label: `View ${m.model} Specs`, action: () => { toggleChat(); openModal(chatState.model); }},
-      { label: 'Start Over', action: () => restartChat() }
+      { label: 'Request Quote', action: () => { chatPrefillAndQuote(); chatEndActions(); }},
+      { label: `View ${m.model} Specs`, action: () => { toggleChat(); openModal(chatState.model); chatEndActions(); }},
     ]);
   });
 }
+function chatEndActions() {
+  const body = document.getElementById('chatBody');
+  setTimeout(() => {
+    const div = document.createElement('div');
+    div.className = 'chat-options';
+    div.style.cssText = 'border-top:1px solid #292929;padding-top:12px;margin-top:8px;';
+    div.innerHTML = '<button class="chat-opt" onclick="clearChat()" style="opacity:.7">Clear Chat</button><button class="chat-opt" onclick="restartChat()">New Question</button>';
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+  }, 600);
+}
+function clearChat() {
+  document.getElementById('chatBody').innerHTML = '';
+}
+
 function chatPrefillAndQuote() {
   // 1. Close chat first
   toggleChat();
