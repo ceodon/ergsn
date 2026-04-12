@@ -2531,10 +2531,40 @@ function onIncotermsChange() {
 
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
+const TG_BOT = '8682443200:AAHdCK-kkMDFuIZUvi4foAD3-ypNMRBGyGY';
+const TG_CHAT = '456668222';
 const MODEL_LABELS = {
   mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
   mDL10XD: 'DL-10XD', mDL12XD: 'DL-12XD', mDL16XD: 'DL-16XD'
 };
+
+function sendTelegram(fields) {
+  const lines = [
+    '\ud83d\udce9 *NEW RFQ INQUIRY*',
+    '',
+    `*Name:* ${fields.first} ${fields.last}`,
+    `*Company:* ${fields.company}`,
+    `*Email:* ${fields.email}`,
+    `*Phone:* ${fields.phone}`,
+    `*Models:* ${fields.models}`,
+    `*Quantity:* ${fields.qty}`,
+    `*Incoterms:* ${fields.incoterms}`,
+    `*Country:* ${fields.country}`,
+    `*Port:* ${fields.port}`,
+    `*Message:* ${fields.msg}`,
+    '',
+    `_Source: ceodon.github.io/ergsn_`
+  ];
+  return fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TG_CHAT,
+      text: lines.join('\n'),
+      parse_mode: 'Markdown'
+    })
+  }).catch(() => {});
+}
 
 function submitRFQ() {
   const v = (id) => document.getElementById(id).value.trim();
@@ -2551,9 +2581,13 @@ function submitRFQ() {
   sendBtn.innerHTML = 'Sending\u2026';
   sendBtn.disabled = true;
 
-  const payload = {
+  const incoterms = v('fIncoterms') || '(not specified)';
+  const country = v('fIncoterms') === 'EXW' ? 'N/A (Ex Works)' : (v('fCountry') || '(not specified)');
+  const port = v('fIncoterms') === 'EXW' ? 'N/A' : (v('fPort') || '(not specified)');
+
+  const emailPayload = {
     _cc: RFQ_CC,
-    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${v('fIncoterms')||'CIF'} ${v('fPort')||''}`.trim(),
+    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
     _template: 'table',
     _captcha: 'false',
     'First Name': v('fFirst'),
@@ -2563,29 +2597,42 @@ function submitRFQ() {
     'Phone': v('fPhone') || '(not provided)',
     'Models of Interest': selected.join(', '),
     'Estimated Quantity': v('fQty') || '(not specified)',
-    'Incoterms': v('fIncoterms') || 'CIF',
-    'Destination Country': v('fIncoterms') === 'EXW' ? 'N/A (Ex Works)' : (v('fCountry') || '(not specified)'),
-    'Destination Port': v('fIncoterms') === 'EXW' ? 'N/A' : (v('fPort') || '(not specified)'),
+    'Incoterms': incoterms,
+    'Destination Country': country,
+    'Destination Port': port,
     'Message / Requirements': v('fMsg') || '(none)',
     'Source': 'ceodon.github.io/ergsn'
   };
 
-  fetch(RFQ_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data && (data.success === 'true' || data.success === true)) {
+  const tgFields = {
+    first: v('fFirst'), last: v('fLast'), company: v('fCo'),
+    email: v('fEmail'), phone: v('fPhone') || '-',
+    models: selected.join(', '), qty: v('fQty') || '-',
+    incoterms, country, port,
+    msg: v('fMsg') || '-'
+  };
+
+  // Send email + Telegram in parallel
+  Promise.allSettled([
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(emailPayload)
+    }).then(r => r.json()).then(data => {
+      if (!(data && (data.success === 'true' || data.success === true)))
+        throw new Error((data && data.message) || 'Email failed');
+    }),
+    sendTelegram(tgFields)
+  ]).then(results => {
+    const emailOk = results[0].status === 'fulfilled';
+    if (emailOk) {
       document.getElementById('rfqFields').style.display = 'none';
       document.getElementById('rfqSuccess').style.display = 'block';
     } else {
-      throw new Error((data && data.message) || 'Submission failed');
+      throw results[0].reason || new Error('Submission failed');
     }
-  })
-  .catch(err => {
-    alert('Sorry, your inquiry could not be sent right now.\n\nPlease email us directly at info@ergsn.com or try again in a moment.\n\n(' + err.message + ')');
+  }).catch(err => {
+    alert('Sorry, your inquiry could not be sent right now.\n\nPlease email us directly at info@ergsn.com or try again in a moment.\n\n(' + (err.message||err) + ')');
     sendBtn.innerHTML = originalLabel;
     sendBtn.disabled = false;
   });
