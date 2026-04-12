@@ -2397,6 +2397,7 @@ function toggleCompare(id, btn) {
     btn.classList.add('active');
   }
   renderCompareTray();
+  updateBottomStack();
 }
 
 function removeCompare(id) {
@@ -2405,12 +2406,14 @@ function removeCompare(id) {
   const btn = document.querySelector(`.product-card[data-model="${id}"] .compare-btn`);
   if (btn) btn.classList.remove('active');
   renderCompareTray();
+  updateBottomStack();
 }
 
 function clearCompare() {
   compareState.length = 0;
   document.querySelectorAll('.compare-btn.active').forEach(b => b.classList.remove('active'));
   renderCompareTray();
+  updateBottomStack();
 }
 
 function renderCompareTray() {
@@ -2482,17 +2485,19 @@ function closeCompareOutside(ev) {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-(function initToTop(){
+function updateBottomStack() {
   const btn = document.getElementById('toTop');
   if (!btn) return;
   const root = document.documentElement;
-  const onScroll = () => {
-    const show = window.scrollY > 400;
-    if (show) { btn.classList.add('visible'); root.style.setProperty('--chat-lift', 'calc(var(--compare-h) + 60px)'); }
-    else { btn.classList.remove('visible'); root.style.setProperty('--chat-lift', '0px'); }
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  const show = window.scrollY > 400;
+  const hasCompare = !!document.querySelector('.compare-btn.active');
+  const compareH = hasCompare ? 76 : 0;
+  if (show) { btn.classList.add('visible'); root.style.setProperty('--chat-lift', (compareH + 60) + 'px'); }
+  else { btn.classList.remove('visible'); root.style.setProperty('--chat-lift', hasCompare ? '60px' : '0px'); }
+}
+(function initToTop(){
+  window.addEventListener('scroll', updateBottomStack, { passive: true });
+  updateBottomStack();
 })();
 
 /* RFQ form submission via FormSubmit.co (no backend required).
