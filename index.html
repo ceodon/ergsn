@@ -3565,15 +3565,6 @@ updateCalc();
       if (autoLang) setLang(autoLang);
     }
 
-    // Personalize hero subtitle based on region
-    const heroDesc = document.querySelector('[data-t="hero_desc"]');
-    if (heroDesc && city) {
-      const geoTag = document.createElement('span');
-      geoTag.style.cssText = 'display:block;margin-top:10px;font-size:13px;color:var(--gold);font-weight:600;';
-      geoTag.textContent = `📍 CIF ${city} available — request a quote`;
-      heroDesc.parentElement.insertBefore(geoTag, heroDesc.nextSibling);
-    }
-
     // Set calculator destination based on region
     const regionMap = { US:'us',CA:'us', GB:'eu',DE:'eu',FR:'eu',NL:'eu',BE:'eu',IT:'eu',ES:'eu',PL:'eu',SE:'eu',
       AE:'me',SA:'me',QA:'me',KW:'me',BH:'me', SG:'sea',MY:'sea',TH:'sea',VN:'sea',PH:'sea',ID:'sea',
