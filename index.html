@@ -988,6 +988,9 @@ section { scroll-margin-top: var(--nav-h); }
   transition: border-color .18s, background .18s;
   -webkit-appearance: none;
 }
+.f-sel:invalid, .f-sel option[value=""] { color: var(--tx-lt); }
+.f-sel option { color: var(--white); background: #1d1d1d; }
+.f-in::placeholder, .f-ta::placeholder { color: var(--tx-lt); }
 .f-in:focus, .f-sel:focus, .f-ta:focus { border-color: var(--gold); background: #232524; }
 .f-ta { min-height: 96px; resize: vertical; }
 .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -1691,11 +1694,11 @@ section { scroll-margin-top: var(--nav-h); }
             <div class="f-grp"><label class="f-lbl">Est. Quantity</label><input type="text" class="f-in" id="fQty" placeholder="e.g. 20&ndash;50 units"></div>
             <div class="f-grp">
               <label class="f-lbl">Incoterms</label>
-              <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()">
-                <option value="">Select&hellip;</option>
+              <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()" required>
+                <option value="" disabled selected>Select&hellip;</option>
                 <optgroup label="Most Common">
                   <option value="FOB">FOB (Free On Board)</option>
-                  <option value="CIF" selected>CIF (Cost, Insurance &amp; Freight)</option>
+                  <option value="CIF">CIF (Cost, Insurance &amp; Freight)</option>
                   <option value="CFR">CFR (Cost &amp; Freight)</option>
                   <option value="EXW">EXW (Ex Works)</option>
                 </optgroup>
@@ -1713,14 +1716,14 @@ section { scroll-margin-top: var(--nav-h); }
           <div class="f-row" id="fDestWrap">
             <div class="f-grp">
               <label class="f-lbl">Country</label>
-              <select class="f-sel" id="fCountry" onchange="onCountryChange()">
-                <option value="">Select country&hellip;</option>
+              <select class="f-sel" id="fCountry" onchange="onCountryChange()" required>
+                <option value="" disabled selected>Select country&hellip;</option>
               </select>
             </div>
             <div class="f-grp">
               <label class="f-lbl">Port / Place</label>
-              <select class="f-sel" id="fPort" disabled>
-                <option value="">Select country first&hellip;</option>
+              <select class="f-sel" id="fPort" disabled required>
+                <option value="" disabled selected>Select country first&hellip;</option>
               </select>
             </div>
           </div>
@@ -2492,10 +2495,8 @@ const WORLD_PORTS = {
   Object.keys(WORLD_PORTS).forEach(c => {
     const opt = document.createElement('option');
     opt.value = c; opt.textContent = c;
-    if (c === 'United States') opt.selected = true;
     countryEl.appendChild(opt);
   });
-  onCountryChange();
 })();
 
 function onCountryChange() {
@@ -2503,7 +2504,7 @@ function onCountryChange() {
   const portEl = document.getElementById('fPort');
   portEl.innerHTML = '';
   if (!country) {
-    portEl.innerHTML = '<option value="">Select country first\u2026</option>';
+    portEl.innerHTML = '<option value="" disabled selected>Select country first\u2026</option>';
     portEl.disabled = true;
     return;
   }
@@ -2513,7 +2514,7 @@ function onCountryChange() {
     portEl.disabled = false;
     return;
   }
-  portEl.innerHTML = '<option value="">Select port\u2026</option>';
+  portEl.innerHTML = '<option value="" disabled selected>Select port\u2026</option>';
   ports.forEach(p => {
     const opt = document.createElement('option');
     opt.value = p; opt.textContent = p;
