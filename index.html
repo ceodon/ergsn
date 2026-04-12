@@ -2264,7 +2264,11 @@ function runShredSim(){
 }
 
 /* ═══ ④ CHATBOT ═════════════════════════════ */
-/* ═══ SMART CHATBOT — Intent Engine ═════════ */
+/* ═══ HYBRID CHATBOT — Level 2 + Level 3 Ready ═════════ */
+// Level 3 (Claude API): set endpoint to enable. null = disabled (Level 2 only).
+// To activate: deploy a Cloudflare Worker proxy, then set the URL here.
+const CLAUDE_API_ENDPOINT = null;
+
 let chatContext = { lastModel: null };
 const MODEL_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
 
@@ -2321,41 +2325,134 @@ const KB = [
   { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd'], resp:null, handler:'handleSpec' }
 ];
 
+// Synonym expansion for broader matching
+const SYNONYMS = {
+  'shredder':['machine','device','unit','equipment','product','model','destroyer'],
+  'buy':['purchase','order','acquire','get','procure'],
+  'fast':['quick','speed','rapid','fpm','throughput'],
+  'big':['large','heavy','industrial','flagship','high-capacity','high capacity'],
+  'small':['compact','mini','deskside','entry','personal'],
+  'noise':['quiet','silent','loud','sound','db','decibel'],
+  'size':['dimension','footprint','height','width','depth','weight','heavy'],
+  'paper':['document','sheet','page','file','record'],
+  'safe':['secure','security','confidential','classified','destroy','destruction']
+};
+
+function expandText(text) {
+  let expanded = text.toLowerCase();
+  for (const [root, syns] of Object.entries(SYNONYMS)) {
+    for (const s of syns) { if (expanded.includes(s)) expanded += ' ' + root; }
+  }
+  return expanded;
+}
+
 function matchIntent(text) {
-  const lower = text.toLowerCase();
-  let best = null, bestScore = 0;
+  const expanded = expandText(text);
+  const results = [];
   for (const entry of KB) {
     let score = 0;
     for (const kw of entry.kw) {
-      if (lower.includes(kw)) score += kw.length;
+      if (expanded.includes(kw)) score += kw.length + (kw.length > 4 ? 3 : 0);
     }
-    if (score > bestScore) { bestScore = score; best = entry; }
+    if (score > 0) results.push({ entry, score });
   }
-  return bestScore > 0 ? best : null;
+  results.sort((a,b) => b.score - a.score);
+  return results.length > 0 ? { best: results[0].entry, confidence: results[0].score, top3: results.slice(0,3) } : null;
 }
 
-function handleChatInput() {
+// Level 3 skeleton: Claude API call (inactive until CLAUDE_API_ENDPOINT is set)
+async function callClaudeAPI(text) {
+  if (!CLAUDE_API_ENDPOINT) return null;
+  try {
+    const sysPrompt = `You are the ERGSN Product Advisor. ERGSN CO., LTD. is a Seoul-based manufacturer of industrial paper shredders (DL Series: DL-10X, DL-12X, DL-16X, DL-10XD, DL-12XD, DL-16XD). All models: Level 3/P-4 cross-cut, all-metal chain drive, oil-free, HIPAA compliant, GSA Schedule. Trade: CIF any port, T/T 50%/50%, 4-6 weeks. Never quote exact prices — redirect to quote form. Be concise (under 150 words). Support EN/ES/AR/FR/JA/TR.`;
+    const resp = await fetch(CLAUDE_API_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: sysPrompt, message: text, context: chatContext.lastModel || '' })
+    });
+    const data = await resp.json();
+    return data.reply || null;
+  } catch(e) { return null; }
+}
+
+async function handleChatInput() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
   chatUserMsg(text);
 
-  const intent = matchIntent(text);
-  if (!intent) {
-    chatBotMsg("I can help with product specs, model comparisons, compliance (HIPAA/GSA), trade terms, shipping info, and quote requests. Try asking something like:\n\n• \"Tell me about the DL-16XD\"\n• \"Compare DL-12X vs DL-16X\"\n• \"Is it HIPAA compliant?\"\n• \"How long is shipping?\"\n• \"I need a quote\"");
+  // Check if a model name is mentioned → update context
+  const mentioned = findModelInText(text);
+  if (mentioned) chatContext.lastModel = mentioned;
+
+  // Level 2: intent matching with synonym expansion
+  const match = matchIntent(text);
+
+  if (match && match.confidence >= 4) {
+    // High confidence → respond directly
+    const intent = match.best.entry;
+    if (intent.resp) {
+      chatBotMsg(intent.resp, () => {
+        if (intent.intent === 'price' || intent.intent === 'quote') {
+          chatOpts([{ label: 'Set Up Quote →', action: () => chatStep('start') }]);
+        }
+      });
+    } else if (intent.handler) {
+      window[intent.handler](text);
+    }
     return;
   }
 
-  if (intent.resp) {
-    chatBotMsg(intent.resp, () => {
-      if (intent.intent === 'price' || intent.intent === 'quote') {
-        chatOpts([{ label: 'Set Up Quote →', action: () => chatStep('start') }]);
-      }
-    });
-  } else if (intent.handler) {
-    window[intent.handler](text);
+  // Level 3: try Claude API if configured
+  if (CLAUDE_API_ENDPOINT) {
+    const body = document.getElementById('chatBody');
+    const typing = document.createElement('div');
+    typing.className = 'chat-typing';
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    body.appendChild(typing);
+    body.scrollTop = body.scrollHeight;
+    const reply = await callClaudeAPI(text);
+    typing.remove();
+    if (reply) { chatBotMsg(reply); return; }
   }
+
+  // Smart fallback: suggest closest matching topics
+  if (match && match.top3.length > 0) {
+    const suggestions = match.top3.map(r => r.entry);
+    chatBotMsg("I'm not 100% sure what you mean, but I may be able to help with one of these:", () => {
+      chatOpts(suggestions.map(s => ({
+        label: s.intent.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),
+        action: () => {
+          if (s.resp) chatBotMsg(s.resp);
+          else if (s.handler) window[s.handler](text);
+        }
+      })).concat([{ label: 'Talk to a Human', action: () => showHumanContact() }]));
+    });
+    return;
+  }
+
+  // No match at all → helpful fallback
+  chatBotMsg("I don't have information on that specific topic yet. Here's what I can help with:", () => {
+    chatOpts([
+      { label: 'Product Specs', action: () => handleQuoteChat() },
+      { label: 'HIPAA / GSA', action: () => { const h = KB.find(k=>k.intent==='hipaa'); if(h) chatBotMsg(h.resp); }},
+      { label: 'Shipping & Trade', action: () => { const s = KB.find(k=>k.intent==='shipping'); if(s) chatBotMsg(s.resp); }},
+      { label: 'Get a Quote', action: () => chatStep('start') },
+      { label: 'Talk to a Human', action: () => showHumanContact() }
+    ]);
+  });
+}
+
+function showHumanContact() {
+  chatBotMsg("Our team is ready to help!\n\n📧 info@ergsn.com\n💬 Telegram: @ceodon\n📱 +82-10-5288-0006\n\nWe typically respond within 1 business day (Seoul time, UTC+9).", () => {
+    chatOpts([
+      { label: 'Open Telegram', action: () => window.open('https://t.me/ceodon','_blank') },
+      { label: 'Send Email', action: () => window.open('mailto:info@ergsn.com') },
+      { label: 'New Question', action: () => restartChat() }
+    ]);
+  });
+}
 }
 
 function handleSpec(text) {
