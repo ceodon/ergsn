@@ -914,10 +914,7 @@ section { scroll-margin-top: var(--nav-h); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.ceo-logo-text::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, var(--gold), rgba(52,210,152,.1));
-}
+.ceo-logo-text::after { display: none; }
 .ceo-name { font-family: var(--fd); font-size: 20px; font-weight: 400; color: var(--white); margin-bottom: 3px; text-transform: uppercase; letter-spacing: .04em; }
 .ceo-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
 .ceo-quote {
