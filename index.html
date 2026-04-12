@@ -2267,13 +2267,170 @@ function runShredSim(){
 /* ═══ HYBRID CHATBOT — Level 2 + Level 3 Ready ═════════ */
 const CLAUDE_API_ENDPOINT = null;
 
-// ── Context memory: last model + 5-turn history + discussed topics ──
-let chatContext = { lastModel: null, history: [], topics: [] };
+// ── Context memory + user profile ──
+let chatContext = { lastModel: null, history: [], topics: [], turnCount: 0, quotePrompted: false };
+let userProfile = { sector: null, size: null, needs: [] };
 function ctxPush(role, text) {
   chatContext.history.push({ role, text });
   if (chatContext.history.length > 10) chatContext.history.shift();
+  if (role === 'user') chatContext.turnCount++;
 }
 function ctxTopic(t) { if (!chatContext.topics.includes(t)) { chatContext.topics.push(t); if (chatContext.topics.length > 8) chatContext.topics.shift(); } }
+
+// ── User profile inference ──
+function inferProfile(text) {
+  const t = text.toLowerCase();
+  if (/hospital|medical|health|clinic|hipaa|pharma|patient/.test(t)) userProfile.sector = 'healthcare';
+  else if (/government|federal|gsa|military|defense|agency|dod/.test(t)) userProfile.sector = 'government';
+  else if (/law|legal|attorney|firm/.test(t)) userProfile.sector = 'legal';
+  else if (/bank|financ|insurance/.test(t)) userProfile.sector = 'financial';
+  else if (/school|university|education|campus/.test(t)) userProfile.sector = 'education';
+  const sizeMatch = t.match(/(\d+)\s*(people|person|employee|staff|worker)/);
+  if (sizeMatch) userProfile.size = parseInt(sizeMatch[1]);
+  if (/hipaa/.test(t) && !userProfile.needs.includes('hipaa')) userProfile.needs.push('hipaa');
+  if (/gsa|government/.test(t) && !userProfile.needs.includes('gsa')) userProfile.needs.push('gsa');
+  if (/quiet|silent|noise/.test(t) && !userProfile.needs.includes('quiet')) userProfile.needs.push('quiet');
+  if (/compact|small|space/.test(t) && !userProfile.needs.includes('compact')) userProfile.needs.push('compact');
+  if (/heavy|high.?volume|industrial|large/.test(t) && !userProfile.needs.includes('heavy')) userProfile.needs.push('heavy');
+}
+function profileEnrich(text) {
+  let extra = '';
+  if (userProfile.sector === 'healthcare' && !/hipaa/i.test(text)) extra += '\n\n✓ All DL models are HIPAA compliant for healthcare use.';
+  if (userProfile.sector === 'government' && !/gsa/i.test(text)) extra += '\n✓ Listed on GSA Schedule for federal procurement.';
+  return extra;
+}
+
+// ── Fuzzy matching (Levenshtein distance) ──
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  if (m === 0) return n; if (n === 0) return m;
+  const d = Array.from({length:m+1}, (_,i) => [i]);
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1] + (a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+const FUZZY_DICT = ['hipaa','shredder','baltimore','singapore','rotterdam','hamburg','dubai','istanbul','jakarta','warranty','voltage','incoterms','compliance','capacity','maintenance','industrial','security'];
+function fuzzyCorrect(text) {
+  return text.toLowerCase().replace(/\b\w{4,}\b/g, word => {
+    for (const correct of FUZZY_DICT) {
+      if (levenshtein(word, correct) <= 2 && word !== correct) return correct;
+    }
+    return word;
+  });
+}
+
+// ── Conversational patterns ──
+const CONV_PATTERNS = [
+  { re: /^(yes|yeah|yep|sure|ok|okay|yea|right)$/i, handler: 'handleYes' },
+  { re: /^(no|nope|nah|not really|no thanks)$/i, handler: 'handleNo' },
+  { re: /^(tell me more|more info|more details|elaborate|explain|go on)$/i, handler: 'handleMore' },
+  { re: /^(what else|anything else|other|others)$/i, handler: 'handleWhatElse' },
+  { re: /^(thanks|thank you|thx|cheers)$/i, handler: 'handleThanks' }
+];
+function handleYes() {
+  if (chatContext.lastModel) {
+    chatBotMsg(`Great! Would you like to set up a quote for the ${P[chatContext.lastModel].model}?`, () => {
+      chatOpts([
+        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskIncoterms(); }},
+        { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
+      ]);
+    });
+  } else { chatBotMsg(cl('greet')); }
+}
+function handleNo() {
+  chatBotMsg("No problem! Is there anything else I can help with?", () => {
+    chatOpts([
+      { label: 'Product Specs', action: () => handleQuoteChat() },
+      { label: 'Shipping & Trade', action: () => respondToIntent(KB.find(k=>k.intent==='shipping'),'') },
+      { label: cl('human'), action: () => showHumanContact() }
+    ]);
+  });
+}
+function handleMore() {
+  if (chatContext.lastModel) {
+    const p = P[chatContext.lastModel];
+    chatBotMsg(`More about ${p.model}:\n\n${p.desc}${cl('techNote')}`, () => {
+      chatOpts([
+        { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
+        { label: 'Key Features', action: () => { chatBotMsg(p.features.slice(0,5).map(f=>'• '+f).join('\n')); }},
+        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskIncoterms(); }},
+      ]);
+    });
+  } else {
+    chatBotMsg("What would you like to know more about?", () => {
+      chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatContext.lastModel=id; handleSpec(id); }})));
+    });
+  }
+}
+function handleWhatElse() {
+  const unvisited = KB.filter(k => k.resp && !chatContext.topics.includes(k.intent)).slice(0,4);
+  if (unvisited.length) {
+    chatBotMsg("Here are some topics we haven't covered:", () => {
+      chatOpts(unvisited.map(k => ({
+        label: k.intent.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),
+        action: () => respondToIntent(k, '')
+      })));
+    });
+  } else { chatBotMsg("We've covered a lot! Ready to request a quote?", () => { chatOpts([{ label: cl('quote') + ' →', action: () => chatStep('start') }]); }); }
+}
+function handleThanks() {
+  chatBotMsg("You're welcome! Feel free to ask anything else, or I can help set up a quote.", () => {
+    chatOpts([{ label: cl('quote') + ' →', action: () => chatStep('start') }, { label: 'New Question', action: () => restartChat() }]);
+  });
+}
+
+// ── Dynamic spec lookup from P object ──
+function dynamicSpecLookup(text, modelId) {
+  const id = modelId || findModelInText(text) || chatContext.lastModel;
+  if (!id) return null;
+  const p = P[id];
+  const lower = text.toLowerCase();
+  const specKeywords = {
+    'entry width':['entry','width','throat','opening','feed'],
+    'sheet capacity':['sheet','capacity','pages','how many'],
+    'shred size':['shred','particle','cut size'],
+    'speed':['speed','fpm','fast','per minute'],
+    'motor':['motor','hp','horsepower','power'],
+    'waste bin':['waste','bin','bag','gallon','gal','container','bucket'],
+    'dimensions':['dimension','size','height','wide','deep','footprint'],
+    'voltage':['volt','voltage','amp','electric','power','plug','nema'],
+    'oil required':['oil','lubrication'],
+    'compliance':['hipaa','compliance','certif'],
+    'cut type':['cut type','security','level','p-4']
+  };
+  for (const [specKey, keywords] of Object.entries(specKeywords)) {
+    if (keywords.some(kw => lower.includes(kw))) {
+      const match = p.specs.find(([k]) => k.toLowerCase().includes(specKey.split(' ')[0]));
+      if (match) {
+        chatContext.lastModel = id;
+        return { model: p.model, key: match[0], value: match[1] };
+      }
+    }
+  }
+  return null;
+}
+
+// ── Proactive quote suggestion ──
+function maybePromptQuote() {
+  if (chatContext.turnCount >= 3 && !chatContext.quotePrompted && chatContext.lastModel) {
+    chatContext.quotePrompted = true;
+    setTimeout(() => {
+      const body = document.getElementById('chatBody');
+      const div = document.createElement('div'); div.className = 'chat-options';
+      div.style.cssText = 'border-top:1px solid var(--gold);padding-top:10px;margin-top:8px;';
+      const hint = document.createElement('span');
+      hint.style.cssText = 'font-size:11px;color:var(--gold);display:block;margin-bottom:6px;';
+      hint.textContent = `💡 I have enough info to prepare a ${P[chatContext.lastModel].model} quote for you.`;
+      div.appendChild(hint);
+      const b = document.createElement('button'); b.className = 'chat-opt';
+      b.textContent = cl('quote') + ' →';
+      b.onclick = () => { div.remove(); chatState.model = chatContext.lastModel; chatAskIncoterms(); };
+      div.appendChild(b);
+      body.appendChild(div); body.scrollTop = body.scrollHeight;
+    }, 600);
+  }
+}
 
 // ── Multilingual bot phrases ──
 const CHAT_L = {
@@ -2440,78 +2597,98 @@ function respondToIntent(intent, text) {
 
 async function handleChatInput() {
   const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
+  const rawText = input.value.trim();
+  if (!rawText) return;
   input.value = '';
-  chatUserMsg(text);
-  ctxPush('user', text);
+  chatUserMsg(rawText);
+  ctxPush('user', rawText);
+  inferProfile(rawText);
 
-  // Update model context
-  const mentioned = findModelInText(text);
+  // ① Conversational patterns (yes/no/more/thanks)
+  for (const pat of CONV_PATTERNS) {
+    if (pat.re.test(rawText)) { window[pat.handler](); return; }
+  }
+
+  // ② Fuzzy correct typos then expand synonyms
+  const corrected = fuzzyCorrect(rawText);
+  const mentioned = findModelInText(corrected);
   if (mentioned) chatContext.lastModel = mentioned;
 
-  // Composite intent: collect ALL matching intents above threshold
-  const match = matchIntent(text);
+  // ③ Dynamic spec lookup (e.g. "what's the waste bin of DL-12X?")
+  const specResult = dynamicSpecLookup(corrected);
+  if (specResult) {
+    chatBotMsg(`${specResult.model} — ${specResult.key}: ${specResult.value}${profileEnrich('')}${cl('techNote')}`, () => {
+      chatOpts([
+        { label: `All ${specResult.model} Specs`, action: () => handleSpec(specResult.model) },
+        { label: cl('quote') + ' →', action: () => { chatState.model=chatContext.lastModel; chatAskIncoterms(); }},
+      ]);
+    });
+    ctxPush('bot', specResult.key);
+    maybePromptQuote();
+    return;
+  }
+
+  // ④ Intent matching with synonym expansion
+  const match = matchIntent(corrected);
   const allMatches = match ? match.top3.filter(r => r.score >= 4) : [];
 
-  // If 2+ strong intents, handle composite
+  // Composite: 2+ strong intents
   if (allMatches.length >= 2) {
     const intents = allMatches.map(r => r.entry);
     let combined = '';
     intents.forEach((intent, i) => {
       ctxTopic(intent.intent);
-      if (intent.resp) {
-        combined += (i > 0 ? '\n\n---\n\n' : '') + intent.resp;
-      }
+      if (intent.resp) combined += (i > 0 ? '\n\n---\n\n' : '') + intent.resp;
     });
     if (combined) {
-      chatBotMsg(combined + cl('techNote'), () => {
-        const lastIntent = intents[intents.length - 1];
-        showFollowUp(lastIntent);
+      chatBotMsg(combined + profileEnrich(combined) + cl('techNote'), () => {
+        showFollowUp(intents[intents.length - 1]);
       });
       ctxPush('bot', combined);
+      maybePromptQuote();
       return;
     }
   }
 
   // Single high-confidence intent
   if (match && match.confidence >= 4) {
-    respondToIntent(match.best, text);
+    respondToIntent(match.best, corrected);
     ctxPush('bot', match.best.resp || match.best.intent);
+    maybePromptQuote();
     return;
   }
 
-  // Context-aware: if user asks about "it" / "this" / "that" with a context model
-  if (chatContext.lastModel && /\b(it|this|that|its|the model)\b/i.test(text)) {
-    handleSpec(text);
+  // Context-aware pronouns
+  if (chatContext.lastModel && /\b(it|this|that|its|the model|this one)\b/i.test(corrected)) {
+    handleSpec(corrected);
     return;
   }
 
-  // Level 3: Claude API if configured
+  // Level 3: Claude API
   if (CLAUDE_API_ENDPOINT) {
     const body = document.getElementById('chatBody');
     const typing = document.createElement('div');
     typing.className = 'chat-typing';
     typing.innerHTML = '<span></span><span></span><span></span>';
     body.appendChild(typing); body.scrollTop = body.scrollHeight;
-    const reply = await callClaudeAPI(text);
+    const reply = await callClaudeAPI(corrected);
     typing.remove();
     if (reply) { chatBotMsg(reply); ctxPush('bot', reply); return; }
   }
 
-  // Smart fallback with partial matches
+  // Smart fallback
   if (match && match.top3.length > 0) {
     const suggestions = match.top3.map(r => r.entry);
     chatBotMsg(cl('fallback'), () => {
       chatOpts(suggestions.map(s => ({
         label: s.intent.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),
-        action: () => { respondToIntent(s, text); }
+        action: () => { respondToIntent(s, corrected); }
       })).concat([{ label: cl('human'), action: () => showHumanContact() }]));
     });
     return;
   }
 
-  // No match → topic menu
+  // No match
   chatBotMsg(cl('fallback'), () => {
     chatOpts([
       { label: 'Product Specs', action: () => handleQuoteChat() },
