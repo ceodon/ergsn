@@ -1,11 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#0b1d38"/>
-  <text x="50%" y="50%"
+  <rect width="64" height="64" rx="12" fill="#0f0f0f"/>
+  <defs>
+    <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="15%" stop-color="#a8a8a6"/>
+      <stop offset="48%" stop-color="#c2c0c0"/>
+      <stop offset="64%" stop-color="#f9f8f6"/>
+      <stop offset="76%" stop-color="#d4d4d4"/>
+      <stop offset="88%" stop-color="#7f7f7f"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="42%" stop-color="#00bf79"/>
+      <stop offset="81%" stop-color="#00ffa1"/>
+    </linearGradient>
+  </defs>
+  <text x="32" y="34"
         text-anchor="middle"
         dominant-baseline="central"
-        font-family="'Syncopate','Arial Black',Impact,sans-serif"
-        font-weight="700"
-        font-size="44"
-        fill="#c8932a">E</text>
-  <rect x="8" y="52" width="48" height="3" fill="#c8932a"/>
+        font-family="Arial Black,Impact,sans-serif"
+        font-weight="900"
+        font-size="42"
+        fill="url(#green)">E</text>
 </svg>
