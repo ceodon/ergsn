@@ -1325,6 +1325,32 @@ section { scroll-margin-top: var(--nav-h); }
 .chat-typing span:nth-child(2) { animation-delay: .15s; }
 .chat-typing span:nth-child(3) { animation-delay: .3s; }
 @keyframes typingDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+/* LANGUAGE SWITCHER */
+.lang-sel {
+  font-family: var(--fb); font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,.08); color: var(--white);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 20px;
+  padding: 5px 12px; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  outline: none; transition: border-color .15s;
+}
+.lang-sel:hover, .lang-sel:focus { border-color: var(--gold); }
+.lang-sel option { background: #171717; color: var(--white); }
+
+/* RTL support for Arabic */
+[dir="rtl"] { text-align: right; }
+[dir="rtl"] .nav-inner { flex-direction: row-reverse; }
+[dir="rtl"] .hero-layout { direction: ltr; }
+[dir="rtl"] .about-grid { direction: ltr; }
+[dir="rtl"] .rfq-grid { direction: ltr; }
+[dir="rtl"] .card-foot { flex-direction: row-reverse; }
+[dir="rtl"] .compare-tray { flex-direction: row-reverse; }
+[dir="rtl"] .chat-msg.user { align-self: flex-start; }
+[dir="rtl"] .chat-msg.bot { align-self: flex-end; }
+[dir="rtl"] .f-row { direction: ltr; }
+[dir="rtl"] .footer-top { direction: ltr; }
+[dir="rtl"] .mobile-cta-bar { flex-direction: row-reverse; }
 </style>
 </head>
 <body>
@@ -1337,11 +1363,19 @@ section { scroll-margin-top: var(--nav-h); }
       <span class="logo-sub">CO., LTD.<br>Seoul · Korea</span>
     </a>
     <ul class="nav-links">
-      <li><a href="#products">Products</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#compliance">Compliance</a></li>
-      <li><a href="#rfq" class="nav-cta">Request Quote</a></li>
+      <li><a href="#products" data-t="nav_products">Products</a></li>
+      <li><a href="#about" data-t="nav_about">About</a></li>
+      <li><a href="#compliance" data-t="nav_compliance">Compliance</a></li>
+      <li><a href="#rfq" class="nav-cta" data-t="nav_quote">Request Quote</a></li>
     </ul>
+    <select class="lang-sel" id="langSel" onchange="setLang(this.value)" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+      <option value="ar">عربي</option>
+      <option value="fr">FR</option>
+      <option value="ja">日本語</option>
+      <option value="tr">TR</option>
+    </select>
     <button class="hamburger" id="ham" aria-label="Menu" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </button>
@@ -1354,6 +1388,14 @@ section { scroll-margin-top: var(--nav-h); }
     <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
     <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
   </ul>
+  <select class="lang-sel" style="margin:16px 0" onchange="setLang(this.value)" aria-label="Language">
+    <option value="en">EN</option>
+    <option value="es">ES</option>
+    <option value="ar">عربي</option>
+    <option value="fr">FR</option>
+    <option value="ja">日本語</option>
+    <option value="tr">TR</option>
+  </select>
 </div>
 
 <!-- ══ HERO ═══════════════════════════════ -->
@@ -1367,32 +1409,32 @@ section { scroll-margin-top: var(--nav-h); }
         <div>
           <div class="hero-tag">
             <span class="hero-tag-dot"></span>
-            <span class="label">Made in Korea &middot; Est. Seoul</span>
+            <span class="label" data-t="hero_tag">Made in Korea &middot; Est. Seoul</span>
           </div>
           <h1 class="hero-title">Industrial<br>Shredders<em>Built to Last.</em></h1>
-          <p class="hero-desc body-lg">ERGSN manufactures heavy-duty cross-cut paper shredders for U.S. commercial and institutional buyers. All-metal construction, oil-free operation, HIPAA compliant &mdash; available on GSA Schedule.</p>
+          <p class="hero-desc body-lg" data-t="hero_desc">ERGSN manufactures heavy-duty cross-cut paper shredders for U.S. commercial and institutional buyers. All-metal construction, oil-free operation, HIPAA compliant &mdash; available on GSA Schedule.</p>
           <div class="hero-actions">
-            <a href="#products" class="btn btn-gold">View Products</a>
-            <a href="#rfq"      class="btn btn-outline">Request a Quote</a>
+            <a href="#products" class="btn btn-gold" data-t="hero_btn1">View Products</a>
+            <a href="#rfq"      class="btn btn-outline" data-t="hero_btn2">Request a Quote</a>
           </div>
         </div>
         <div class="hero-stats">
-          <div class="hero-stat"><span class="stat-num count" data-count="20" data-suffix="+">20+</span><span class="stat-lbl">Years Manufacturing</span></div>
-          <div class="hero-stat"><span class="stat-num">CIF</span><span class="stat-lbl">Baltimore Port</span></div>
-          <div class="hero-stat"><span class="stat-num">GSA</span><span class="stat-lbl">Schedule Listed</span></div>
-          <div class="hero-stat"><span class="stat-num">P-4</span><span class="stat-lbl">Security Level</span></div>
+          <div class="hero-stat"><span class="stat-num count" data-count="20" data-suffix="+">20+</span><span class="stat-lbl" data-t="stat_years">Years Manufacturing</span></div>
+          <div class="hero-stat"><span class="stat-num">CIF</span><span class="stat-lbl" data-t="stat_port">Baltimore Port</span></div>
+          <div class="hero-stat"><span class="stat-num">GSA</span><span class="stat-lbl" data-t="stat_gsa">Schedule Listed</span></div>
+          <div class="hero-stat"><span class="stat-num">P-4</span><span class="stat-lbl" data-t="stat_sec">Security Level</span></div>
         </div>
       </div>
     </div>
   </div>
   <div class="trust-bar">
     <div class="container trust-inner">
-      <span class="trust-item">All-Metal Chain Drive</span>
-      <span class="trust-item">Oil-Free Operation</span>
-      <span class="trust-item">HIPAA Compliant</span>
-      <span class="trust-item">GSA Schedule</span>
-      <span class="trust-item">CIF Baltimore</span>
-      <span class="trust-item">T/T Payment</span>
+      <span class="trust-item" data-t="trust_1">All-Metal Chain Drive</span>
+      <span class="trust-item" data-t="trust_2">Oil-Free Operation</span>
+      <span class="trust-item" data-t="trust_3">HIPAA Compliant</span>
+      <span class="trust-item" data-t="trust_4">GSA Schedule</span>
+      <span class="trust-item" data-t="trust_5">CIF Baltimore</span>
+      <span class="trust-item" data-t="trust_6">T/T Payment</span>
     </div>
   </div>
 </section>
@@ -1400,9 +1442,9 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ SHREDDER SIMULATOR ══════════════════ -->
 <section class="sim-section">
   <div class="container sim-inner">
-    <span class="label">Interactive Demo</span>
-    <h2 class="h-lg">Try It Yourself</h2>
-    <p class="body-lg" style="max-width:520px;margin:0 auto">See how our DL Series shredders destroy documents at P-4 security level. Select a model and feed a document.</p>
+    <span class="label" data-t="sim_label">Interactive Demo</span>
+    <h2 class="h-lg" data-t="sim_title">Try It Yourself</h2>
+    <p class="body-lg" style="max-width:520px;margin:0 auto" data-t="sim_desc">See how our DL Series shredders destroy documents at P-4 security level. Select a model and feed a document.</p>
     <select class="sim-model-sel" id="simModelSel">
       <option value="dl10x">DL-10X — 1/12" × 5/8" particles</option>
       <option value="dl12x">DL-12X — 5/64" × 1-3/16" particles</option>
@@ -1419,7 +1461,7 @@ section { scroll-margin-top: var(--nav-h); }
     </div>
     <button class="sim-feed-btn" id="simFeedBtn" onclick="runShredSim()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-      Feed Document
+      <span data-t="sim_btn">Feed Document</span>
     </button>
     <p class="sim-result" id="simResult"></p>
   </div>
@@ -1430,9 +1472,9 @@ section { scroll-margin-top: var(--nav-h); }
   <div class="container products-inner">
     <div class="section-head reveal">
       <div class="section-head-text">
-        <span class="label">DL Series</span>
-        <h2 class="h-lg">Cross-Cut Shredders</h2>
-        <p class="body-sm" style="max-width:500px">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
+        <span class="label" data-t="prod_tag">DL Series</span>
+        <h2 class="h-lg" data-t="prod_title">Cross-Cut Shredders</h2>
+        <p class="body-sm" style="max-width:500px" data-t="prod_desc">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
       </div>
     </div>
 
@@ -1451,7 +1493,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.2 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-10X to compare" onclick="event.stopPropagation();toggleCompare('dl10x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1469,7 +1511,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.2 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-12X to compare" onclick="event.stopPropagation();toggleCompare('dl12x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1487,7 +1529,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.5 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-16X to compare" onclick="event.stopPropagation();toggleCompare('dl16x',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1505,7 +1547,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.5 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-10XD to compare" onclick="event.stopPropagation();toggleCompare('dl10xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1523,7 +1565,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">2.3 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-12XD to compare" onclick="event.stopPropagation();toggleCompare('dl12xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1542,7 +1584,7 @@ section { scroll-margin-top: var(--nav-h); }
           <div><p class="spec-lbl">Motor</p><p class="spec-val">3.25 Hp</p></div>
         </div>
         <div class="card-foot">
-          <span class="card-cta">View Full Specs</span>
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add DL-16XD to compare" onclick="event.stopPropagation();toggleCompare('dl16xd',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
@@ -1566,21 +1608,21 @@ section { scroll-margin-top: var(--nav-h); }
       </picture>
       <figcaption class="about-visual-overlay">
         <span class="label">The Future Workplace</span>
-        <p class="about-visual-caption">Document security, engineered for the modern office.</p>
+        <p class="about-visual-caption" data-t="about_visual">Document security, engineered for the modern office.</p>
       </figcaption>
     </figure>
     <div class="about-grid">
       <div class="about-copy reveal">
-        <span class="label">Who We Are</span>
-        <h2 class="h-lg">Korean Precision.<br>American Standards.</h2>
-        <p class="body-lg">ERGSN CO., LTD. is a Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders. We design and produce the DL Series cross-cut shredders to meet the rigorous demands of U.S. commercial, healthcare, legal, and government procurement.</p>
-        <p class="body-lg">Every ERGSN shredder uses an all-metal chain drive &mdash; eliminating the nylon and plastic gears found in lower-quality alternatives. Machines built to operate reliably for years, not months.</p>
-        <p class="body-lg">Long-term supply partner of Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders.</p>
+        <span class="label" data-t="about_label">Who We Are</span>
+        <h2 class="h-lg" data-t="about_title">Korean Precision.<br>American Standards.</h2>
+        <p class="body-lg" data-t="about_p1">ERGSN CO., LTD. is a Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders. We design and produce the DL Series cross-cut shredders to meet the rigorous demands of U.S. commercial, healthcare, legal, and government procurement.</p>
+        <p class="body-lg" data-t="about_p2">Every ERGSN shredder uses an all-metal chain drive &mdash; eliminating the nylon and plastic gears found in lower-quality alternatives. Machines built to operate reliably for years, not months.</p>
+        <p class="body-lg" data-t="about_p3">Long-term supply partner of Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders.</p>
         <div class="kpi-grid">
-          <div class="kpi-cell"><p class="kpi-num count" data-count="6">6</p><p class="kpi-lbl">DL Series Models</p></div>
-          <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl">Baltimore Port Terms</p></div>
-          <div class="kpi-cell"><p class="kpi-num">P-4</p><p class="kpi-lbl">Security Level</p></div>
-          <div class="kpi-cell"><p class="kpi-num count" data-count="100" data-suffix="%">100%</p><p class="kpi-lbl">All-Metal Construction</p></div>
+          <div class="kpi-cell"><p class="kpi-num count" data-count="6">6</p><p class="kpi-lbl" data-t="kpi_models">DL Series Models</p></div>
+          <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl" data-t="kpi_port">Baltimore Port Terms</p></div>
+          <div class="kpi-cell"><p class="kpi-num">P-4</p><p class="kpi-lbl" data-t="kpi_sec">Security Level</p></div>
+          <div class="kpi-cell"><p class="kpi-num count" data-count="100" data-suffix="%">100%</p><p class="kpi-lbl" data-t="kpi_metal">All-Metal Construction</p></div>
         </div>
       </div>
       <div>
@@ -1606,9 +1648,9 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ TRADE ROUTE MAP ═════════════════════ -->
 <section class="map-section">
   <div class="container map-inner">
-    <span class="label">Global Logistics</span>
-    <h2 class="h-lg">Seoul to Baltimore</h2>
-    <p class="body-lg" style="max-width:520px;margin:0 auto">Every ERGSN shredder travels from our facility in Seoul across the Pacific to the Port of Baltimore — CIF terms, on schedule.</p>
+    <span class="label" data-t="map_label">Global Logistics</span>
+    <h2 class="h-lg" data-t="map_title">Seoul to Baltimore</h2>
+    <p class="body-lg" style="max-width:520px;margin:0 auto" data-t="map_desc">Every ERGSN shredder travels from our facility in Seoul across the Pacific to the Port of Baltimore — CIF terms, on schedule.</p>
     <div class="map-svg-wrap">
       <svg viewBox="0 0 840 340" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="840" height="340" fill="transparent"/>
@@ -1627,10 +1669,10 @@ section { scroll-margin-top: var(--nav-h); }
       </svg>
     </div>
     <div class="map-info-cards reveal">
-      <div class="map-info-card"><p class="map-info-val">CIF</p><p class="map-info-lbl">Baltimore Port Terms</p></div>
-      <div class="map-info-card"><p class="map-info-val">4-6</p><p class="map-info-lbl">Weeks Lead Time</p></div>
-      <div class="map-info-card"><p class="map-info-val">HS 8472.90</p><p class="map-info-lbl">Tariff Classification</p></div>
-      <div class="map-info-card"><p class="map-info-val">T/T</p><p class="map-info-lbl">Payment Remittance</p></div>
+      <div class="map-info-card"><p class="map-info-val">CIF</p><p class="map-info-lbl" data-t="map_cif">Baltimore Port Terms</p></div>
+      <div class="map-info-card"><p class="map-info-val">4-6</p><p class="map-info-lbl" data-t="map_lead">Weeks Lead Time</p></div>
+      <div class="map-info-card"><p class="map-info-val">HS 8472.90</p><p class="map-info-lbl" data-t="map_hs">Tariff Classification</p></div>
+      <div class="map-info-card"><p class="map-info-val">T/T</p><p class="map-info-lbl" data-t="map_tt">Payment Remittance</p></div>
     </div>
   </div>
 </section>
@@ -1639,9 +1681,9 @@ section { scroll-margin-top: var(--nav-h); }
 <section id="compliance">
   <div class="container compliance-inner">
     <div class="reveal">
-      <span class="label">Certifications &amp; Standards</span>
-      <h2 class="h-lg" style="margin:.6rem 0 1rem">Built for U.S. Compliance</h2>
-      <p class="body-lg" style="max-width:560px">Engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.</p>
+      <span class="label" data-t="comp_label">Certifications &amp; Standards</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem" data-t="comp_title">Built for U.S. Compliance</h2>
+      <p class="body-lg" style="max-width:560px" data-t="comp_desc">Engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.</p>
     </div>
     <div class="comp-grid">
       <div class="comp-card reveal" style="--i:0"><div class="comp-icon"></div><p class="comp-title">HIPAA Compliant</p><p class="comp-desc">All DL Series models meet HIPAA document destruction requirements for healthcare data security.</p></div>
@@ -1657,9 +1699,9 @@ section { scroll-margin-top: var(--nav-h); }
   <div class="container rfq-inner">
     <div class="rfq-grid">
       <div class="rfq-info reveal">
-        <span class="label">Get in Touch</span>
-        <h2 class="h-lg" style="margin:.6rem 0 1rem;color:var(--white)">Request a Quote</h2>
-        <p class="body-lg" style="color:var(--steel-lt)">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).</p>
+        <span class="label" data-t="rfq_label">Get in Touch</span>
+        <h2 class="h-lg" style="margin:.6rem 0 1rem;color:var(--white)" data-t="rfq_title">Request a Quote</h2>
+        <p class="body-lg" style="color:var(--steel-lt)" data-t="rfq_desc">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).</p>
         <ul class="rfq-contacts">
           <li><span class="rfq-cl">Email</span><span class="rfq-cv">info@ergsn.com</span></li>
           <li><span class="rfq-cl">Tel</span><span class="rfq-cv">+82-10-5288-0006</span></li>
@@ -1671,16 +1713,16 @@ section { scroll-margin-top: var(--nav-h); }
       <div class="rfq-form reveal" style="--i:1" id="rfqFormWrap">
         <div id="rfqFields">
           <div class="f-row">
-            <div class="f-grp"><label class="f-lbl">First Name <span>*</span></label><input type="text" class="f-in" id="fFirst" placeholder="Greg"></div>
-            <div class="f-grp"><label class="f-lbl">Last Name <span>*</span></label><input type="text" class="f-in" id="fLast" placeholder="Smith"></div>
+            <div class="f-grp"><label class="f-lbl"><span data-t="f_first">First Name</span> <span>*</span></label><input type="text" class="f-in" id="fFirst" placeholder="Greg"></div>
+            <div class="f-grp"><label class="f-lbl"><span data-t="f_last">Last Name</span> <span>*</span></label><input type="text" class="f-in" id="fLast" placeholder="Smith"></div>
           </div>
-          <div class="f-grp"><label class="f-lbl">Company <span>*</span></label><input type="text" class="f-in" id="fCo" placeholder="Capital Shredder Corp."></div>
+          <div class="f-grp"><label class="f-lbl"><span data-t="f_company">Company</span> <span>*</span></label><input type="text" class="f-in" id="fCo" placeholder="Capital Shredder Corp."></div>
           <div class="f-row">
-            <div class="f-grp"><label class="f-lbl">Email <span>*</span></label><input type="email" class="f-in" id="fEmail" placeholder="you@company.com"></div>
-            <div class="f-grp"><label class="f-lbl">Phone</label><input type="tel" class="f-in" id="fPhone" placeholder="+1 (301) 770-3900" autocomplete="off"></div>
+            <div class="f-grp"><label class="f-lbl"><span data-t="f_email">Email</span> <span>*</span></label><input type="email" class="f-in" id="fEmail" placeholder="you@company.com"></div>
+            <div class="f-grp"><label class="f-lbl" data-t="f_phone">Phone</label><input type="tel" class="f-in" id="fPhone" placeholder="+1 (301) 770-3900" autocomplete="off"></div>
           </div>
           <div class="f-grp">
-            <label class="f-lbl">Models of Interest <span>*</span></label>
+            <label class="f-lbl"><span data-t="f_models">Models of Interest</span> <span>*</span></label>
             <div class="model-grid">
               <label class="model-cb"><input type="checkbox" id="mDL10X"><span class="model-cb-lbl">DL-10X</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL12X"><span class="model-cb-lbl">DL-12X</span></label>
@@ -1691,9 +1733,9 @@ section { scroll-margin-top: var(--nav-h); }
             </div>
           </div>
           <div class="f-row">
-            <div class="f-grp"><label class="f-lbl">Est. Quantity</label><input type="text" class="f-in" id="fQty" placeholder="e.g. 20&ndash;50 units"></div>
+            <div class="f-grp"><label class="f-lbl" data-t="f_qty">Est. Quantity</label><input type="text" class="f-in" id="fQty" placeholder="e.g. 20&ndash;50 units"></div>
             <div class="f-grp">
-              <label class="f-lbl">Incoterms</label>
+              <label class="f-lbl" data-t="f_incoterms">Incoterms</label>
               <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()" required autocomplete="off">
                 <option value="" disabled selected>Select&hellip;</option>
                 <optgroup label="Most Common">
@@ -1715,26 +1757,26 @@ section { scroll-margin-top: var(--nav-h); }
           </div>
           <div class="f-row" id="fDestWrap">
             <div class="f-grp">
-              <label class="f-lbl">Country</label>
+              <label class="f-lbl" data-t="f_country">Country</label>
               <select class="f-sel" id="fCountry" onchange="onCountryChange()" required autocomplete="off">
                 <option value="" disabled selected>Select country&hellip;</option>
               </select>
             </div>
             <div class="f-grp">
-              <label class="f-lbl">Port / Place</label>
+              <label class="f-lbl" data-t="f_port">Port / Place</label>
               <select class="f-sel" id="fPort" disabled required autocomplete="off">
                 <option value="" disabled selected>Select country first&hellip;</option>
               </select>
             </div>
           </div>
-          <div class="f-grp"><label class="f-lbl">Message / Special Requirements</label><textarea class="f-ta" id="fMsg" placeholder="Delivery date, voltage specs, packaging, etc."></textarea></div>
-          <button class="btn btn-navy" onclick="submitRFQ()">Send Inquiry &rarr;</button>
-          <p class="f-note">Sent directly to ERGSN CO., LTD. in Seoul &mdash; reply within 1 business day (KST, UTC+9).</p>
+          <div class="f-grp"><label class="f-lbl" data-t="f_message">Message / Special Requirements</label><textarea class="f-ta" id="fMsg" placeholder="Delivery date, voltage specs, packaging, etc."></textarea></div>
+          <button class="btn btn-navy" onclick="submitRFQ()"><span data-t="rfq_btn">Send Inquiry</span> &rarr;</button>
+          <p class="f-note" data-t="rfq_note">Sent directly to ERGSN CO., LTD. in Seoul &mdash; reply within 1 business day (KST, UTC+9).</p>
         </div>
         <div class="form-success" id="rfqSuccess">
           <div class="success-icon">&#10003;</div>
-          <h3>Inquiry Received</h3>
-          <p>Thank you. We will respond within 1 business day (Seoul time).<br><br>For urgent inquiries: <strong>+82-10-5288-0006</strong></p>
+          <h3 data-t="success_title">Inquiry Received</h3>
+          <p data-t="success_msg">Thank you. We will respond within 1 business day (Seoul time).<br><br>For urgent inquiries: <strong>+82-10-5288-0006</strong></p>
         </div>
       </div>
     </div>
@@ -1752,7 +1794,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="footer-about">Industrial shredder manufacturer and exporter.<br>#503 Susong BD, 12-21, Seoae-ro 5-gil,<br>Joong-gu, Seoul 04623, Republic of Korea</p>
       </div>
       <div>
-        <p class="footer-col-title">Products</p>
+        <p class="footer-col-title" data-t="footer_products">Products</p>
         <ul class="footer-links">
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl10x'),200)">DL-10X Shredder</a></li>
           <li><a href="#products" onclick="setTimeout(()=>openModal('dl12x'),200)">DL-12X Shredder</a></li>
@@ -1763,7 +1805,7 @@ section { scroll-margin-top: var(--nav-h); }
         </ul>
       </div>
       <div>
-        <p class="footer-col-title">Company</p>
+        <p class="footer-col-title" data-t="footer_company">Company</p>
         <ul class="footer-links">
           <li><a href="#about">About ERGSN</a></li>
           <li><a href="#compliance">Compliance</a></li>
@@ -1781,11 +1823,11 @@ section { scroll-margin-top: var(--nav-h); }
 <!-- ══ COMPARE TRAY ════════════════════════════ -->
 <div class="compare-tray" id="compareTray" aria-live="polite" aria-label="Compare tray">
   <div class="compare-tray-left">
-    <span class="compare-tray-label">Comparing</span>
+    <span class="compare-tray-label" data-t="tray_comparing">Comparing</span>
     <div class="compare-chips" id="compareChips"></div>
   </div>
   <div class="compare-tray-actions">
-    <button type="button" class="btn-clear" onclick="clearCompare()">Clear</button>
+    <button type="button" class="btn-clear" onclick="clearCompare()"><span data-t="tray_clear">Clear</span></button>
     <button type="button" class="btn btn-gold" id="compareGo" onclick="openCompareModal()">Compare <span id="compareCount">0</span> Models</button>
   </div>
 </div>
@@ -1797,8 +1839,8 @@ section { scroll-margin-top: var(--nav-h); }
 
 <!-- ══ MOBILE CTA BAR ══════════════════════════ -->
 <div class="mobile-cta-bar" aria-label="Quick contact">
-  <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="mcta-call"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.013 12.013 0 0 0 11.944 0Zm5.654 8.22l-1.636 7.706c-.12.548-.44.68-.896.424l-2.47-1.822-1.192 1.148a.622.622 0 0 1-.498.242l.178-2.518 4.58-4.138c.2-.178-.044-.276-.308-.1l-5.66 3.564-2.44-.762c-.53-.166-.54-.53.112-.786l9.534-3.676c.442-.16.828.108.696.718Z"/></svg>Telegram</a>
-  <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Request Quote</a>
+  <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="mcta-call"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.013 12.013 0 0 0 11.944 0Zm5.654 8.22l-1.636 7.706c-.12.548-.44.68-.896.424l-2.47-1.822-1.192 1.148a.622.622 0 0 1-.498.242l.178-2.518 4.58-4.138c.2-.178-.044-.276-.308-.1l-5.66 3.564-2.44-.762c-.53-.166-.54-.53.112-.786l9.534-3.676c.442-.16.828.108.696.718Z"/></svg><span data-t="cta_telegram">Telegram</span></a>
+  <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-t="cta_quote">Request Quote</span></a>
 </div>
 
 <!-- ══ CHATBOT ════════════════════════════════ -->
@@ -1820,7 +1862,29 @@ section { scroll-margin-top: var(--nav-h); }
 </button>
 
 <!-- ══ DATA + JS ══════════════════════════════ -->
+<script src="translations.js"></script>
 <script>
+/* ── i18n ─────────────────────────────── */
+function setLang(lang) {
+  if (!T[lang]) return;
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.dataset.t;
+    if (T[lang][key]) el.textContent = T[lang][key];
+  });
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+  document.getElementById('langSel').value = lang;
+  localStorage.setItem('ergsn_lang', lang);
+}
+// Initialize language from localStorage or browser preference
+(function initLang(){
+  const saved = localStorage.getItem('ergsn_lang');
+  if (saved && T[saved]) { setLang(saved); return; }
+  const browser = (navigator.language || '').slice(0,2);
+  const supported = { en:1, es:1, ar:1, fr:1, ja:1, tr:1 };
+  if (supported[browser]) setLang(browser);
+})();
+
 const P = {
   dl10x: {
     model:'DL-10X', sub:'Level 3 / P-4 Cross Cut \u2014 Entry Mid-Sized Office Shredder', part:'DL10X (RS-2200A)',
