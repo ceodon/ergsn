@@ -2175,35 +2175,50 @@ function clearChat() {
   startChat();
 }
 
+function applyQuoteFields() {
+  // Model checkbox
+  const cb = document.getElementById('m' + chatState.model.toUpperCase());
+  if (cb) cb.checked = true;
+
+  // Incoterms
+  const incoEl = document.getElementById('fIncoterms');
+  if (incoEl && chatState.incoterm && chatState.incoterm !== 'Other') {
+    // Remove disabled placeholder so browser cannot reset to it
+    const ph = incoEl.querySelector('option[disabled]');
+    if (ph) ph.disabled = false;
+    incoEl.value = chatState.incoterm;
+    onIncotermsChange();
+  }
+
+  // Country
+  const countryEl = document.getElementById('fCountry');
+  if (countryEl && chatState.country) {
+    const ph = countryEl.querySelector('option[disabled]');
+    if (ph) ph.disabled = false;
+    countryEl.value = chatState.country;
+    onCountryChange();
+
+    // Port
+    if (chatState.port) {
+      const portEl = document.getElementById('fPort');
+      if (portEl) {
+        const ph2 = portEl.querySelector('option[disabled]');
+        if (ph2) ph2.disabled = false;
+        portEl.value = chatState.port;
+      }
+    }
+  }
+}
+
 function chatPrefillAndQuote() {
   toggleChat();
   setTimeout(() => {
     document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      // Model checkbox
-      const cb = document.getElementById('m' + chatState.model.toUpperCase());
-      if (cb) cb.checked = true;
-
-      // Incoterms — direct function call (no dispatchEvent)
-      const incoEl = document.getElementById('fIncoterms');
-      if (incoEl && chatState.incoterm && chatState.incoterm !== 'Other') {
-        incoEl.value = chatState.incoterm;
-        onIncotermsChange();
-      }
-
-      // Country — direct call, synchronously populates port options
-      const countryEl = document.getElementById('fCountry');
-      if (countryEl && chatState.country) {
-        countryEl.value = chatState.country;
-        onCountryChange();
-
-        // Port — options now exist after synchronous onCountryChange
-        if (chatState.port) {
-          const portEl = document.getElementById('fPort');
-          if (portEl) portEl.value = chatState.port;
-        }
-      }
-    }, 400);
+    // Apply immediately after scroll starts
+    setTimeout(applyQuoteFields, 500);
+    // Re-apply to catch any browser autofill/reset interference
+    setTimeout(applyQuoteFields, 1500);
+    setTimeout(applyQuoteFields, 3000);
   }, 150);
 }
 
