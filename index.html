@@ -1434,7 +1434,7 @@ section { scroll-margin-top: var(--nav-h); }
     <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
     <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
   </ul>
-  <select class="lang-sel" style="margin:16px 0" onchange="setLang(this.value)" aria-label="Language">
+  <select class="lang-sel" id="langSelMobile" style="margin:16px 0" onchange="setLang(this.value)" aria-label="Language">
     <option value="en">EN</option>
     <option value="es">ES</option>
     <option value="ar">عربي</option>
@@ -2011,6 +2011,8 @@ function setLang(lang) {
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
   document.getElementById('langSel').value = lang;
+  const mobSel = document.getElementById('langSelMobile');
+  if (mobSel) mobSel.value = lang;
   localStorage.setItem('ergsn_lang', lang);
 }
 // Initialize language from localStorage or browser preference
