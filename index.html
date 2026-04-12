@@ -2169,49 +2169,39 @@ function chatEndActions() {
 }
 function clearChat() {
   document.getElementById('chatBody').innerHTML = '';
+  startChat();
 }
 
 function chatPrefillAndQuote() {
-  // 1. Close chat first
   toggleChat();
-
-  // 2. Scroll to RFQ so the form is in the DOM viewport
   setTimeout(() => {
     document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
-
-    // 3. After scroll starts, fill the form fields sequentially
     setTimeout(() => {
       // Model checkbox
       const cb = document.getElementById('m' + chatState.model.toUpperCase());
       if (cb) cb.checked = true;
 
-      // Incoterms
-      if (chatState.incoterm && chatState.incoterm !== 'Other') {
-        const incoEl = document.getElementById('fIncoterms');
-        if (incoEl) {
-          incoEl.value = chatState.incoterm;
-          incoEl.dispatchEvent(new Event('change'));
-        }
+      // Incoterms — direct function call (no dispatchEvent)
+      const incoEl = document.getElementById('fIncoterms');
+      if (incoEl && chatState.incoterm && chatState.incoterm !== 'Other') {
+        incoEl.value = chatState.incoterm;
+        onIncotermsChange();
       }
 
-      // Country — set value then trigger change to populate ports
-      if (chatState.country) {
-        const countryEl = document.getElementById('fCountry');
-        if (countryEl) {
-          countryEl.value = chatState.country;
-          countryEl.dispatchEvent(new Event('change'));
-        }
+      // Country — direct call, synchronously populates port options
+      const countryEl = document.getElementById('fCountry');
+      if (countryEl && chatState.country) {
+        countryEl.value = chatState.country;
+        onCountryChange();
 
-        // Port — wait for onCountryChange to finish populating options
-        setTimeout(() => {
-          if (chatState.port) {
-            const portEl = document.getElementById('fPort');
-            if (portEl) portEl.value = chatState.port;
-          }
-        }, 200);
+        // Port — options now exist after synchronous onCountryChange
+        if (chatState.port) {
+          const portEl = document.getElementById('fPort');
+          if (portEl) portEl.value = chatState.port;
+        }
       }
-    }, 300);
-  }, 100);
+    }, 400);
+  }, 150);
 }
 
 function chatStep(key){
