@@ -1694,7 +1694,7 @@ section { scroll-margin-top: var(--nav-h); }
             <div class="f-grp"><label class="f-lbl">Est. Quantity</label><input type="text" class="f-in" id="fQty" placeholder="e.g. 20&ndash;50 units"></div>
             <div class="f-grp">
               <label class="f-lbl">Incoterms</label>
-              <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()" required>
+              <select class="f-sel" id="fIncoterms" onchange="onIncotermsChange()" required autocomplete="off">
                 <option value="" disabled selected>Select&hellip;</option>
                 <optgroup label="Most Common">
                   <option value="FOB">FOB (Free On Board)</option>
@@ -1716,13 +1716,13 @@ section { scroll-margin-top: var(--nav-h); }
           <div class="f-row" id="fDestWrap">
             <div class="f-grp">
               <label class="f-lbl">Country</label>
-              <select class="f-sel" id="fCountry" onchange="onCountryChange()" required>
+              <select class="f-sel" id="fCountry" onchange="onCountryChange()" required autocomplete="off">
                 <option value="" disabled selected>Select country&hellip;</option>
               </select>
             </div>
             <div class="f-grp">
               <label class="f-lbl">Port / Place</label>
-              <select class="f-sel" id="fPort" disabled required>
+              <select class="f-sel" id="fPort" disabled required autocomplete="off">
                 <option value="" disabled selected>Select country first&hellip;</option>
               </select>
             </div>
