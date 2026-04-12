@@ -112,7 +112,7 @@
 @media (max-width: 760px) {
   :root { --bottom-cta-h: 60px; }
 }
-body:has(.compare-btn.active) { --compare-h: 76px; }
+/* --compare-h is set dynamically by updateBottomStack() based on actual tray height */
 
 /* ── RESET ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2490,10 +2490,12 @@ function updateBottomStack() {
   if (!btn) return;
   const root = document.documentElement;
   const show = window.scrollY > 400;
+  const tray = document.getElementById('compareTray');
   const hasCompare = !!document.querySelector('.compare-btn.active');
-  const compareH = hasCompare ? 76 : 0;
+  const compareH = hasCompare && tray ? tray.offsetHeight : 0;
+  root.style.setProperty('--compare-h', compareH + 'px');
   if (show) { btn.classList.add('visible'); root.style.setProperty('--chat-lift', (compareH + 60) + 'px'); }
-  else { btn.classList.remove('visible'); root.style.setProperty('--chat-lift', hasCompare ? '60px' : '0px'); }
+  else { btn.classList.remove('visible'); root.style.setProperty('--chat-lift', hasCompare ? (compareH + 10) + 'px' : '0px'); }
 }
 (function initToTop(){
   window.addEventListener('scroll', updateBottomStack, { passive: true });
