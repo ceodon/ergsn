@@ -2037,25 +2037,25 @@ function runShredSim(){
 /* ═══ ④ CHATBOT ═════════════════════════════ */
 const CHAT_TREE = {
   start: {
-    msg: "Hi! I'm the ERGSN Product Advisor. I'll help you find the right shredder in 30 seconds. How large is your office?",
+    msg: "Hi! I'm the ERGSN Product Advisor. I'll help you find the right shredder and set up a quote. How large is your office?",
     opts: [
-      { label: 'Small (1–15 people)', next: 'vol_small' },
-      { label: 'Medium (15–50)', next: 'vol_med' },
+      { label: 'Small (1\u201315 people)', next: 'vol_small' },
+      { label: 'Medium (15\u201350)', next: 'vol_med' },
       { label: 'Large (50+)', next: 'vol_large' }
     ]
   },
   vol_small: {
-    msg: "Got it — small office. How many pages do you shred per day?",
+    msg: "Got it \u2014 small office. How many pages do you shred per day?",
     opts: [
       { label: 'Under 100 pages', next: 'sec_s_low' },
-      { label: '100–300 pages', next: 'sec_s_high' }
+      { label: '100\u2013300 pages', next: 'sec_s_high' }
     ]
   },
   vol_med: {
     msg: "Medium office. Daily shredding volume?",
     opts: [
       { label: 'Under 200 pages', next: 'sec_m_low' },
-      { label: '200–500 pages', next: 'sec_m_high' }
+      { label: '200\u2013500 pages', next: 'sec_m_high' }
     ]
   },
   vol_large: {
@@ -2066,42 +2066,118 @@ const CHAT_TREE = {
       { label: 'Balanced', next: 'rec_dl12xd' }
     ]
   },
-  sec_s_low: {
-    msg: "For a small office with light volume, the compact DL-10X is perfect.",
-    opts: [], rec: 'dl10x'
-  },
-  sec_s_high: {
-    msg: "You need more capacity. The DL-10XD handles up to 42 sheets per pass in a compact form.",
-    opts: [], rec: 'dl10xd'
-  },
-  sec_m_low: {
-    msg: "The DL-12X is our most popular mid-size model — 26 sheets, 12¼\" entry.",
-    opts: [], rec: 'dl12x'
-  },
-  sec_m_high: {
-    msg: "For heavier mid-office use, the DL-16X with its wide 16¼\" entry is ideal.",
-    opts: [], rec: 'dl16x'
-  },
-  rec_dl16xd: {
-    msg: "The DL-16XD is our flagship — up to 90 sheets at 31 FPM. Maximum throughput.",
-    opts: [], rec: 'dl16xd'
-  },
-  rec_dl10xd: {
-    msg: "The DL-10XD packs 42 sheets/pass into a compact 10\" chassis. Great for tight spaces.",
-    opts: [], rec: 'dl10xd'
-  },
-  rec_dl12xd: {
-    msg: "The DL-12XD offers the best balance — 45 sheets in a mid-size frame.",
-    opts: [], rec: 'dl12xd'
-  }
+  sec_s_low:   { msg: "For a small office with light volume, the compact DL-10X is perfect.", opts: [], rec: 'dl10x' },
+  sec_s_high:  { msg: "You need more capacity. The DL-10XD handles up to 42 sheets per pass in a compact form.", opts: [], rec: 'dl10xd' },
+  sec_m_low:   { msg: "The DL-12X is our most popular mid-size model \u2014 26 sheets, 12\xBC\" entry.", opts: [], rec: 'dl12x' },
+  sec_m_high:  { msg: "For heavier mid-office use, the DL-16X with its wide 16\xBC\" entry is ideal.", opts: [], rec: 'dl16x' },
+  rec_dl16xd:  { msg: "The DL-16XD is our flagship \u2014 up to 90 sheets at 31 FPM. Maximum throughput.", opts: [], rec: 'dl16xd' },
+  rec_dl10xd:  { msg: "The DL-10XD packs 42 sheets/pass into a compact 10\" chassis. Great for tight spaces.", opts: [], rec: 'dl10xd' },
+  rec_dl12xd:  { msg: "The DL-12XD offers the best balance \u2014 45 sheets in a mid-size frame.", opts: [], rec: 'dl12xd' }
 };
+
+const chatState = { model: null, incoterm: null, country: null, port: null };
 let chatOpen = false;
+
 function toggleChat(){
   chatOpen = !chatOpen;
   document.getElementById('chatPanel').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chatBody').children.length) startChat();
 }
-function startChat(){ chatStep('start'); }
+function startChat(){ chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null; chatStep('start'); }
+
+function chatBotMsg(text, cb) {
+  const body = document.getElementById('chatBody');
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(typing);
+  body.scrollTop = body.scrollHeight;
+  setTimeout(()=>{ typing.remove(); const m = document.createElement('div'); m.className='chat-msg bot'; m.textContent=text; body.appendChild(m); body.scrollTop=body.scrollHeight; if(cb) cb(); }, 800);
+}
+function chatUserMsg(text) {
+  const body = document.getElementById('chatBody');
+  const m = document.createElement('div'); m.className='chat-msg user'; m.textContent=text; body.appendChild(m); body.scrollTop=body.scrollHeight;
+}
+function chatOpts(opts) {
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div'); div.className='chat-options';
+  opts.forEach(o => {
+    const b = document.createElement('button'); b.className='chat-opt'; b.textContent=o.label;
+    b.onclick = () => { div.remove(); chatUserMsg(o.label); if(o.action) o.action(); };
+    div.appendChild(b);
+  });
+  body.appendChild(div); body.scrollTop=body.scrollHeight;
+}
+function chatSelect(placeholder, options, onSelect) {
+  const body = document.getElementById('chatBody');
+  const wrap = document.createElement('div'); wrap.className='chat-options';
+  const sel = document.createElement('select'); sel.className='f-sel';
+  sel.style.cssText='max-width:260px;font-size:13px;padding:8px 10px;border-radius:8px;';
+  sel.innerHTML = `<option value="">${placeholder}</option>` + options.map(o => `<option value="${o}">${o}</option>`).join('');
+  const btn = document.createElement('button'); btn.className='chat-opt'; btn.textContent='Confirm'; btn.style.padding='8px 16px';
+  btn.onclick = () => { if(!sel.value) return; wrap.remove(); chatUserMsg(sel.value); onSelect(sel.value); };
+  wrap.appendChild(sel); wrap.appendChild(btn);
+  body.appendChild(wrap); body.scrollTop=body.scrollHeight;
+}
+
+function chatAskIncoterms() {
+  chatBotMsg("Now let's set up delivery. What Incoterms do you prefer?", () => {
+    chatOpts([
+      { label: 'FOB', action: () => { chatState.incoterm='FOB'; chatAskCountry(); }},
+      { label: 'CIF', action: () => { chatState.incoterm='CIF'; chatAskCountry(); }},
+      { label: 'CFR', action: () => { chatState.incoterm='CFR'; chatAskCountry(); }},
+      { label: 'EXW', action: () => { chatState.incoterm='EXW'; chatFinalize(); }},
+      { label: 'Other', action: () => { chatState.incoterm='Other'; chatAskCountry(); }}
+    ]);
+  });
+}
+function chatAskCountry() {
+  chatBotMsg("Which country should we ship to?", () => {
+    chatSelect('Select country\u2026', Object.keys(WORLD_PORTS).filter(k => k !== 'Other'), (val) => {
+      chatState.country = val;
+      const ports = WORLD_PORTS[val];
+      if (typeof ports === 'string' || !ports || ports.length <= 1) { chatState.port = typeof ports === 'string' ? ports : (ports ? ports[0] : val); chatFinalize(); }
+      else chatAskPort(ports);
+    });
+  });
+}
+function chatAskPort(ports) {
+  chatBotMsg(`Which port in ${chatState.country}?`, () => {
+    chatSelect('Select port\u2026', ports, (val) => { chatState.port = val; chatFinalize(); });
+  });
+}
+function chatFinalize() {
+  const m = P[chatState.model];
+  const dest = chatState.incoterm === 'EXW' ? 'Ex Works (Seoul)' : `${chatState.incoterm} ${chatState.port}, ${chatState.country}`;
+  chatBotMsg(`Perfect! ${m.model} \u2014 ${dest}. Ready to request a quote?`, () => {
+    chatOpts([
+      { label: 'Request Quote', action: () => { chatPrefillAndQuote(); }},
+      { label: `View ${m.model} Specs`, action: () => { toggleChat(); openModal(chatState.model); }},
+      { label: 'Start Over', action: () => restartChat() }
+    ]);
+  });
+}
+function chatPrefillAndQuote() {
+  const cb = document.getElementById('m' + chatState.model.toUpperCase());
+  if (cb) cb.checked = true;
+  if (chatState.incoterm && chatState.incoterm !== 'Other') {
+    const incoEl = document.getElementById('fIncoterms');
+    if (incoEl) { incoEl.value = chatState.incoterm; onIncotermsChange(); }
+  }
+  if (chatState.country) {
+    const countryEl = document.getElementById('fCountry');
+    if (countryEl) { countryEl.value = chatState.country; onCountryChange(); }
+    setTimeout(() => {
+      if (chatState.port) {
+        const portEl = document.getElementById('fPort');
+        if (portEl) portEl.value = chatState.port;
+      }
+    }, 50);
+  }
+  toggleChat();
+  setTimeout(() => document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' }), 120);
+}
+
 function chatStep(key){
   const node = CHAT_TREE[key];
   const body = document.getElementById('chatBody');
@@ -2117,10 +2193,11 @@ function chatStep(key){
     msg.textContent = node.msg;
     body.appendChild(msg);
     if(node.rec){
+      chatState.model = node.rec;
       const m = P[node.rec];
       const recDiv = document.createElement('div');
       recDiv.className = 'chat-options';
-      recDiv.innerHTML = `<button class="chat-opt" onclick="toggleChat();openModal('${node.rec}')">View ${m.model} Specs</button><button class="chat-opt" onclick="toggleChat();requestQuote('${node.rec}')">Request Quote</button><button class="chat-opt" onclick="restartChat()">Start Over</button>`;
+      recDiv.innerHTML = `<button class="chat-opt" onclick="chatAskIncoterms()">Set Up Quote \u2192</button><button class="chat-opt" onclick="toggleChat();openModal('${node.rec}')">View ${m.model} Specs</button><button class="chat-opt" onclick="restartChat()">Start Over</button>`;
       body.appendChild(recDiv);
     } else if(node.opts.length){
       const optDiv = document.createElement('div');
