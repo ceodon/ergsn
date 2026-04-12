@@ -1110,6 +1110,217 @@ section { scroll-margin-top: var(--nav-h); }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; animation: none; }
 }
+/* ════════════════════════════════════════
+   PARTICLE CANVAS (Hero overlay)
+════════════════════════════════════════ */
+#particleCanvas {
+  position: absolute; inset: 0;
+  z-index: 2; pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   SHREDDER SIMULATOR
+════════════════════════════════════════ */
+.sim-section { background: #151515; position: relative; overflow: hidden; }
+.sim-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
+.sim-stage {
+  position: relative;
+  width: min(420px, 90vw); height: 380px;
+  margin: 2rem auto 0;
+}
+.sim-doc {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 100px;
+  background: #fff; border: 1px solid #ccc; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #999; line-height: 1.3; text-align: center;
+  padding: 8px;
+  transition: top .6s ease-in, opacity .3s ease;
+  cursor: pointer; z-index: 3;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+}
+.sim-doc.feeding { top: 120px; opacity: 0; }
+.sim-machine {
+  position: absolute; top: 130px; left: 50%; transform: translateX(-50%);
+  width: 180px; height: 90px;
+  background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+  border: 2px solid #34d298; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+  box-shadow: 0 0 30px rgba(52,210,152,.2);
+}
+.sim-machine-label {
+  font-family: var(--fd); font-size: 16px; font-weight: 400;
+  text-transform: uppercase; letter-spacing: .06em; color: var(--gold);
+}
+.sim-slot {
+  position: absolute; top: 126px; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 8px;
+  background: #000; border-radius: 4px;
+  z-index: 4;
+}
+#simCanvas {
+  position: absolute; top: 220px; left: 0; width: 100%; height: 160px;
+  z-index: 1;
+}
+.sim-result {
+  margin-top: 1rem;
+  font-family: var(--fb); font-size: 14px; color: var(--gold);
+  opacity: 0; transition: opacity .4s ease;
+  min-height: 24px;
+}
+.sim-result.visible { opacity: 1; }
+.sim-feed-btn {
+  font-family: var(--fb); font-size: 14px; font-weight: 600;
+  background: #002c1c; color: var(--gold); border: 1px solid var(--gold);
+  border-radius: 36px; padding: 10px 28px;
+  cursor: pointer; transition: background .2s, color .2s;
+  margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px;
+}
+.sim-feed-btn:hover { background: var(--gold); color: #0f1110; }
+.sim-model-sel {
+  font-family: var(--fb); font-size: 13px; font-weight: 500;
+  background: #1d1d1d; color: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px; margin-bottom: .5rem;
+  -webkit-appearance: none;
+}
+
+/* ════════════════════════════════════════
+   TRADE ROUTE MAP
+════════════════════════════════════════ */
+.map-section { background: var(--navy); }
+.map-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
+.map-svg-wrap {
+  max-width: 800px; margin: 2rem auto 0;
+  position: relative;
+}
+.map-svg-wrap svg { width: 100%; height: auto; }
+.map-route {
+  stroke: var(--gold); stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 8 6;
+  animation: routeDash 30s linear infinite;
+}
+@keyframes routeDash { to { stroke-dashoffset: -600; } }
+.map-dot {
+  fill: var(--gold); filter: drop-shadow(0 0 6px rgba(52,210,152,.6));
+}
+.map-ship {
+  fill: var(--gold);
+  offset-path: path("M150,145 Q400,90 680,165");
+  offset-distance: 0%;
+  animation: shipMove 8s ease-in-out infinite alternate;
+}
+@keyframes shipMove { to { offset-distance: 100%; } }
+.map-label {
+  font-family: var(--fb); font-size: 11px; font-weight: 600;
+  fill: var(--white); text-anchor: middle;
+}
+.map-sub-label {
+  font-family: var(--fb); font-size: 9px; font-weight: 400;
+  fill: var(--steel); text-anchor: middle;
+}
+.map-info-cards {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.map-info-card {
+  background: #171717; border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.25rem 1.5rem; min-width: 160px; text-align: center;
+}
+.map-info-val {
+  font-family: var(--fd); font-size: 22px; font-weight: 400;
+  text-transform: uppercase; color: var(--gold);
+}
+.map-info-lbl { font-size: 11px; color: var(--steel); margin-top: 4px; }
+
+/* ════════════════════════════════════════
+   CHATBOT
+════════════════════════════════════════ */
+#chatToggle {
+  position: fixed;
+  left: clamp(16px,3vw,32px);
+  bottom: calc(clamp(16px,3vw,32px) + var(--bottom-cta-h));
+  width: 52px; height: 52px;
+  background: var(--gold); color: #0f1110;
+  border: none; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 24px rgba(52,210,152,.4);
+  cursor: pointer; z-index: 800;
+  transition: transform .2s, box-shadow .2s;
+}
+#chatToggle:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(52,210,152,.55); }
+#chatToggle svg { width: 24px; height: 24px; }
+#chatPanel {
+  position: fixed;
+  left: clamp(16px,3vw,32px);
+  bottom: calc(80px + var(--bottom-cta-h));
+  width: min(360px, calc(100vw - 32px));
+  max-height: 480px;
+  background: #171717; border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  z-index: 810;
+  display: none; flex-direction: column;
+}
+#chatPanel.open { display: flex; }
+.chat-hd {
+  background: var(--navy-2); padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.chat-hd-dot { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+.chat-hd-title { font-family: var(--fb); font-size: 14px; font-weight: 600; color: var(--white); }
+.chat-hd-sub { font-size: 11px; color: var(--steel); }
+.chat-close {
+  margin-left: auto; color: var(--steel); font-size: 18px;
+  cursor: pointer; transition: color .15s;
+}
+.chat-close:hover { color: var(--white); }
+.chat-body {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 340px;
+}
+.chat-msg {
+  max-width: 85%; padding: 10px 14px;
+  font-size: 13px; line-height: 1.55; border-radius: 14px;
+  animation: chatPop .25s ease;
+}
+@keyframes chatPop { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.chat-msg.bot {
+  background: #232524; color: var(--tx-mid);
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+.chat-msg.user {
+  background: var(--gold); color: #0f1110; font-weight: 500;
+  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+}
+.chat-options {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  align-self: flex-start;
+  animation: chatPop .25s ease;
+}
+.chat-opt {
+  font-family: var(--fb); font-size: 12px; font-weight: 500;
+  background: #002c1c; color: var(--gold); border: 1px solid var(--gold);
+  border-radius: 20px; padding: 7px 14px;
+  cursor: pointer; transition: background .15s, color .15s;
+}
+.chat-opt:hover { background: var(--gold); color: #0f1110; }
+.chat-typing {
+  display: flex; gap: 4px; align-self: flex-start; padding: 10px 14px;
+  background: #232524; border-radius: 14px; border-bottom-left-radius: 4px;
+}
+.chat-typing span {
+  width: 6px; height: 6px; background: var(--steel);
+  border-radius: 50%; animation: typingDot .8s ease-in-out infinite;
+}
+.chat-typing span:nth-child(2) { animation-delay: .15s; }
+.chat-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes typingDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
 </style>
 </head>
 <body>
@@ -1143,6 +1354,7 @@ section { scroll-margin-top: var(--nav-h); }
 
 <!-- ══ HERO ═══════════════════════════════ -->
 <section id="home">
+  <canvas id="particleCanvas"></canvas>
   <div class="hero-grid-bg"></div>
   <div class="hero-accent"></div>
   <div class="hero-body">
@@ -1178,6 +1390,34 @@ section { scroll-margin-top: var(--nav-h); }
       <span class="trust-item">CIF Baltimore</span>
       <span class="trust-item">T/T Payment</span>
     </div>
+  </div>
+</section>
+
+<!-- ══ SHREDDER SIMULATOR ══════════════════ -->
+<section class="sim-section">
+  <div class="container sim-inner">
+    <span class="label">Interactive Demo</span>
+    <h2 class="h-lg">Try It Yourself</h2>
+    <p class="body-lg" style="max-width:520px;margin:0 auto">See how our DL Series shredders destroy documents at P-4 security level. Select a model and feed a document.</p>
+    <select class="sim-model-sel" id="simModelSel">
+      <option value="dl10x">DL-10X — 1/12" × 5/8" particles</option>
+      <option value="dl12x">DL-12X — 5/64" × 1-3/16" particles</option>
+      <option value="dl16x" selected>DL-16X — 5/64" × 1-3/16" particles</option>
+      <option value="dl10xd">DL-10XD — 5/32" × 1-3/16" particles</option>
+      <option value="dl12xd">DL-12XD — 5/32" × 1-3/16" particles</option>
+      <option value="dl16xd">DL-16XD — 5/32" × 1-3/4" particles</option>
+    </select>
+    <div class="sim-stage">
+      <div class="sim-doc" id="simDoc">CONFIDENTIAL<br>DOCUMENT</div>
+      <div class="sim-slot"></div>
+      <div class="sim-machine"><span class="sim-machine-label" id="simMachineLabel">DL-16X</span></div>
+      <canvas id="simCanvas"></canvas>
+    </div>
+    <button class="sim-feed-btn" id="simFeedBtn" onclick="runShredSim()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Feed Document
+    </button>
+    <p class="sim-result" id="simResult"></p>
   </div>
 </section>
 
@@ -1359,6 +1599,38 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ TRADE ROUTE MAP ═════════════════════ -->
+<section class="map-section">
+  <div class="container map-inner">
+    <span class="label">Global Logistics</span>
+    <h2 class="h-lg">Seoul to Baltimore</h2>
+    <p class="body-lg" style="max-width:520px;margin:0 auto">Every ERGSN shredder travels from our facility in Seoul across the Pacific to the Port of Baltimore — CIF terms, on schedule.</p>
+    <div class="map-svg-wrap">
+      <svg viewBox="0 0 840 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="840" height="340" fill="transparent"/>
+        <path d="M90,100 Q140,70 200,80 Q260,90 300,75 Q340,60 380,80 Q420,100 460,95 Q500,90 540,100 Q560,110 580,105 Q600,95 620,105 Q660,120 700,140 Q720,150 740,155 Q760,160 780,150" stroke="#292929" stroke-width="1" fill="none"/>
+        <path d="M80,170 Q120,160 160,165 Q200,170 240,160 Q280,150 320,155 Q360,160 380,180 Q400,200 380,220 Q360,240 340,245 Q300,250 280,240" stroke="#292929" stroke-width="1" fill="none"/>
+        <path d="M500,170 Q520,160 540,165 Q560,175 580,170 Q620,160 660,175 Q700,190 720,200 Q740,210 750,230 Q760,250 740,265 Q720,275 700,270 Q680,260 660,265 Q640,270 620,260 Q600,245 580,250 Q560,260 540,255 Q510,245 500,230 Q490,210 500,190 Z" stroke="#292929" stroke-width="1" fill="none"/>
+        <path class="map-route" d="M150,145 Q400,90 680,165"/>
+        <polygon class="map-ship" points="-6,-4 6,0 -6,4" />
+        <circle class="map-dot" cx="150" cy="145" r="6"/>
+        <circle class="map-dot" cx="680" cy="165" r="6"/>
+        <text class="map-label" x="150" y="135">Seoul</text>
+        <text class="map-sub-label" x="150" y="168">Incheon Port</text>
+        <text class="map-label" x="680" y="155">Baltimore</text>
+        <text class="map-sub-label" x="680" y="188">Port of Baltimore</text>
+        <text class="map-sub-label" x="415" y="105" style="fill:var(--gold);font-size:10px;letter-spacing:.1em">PACIFIC OCEAN</text>
+      </svg>
+    </div>
+    <div class="map-info-cards reveal">
+      <div class="map-info-card"><p class="map-info-val">CIF</p><p class="map-info-lbl">Baltimore Port Terms</p></div>
+      <div class="map-info-card"><p class="map-info-val">4-6</p><p class="map-info-lbl">Weeks Lead Time</p></div>
+      <div class="map-info-card"><p class="map-info-val">HS 8472.90</p><p class="map-info-lbl">Tariff Classification</p></div>
+      <div class="map-info-card"><p class="map-info-val">T/T</p><p class="map-info-lbl">Payment Remittance</p></div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ COMPLIANCE ═══════════════════════════ -->
 <section id="compliance">
   <div class="container compliance-inner">
@@ -1500,6 +1772,19 @@ section { scroll-margin-top: var(--nav-h); }
   <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Request Quote</a>
 </div>
 
+<!-- ══ CHATBOT ════════════════════════════════ -->
+<button id="chatToggle" type="button" aria-label="Product advisor" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
+</button>
+<div id="chatPanel">
+  <div class="chat-hd">
+    <span class="chat-hd-dot"></span>
+    <div><p class="chat-hd-title">ERGSN Product Advisor</p><p class="chat-hd-sub">Find the right shredder</p></div>
+    <button class="chat-close" onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+</div>
+
 <!-- ══ BACK TO TOP ═════════════════════════════ -->
 <button id="toTop" type="button" aria-label="Back to top" onclick="scrollToTop()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
@@ -1628,6 +1913,215 @@ function toggleMenu() {
 function closeMenu() {
   document.getElementById('ham').classList.remove('open');
   document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* ═══ ① PARTICLE HERO ═══════════════════════ */
+(function initParticles(){
+  const c = document.getElementById('particleCanvas');
+  if (!c || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const ctx = c.getContext('2d');
+  let w, h, pts = [];
+  function resize(){ w = c.width = c.parentElement.offsetWidth; h = c.height = c.parentElement.offsetHeight; }
+  function make(){ return { x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.8+.5, dx:(Math.random()-.5)*.4, dy:(Math.random()-.5)*.4, o:Math.random()*.4+.1 }; }
+  function init(){ resize(); pts = Array.from({length:70}, make); }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(let i=0;i<pts.length;i++){
+      const p=pts[i];
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(52,210,152,${p.o})`; ctx.fill();
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0; if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      for(let j=i+1;j<pts.length;j++){
+        const q=pts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){ ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle=`rgba(52,210,152,${.12*(1-d/110)})`; ctx.lineWidth=.6; ctx.stroke(); }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  init(); draw(); window.addEventListener('resize', resize);
+})();
+
+/* ═══ ② SHREDDER SIMULATOR ══════════════════ */
+const SIM_DATA = {
+  dl10x:  { model:'DL-10X',  size:'1/12" × 5/8"',   count:980,  speed:22, color:'#34d298' },
+  dl12x:  { model:'DL-12X',  size:'5/64" × 1-3/16"', count:420,  speed:22, color:'#00ffa1' },
+  dl16x:  { model:'DL-16X',  size:'5/64" × 1-3/16"', count:420,  speed:22, color:'#34d298' },
+  dl10xd: { model:'DL-10XD', size:'5/32" × 1-3/16"', count:280,  speed:22, color:'#00bf79' },
+  dl12xd: { model:'DL-12XD', size:'5/32" × 1-3/16"', count:280,  speed:22, color:'#34d298' },
+  dl16xd: { model:'DL-16XD', size:'5/32" × 1-3/4"',  count:180,  speed:31, color:'#00ffa1' }
+};
+let simBusy = false;
+document.getElementById('simModelSel').addEventListener('change', function(){
+  document.getElementById('simMachineLabel').textContent = SIM_DATA[this.value].model;
+});
+function runShredSim(){
+  if(simBusy) return; simBusy = true;
+  const sel = document.getElementById('simModelSel').value;
+  const info = SIM_DATA[sel];
+  const doc = document.getElementById('simDoc');
+  const result = document.getElementById('simResult');
+  const canvas = document.getElementById('simCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  result.classList.remove('visible'); result.textContent = '';
+  doc.style.top = '0'; doc.style.opacity = '1';
+  doc.classList.remove('feeding');
+  void doc.offsetWidth;
+  doc.classList.add('feeding');
+  const particles = [];
+  setTimeout(()=>{
+    const cx = canvas.width/2;
+    for(let i=0;i<info.count/4;i++){
+      particles.push({
+        x: cx + (Math.random()-.5)*80,
+        y: 0,
+        dx: (Math.random()-.5)*4,
+        dy: Math.random()*3+1.5,
+        r: Math.random()*2.5+1,
+        life: 1,
+        color: info.color
+      });
+    }
+    function anim(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      let alive = false;
+      particles.forEach(p=>{
+        if(p.life<=0)return;
+        alive = true;
+        p.x+=p.dx; p.y+=p.dy; p.dy+=.06; p.life-=.012;
+        ctx.globalAlpha=Math.max(0,p.life);
+        ctx.fillStyle=p.color;
+        ctx.fillRect(p.x,p.y,p.r,p.r*1.5);
+      });
+      ctx.globalAlpha=1;
+      if(alive) requestAnimationFrame(anim);
+      else {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        result.innerHTML = `<strong>${info.model}</strong> — shredded into <strong>${info.size}</strong> particles at <strong>${info.speed} FPM</strong> &middot; P-4 Security Level`;
+        result.classList.add('visible');
+        setTimeout(()=>{ doc.classList.remove('feeding'); doc.style.top='0'; doc.style.opacity='1'; simBusy=false; }, 1200);
+      }
+    }
+    anim();
+  }, 650);
+}
+
+/* ═══ ④ CHATBOT ═════════════════════════════ */
+const CHAT_TREE = {
+  start: {
+    msg: "Hi! I'm the ERGSN Product Advisor. I'll help you find the right shredder in 30 seconds. How large is your office?",
+    opts: [
+      { label: 'Small (1–15 people)', next: 'vol_small' },
+      { label: 'Medium (15–50)', next: 'vol_med' },
+      { label: 'Large (50+)', next: 'vol_large' }
+    ]
+  },
+  vol_small: {
+    msg: "Got it — small office. How many pages do you shred per day?",
+    opts: [
+      { label: 'Under 100 pages', next: 'sec_s_low' },
+      { label: '100–300 pages', next: 'sec_s_high' }
+    ]
+  },
+  vol_med: {
+    msg: "Medium office. Daily shredding volume?",
+    opts: [
+      { label: 'Under 200 pages', next: 'sec_m_low' },
+      { label: '200–500 pages', next: 'sec_m_high' }
+    ]
+  },
+  vol_large: {
+    msg: "Large operation. What's your priority?",
+    opts: [
+      { label: 'High throughput', next: 'rec_dl16xd' },
+      { label: 'Space efficient', next: 'rec_dl10xd' },
+      { label: 'Balanced', next: 'rec_dl12xd' }
+    ]
+  },
+  sec_s_low: {
+    msg: "For a small office with light volume, the compact DL-10X is perfect.",
+    opts: [], rec: 'dl10x'
+  },
+  sec_s_high: {
+    msg: "You need more capacity. The DL-10XD handles up to 42 sheets per pass in a compact form.",
+    opts: [], rec: 'dl10xd'
+  },
+  sec_m_low: {
+    msg: "The DL-12X is our most popular mid-size model — 26 sheets, 12¼\" entry.",
+    opts: [], rec: 'dl12x'
+  },
+  sec_m_high: {
+    msg: "For heavier mid-office use, the DL-16X with its wide 16¼\" entry is ideal.",
+    opts: [], rec: 'dl16x'
+  },
+  rec_dl16xd: {
+    msg: "The DL-16XD is our flagship — up to 90 sheets at 31 FPM. Maximum throughput.",
+    opts: [], rec: 'dl16xd'
+  },
+  rec_dl10xd: {
+    msg: "The DL-10XD packs 42 sheets/pass into a compact 10\" chassis. Great for tight spaces.",
+    opts: [], rec: 'dl10xd'
+  },
+  rec_dl12xd: {
+    msg: "The DL-12XD offers the best balance — 45 sheets in a mid-size frame.",
+    opts: [], rec: 'dl12xd'
+  }
+};
+let chatOpen = false;
+function toggleChat(){
+  chatOpen = !chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open', chatOpen);
+  if(chatOpen && !document.getElementById('chatBody').children.length) startChat();
+}
+function startChat(){ chatStep('start'); }
+function chatStep(key){
+  const node = CHAT_TREE[key];
+  const body = document.getElementById('chatBody');
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  body.appendChild(typing);
+  body.scrollTop = body.scrollHeight;
+  setTimeout(()=>{
+    typing.remove();
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg bot';
+    msg.textContent = node.msg;
+    body.appendChild(msg);
+    if(node.rec){
+      const m = P[node.rec];
+      const recDiv = document.createElement('div');
+      recDiv.className = 'chat-options';
+      recDiv.innerHTML = `<button class="chat-opt" onclick="toggleChat();openModal('${node.rec}')">View ${m.model} Specs</button><button class="chat-opt" onclick="toggleChat();requestQuote('${node.rec}')">Request Quote</button><button class="chat-opt" onclick="restartChat()">Start Over</button>`;
+      body.appendChild(recDiv);
+    } else if(node.opts.length){
+      const optDiv = document.createElement('div');
+      optDiv.className = 'chat-options';
+      node.opts.forEach(o=>{
+        const btn = document.createElement('button');
+        btn.className = 'chat-opt';
+        btn.textContent = o.label;
+        btn.onclick = ()=>{
+          optDiv.remove();
+          const userMsg = document.createElement('div');
+          userMsg.className = 'chat-msg user';
+          userMsg.textContent = o.label;
+          body.appendChild(userMsg);
+          body.scrollTop = body.scrollHeight;
+          chatStep(o.next);
+        };
+        optDiv.appendChild(btn);
+      });
+      body.appendChild(optDiv);
+    }
+    body.scrollTop = body.scrollHeight;
+  }, 800);
+}
+function restartChat(){
+  document.getElementById('chatBody').innerHTML = '';
+  startChat();
 }
 
 (function initReveal(){
