@@ -1036,10 +1036,7 @@ section { scroll-margin-top: var(--nav-h); }
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.footer-logo-text::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, var(--gold), rgba(52,210,152,.1));
-}
+.footer-logo-text::after { display: none; }
 .footer-about { font-size: 12px; color: var(--steel); line-height: 1.75; }
 .footer-col-title { font-family: var(--fb); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
 .footer-links { list-style: none; }
