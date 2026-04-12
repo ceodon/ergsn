@@ -194,6 +194,10 @@ section { scroll-margin-top: var(--nav-h); }
 .nav-inner {
   height: 100%;
   display: flex; align-items: center; justify-content: space-between;
+  gap: clamp(12px,2vw,24px);
+}
+.nav-right {
+  display: flex; align-items: center; gap: clamp(12px,2vw,20px);
 }
 
 /* LOGO */
@@ -1068,6 +1072,7 @@ section { scroll-margin-top: var(--nav-h); }
   .kpi-grid      { grid-template-columns: 1fr 1fr; }
   .nav-links     { display: none; }
   .hamburger     { display: flex; }
+  .nav-right .lang-sel { order: -1; }
   .logo-sub      { display: none; }
 }
 @media (max-width: 420px) {
@@ -1381,23 +1386,25 @@ section { scroll-margin-top: var(--nav-h); }
       <span class="logo-mark"><span class="e">E</span>RGSN</span>
       <span class="logo-sub">CO., LTD.<br>Seoul · Korea</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="#products" data-t="nav_products">Products</a></li>
-      <li><a href="#about" data-t="nav_about">About</a></li>
-      <li><a href="#compliance" data-t="nav_compliance">Compliance</a></li>
-      <li><a href="#rfq" class="nav-cta" data-t="nav_quote">Request Quote</a></li>
-    </ul>
-    <select class="lang-sel" id="langSel" onchange="setLang(this.value)" aria-label="Language">
-      <option value="en">EN</option>
-      <option value="es">ES</option>
-      <option value="ar">عربي</option>
-      <option value="fr">FR</option>
-      <option value="ja">日本語</option>
-      <option value="tr">TR</option>
-    </select>
-    <button class="hamburger" id="ham" aria-label="Menu" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#products" data-t="nav_products">Products</a></li>
+        <li><a href="#about" data-t="nav_about">About</a></li>
+        <li><a href="#compliance" data-t="nav_compliance">Compliance</a></li>
+        <li><a href="#rfq" class="nav-cta" data-t="nav_quote">Request Quote</a></li>
+      </ul>
+      <select class="lang-sel" id="langSel" onchange="setLang(this.value)" aria-label="Language">
+        <option value="en">EN</option>
+        <option value="es">ES</option>
+        <option value="ar">عربي</option>
+        <option value="fr">FR</option>
+        <option value="ja">日本語</option>
+        <option value="tr">TR</option>
+      </select>
+      <button class="hamburger" id="ham" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
