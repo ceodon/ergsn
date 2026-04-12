@@ -2158,24 +2158,46 @@ function chatFinalize() {
   });
 }
 function chatPrefillAndQuote() {
-  const cb = document.getElementById('m' + chatState.model.toUpperCase());
-  if (cb) cb.checked = true;
-  if (chatState.incoterm && chatState.incoterm !== 'Other') {
-    const incoEl = document.getElementById('fIncoterms');
-    if (incoEl) { incoEl.value = chatState.incoterm; onIncotermsChange(); }
-  }
-  if (chatState.country) {
-    const countryEl = document.getElementById('fCountry');
-    if (countryEl) { countryEl.value = chatState.country; onCountryChange(); }
-    setTimeout(() => {
-      if (chatState.port) {
-        const portEl = document.getElementById('fPort');
-        if (portEl) portEl.value = chatState.port;
-      }
-    }, 50);
-  }
+  // 1. Close chat first
   toggleChat();
-  setTimeout(() => document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' }), 120);
+
+  // 2. Scroll to RFQ so the form is in the DOM viewport
+  setTimeout(() => {
+    document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+
+    // 3. After scroll starts, fill the form fields sequentially
+    setTimeout(() => {
+      // Model checkbox
+      const cb = document.getElementById('m' + chatState.model.toUpperCase());
+      if (cb) cb.checked = true;
+
+      // Incoterms
+      if (chatState.incoterm && chatState.incoterm !== 'Other') {
+        const incoEl = document.getElementById('fIncoterms');
+        if (incoEl) {
+          incoEl.value = chatState.incoterm;
+          incoEl.dispatchEvent(new Event('change'));
+        }
+      }
+
+      // Country — set value then trigger change to populate ports
+      if (chatState.country) {
+        const countryEl = document.getElementById('fCountry');
+        if (countryEl) {
+          countryEl.value = chatState.country;
+          countryEl.dispatchEvent(new Event('change'));
+        }
+
+        // Port — wait for onCountryChange to finish populating options
+        setTimeout(() => {
+          if (chatState.port) {
+            const portEl = document.getElementById('fPort');
+            if (portEl) portEl.value = chatState.port;
+          }
+        }, 200);
+      }
+    }, 300);
+  }, 100);
 }
 
 function chatStep(key){
