@@ -699,24 +699,23 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .mobile-cta-bar a {
   flex: 1;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  font-family: var(--fc); font-size: 12px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
-  border-radius: var(--radius);
-  padding: 11px 10px;
-  transition: background .15s, color .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--fb); font-size: 14px; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+  border-radius: 36px;
+  padding: 12px 10px;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
 }
-.mobile-cta-bar a svg { width: 14px; height: 14px; flex-shrink: 0; }
+.mobile-cta-bar a svg { width: 16px; height: 16px; flex-shrink: 0; }
 .mobile-cta-bar .mcta-call {
-  color: var(--white);
-  border: 1px solid rgba(255,255,255,.3);
+  background: var(--gold); color: #0f1110;
 }
-.mobile-cta-bar .mcta-call:active { background: rgba(255,255,255,.08); }
+.mobile-cta-bar .mcta-call:active { background: var(--gold-light); box-shadow: 0 0 20px rgba(52,210,152,.35); }
 .mobile-cta-bar .mcta-quote {
-  background: var(--gold);
-  color: var(--white);
+  background: #002c1c; color: var(--gold);
+  border: 1px solid var(--gold);
 }
-.mobile-cta-bar .mcta-quote:active { background: var(--gold-light); }
+.mobile-cta-bar .mcta-quote:active { background: var(--gold); color: #0f1110; }
 @media (max-width: 760px) {
   .mobile-cta-bar { display: flex; }
 }
