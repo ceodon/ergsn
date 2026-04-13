@@ -2866,11 +2866,66 @@ function handleQuoteChat() {
 
 const CHAT_TREE = {
   start: {
-    msg: "Hi! I'm the ERGSN Product Advisor. I'll help you find the right shredder and set up a quote. How large is your office?",
+    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway \u2014 we connect verified Korean manufacturers with global procurement teams. Every product on our platform passes a rigorous 4-step verification (vendor audit, quality testing, compliance check, long-term partnership) before being offered to international buyers.\n\nWe currently offer the DL Series industrial shredders (GSA Schedule listed, U.S. defense procured), with additional product categories joining our network soon.\n\nHow may I assist you today?",
+    opts: [
+      { label: 'Find the right shredder for me', next: 'find_office_size' },
+      { label: 'Browse all DL Series models', next: 'browse_models' },
+      { label: 'About ERGSN & verification', next: 'about_company' },
+      { label: 'Trade terms (CIF, payment, shipping)', next: 'trade_info' },
+      { label: 'Request a quote directly', next: 'quote_direct' }
+    ]
+  },
+  find_office_size: {
+    msg: "Of course. To recommend the most suitable model, may I ask the size of your office?",
     opts: [
       { label: 'Small (1\u201315 people)', next: 'vol_small' },
       { label: 'Medium (15\u201350)', next: 'vol_med' },
       { label: 'Large (50+)', next: 'vol_large' }
+    ]
+  },
+  browse_models: {
+    msg: "We currently carry six DL Series cross-cut shredders, all manufactured by ERGSN CO., LTD. (verified partner). Which model would you like to learn about?",
+    opts: [
+      { label: 'DL-10X', action: 'browse_dl10x' },
+      { label: 'DL-12X', action: 'browse_dl12x' },
+      { label: 'DL-16X', action: 'browse_dl16x' },
+      { label: 'DL-10XD', action: 'browse_dl10xd' },
+      { label: 'DL-12XD', action: 'browse_dl12xd' },
+      { label: 'DL-16XD (Flagship)', action: 'browse_dl16xd' }
+    ]
+  },
+  about_company: {
+    msg: "ERGSN CO., LTD. is a Seoul-based trade gateway founded in 2013. Rather than a single-product seller, we are a curator: every manufacturer in our network passes our 4-step verification (Vendor Audit \u2192 Quality Verification \u2192 Compliance Check \u2192 Long-term Partnership) before their products are offered to global buyers.\n\nOur first verified partner is ERGSN CO., LTD. itself \u2014 manufacturing the DL Series shredders that have been GSA Schedule listed and procured by U.S. defense agencies for over a decade through Capital Shredder Corp. (Rockville, MD).\n\nWould you like to know more?",
+    opts: [
+      { label: 'See the verification process', next: 'verify_detail' },
+      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Trade terms', next: 'trade_info' }
+    ]
+  },
+  verify_detail: {
+    msg: "Our 4-Step Verification:\n\n1. Vendor Audit \u2014 on-site facility inspection, financials, 3-year operational history\n2. Quality Verification \u2014 independent product testing against DIN/ISO/ANSI standards\n3. Compliance Check \u2014 export documentation, HS codes, target-market regulations (HIPAA, GSA, CE)\n4. Long-term Partnership \u2014 formal supply agreement, dedicated account management, ongoing quality monitoring\n\nThis is why our buyers know that anything they purchase through ERGSN has already been thoroughly vetted.",
+    opts: [
+      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Request a quote', next: 'quote_direct' }
+    ]
+  },
+  trade_info: {
+    msg: "Standard trade terms:\n\n\u2022 Incoterms: CIF to any major port worldwide (FOB, CFR, EXW also available)\n\u2022 Payment: T/T 50% advance, 50% before shipment (L/C negotiable)\n\u2022 Lead time: 4\u20136 weeks from advance payment\n\u2022 HS Code: 8472.90\n\u2022 Packaging: Individual crating for ocean freight\n\nMay I help with anything else?",
+    opts: [
+      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Request a quote directly', next: 'quote_direct' }
+    ]
+  },
+  quote_direct: {
+    msg: "I can set up a formal quote request for you. Which model are you interested in?",
+    opts: [
+      { label: 'DL-10X', action: 'quote_dl10x' },
+      { label: 'DL-12X', action: 'quote_dl12x' },
+      { label: 'DL-16X', action: 'quote_dl16x' },
+      { label: 'DL-10XD', action: 'quote_dl10xd' },
+      { label: 'DL-12XD', action: 'quote_dl12xd' },
+      { label: 'DL-16XD', action: 'quote_dl16xd' },
+      { label: 'Not sure yet \u2014 help me choose', next: 'find_office_size' }
     ]
   },
   vol_small: {
@@ -3222,7 +3277,21 @@ function chatStep(key){
           userMsg.textContent = o.label;
           body.appendChild(userMsg);
           body.scrollTop = body.scrollHeight;
-          chatStep(o.next);
+          if (o.action && typeof o.action === 'string') {
+            // Handle string action commands
+            if (o.action.startsWith('browse_')) {
+              const id = o.action.replace('browse_', '');
+              chatContext.lastModel = id;
+              setTimeout(() => { toggleChat(); openModal(id); }, 200);
+            } else if (o.action.startsWith('quote_')) {
+              const id = o.action.replace('quote_', '');
+              chatState.model = id;
+              chatContext.lastModel = id;
+              chatAskQualification();
+            }
+          } else if (o.next) {
+            chatStep(o.next);
+          }
         };
         optDiv.appendChild(btn);
       });
