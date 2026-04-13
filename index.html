@@ -2821,14 +2821,56 @@ function startChat(){
   chatStep('start');
 }
 
+let chatBotMsgActive = 0;
 function chatBotMsg(text, cb) {
+  chatBotMsgActive++;
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
   typing.className = 'chat-typing';
   typing.innerHTML = '<span></span><span></span><span></span>';
   body.appendChild(typing);
   body.scrollTop = body.scrollHeight;
-  setTimeout(()=>{ typing.remove(); const m = document.createElement('div'); m.className='chat-msg bot'; m.textContent=text; body.appendChild(m); body.scrollTop=body.scrollHeight; if(cb) cb(); }, 800);
+  setTimeout(()=>{
+    typing.remove();
+    const m = document.createElement('div'); m.className='chat-msg bot'; m.textContent=text;
+    body.appendChild(m); body.scrollTop=body.scrollHeight;
+    if(cb) cb();
+    chatBotMsgActive--;
+    // After all nested messages complete, ensure options exist
+    setTimeout(() => {
+      if (chatBotMsgActive > 0) return;
+      const last = body.lastElementChild;
+      if (last && (last.classList.contains('chat-options') || last.classList.contains('chat-typing'))) return;
+      chatDefaultOpts();
+    }, 1200);
+  }, 800);
+}
+
+function chatDefaultOpts() {
+  const body = document.getElementById('chatBody');
+  if (body.lastElementChild && body.lastElementChild.classList.contains('chat-options')) return;
+  const div = document.createElement('div');
+  div.className = 'chat-options';
+  div.style.cssText = 'border-top:1px solid #292929;padding-top:8px;margin-top:6px;';
+  const label = document.createElement('span');
+  label.style.cssText = 'font-size:10px;color:var(--tx-lt);display:block;margin-bottom:6px;';
+  label.textContent = 'What next?';
+  div.appendChild(label);
+  const opts = [
+    { label: 'Browse Models', action: () => handleQuoteChat() },
+    { label: cl('quote') + ' →', action: () => chatStep('start') },
+    { label: 'Ask Anything', action: () => { div.remove(); document.getElementById('chatInput').focus(); }},
+    { label: cl('human'), action: () => showHumanContact() }
+  ];
+  opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'chat-opt';
+    b.textContent = o.label;
+    b.onclick = () => { div.remove(); if (o.label !== 'Ask Anything') chatUserMsg(b.textContent); o.action(); };
+    div.appendChild(b);
+  });
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
 }
 function chatUserMsg(text) {
   const body = document.getElementById('chatBody');
