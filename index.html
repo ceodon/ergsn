@@ -1606,6 +1606,103 @@ section { scroll-margin-top: var(--nav-h); }
   padding-bottom: .4rem; border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
+/* ── Spotlight / Pre-Launch Radar ──── */
+.spotlight-section { background: linear-gradient(180deg, #0a0a0a 0%, #0f1210 100%); }
+.spotlight-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.spotlight-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+.spotlight-stats { display: flex; gap: clamp(1rem,2vw,2rem); flex-wrap: wrap; }
+.sl-stat { background: #151515; border: 1px solid var(--border); border-radius: 10px; padding: .8rem 1.2rem; }
+.sl-stat .n { font-family: var(--fh); font-size: clamp(1.3rem,2vw,1.7rem); color: var(--gold); display: block; line-height: 1; }
+.sl-stat .l { font-family: var(--fb); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-top: 4px; display: block; }
+.spotlight-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(1.2rem,2vw,1.8rem);
+}
+.sl-card {
+  background: #141414; border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.sl-card:hover { transform: translateY(-3px); border-color: rgba(52,210,152,.3); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.sl-visual {
+  height: 160px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.sl-visual.gradient-1 { background: linear-gradient(135deg, #0a2e1f 0%, #0f5a3e 50%, #34d298 100%); }
+.sl-visual.gradient-2 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.sl-visual.gradient-3 { background: linear-gradient(135deg, #2e1a0a 0%, #5c3317 50%, #d4a574 100%); }
+.sl-visual.gradient-4 { background: linear-gradient(135deg, #1a0a2e 0%, #3a1a5c 50%, #8e44ad 100%); }
+.sl-visual-icon { width: 72px; height: 72px; color: rgba(255,255,255,.85); }
+.sl-visual::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,.15), transparent 60%);
+  pointer-events: none;
+}
+.sl-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 1; }
+.sl-badge {
+  font-family: var(--fb); font-size: 10px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 8px; border-radius: 6px;
+  background: rgba(0,0,0,.7); color: #fff; backdrop-filter: blur(4px);
+}
+.sl-badge.status-concept { background: rgba(139,111,255,.9); }
+.sl-badge.status-prototype { background: rgba(255,179,71,.9); color: #1a1a1a; }
+.sl-badge.status-pilot { background: rgba(52,210,152,.9); color: #0a0a0a; }
+.sl-body { padding: 1.2rem 1.3rem 1.3rem; flex: 1; display: flex; flex-direction: column; gap: .7rem; }
+.sl-sector { font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.sl-title { font-family: var(--fh); font-size: 1.15rem; color: var(--white); margin: 0; line-height: 1.2; }
+.sl-tag { font-size: 13px; color: var(--tx-mid); line-height: 1.5; margin: 0; }
+.sl-origin { font-size: 11px; color: var(--tx-lt); font-style: italic; }
+.sl-poll { margin-top: .5rem; padding-top: .8rem; border-top: 1px dashed rgba(255,255,255,.08); }
+.sl-poll-q { font-family: var(--fb); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: .5rem; }
+.sl-poll-opt {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 7px 10px; margin-bottom: 5px;
+  background: #1a1a1a; border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; font-size: 12px; color: var(--white);
+  transition: background .15s, border-color .15s; position: relative; overflow: hidden;
+}
+.sl-poll-opt:hover { border-color: rgba(52,210,152,.4); }
+.sl-poll-opt.voted { cursor: default; }
+.sl-poll-opt.voted.picked { border-color: var(--gold); }
+.sl-poll-bar { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(52,210,152,.12); transition: width .4s ease; z-index: 0; }
+.sl-poll-opt > span { position: relative; z-index: 1; }
+.sl-poll-pct { font-family: var(--fb); font-size: 11px; color: var(--gold); }
+.sl-actions { display: flex; gap: 8px; margin-top: auto; padding-top: .8rem; }
+.sl-btn-int, .sl-btn-inq {
+  flex: 1; padding: 10px 12px; border-radius: 8px;
+  font-family: var(--fb); font-size: 12px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  transition: transform .15s, background .15s; border: 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.sl-btn-int { background: var(--gold); color: #0a0a0a; }
+.sl-btn-int:hover { transform: translateY(-1px); background: var(--gold-light, #5be3b5); }
+.sl-btn-int.voted { background: rgba(52,210,152,.15); color: var(--gold); cursor: default; }
+.sl-btn-inq { background: transparent; color: var(--white); border: 1px solid var(--border); }
+.sl-btn-inq:hover { background: #1d1d1d; border-color: var(--gold); color: var(--gold); }
+.sl-count { font-size: 11px; color: var(--tx-lt); margin-top: 4px; text-align: center; }
+
+/* Quick inquiry modal */
+.sl-modal { display: none; position: fixed; inset: 0; z-index: 1100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
+.sl-modal.open { display: flex; }
+.sl-modal-inner { background: #151515; border: 1px solid var(--border); border-radius: 16px; max-width: 460px; width: 100%; padding: clamp(1.4rem,3vw,2rem); position: relative; max-height: 90vh; overflow-y: auto; }
+.sl-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: 0; color: var(--tx-mid); font-size: 22px; cursor: pointer; line-height: 1; }
+.sl-modal h3 { font-family: var(--fh); color: var(--white); margin: 0 0 .3rem; font-size: 1.2rem; }
+.sl-modal .sl-m-sub { font-size: 13px; color: var(--tx-mid); margin-bottom: 1rem; }
+.sl-modal form { display: flex; flex-direction: column; gap: 12px; }
+.sl-modal label { font-family: var(--fb); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: -8px; }
+.sl-modal input, .sl-modal select, .sl-modal textarea {
+  background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--white); padding: 10px 12px; font-size: 14px; outline: none; width: 100%;
+  font-family: inherit; -webkit-appearance: none;
+}
+.sl-modal input:focus, .sl-modal select:focus, .sl-modal textarea:focus { border-color: var(--gold); }
+.sl-modal textarea { resize: vertical; min-height: 70px; }
+.sl-modal .sl-submit { background: var(--gold); color: #0a0a0a; font-family: var(--fb); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; padding: 12px; border-radius: 8px; border: 0; cursor: pointer; margin-top: 4px; }
+.sl-modal .sl-submit:disabled { opacity: .6; cursor: wait; }
+.sl-success { text-align: center; padding: 1.5rem 0; color: var(--gold); font-family: var(--fh); }
+
 /* ── AI Curation / Partner Match-making ── */
 .match-section { background: radial-gradient(ellipse at top, #131616 0%, #0a0a0a 70%); }
 .match-inner { padding: clamp(3rem,6vh,5rem) 0; }
@@ -1693,6 +1790,7 @@ section { scroll-margin-top: var(--nav-h); }
   <button class="side-dot" type="button" data-target="verify"    onclick="sideNavGo('verify')"><span class="sd-tip">Verification</span></button>
   <button class="side-dot" type="button" data-target="map"       onclick="sideNavGo('map')"><span class="sd-tip">Trade Map</span></button>
   <button class="side-dot" type="button" data-target="match"     onclick="sideNavGo('match')"><span class="sd-tip">AI Match</span></button>
+  <button class="side-dot" type="button" data-target="spotlight" onclick="sideNavGo('spotlight')"><span class="sd-tip">Spotlight</span></button>
   <button class="side-dot" type="button" data-target="compliance" onclick="sideNavGo('compliance')"><span class="sd-tip">Compliance</span></button>
   <button class="side-dot" type="button" data-target="calculator" onclick="sideNavGo('calculator')"><span class="sd-tip">Calculator</span></button>
   <button class="side-dot" type="button" data-target="rfq"       onclick="sideNavGo('rfq')"><span class="sd-tip">Contact</span></button>
@@ -1740,6 +1838,7 @@ section { scroll-margin-top: var(--nav-h); }
           <a href="#match">Tools</a>
           <ul class="nav-dropmenu">
             <li><a href="#match"><span class="ds-name">AI Partner Match <span class="ds-tag">New</span></span><span class="ds-desc">Curated supplier recommendations</span></a></li>
+            <li><a href="#spotlight"><span class="ds-name">Spotlight <span class="ds-tag">Beta</span></span><span class="ds-desc">Pre-launch radar · vote &amp; inquire</span></a></li>
             <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB pricing</span></a></li>
           </ul>
         </li>
@@ -1774,6 +1873,7 @@ section { scroll-margin-top: var(--nav-h); }
     <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
     <li class="mm-group-title">Tools</li>
     <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
+    <li><a href="#spotlight" onclick="closeMenu()">Spotlight · Pre-Launch</a></li>
     <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
     <li class="mm-group-title">Contact</li>
     <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
@@ -2227,6 +2327,70 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ SPOTLIGHT / PRE-LAUNCH RADAR ════════ -->
+<section class="spotlight-section" id="spotlight">
+  <div class="container spotlight-inner">
+    <div class="spotlight-head">
+      <div class="reveal">
+        <span class="label" style="color:var(--gold)">Pre-Launch Radar</span>
+        <h2 class="h-lg" style="margin:.6rem 0 1rem">Spotlight · This, any good?</h2>
+        <p class="body-lg" style="max-width:620px">Concepts we're evaluating with verified Korean makers — not yet launched. Your interest, preferences, and inquiries directly shape what ERGSN brings to market next.</p>
+      </div>
+      <div class="spotlight-stats reveal">
+        <div class="sl-stat"><span class="n" id="slTotalInterest">0</span><span class="l">Total Interest</span></div>
+        <div class="sl-stat"><span class="n" id="slTotalVotes">0</span><span class="l">Preference Votes</span></div>
+        <div class="sl-stat"><span class="n" id="slTotalInquiries">0</span><span class="l">Inquiries Logged</span></div>
+      </div>
+    </div>
+    <div class="spotlight-grid" id="spotlightGrid"></div>
+  </div>
+</section>
+
+<!-- Quick Inquiry Modal -->
+<div class="sl-modal" id="slModal" onclick="if(event.target.id==='slModal')closeSlModal()">
+  <div class="sl-modal-inner">
+    <button type="button" class="sl-modal-close" onclick="closeSlModal()" aria-label="Close">×</button>
+    <h3 id="slModalTitle">Quick Inquiry</h3>
+    <p class="sl-m-sub" id="slModalSub">Tell us what you'd want to see in this concept. 60-second input.</p>
+    <form id="slForm" onsubmit="submitSpotlight(event)">
+      <label>Your Name *</label>
+      <input type="text" id="slName" required autocomplete="off">
+      <label>Email *</label>
+      <input type="email" id="slEmail" required autocomplete="off">
+      <label>Country *</label>
+      <select id="slCountry" required autocomplete="off">
+        <option value="" disabled selected>Select country…</option>
+      </select>
+      <label>Primary Industry</label>
+      <select id="slIndustry">
+        <option value="">— Optional —</option>
+        <option value="Government">Government / Public Sector</option>
+        <option value="Finance">Finance / Legal</option>
+        <option value="Healthcare">Healthcare / Pharma</option>
+        <option value="Education">Education / Research</option>
+        <option value="Technology">Technology / IT</option>
+        <option value="Manufacturing">Manufacturing / Industrial</option>
+        <option value="Retail">Retail / E-commerce</option>
+        <option value="Energy">Energy / Utilities</option>
+        <option value="Hospitality">Hospitality / F&amp;B</option>
+        <option value="Logistics">Logistics / Trading</option>
+      </select>
+      <label>Estimated Interest Volume</label>
+      <select id="slVolume">
+        <option value="">— Not sure —</option>
+        <option value="<100 units">&lt; 100 units</option>
+        <option value="100–500 units">100 – 500 units</option>
+        <option value="500–2000 units">500 – 2,000 units</option>
+        <option value="2000+ units">2,000+ units</option>
+      </select>
+      <label>What would make this compelling?</label>
+      <textarea id="slMessage" placeholder="Specs, certifications, price point, timeline — anything."></textarea>
+      <button type="submit" class="sl-submit" id="slSubmitBtn">Send Inquiry</button>
+    </form>
+    <div class="sl-success" id="slSuccess" style="display:none">✓ Inquiry logged. Thank you — we'll update you as this concept progresses.</div>
+  </div>
+</div>
+
 <!-- ══ COMPLIANCE ═══════════════════════════ -->
 <section id="compliance">
   <div class="container compliance-inner">
@@ -2419,6 +2583,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="footer-col-title">Tools</p>
         <ul class="footer-links">
           <li><a href="#match">AI Partner Match</a></li>
+          <li><a href="#spotlight">Spotlight · Pre-Launch</a></li>
           <li><a href="#calculator">Quote Calculator</a></li>
         </ul>
       </div>
@@ -2806,7 +2971,8 @@ function runMatch(e) {
     });
     window._lastMatch = { country, industry: industryLabel, scale, ranked };
     html += `<div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center">`
-      + `<button type="button" class="match-btn" onclick="applyMatchToRFQ()">Request Quote for These</button></div>`;
+      + `<button type="button" class="match-btn" onclick="applyMatchToRFQ()">Request Quote for These</button>`
+      + `<div style="margin-top:.8rem;font-size:12px;color:var(--tx-mid)">Or explore <a href="#spotlight" style="color:var(--gold);text-decoration:underline">Spotlight concepts</a> — pre-launch items looking for early bidder feedback.</div></div>`;
     out.innerHTML = html;
     btn.disabled = false; btn.textContent = 'Find My Match';
   }, 1100);
@@ -2836,6 +3002,252 @@ function applyMatchToRFQ() {
   if (msgEl) msgEl.value = lines.join('\n');
   document.getElementById('rfq').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+/* ── Spotlight / Pre-Launch Radar ────── */
+const SPOTLIGHTS = [
+  {
+    id: 'sl-kbeauty',
+    sector: 'Smart Living',
+    status: 'concept',
+    gradient: 'gradient-3',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><path d="M9 2h6l1 4H8zM7 6h10l-1 16H8z"/><circle cx="12" cy="14" r="3"/></svg>',
+    title: 'K-Beauty Device · Smart Mirror',
+    tag: 'AI-driven skin analysis + Korean skincare tech. Salon-grade, home-ready.',
+    origin: 'Korean maker · 12 years in aesthetic devices',
+    poll: { q: 'Most important to you?', opts: ['Salon-grade accuracy', 'Competitive price point', 'Sleek design', 'Clinical certification'] }
+  },
+  {
+    id: 'sl-semisensor',
+    sector: 'K-Tech',
+    status: 'prototype',
+    gradient: 'gradient-2',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2M9 9h6v6H9z"/></svg>',
+    title: 'Industrial IoT Sensor Suite',
+    tag: 'High-precision environmental & vibration sensors for smart factories. Korean fab-grade.',
+    origin: 'Korean OEM · Tier-1 semiconductor fab partner',
+    poll: { q: 'Primary use case?', opts: ['Predictive maintenance', 'Energy monitoring', 'Quality control', 'Safety compliance'] }
+  },
+  {
+    id: 'sl-ess',
+    sector: 'Future Energy',
+    status: 'pilot',
+    gradient: 'gradient-1',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><rect x="5" y="8" width="14" height="12" rx="2"/><path d="M9 8V4h6v4M9 14h6"/></svg>',
+    title: 'Commercial ESS · Modular Battery',
+    tag: '50 kWh modular energy storage, Korean cell technology. Stackable, grid-tied.',
+    origin: 'Korean clean-tech partner · ESS export-ready',
+    poll: { q: 'Deal-breaker feature?', opts: ['Price per kWh', 'Cycle life (10,000+)', 'Local certification', 'Integration support'] }
+  },
+  {
+    id: 'sl-kpop-merch',
+    sector: 'Smart Living',
+    status: 'concept',
+    gradient: 'gradient-4',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><circle cx="12" cy="12" r="9"/><path d="M8 14c1 2 3 3 4 3s3-1 4-3"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>',
+    title: 'K-Culture Licensed Lifestyle Goods',
+    tag: 'Premium licensed Korean-pop & drama merchandise for global retail. White-label possible.',
+    origin: 'Seoul licensing consortium',
+    poll: { q: 'Your channel?', opts: ['Online retail', 'Physical stores', 'B2B distributor', 'Brand co-promo'] }
+  }
+];
+
+function slStore() {
+  try { return JSON.parse(localStorage.getItem('ergsn_spotlight') || '{}'); } catch (_) { return {}; }
+}
+function slSave(s) { try { localStorage.setItem('ergsn_spotlight', JSON.stringify(s)); } catch (_) {} }
+
+function renderSpotlight() {
+  const grid = document.getElementById('spotlightGrid');
+  if (!grid) return;
+  const s = slStore();
+  grid.innerHTML = SPOTLIGHTS.map(sp => {
+    const state = s[sp.id] || { interest: 0, vote: null, votes: {} };
+    const voted = state.vote != null;
+    const interested = !!state.interested;
+    const totalVotes = Object.values(state.votes || {}).reduce((a,b) => a+b, 0) || 0;
+    const pollHtml = sp.poll.opts.map((opt, i) => {
+      const count = (state.votes && state.votes[i]) || 0;
+      const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+      const picked = state.vote === i ? ' picked' : '';
+      return `<div class="sl-poll-opt${voted ? ' voted' + picked : ''}" onclick="${voted ? '' : `slVote('${sp.id}',${i})`}">`
+        + (voted ? `<div class="sl-poll-bar" style="width:${pct}%"></div>` : '')
+        + `<span>${opt}</span>`
+        + (voted ? `<span class="sl-poll-pct">${pct}%</span>` : '')
+        + `</div>`;
+    }).join('');
+    return `<article class="sl-card reveal">
+      <div class="sl-visual ${sp.gradient}">
+        <div class="sl-badges">
+          <span class="sl-badge status-${sp.status}">${sp.status}</span>
+          <span class="sl-badge">${sp.sector}</span>
+        </div>
+        ${sp.icon}
+      </div>
+      <div class="sl-body">
+        <span class="sl-sector">${sp.sector}</span>
+        <h3 class="sl-title">${sp.title}</h3>
+        <p class="sl-tag">${sp.tag}</p>
+        <p class="sl-origin">${sp.origin}</p>
+        <div class="sl-poll">
+          <p class="sl-poll-q">${sp.poll.q}</p>
+          ${pollHtml}
+        </div>
+        <div class="sl-actions">
+          <button class="sl-btn-int${interested ? ' voted' : ''}" onclick="slInterest('${sp.id}')" ${interested?'disabled':''}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 11v10H3V11h4zm14.5-2c0-.8-.7-1.5-1.5-1.5h-5.8L15 3.5l.1-.4c0-.3-.1-.6-.3-.9L13.5 1 7 7.6V21h10.5c.8 0 1.5-.5 1.7-1.2l2.2-7.1c.1-.2.1-.4.1-.6V11l-.1-2z"/></svg>
+            ${interested ? 'Interested' : "I'm Interested"}
+          </button>
+          <button class="sl-btn-inq" onclick="openSlModal('${sp.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Inquiry
+          </button>
+        </div>
+        <div class="sl-count">${state.interest || 0} interested · ${totalVotes} voted</div>
+      </div>
+    </article>`;
+  }).join('');
+  slUpdateTotals();
+}
+
+function slUpdateTotals() {
+  const s = slStore();
+  let interest = 0, votes = 0, inq = 0;
+  SPOTLIGHTS.forEach(sp => {
+    const st = s[sp.id] || {};
+    interest += st.interest || 0;
+    votes += Object.values(st.votes || {}).reduce((a,b) => a+b, 0);
+    inq += st.inquiries || 0;
+  });
+  const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  setT('slTotalInterest', interest);
+  setT('slTotalVotes', votes);
+  setT('slTotalInquiries', inq);
+}
+
+function slInterest(id) {
+  const s = slStore();
+  if (!s[id]) s[id] = { interest: 0, vote: null, votes: {} };
+  if (s[id].interested) return;
+  s[id].interested = true;
+  s[id].interest = (s[id].interest || 0) + 1;
+  slSave(s);
+  slNotify('interest', id);
+  renderSpotlight();
+}
+
+function slVote(id, optIdx) {
+  const s = slStore();
+  if (!s[id]) s[id] = { interest: 0, vote: null, votes: {} };
+  if (s[id].vote != null) return;
+  s[id].vote = optIdx;
+  s[id].votes = s[id].votes || {};
+  s[id].votes[optIdx] = (s[id].votes[optIdx] || 0) + 1;
+  slSave(s);
+  const sp = SPOTLIGHTS.find(x => x.id === id);
+  slNotify('vote', id, sp && sp.poll.opts[optIdx]);
+  renderSpotlight();
+}
+
+function slNotify(kind, id, detail) {
+  const sp = SPOTLIGHTS.find(x => x.id === id); if (!sp) return;
+  const text = kind === 'interest'
+    ? `📡 *Spotlight Interest*\n\n*Concept:* ${sp.title}\n*Sector:* ${sp.sector}\n*Status:* ${sp.status}\n\n_Anonymous click · ceodon.github.io/ergsn_`
+    : `🗳️ *Spotlight Vote*\n\n*Concept:* ${sp.title}\n*Question:* ${sp.poll.q}\n*Answer:* ${detail || '-'}\n\n_Anonymous click · ceodon.github.io/ergsn_`;
+  try {
+    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: 'Markdown' })
+    }).catch(() => {});
+  } catch (_) {}
+}
+
+let _slCurrentConcept = null;
+function openSlModal(id) {
+  const sp = SPOTLIGHTS.find(x => x.id === id); if (!sp) return;
+  _slCurrentConcept = sp;
+  document.getElementById('slModalTitle').textContent = `Inquiry · ${sp.title}`;
+  document.getElementById('slModalSub').textContent = `Pre-launch concept in ${sp.sector}. Share what would make this compelling for your market.`;
+  document.getElementById('slForm').reset();
+  document.getElementById('slForm').style.display = '';
+  document.getElementById('slSuccess').style.display = 'none';
+  document.getElementById('slModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSlModal() {
+  document.getElementById('slModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function submitSpotlight(e) {
+  e.preventDefault();
+  const sp = _slCurrentConcept; if (!sp) return;
+  const btn = document.getElementById('slSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  const fields = {
+    name: document.getElementById('slName').value.trim(),
+    email: document.getElementById('slEmail').value.trim(),
+    country: document.getElementById('slCountry').value,
+    industry: document.getElementById('slIndustry').value || '-',
+    volume: document.getElementById('slVolume').value || '-',
+    message: document.getElementById('slMessage').value.trim() || '-'
+  };
+  const emailPayload = {
+    _cc: RFQ_CC,
+    _subject: `[SPOTLIGHT INQUIRY] ${sp.title} — ${fields.name}`,
+    _template: 'table', _captcha: 'false',
+    'Concept': sp.title, 'Sector': sp.sector, 'Status': sp.status,
+    'Name': fields.name, 'Email': fields.email,
+    'Country': fields.country, 'Industry': fields.industry,
+    'Est. Volume': fields.volume, 'Feedback': fields.message,
+    'Source': 'ceodon.github.io/ergsn (Spotlight)'
+  };
+  const tgText = [
+    `🚀 *SPOTLIGHT INQUIRY*`, '',
+    `*Concept:* ${sp.title}`,
+    `*Sector:* ${sp.sector} (${sp.status})`, '',
+    `*Name:* ${fields.name}`,
+    `*Email:* ${fields.email}`,
+    `*Country:* ${fields.country}`,
+    `*Industry:* ${fields.industry}`,
+    `*Est. Volume:* ${fields.volume}`, '',
+    `*Feedback:* ${fields.message}`, '',
+    `_Pre-launch market test · ceodon.github.io/ergsn_`
+  ].join('\n');
+  Promise.allSettled([
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(emailPayload)
+    }),
+    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text: tgText, parse_mode: 'Markdown' })
+    })
+  ]).then(() => {
+    const s = slStore();
+    if (!s[sp.id]) s[sp.id] = { interest: 0, vote: null, votes: {} };
+    s[sp.id].inquiries = (s[sp.id].inquiries || 0) + 1;
+    slSave(s);
+    document.getElementById('slForm').style.display = 'none';
+    document.getElementById('slSuccess').style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Send Inquiry';
+    slUpdateTotals();
+    setTimeout(closeSlModal, 2400);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function initSpotlight(){
+  const sel = document.getElementById('slCountry');
+  if (sel && typeof WORLD_PORTS !== 'undefined') {
+    Object.keys(WORLD_PORTS).forEach(c => {
+      const o = document.createElement('option'); o.value = c; o.textContent = c;
+      sel.appendChild(o);
+    });
+  }
+  renderSpotlight();
+});
 
 function toggleMenu() {
   const h = document.getElementById('ham');
@@ -3107,7 +3519,7 @@ function fmtCompare(a,b) {
 }
 
 const KB = [
-  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's trade platform — we implant Korean hi-tech and cultural trends into global business through verified Korean producers. Ask me about:\n\n• Our 4 sectors (Office Security · K-Tech · Smart Living · Future Energy)\n• Flagship DL Series shredders\n• AI Partner Match · Quote Calculator · Trade Route Map\n• Verification process · Compliance · Trade terms\n\nHow can I help?" },
+  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's trade platform — we implant Korean hi-tech and cultural trends into global business through verified Korean producers. Ask me about:\n\n• Our 4 sectors (Office Security · K-Tech · Smart Living · Future Energy)\n• Flagship DL Series shredders\n• AI Partner Match · Spotlight (Pre-Launch) · Quote Calculator · Trade Route Map\n• Verification process · Compliance · Trade terms\n\nHow can I help?" },
   { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
   { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
   { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
@@ -3128,7 +3540,8 @@ const KB = [
   { intent:'ai_match', kw:['ai match','partner match','match making','matchmaking','ai curation','recommendation tool','who is right','suggest supplier','fit for me'], followUp:['sectors','quote','calculator'], resp:"AI Partner Match-making is ERGSN's curation tool. Tell it:\n• Your country\n• Your primary industry (government, finance, healthcare, tech, manufacturing, energy, retail, etc.)\n• (Optional) annual procurement volume\n\nIt returns a ranked Top 3 of ERGSN portfolio items with a fit score — pulling from active DL Series products and upcoming K-Tech / Smart Living / Future Energy items.\n\nClick 'Request Quote for These' and your selections auto-fill into the RFQ form, which sends to ERGSN via email + Telegram." },
   { intent:'calculator', kw:['calculator','estimate','quote calculator','instant quote','price estimate','calc'], followUp:['quote','incoterms','shipping'], resp:"The Quote Calculator gives you an instant CIF/FOB estimate. Pick model, quantity, destination — it shows indicative pricing in your local currency (with live FX).\n\nThis is an estimate for planning. For a binding quote, use 'Request a Quote' (RFQ form) — we'll issue a formal Proforma Invoice." },
   { intent:'route_map', kw:['map','route','shipping route','trade route','lanes','ports','how do you ship','logistics map'], followUp:['shipping','incoterms','payment'], resp:"Our Trade Route Map visualizes shipping lanes from Seoul/Busan to 14 major ports worldwide — Baltimore, Los Angeles, Long Beach, Hamburg, Rotterdam, Jebel Ali, Singapore, Tokyo, Sydney and more.\n\nWe ship CIF to any major port. Lead time: 4–6 weeks after advance payment (2–3 weeks production + 2–4 weeks ocean freight)." },
-  { intent:'tools', kw:['tools','what tools','website features','interactive','services on site'], followUp:['ai_match','calculator','route_map'], resp:"ERGSN website tools:\n• AI Partner Match — country + industry → Top-3 curated portfolio\n• Quote Calculator — instant CIF/FOB estimate in your currency\n• Trade Route Map — live global shipping lanes from Korea\n• RFQ form — formal quote request (sent to ERGSN via email + Telegram)\n• Product compare — side-by-side DL Series specs" },
+  { intent:'tools', kw:['tools','what tools','website features','interactive','services on site'], followUp:['ai_match','spotlight','calculator','route_map'], resp:"ERGSN website tools:\n• AI Partner Match — country + industry → Top-3 curated portfolio\n• Spotlight (Pre-Launch Radar) — vote, express interest, and submit inquiries on concepts before they launch\n• Quote Calculator — instant CIF/FOB estimate in your currency\n• Trade Route Map — live global shipping lanes from Korea\n• RFQ form — formal quote request (sent to ERGSN via email + Telegram)\n• Product compare — side-by-side DL Series specs" },
+  { intent:'spotlight', kw:['spotlight','pre-launch','prelaunch','radar','concept','preview','upcoming product','market test','vote','poll','interest','what\'s next','early access','beta product','new product'], followUp:['ai_match','sectors','verification'], resp:"Spotlight is ERGSN's Pre-Launch Radar — concepts we're evaluating with verified Korean makers before formal launch.\n\nHow it works:\n• Browse concept cards tagged Concept / Prototype / Pilot\n• 👍 Click 'I'm Interested' — anonymous signal, boosts the concept's priority\n• 🗳️ Vote on the short preference poll on each card\n• 💬 Submit a quick inquiry (name + country + industry + est. volume + feedback)\n\nEvery interaction reaches our team via email + Telegram, helping us gauge global demand and shape which Korean products ERGSN brings to market next. Current concepts span K-Tech (Industrial IoT Sensors), Smart Living (K-Beauty Smart Mirror, K-Culture licensed goods) and Future Energy (Commercial ESS)." },
   { intent:'contact', kw:['contact','email','phone','telegram','reach','call','address'], resp:"ERGSN CO., LTD.\n📍 #503 Susong BD, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea\n📱 +82-10-5288-0006\n💬 Telegram: @ceodon\n📠 Fax: +82-50-4048-0006" },
   { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], followUp:['chain','oil','quote'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
   { intent:'custom', kw:['custom','oem','odm','private label','brand','modify','special'], resp:"ERGSN supports OEM/ODM across sectors through our verified Korean partner network:\n• Office Security (DL Series) — private label, voltage mods (115V/220V), custom packaging\n• K-Tech (2026) — custom module specifications, Korean-fab precision builds\n• Smart Living (2026) — co-branded IoT / wellness devices\n• Future Energy (2026) — solar / ESS configurations for your market\n\nMinimum order quantities apply. Submit an RFQ — we'll match you with the right verified Korean producer." },
