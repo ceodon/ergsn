@@ -2098,7 +2098,9 @@ section { scroll-margin-top: var(--nav-h); }
     <div class="match-wrap">
       <form class="match-form reveal" id="matchForm" onsubmit="runMatch(event)">
         <label>Your Country</label>
-        <input type="text" class="f-in" id="matchCountry" placeholder="e.g. United States, Saudi Arabia, Japan" autocomplete="off" required>
+        <select class="f-sel" id="matchCountry" required autocomplete="off">
+          <option value="" disabled selected>Select country&hellip;</option>
+        </select>
         <label>Primary Industry</label>
         <select class="f-sel" id="matchIndustry" required>
           <option value="">— Select your sector —</option>
@@ -2668,11 +2670,37 @@ function runMatch(e) {
         + `<div class="match-score">${r.score}%<br><span style="color:var(--tx-lt);font-size:10px">fit score</span></div>`
         + `</div>`;
     });
+    window._lastMatch = { country, industry: industryLabel, scale, ranked };
     html += `<div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center">`
-      + `<a href="#rfq" class="match-btn" style="display:inline-block;text-decoration:none">Request Quote for These</a></div>`;
+      + `<button type="button" class="match-btn" onclick="applyMatchToRFQ()">Request Quote for These</button></div>`;
     out.innerHTML = html;
     btn.disabled = false; btn.textContent = 'Find My Match';
   }, 1100);
+}
+function applyMatchToRFQ() {
+  const m = window._lastMatch; if (!m) { location.hash = '#rfq'; return; }
+  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD' };
+  document.querySelectorAll('#rfqFields .model-cb input').forEach(cb => cb.checked = false);
+  m.ranked.forEach(r => { const id = modelMap[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
+  const cSel = document.getElementById('fCountry');
+  if (cSel && [...cSel.options].some(o => o.value === m.country)) {
+    cSel.value = m.country;
+    if (typeof onCountryChange === 'function') onCountryChange();
+  }
+  const incoEl = document.getElementById('fIncoterms');
+  if (incoEl && !incoEl.value) { incoEl.value = 'CIF'; if (typeof onIncotermsChange === 'function') onIncotermsChange(); }
+  const msgEl = document.getElementById('fMsg');
+  const comingList = m.ranked.filter(r => r.coming).map(r => `• ${r.name} (${r.sector})`).join('\n');
+  const lines = [
+    `[AI Curation Match — ${m.country} · ${m.industry}]`,
+    ``,
+    `Recommended portfolio fit:`,
+    ...m.ranked.map((r,i) => `  ${i+1}. ${r.name} — ${r.score}% fit`),
+  ];
+  if (comingList) lines.push(``, `Interested in upcoming sector items:`, comingList);
+  lines.push(``, `Please advise availability, lead times and indicative pricing.`);
+  if (msgEl) msgEl.value = lines.join('\n');
+  document.getElementById('rfq').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function toggleMenu() {
@@ -4017,10 +4045,16 @@ const WORLD_PORTS = {
 
 (function initDestDropdowns(){
   const countryEl = document.getElementById('fCountry');
+  const matchEl = document.getElementById('matchCountry');
   Object.keys(WORLD_PORTS).forEach(c => {
     const opt = document.createElement('option');
     opt.value = c; opt.textContent = c;
     countryEl.appendChild(opt);
+    if (matchEl) {
+      const opt2 = document.createElement('option');
+      opt2.value = c; opt2.textContent = c;
+      matchEl.appendChild(opt2);
+    }
   });
 })();
 
