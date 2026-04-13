@@ -492,7 +492,9 @@ section { scroll-margin-top: var(--nav-h); }
   font-weight: 400; color: var(--white); line-height: 1; margin-bottom: 4px;
   letter-spacing: .02em; text-transform: uppercase;
 }
-.card-part { font-size: 11px; color: var(--tx-lt); margin-bottom: 1.1rem; }
+.card-part { font-size: 11px; color: var(--tx-lt); margin-bottom: 4px; }
+.card-mfg { font-size: 10px; color: var(--steel); margin-bottom: 1.1rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.card-verified { color: var(--gold); font-weight: 600; font-size: 9px; padding: 2px 6px; background: rgba(52,210,152,.1); border-radius: 10px; }
 .card-desc { font-size: 13px; color: var(--tx-mid); line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
 
 /* MINI SPECS */
@@ -1128,6 +1130,35 @@ section { scroll-margin-top: var(--nav-h); }
 }
 
 /* ════════════════════════════════════════
+   VERIFICATION PROCESS
+════════════════════════════════════════ */
+.verify-section { background: #151515; }
+.verify-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
+.verify-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+  margin-top: 2.5rem;
+}
+.verify-step {
+  background: #171717; border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem 1.25rem; text-align: left; position: relative;
+  transition: border-color .2s, transform .2s;
+}
+.verify-step:hover { border-color: var(--gold); transform: translateY(-4px); }
+.verify-icon { font-size: 28px; line-height: 1; margin-bottom: .5rem; }
+.verify-num {
+  font-family: var(--fd); font-size: 11px; color: var(--gold);
+  letter-spacing: .15em; margin-bottom: .25rem;
+}
+.verify-title {
+  font-family: var(--fd); font-size: 17px; font-weight: 400;
+  color: var(--white); text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: .5rem;
+}
+.verify-desc { font-size: 12px; color: var(--tx-mid); line-height: 1.55; }
+@media (max-width: 900px) { .verify-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .verify-grid { grid-template-columns: 1fr; } }
+
+/* ════════════════════════════════════════
    TRADE ROUTE MAP
 ════════════════════════════════════════ */
 .map-section { background: #0a0a0a; overflow: hidden; }
@@ -1478,8 +1509,8 @@ section { scroll-margin-top: var(--nav-h); }
             <span class="hero-tag-dot"></span>
             <span class="label" data-t="hero_tag">Made in Korea &middot; Est. Seoul</span>
           </div>
-          <h1 class="hero-title">Industrial<br>Shredders<em>Built to Last.</em></h1>
-          <p class="hero-desc body-lg" data-t="hero_desc">ERGSN manufactures heavy-duty cross-cut paper shredders for U.S. commercial and institutional buyers. All-metal construction, oil-free operation, HIPAA compliant &mdash; available on GSA Schedule.</p>
+          <h1 class="hero-title">Korea&rsquo;s<br>Trusted<em>Trade Gateway.</em></h1>
+          <p class="hero-desc body-lg" data-t="hero_desc">ERGSN connects verified Korean industrial manufacturers with global procurement teams. Every product is sourced from manufacturers we have personally vetted, audited, and partnered with for years &mdash; starting with our flagship DL Series shredders, GSA Schedule listed and U.S. defense procured.</p>
           <div class="hero-actions">
             <a href="#products" class="btn btn-gold" data-t="hero_btn1">View Products</a>
             <a href="#rfq"      class="btn btn-outline" data-t="hero_btn2">Request a Quote</a>
@@ -1524,6 +1555,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">Entry Mid-Sized Office</p>
         <p class="card-model">DL-10X</p>
         <p class="card-part">Part No: DL10X (RS-2200A)</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">Level 3 / P-4 Cross Cut with extra-small 1/12" &times; 5/8" particles &mdash; compact footprint for small to mid-sized offices.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">10-3/4"</p></div>
@@ -1542,6 +1574,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">Mid-Sized Office</p>
         <p class="card-model">DL-12X</p>
         <p class="card-part">Part No: DL12X (RS-3300A)</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">Level 3 / P-4 Cross Cut shredder built for long-term durability in mid-sized office environments.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">12-1/4"</p></div>
@@ -1560,6 +1593,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">Large Office / Departmental</p>
         <p class="card-model">DL-16X</p>
         <p class="card-part">Part No: DL16X (RS-3890A)</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">Widest entry in the DL cross-cut series &mdash; engineered for high-volume departmental shredding.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">16-1/4"</p></div>
@@ -1578,6 +1612,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">High-Capacity 10" Class</p>
         <p class="card-model">DL-10XD</p>
         <p class="card-part">Part No: DL10XD (RS-6602A)</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">High-volume 10" class shredder &mdash; up to 42 sheets per pass in a compact form factor.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">10-1/4"</p></div>
@@ -1596,6 +1631,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
         <p class="card-part">Part No: DL12XD</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">Highest sheet capacity in the 12" class &mdash; up to 45 sheets per pass for demanding workloads.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">12-1/4"</p></div>
@@ -1615,6 +1651,7 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="card-tag">Heavy-Duty Industrial</p>
         <p class="card-model">DL-16XD</p>
         <p class="card-part">Part No: DL16XD (RS-8200A)</p>
+        <p class="card-mfg">Manufactured by ERGSN CO., LTD. <span class="card-verified">✓ Verified Partner</span></p>
         <p class="card-desc">Flagship industrial model &mdash; up to 90 sheets per pass at 31 FPM for continuous heavy-duty operation.</p>
         <div class="card-specs">
           <div><p class="spec-lbl">Entry Width</p><p class="spec-val">16"</p></div>
@@ -1654,14 +1691,17 @@ section { scroll-margin-top: var(--nav-h); }
       <div class="about-copy reveal">
         <span class="label" data-t="about_label">Who We Are</span>
         <h2 class="h-lg" data-t="about_title">Korean Precision.<br>American Standards.</h2>
-        <p class="body-lg" data-t="about_p1">ERGSN CO., LTD. is a Seoul-based manufacturer and exporter of heavy-duty industrial paper shredders. We design and produce the DL Series cross-cut shredders to meet the rigorous demands of U.S. commercial, healthcare, legal, and government procurement.</p>
+        <p class="body-lg" data-t="about_p1">ERGSN is more than a manufacturer &mdash; we are Korea&rsquo;s <strong style="color:var(--gold)">certified trade gateway</strong>. We connect verified Korean industrial producers with global procurement teams, ensuring every product on this platform is sourced from manufacturers we have personally vetted, audited, and partnered with for years.</p>
         <p class="body-lg" data-t="about_p2">Every ERGSN shredder uses an all-metal chain drive &mdash; eliminating the nylon and plastic gears found in lower-quality alternatives. Machines built to operate reliably for years, not months.</p>
         <p class="body-lg" data-t="about_p3">Long-term supply partner of Capital Shredder Corp. (Rockville, MD), delivering CIF Baltimore on schedule across multiple purchase orders.</p>
         <div class="kpi-grid">
           <div class="kpi-cell"><p class="kpi-num count" data-count="6">6</p><p class="kpi-lbl" data-t="kpi_models">DL Series Models</p></div>
-          <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl" data-t="kpi_port">Baltimore Port Terms</p></div>
+          <div class="kpi-cell"><p class="kpi-num">CIF</p><p class="kpi-lbl" data-t="kpi_port">Worldwide Terms</p></div>
           <div class="kpi-cell"><p class="kpi-num">P-4</p><p class="kpi-lbl" data-t="kpi_sec">Security Level</p></div>
           <div class="kpi-cell"><p class="kpi-num count" data-count="100" data-suffix="%">100%</p><p class="kpi-lbl" data-t="kpi_metal">All-Metal Construction</p></div>
+          <div class="kpi-cell"><p class="kpi-num count" data-count="13" data-suffix="+">13+</p><p class="kpi-lbl">Years Trade History</p></div>
+          <div class="kpi-cell"><p class="kpi-num">DoD</p><p class="kpi-lbl">U.S. Defense Procured</p></div>
+          <div class="kpi-cell"><p class="kpi-num">✓</p><p class="kpi-lbl">Verified Partners</p></div>
         </div>
       </div>
       <div>
@@ -1679,6 +1719,41 @@ section { scroll-margin-top: var(--nav-h); }
             <p><span class="co-lbl">Email</span>info@ergsn.com</p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VERIFICATION PROCESS ════════════════ -->
+<section class="verify-section">
+  <div class="container verify-inner">
+    <span class="label">Our Standard</span>
+    <h2 class="h-lg">4-Step Verification Process</h2>
+    <p class="body-lg" style="max-width:560px;margin:0 auto">Every manufacturer in the ERGSN network passes a rigorous four-stage verification before their products are listed for global buyers.</p>
+    <div class="verify-grid reveal">
+      <div class="verify-step" style="--i:0">
+        <div class="verify-icon">🔍</div>
+        <div class="verify-num">01</div>
+        <h3 class="verify-title">Vendor Audit</h3>
+        <p class="verify-desc">On-site facility inspection, financial review, and 3-year operational history check.</p>
+      </div>
+      <div class="verify-step" style="--i:1">
+        <div class="verify-icon">🛡️</div>
+        <div class="verify-num">02</div>
+        <h3 class="verify-title">Quality Verification</h3>
+        <p class="verify-desc">Independent product testing against international standards (DIN, ISO, ANSI).</p>
+      </div>
+      <div class="verify-step" style="--i:2">
+        <div class="verify-icon">📜</div>
+        <div class="verify-num">03</div>
+        <h3 class="verify-title">Compliance Check</h3>
+        <p class="verify-desc">Export documentation, HS code verification, and target-market regulatory review (HIPAA, GSA, CE, etc.).</p>
+      </div>
+      <div class="verify-step" style="--i:3">
+        <div class="verify-icon">🤝</div>
+        <div class="verify-num">04</div>
+        <h3 class="verify-title">Long-term Partnership</h3>
+        <p class="verify-desc">Formal supply agreement, dedicated account management, and ongoing quality monitoring.</p>
       </div>
     </div>
   </div>
