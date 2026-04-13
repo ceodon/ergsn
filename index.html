@@ -2319,7 +2319,7 @@ function handleYes() {
   if (chatContext.lastModel) {
     chatBotMsg(`Great! Would you like to set up a quote for the ${P[chatContext.lastModel].model}?`, () => {
       chatOpts([
-        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskIncoterms(); }},
+        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskQualification(); }},
         { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
       ]);
     });
@@ -2341,7 +2341,7 @@ function handleMore() {
       chatOpts([
         { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
         { label: 'Key Features', action: () => { chatBotMsg(p.features.slice(0,5).map(f=>'• '+f).join('\n')); }},
-        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskIncoterms(); }},
+        { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskQualification(); }},
       ]);
     });
   } else {
@@ -2412,7 +2412,7 @@ function maybePromptQuote() {
       div.appendChild(hint);
       const b = document.createElement('button'); b.className = 'chat-opt';
       b.textContent = cl('quote') + ' →';
-      b.onclick = () => { div.remove(); chatState.model = chatContext.lastModel; chatAskIncoterms(); };
+      b.onclick = () => { div.remove(); chatState.model = chatContext.lastModel; chatAskQualification(); };
       div.appendChild(b);
       body.appendChild(div); body.scrollTop = body.scrollHeight;
     }, 600);
@@ -2607,7 +2607,7 @@ async function handleChatInput() {
     chatBotMsg(`${specResult.model} — ${specResult.key}: ${specResult.value}${profileEnrich('')}${cl('techNote')}`, () => {
       chatOpts([
         { label: `All ${specResult.model} Specs`, action: () => handleSpec(specResult.model) },
-        { label: cl('quote') + ' →', action: () => { chatState.model=chatContext.lastModel; chatAskIncoterms(); }},
+        { label: cl('quote') + ' →', action: () => { chatState.model=chatContext.lastModel; chatAskQualification(); }},
       ]);
     });
     ctxPush('bot', specResult.key);
@@ -2711,7 +2711,7 @@ function handleSpec(text) {
   chatBotMsg(`${p.model} — ${p.sub}\nPart No: ${p.part}\n\n${fmtSpecs(id)}${cl('techNote')}`, () => {
     chatOpts([
       { label: cl('specs'), action: () => { toggleChat(); openModal(id); }},
-      { label: cl('quote') + ' →', action: () => { chatState.model=id; chatAskIncoterms(); }},
+      { label: cl('quote') + ' →', action: () => { chatState.model=id; chatAskQualification(); }},
       { label: 'Compare', action: () => chatBotMsg("Type: \"Compare " + p.model + " vs [other model]\"") },
     ]);
   });
@@ -2753,7 +2753,7 @@ function handleCapacity(text) {
   chatBotMsg(response + cl('techNote'), () => {
     chatOpts([
       { label: cl('specs'), action: () => { toggleChat(); openModal(rec); }},
-      { label: cl('quote') + ' →', action: () => { chatState.model=rec; chatAskIncoterms(); }},
+      { label: cl('quote') + ' →', action: () => { chatState.model=rec; chatAskQualification(); }},
     ]);
   });
   ctxPush('bot', 'recommended ' + p.model);
@@ -2763,7 +2763,7 @@ function handleRecommendText(text) { handleCapacity(text); }
 
 function handleQuoteChat() {
   chatBotMsg("Let's set up your quote! First, which model are you interested in?", () => {
-    chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatState.model=id; chatContext.lastModel=id; chatAskIncoterms(); }})));
+    chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatState.model=id; chatContext.lastModel=id; chatAskQualification(); }})));
   });
 }
 
@@ -2807,7 +2807,7 @@ const CHAT_TREE = {
   rec_dl12xd:  { msg: "The DL-12XD offers the best balance \u2014 45 sheets in a mid-size frame.", opts: [], rec: 'dl12xd' }
 };
 
-const chatState = { model: null, incoterm: null, country: null, port: null };
+const chatState = { model: null, incoterm: null, country: null, port: null, qual: { volume:null, timeline:null, experience:null, payment:null, tier:null } };
 let chatOpen = false;
 
 function toggleChat(){
@@ -2815,7 +2815,11 @@ function toggleChat(){
   document.getElementById('chatPanel').classList.toggle('open', chatOpen);
   if(chatOpen && !document.getElementById('chatBody').children.length) startChat();
 }
-function startChat(){ chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null; chatStep('start'); }
+function startChat(){
+  chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null;
+  chatState.qual = { volume:null, timeline:null, experience:null, payment:null, tier:null };
+  chatStep('start');
+}
 
 function chatBotMsg(text, cb) {
   const body = document.getElementById('chatBody');
@@ -2850,6 +2854,72 @@ function chatSelect(placeholder, options, onSelect) {
   btn.onclick = () => { if(!sel.value) return; wrap.remove(); chatUserMsg(sel.value); onSelect(sel.value); };
   wrap.appendChild(sel); wrap.appendChild(btn);
   body.appendChild(wrap); body.scrollTop=body.scrollHeight;
+}
+
+// ── BANT Qualification Flow (optional) ──
+function chatAskQualification() {
+  chatBotMsg("Before we finalize your quote, a few quick questions help us prepare the most accurate pricing and terms for you.\n\n(Takes 20 seconds, or you can skip.)", () => {
+    chatOpts([
+      { label: 'Continue (4 quick questions)', action: () => chatAskVolume() },
+      { label: 'Skip to delivery terms', action: () => chatAskIncoterms() }
+    ]);
+  });
+}
+function chatAskVolume() {
+  chatBotMsg("1/4 — What's your estimated annual import volume for this product?", () => {
+    chatOpts([
+      { label: 'Under 20 units', action: () => { chatState.qual.volume='Under 20 units/year'; chatAskTimeline(); }},
+      { label: '20–100 units', action: () => { chatState.qual.volume='20–100 units/year'; chatAskTimeline(); }},
+      { label: '100+ units', action: () => { chatState.qual.volume='100+ units/year'; chatAskTimeline(); }},
+      { label: 'Full container (FCL)', action: () => { chatState.qual.volume='Full container (FCL)'; chatAskTimeline(); }},
+      { label: 'Not sure yet', action: () => { chatState.qual.volume='Not determined yet'; chatAskTimeline(); }}
+    ]);
+  });
+}
+function chatAskTimeline() {
+  chatBotMsg("2/4 — When do you need the shipment to arrive at your port?", () => {
+    chatOpts([
+      { label: 'Within 4–6 weeks', action: () => { chatState.qual.timeline='Within 4–6 weeks (specific)'; chatAskExperience(); }},
+      { label: 'Within 2–3 months', action: () => { chatState.qual.timeline='Within 2–3 months'; chatAskExperience(); }},
+      { label: 'Later this year', action: () => { chatState.qual.timeline='Later this year'; chatAskExperience(); }},
+      { label: 'Just exploring', action: () => { chatState.qual.timeline='Exploring / No deadline'; chatAskExperience(); }}
+    ]);
+  });
+}
+function chatAskExperience() {
+  chatBotMsg("3/4 — Have you imported from Korea (or similar products) before? Do you have a current forwarder?", () => {
+    chatOpts([
+      { label: 'Yes, experienced + forwarder', action: () => { chatState.qual.experience='Experienced importer with forwarder'; chatAskPayment(); }},
+      { label: 'Yes, some experience', action: () => { chatState.qual.experience='Some import experience'; chatAskPayment(); }},
+      { label: 'No, first time', action: () => { chatState.qual.experience='First-time importer'; chatAskPayment(); }},
+      { label: 'Need your guidance', action: () => { chatState.qual.experience='Needs ERGSN guidance'; chatAskPayment(); }}
+    ]);
+  });
+}
+function chatAskPayment() {
+  chatBotMsg("4/4 — Our standard terms are T/T with 50% advance, 50% before shipment. Does this work for your internal payment process?", () => {
+    chatOpts([
+      { label: 'Yes, T/T 50/50 works', action: () => { chatState.qual.payment='T/T 50/50 accepted'; chatQualTier(); chatAskIncoterms(); }},
+      { label: 'L/C preferred', action: () => { chatState.qual.payment='L/C preferred'; chatQualTier(); chatAskIncoterms(); }},
+      { label: 'Need to discuss', action: () => { chatState.qual.payment='Needs discussion'; chatQualTier(); chatAskIncoterms(); }},
+      { label: 'Net 60/90 after delivery', action: () => { chatState.qual.payment='Net terms requested (higher risk)'; chatQualTier(); chatAskIncoterms(); }}
+    ]);
+  });
+}
+
+// Calculate buyer tier (A/B/C) for ERGSN's internal prioritization
+function chatQualTier() {
+  const q = chatState.qual; let score = 0;
+  if (/100\+|FCL/.test(q.volume || '')) score += 3;
+  else if (/20–100/.test(q.volume || '')) score += 2;
+  else if (/Under 20/.test(q.volume || '')) score += 1;
+  if (/4–6 weeks|2–3 months/.test(q.timeline || '')) score += 3;
+  else if (/Later this year/.test(q.timeline || '')) score += 1;
+  if (/Experienced|Some import/.test(q.experience || '')) score += 2;
+  else if (/First-time|Needs ERGSN/.test(q.experience || '')) score += 1;
+  if (/accepted|L\/C/.test(q.payment || '')) score += 3;
+  else if (/Needs discussion/.test(q.payment || '')) score += 1;
+  q.tier = score >= 9 ? 'A (Hot Lead)' : score >= 6 ? 'B (Warm Lead)' : 'C (Early Stage)';
 }
 
 function chatAskIncoterms() {
@@ -3420,18 +3490,27 @@ const MODEL_LABELS = {
 };
 
 function sendTelegram(fields) {
+  const tierIcon = /^A /.test(fields.tier) ? '\ud83d\udd25' : /^B /.test(fields.tier) ? '\u2b50' : '\ud83d\udce8';
   const lines = [
-    '\ud83d\udce9 *NEW RFQ INQUIRY*',
+    `${tierIcon} *NEW RFQ — ${fields.tier}*`,
     '',
     `*Name:* ${fields.first} ${fields.last}`,
     `*Company:* ${fields.company}`,
     `*Email:* ${fields.email}`,
     `*Phone:* ${fields.phone}`,
+    '',
     `*Models:* ${fields.models}`,
     `*Quantity:* ${fields.qty}`,
     `*Incoterms:* ${fields.incoterms}`,
     `*Country:* ${fields.country}`,
     `*Port:* ${fields.port}`,
+    '',
+    `\u2500\u2500 BANT Qualification \u2500\u2500`,
+    `*Annual Volume:* ${fields.volume}`,
+    `*Timeline:* ${fields.timeline}`,
+    `*Experience:* ${fields.experience}`,
+    `*Payment:* ${fields.paymentResp}`,
+    '',
     `*Message:* ${fields.msg}`,
     '',
     `_Source: ceodon.github.io/ergsn_`
@@ -3468,7 +3547,7 @@ function submitRFQ() {
 
   const emailPayload = {
     _cc: RFQ_CC,
-    _subject: `ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
+    _subject: `[${(typeof chatState !== 'undefined' && chatState.qual.tier) || 'Unqualified'}] ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
     _template: 'table',
     _captcha: 'false',
     'First Name': v('fFirst'),
@@ -3481,15 +3560,24 @@ function submitRFQ() {
     'Incoterms': incoterms,
     'Destination Country': country,
     'Destination Port': port,
+    'Annual Volume': (typeof chatState !== 'undefined' && chatState.qual.volume) || '(not asked)',
+    'Timeline': (typeof chatState !== 'undefined' && chatState.qual.timeline) || '(not asked)',
+    'Import Experience': (typeof chatState !== 'undefined' && chatState.qual.experience) || '(not asked)',
+    'Payment Terms Response': (typeof chatState !== 'undefined' && chatState.qual.payment) || '(not asked)',
+    'Buyer Tier': (typeof chatState !== 'undefined' && chatState.qual.tier) || 'Unqualified',
     'Message / Requirements': v('fMsg') || '(none)',
     'Source': 'ceodon.github.io/ergsn'
   };
 
+  const q = (typeof chatState !== 'undefined') ? chatState.qual : {};
   const tgFields = {
     first: v('fFirst'), last: v('fLast'), company: v('fCo'),
     email: v('fEmail'), phone: v('fPhone') || '-',
     models: selected.join(', '), qty: v('fQty') || '-',
     incoterms, country, port,
+    volume: q.volume || '-', timeline: q.timeline || '-',
+    experience: q.experience || '-', paymentResp: q.payment || '-',
+    tier: q.tier || 'Unqualified',
     msg: v('fMsg') || '-'
   };
 
