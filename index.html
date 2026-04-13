@@ -2978,12 +2978,55 @@ function toggleChat(){
 function offerReturnFollowUp(ret) {
   if (ret.type === 'browse' && ret.model && P[ret.model]) {
     const m = P[ret.model];
+    const q = chatState.qual || {};
+    const hasModel = !!chatState.model;
+    const hasQual = !!q.tier;
+    const hasDelivery = !!chatState.incoterm && (chatState.incoterm === 'EXW' || (!!chatState.country && !!chatState.port));
+
+    // STAGE 3: Everything done — qualification + delivery complete → push to quote submission
+    if (hasQual && hasDelivery && hasModel) {
+      const dest = chatState.incoterm === 'EXW' ? 'Ex Works (Seoul)' : `${chatState.incoterm} ${chatState.port}, ${chatState.country}`;
+      chatBotMsg(`Welcome back! You've completed everything we need:\n\n• Model: ${P[chatState.model].model}\n• Delivery: ${dest}\n• Buyer profile: ${q.tier}\n\nShall we move to the quote request page now? Your selections will be pre-filled — you only need to add your contact details.`, () => {
+        chatOpts([
+          { label: 'Yes — go to quote request', action: () => { chatPrefillAndQuote(); chatEndActions(); }},
+          { label: 'Wait, I want to change something', action: () => chatBotMsg("Sure, what would you like to change?", () => {
+            chatOpts([
+              { label: 'Change model', action: () => chatStep('browse_models') },
+              { label: 'Change delivery terms', action: () => chatAskIncoterms() },
+              { label: 'Update qualification answers', action: () => chatAskVolume() }
+            ]);
+          })},
+          { label: 'I have one more question first', action: () => { document.getElementById('chatInput').focus(); }}
+        ]);
+      });
+      return;
+    }
+
+    // STAGE 2: Qualification done but no delivery (or partial) — continue setup
+    if (hasQual && hasModel) {
+      chatBotMsg(`Welcome back! You've completed the buyer profile (${q.tier}) for ${P[chatState.model].model}. Let's set up your delivery terms next?`, () => {
+        chatOpts([
+          { label: 'Continue — set up delivery', action: () => chatAskIncoterms() },
+          { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Pick a model to compare with ${m.model}:`, () => {
+            chatOpts(MODEL_IDS.filter(id => id !== ret.model).slice(0,5).map(id => ({
+              label: `vs ${P[id].model}`,
+              action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
+            })));
+          })},
+          { label: 'Browse a different model', action: () => chatStep('browse_models') },
+          { label: 'I have a different question', action: () => { document.getElementById('chatInput').focus(); }}
+        ]);
+      });
+      return;
+    }
+
+    // STAGE 1: Just browsed a model (no qualification yet) — first return
     chatBotMsg(`Welcome back! Did you have a chance to review the ${m.model} specifications? Is there anything I can help you with next?`, () => {
       chatOpts([
         { label: `Yes — request a quote for ${m.model}`, action: () => { chatState.model = ret.model; chatContext.lastModel = ret.model; chatAskQualification(); }},
-        { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Sure! Type "Compare ${m.model} vs [other model]" or pick one to compare.`, () => {
-          chatOpts(MODEL_IDS.filter(id => id !== ret.model).map(id => ({
-            label: `Compare with ${P[id].model}`,
+        { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Pick a model to compare with ${m.model}:`, () => {
+          chatOpts(MODEL_IDS.filter(id => id !== ret.model).slice(0,5).map(id => ({
+            label: `vs ${P[id].model}`,
             action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
           })));
         })},
