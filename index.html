@@ -36,9 +36,6 @@
 <link rel="preload" as="image" href="images/hero-workplace.webp" type="image/webp" fetchpriority="high">
 <link rel="preload" as="image" href="images/hero-workplace.jpg" type="image/jpeg">
 
-<!-- Leaflet (interactive world map) -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
 <!-- Structured data: Organization + Product catalog -->
 <script type="application/ld+json">
@@ -1135,38 +1132,57 @@ section { scroll-margin-top: var(--nav-h); }
 ════════════════════════════════════════ */
 .map-section { background: #0a0a0a; overflow: hidden; }
 .map-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
-/* Leaflet container — dark theme */
-#leafletMap { max-width: 1100px; margin: 2rem auto 0; background: #0a0a0a; }
-.leaflet-container { background: #0a0a0a !important; outline: none; }
-.leaflet-tile-pane { filter: brightness(0.6) saturate(0.4); }
-.leaflet-control-attribution { background: rgba(0,0,0,0.7) !important; color: var(--steel) !important; font-size: 9px !important; }
-.leaflet-control-attribution a { color: var(--gold) !important; }
-.leaflet-control-zoom a { background: #171717 !important; color: var(--white) !important; border-color: var(--border) !important; }
-.leaflet-control-zoom a:hover { background: var(--gold) !important; color: #0f1110 !important; }
-.lp-label {
-  background: rgba(15,15,15,0.85); color: var(--white);
-  font-family: var(--fb); font-size: 11px; font-weight: 600;
-  padding: 3px 8px; border-radius: 4px;
-  border: 1px solid var(--border); white-space: nowrap;
+/* ── Airline-style world map ── */
+.route-map { width: 100%; max-width: 1100px; height: auto; display: block; margin: 2rem auto 0; }
+.continents-layer use, .continents-layer path {
+  fill: #1c2420; stroke: #2d3833; stroke-width: 0.5;
 }
-.lp-label.korea {
-  font-family: var(--fd); color: var(--gold); font-size: 13px;
-  letter-spacing: .12em; text-transform: uppercase;
-  border-color: var(--gold);
+.route-lines path {
+  fill: none; stroke: #34d298; stroke-width: 1.2;
+  stroke-dasharray: 5 4; opacity: 0.55;
+  animation: routeFlow 3s linear infinite;
 }
-.lp-marker {
-  width: 10px; height: 10px; background: var(--gold);
-  border-radius: 50%; box-shadow: 0 0 8px rgba(52,210,152,.8);
+@keyframes routeFlow { to { stroke-dashoffset: -90; } }
+.plane {
+  fill: #00ffa1; opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(52,210,152,0.9));
+  animation-name: planeMove;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
-.lp-marker.korea {
-  width: 14px; height: 14px;
-  box-shadow: 0 0 14px rgba(52,210,152,1);
+@keyframes planeMove { 0%{offset-distance:0%} 100%{offset-distance:100%} }
+.origin {
+  fill: var(--gold);
+  filter: drop-shadow(0 0 8px rgba(52,210,152,1));
 }
-@keyframes lpPulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(2.5);opacity:0} }
-.lp-marker.korea::after {
-  content:''; position:absolute; inset:0;
-  border-radius:50%; border:2px solid var(--gold);
-  animation: lpPulse 2.5s ease-out infinite;
+.origin-pulse {
+  fill: none; stroke: var(--gold); stroke-width: 1.5;
+  opacity: 0; animation: originPulse 2.5s ease-out infinite;
+}
+@keyframes originPulse {
+  0%   { opacity: 0.7; r: 5; stroke-width: 2; }
+  100% { opacity: 0;   r: 22; stroke-width: 0.5; }
+}
+.origin-label {
+  font-family: var(--fd); font-size: 13px; font-weight: 400;
+  fill: var(--gold); text-anchor: middle; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+}
+.destinations circle {
+  fill: var(--gold); opacity: 0.85;
+  filter: drop-shadow(0 0 4px rgba(52,210,152,0.6));
+  cursor: pointer; transition: opacity .2s, r .2s;
+}
+.destinations circle:hover { opacity: 1; }
+.destinations text {
+  font-family: var(--fb); font-size: 10px; font-weight: 600;
+  fill: rgba(255,255,255,0.85); text-anchor: middle;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.9));
+}
+@media (max-width: 600px) {
+  .destinations text, .origin-label { font-size: 8px; }
 }
 .map-info-cards {
   display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
@@ -1675,7 +1691,116 @@ section { scroll-margin-top: var(--nav-h); }
     <h2 class="h-lg" data-t="map_title">Seoul to the World</h2>
     <p class="body-lg" style="max-width:560px;margin:0 auto" data-t="map_desc">ERGSN ships from Seoul to every major port worldwide — CIF terms, on schedule. Select any destination and request a quote.</p>
     <div class="map-svg-wrap">
-      <div id="leafletMap" style="width:100%;height:520px;border-radius:12px;border:1px solid var(--border)"></div>
+      <svg viewBox="0 0 1000 500" class="route-map" xmlns="http://www.w3.org/2000/svg">
+        <!-- Continent shapes (Pacific-centered, drawn in original Atlantic-centered coords) -->
+        <defs>
+          <g id="continents">
+            <!-- Greenland -->
+            <path d="M370,30 Q410,25 440,35 Q455,50 445,70 Q420,80 395,75 Q375,65 365,50 Q360,38 370,30 Z"/>
+            <!-- North America -->
+            <path d="M40,90 Q90,65 160,75 Q230,70 290,90 Q330,110 350,150 Q345,180 320,200 Q280,215 240,210 Q200,200 170,190 Q140,180 110,170 Q80,150 60,130 Q40,110 40,90 Z"/>
+            <!-- Central America -->
+            <path d="M280,210 Q310,210 330,225 Q325,245 305,255 Q285,250 275,235 Q272,220 280,210 Z"/>
+            <!-- South America -->
+            <path d="M295,230 Q330,220 360,235 Q380,260 385,290 Q380,330 360,370 Q335,395 310,400 Q290,390 280,360 Q275,330 280,295 Q285,260 295,230 Z"/>
+            <!-- Europe -->
+            <path d="M480,80 Q510,70 540,75 Q565,80 580,90 Q582,105 575,120 Q565,140 545,145 Q525,148 510,140 Q490,135 480,120 Q475,100 480,80 Z"/>
+            <!-- Scandinavia -->
+            <path d="M510,40 Q535,35 555,45 Q560,60 545,75 Q525,75 510,65 Q505,50 510,40 Z"/>
+            <!-- UK/Ireland -->
+            <path d="M468,85 Q478,82 482,92 Q480,102 470,103 Q463,98 468,85 Z"/>
+            <!-- Africa -->
+            <path d="M460,160 Q500,150 540,160 Q580,165 600,180 Q615,200 620,230 Q625,260 615,290 Q600,320 580,335 Q560,345 540,340 Q525,335 510,320 Q495,300 485,275 Q475,250 470,225 Q465,200 460,180 Z"/>
+            <!-- Madagascar -->
+            <path d="M613,310 Q623,305 626,322 Q623,338 615,335 Q610,322 613,310 Z"/>
+            <!-- Russia/CIS (eastern Eurasia) -->
+            <path d="M583,55 Q650,40 720,45 Q800,42 880,50 Q930,55 970,62 Q975,80 940,95 Q900,100 850,98 Q800,102 740,98 Q680,95 620,92 Q590,82 583,68 Z"/>
+            <!-- Middle East / Arabia -->
+            <path d="M595,170 Q625,162 655,170 Q670,180 668,195 Q650,210 625,212 Q605,205 595,195 Q588,182 595,170 Z"/>
+            <!-- India -->
+            <path d="M680,170 Q710,165 725,180 Q730,200 720,220 Q705,235 690,225 Q680,210 678,190 Z"/>
+            <!-- China + East Asia -->
+            <path d="M720,110 Q780,100 830,115 Q870,125 880,150 Q870,175 845,185 Q810,195 775,190 Q745,180 730,160 Q720,140 720,110 Z"/>
+            <!-- Korean Peninsula -->
+            <path d="M858,130 Q866,125 870,142 Q866,155 858,153 Q854,142 858,130 Z" fill="#34d298" opacity="0.4"/>
+            <!-- Japan -->
+            <path d="M885,128 Q895,122 900,140 Q895,155 885,152 Q880,140 885,128 Z"/>
+            <!-- SE Asia mainland -->
+            <path d="M770,200 Q800,195 820,205 Q830,225 815,240 Q795,245 780,235 Q770,220 770,200 Z"/>
+            <!-- Indonesia / Malaysia -->
+            <path d="M770,250 Q800,245 830,250 Q860,250 875,255 Q870,265 845,268 Q815,270 790,265 Q770,260 770,250 Z"/>
+            <!-- Philippines -->
+            <path d="M850,210 Q858,205 860,220 Q855,232 850,225 Q846,215 850,210 Z"/>
+            <!-- Australia -->
+            <path d="M820,295 Q855,285 895,290 Q920,300 925,325 Q920,355 895,365 Q860,370 830,360 Q815,345 815,320 Q815,305 820,295 Z"/>
+            <!-- New Zealand -->
+            <path d="M945,355 Q953,350 955,365 Q950,375 945,370 Z"/>
+          </g>
+        </defs>
+
+        <!-- Render continents twice with translate for Pacific-centered + Americas wrap -->
+        <g class="continents-layer" transform="translate(-380, 0)">
+          <use href="#continents"/>
+        </g>
+        <g class="continents-layer" transform="translate(620, 0)">
+          <use href="#continents"/>
+        </g>
+
+        <!-- Animated airline-style routes from KOREA (476, 147) -->
+        <g class="route-lines">
+          <path d="M476,147 Q300,80 133,106"/>
+          <path d="M476,147 Q310,75 148,101"/>
+          <path d="M476,147 Q400,140 274,180"/>
+          <path d="M476,147 Q420,150 322,197"/>
+          <path d="M476,147 Q360,180 206,333"/>
+          <path d="M476,147 Q380,160 230,261"/>
+          <path d="M476,147 Q450,200 408,246"/>
+          <path d="M476,147 Q450,210 417,267"/>
+          <path d="M476,147 Q495,148 508,151"/>
+          <path d="M476,147 Q520,250 540,344"/>
+          <path d="M476,147 Q650,80 792,156"/>
+          <path d="M476,147 Q700,60 907,141"/>
+          <path d="M476,147 Q710,55 914,137"/>
+          <path d="M476,147 Q800,150 992,316"/>
+        </g>
+
+        <!-- Flying planes/dots animating along routes -->
+        <g class="route-planes">
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q300,80 133,106');animation-duration:8s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q400,140 274,180');animation-duration:6s;animation-delay:-1s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q420,150 322,197');animation-duration:7s;animation-delay:-3s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q360,180 206,333');animation-duration:9s;animation-delay:-2s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q450,200 408,246');animation-duration:6s;animation-delay:-4s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q520,250 540,344');animation-duration:8s;animation-delay:-1s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q650,80 792,156');animation-duration:9s;animation-delay:-5s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q700,60 907,141');animation-duration:10s;animation-delay:-3s"/>
+          <circle r="3" class="plane" style="offset-path:path('M476,147 Q800,150 992,316');animation-duration:11s;animation-delay:-6s"/>
+        </g>
+
+        <!-- KOREA origin marker -->
+        <circle class="origin-pulse" cx="476" cy="147" r="6"/>
+        <circle class="origin-pulse" cx="476" cy="147" r="6" style="animation-delay:-1.25s"/>
+        <circle class="origin" cx="476" cy="147" r="5"/>
+        <text class="origin-label" x="476" y="135">SOUTH KOREA</text>
+
+        <!-- Destination markers + labels -->
+        <g class="destinations">
+          <circle cx="133" cy="106" r="3.5"/><text x="133" y="98">Rotterdam</text>
+          <circle cx="148" cy="101" r="3.5"/><text x="148" y="118">Hamburg</text>
+          <circle cx="274" cy="180" r="3.5"/><text x="274" y="172">Dubai</text>
+          <circle cx="322" cy="197" r="3.5"/><text x="322" y="212">Mumbai</text>
+          <circle cx="206" cy="333" r="3.5"/><text x="206" y="348">Durban</text>
+          <circle cx="230" cy="261" r="3.5"/><text x="230" y="276">Mombasa</text>
+          <circle cx="408" cy="246" r="3.5"/><text x="408" y="261">Singapore</text>
+          <circle cx="417" cy="267" r="3.5"/><text x="417" y="282">Jakarta</text>
+          <circle cx="508" cy="151" r="3.5"/><text x="508" y="143">Tokyo</text>
+          <circle cx="540" cy="344" r="3.5"/><text x="540" y="359">Sydney</text>
+          <circle cx="792" cy="156" r="3.5"/><text x="792" y="148">Los Angeles</text>
+          <circle cx="907" cy="141" r="3.5"/><text x="907" y="133">Baltimore</text>
+          <circle cx="914" cy="137" r="3.5"/><text x="884" y="125">New York</text>
+          <circle cx="992" cy="316" r="3.5"/><text x="975" y="331">Santos</text>
+        </g>
+      </svg>
     </div>
     <div class="map-info-cards reveal">
       <div class="map-info-card"><p class="map-info-val">CIF</p><p class="map-info-lbl" data-t="map_cif">Any Port Worldwide</p></div>
@@ -2111,73 +2236,6 @@ function toggleMenu() {
 function closeMenu() {
   document.getElementById('ham').classList.remove('open');
   document.getElementById('mobileMenu').classList.remove('open');
-}
-
-/* ═══ LEAFLET MAP ═══════════════════════════ */
-function initLeafletMap() {
-  if (typeof L === 'undefined' || !document.getElementById('leafletMap')) return;
-  const KOREA = [35.5, 129.0];
-  const ports = [
-    { name: 'Rotterdam',   coords: [51.92,   4.48] },
-    { name: 'Hamburg',     coords: [53.55,  10.00] },
-    { name: 'Dubai',       coords: [25.07,  55.30] },
-    { name: 'Mumbai',      coords: [18.97,  72.83] },
-    { name: 'Durban',      coords: [-29.86, 31.02] },
-    { name: 'Mombasa',     coords: [-4.04,  39.67] },
-    { name: 'Singapore',   coords: [1.29,  103.85] },
-    { name: 'Jakarta',     coords: [-6.21, 106.85] },
-    { name: 'Tokyo',       coords: [35.68, 139.69] },
-    { name: 'Sydney',      coords: [-33.87, 151.21] },
-    { name: 'Los Angeles', coords: [33.74, -118.27] },
-    { name: 'Baltimore',   coords: [39.29,  -76.61] },
-    { name: 'New York',    coords: [40.71,  -74.01] },
-    { name: 'Santos',      coords: [-23.95, -46.33] },
-  ];
-
-  const map = L.map('leafletMap', {
-    center: [20, 130],
-    zoom: 2,
-    minZoom: 2,
-    maxZoom: 6,
-    worldCopyJump: true,
-    zoomControl: true,
-    scrollWheelZoom: false,
-    attributionControl: true
-  });
-
-  // Dark tile layer (CartoDB Dark Matter)
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
-
-  // Korea origin marker (pulsing)
-  const koreaIcon = L.divIcon({
-    className: '',
-    html: '<div class="lp-marker korea" style="position:relative;"></div>',
-    iconSize: [14, 14], iconAnchor: [7, 7]
-  });
-  L.marker(KOREA, { icon: koreaIcon }).addTo(map)
-    .bindTooltip('KOREA', { permanent: true, direction: 'top', className: 'lp-label korea', offset: [0, -10] });
-
-  // Destination markers + route polylines
-  ports.forEach(p => {
-    const icon = L.divIcon({ className: '', html: '<div class="lp-marker"></div>', iconSize: [10, 10], iconAnchor: [5, 5] });
-    L.marker(p.coords, { icon }).addTo(map)
-      .bindTooltip(p.name, { permanent: true, direction: 'top', className: 'lp-label', offset: [0, -8] });
-    // Route line from Korea to destination — use worldCopyJump for proper Pacific routing
-    L.polyline([KOREA, p.coords], {
-      color: '#34d298', weight: 1.5, opacity: 0.6,
-      dashArray: '6 5', smoothFactor: 1
-    }).addTo(map);
-  });
-}
-// Initialize when Leaflet script is loaded
-if (document.readyState === 'loading') {
-  window.addEventListener('load', initLeafletMap);
-} else {
-  setTimeout(initLeafletMap, 100);
 }
 
 /* ═══ ① PARTICLE HERO ═══════════════════════ */
