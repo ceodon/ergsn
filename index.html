@@ -1552,6 +1552,81 @@ section { scroll-margin-top: var(--nav-h); }
 [dir="rtl"] .f-row { direction: ltr; }
 [dir="rtl"] .footer-top { direction: ltr; }
 [dir="rtl"] .mobile-cta-bar { flex-direction: row-reverse; }
+
+/* ── AI Curation / Partner Match-making ── */
+.match-section { background: radial-gradient(ellipse at top, #131616 0%, #0a0a0a 70%); }
+.match-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.match-wrap {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: clamp(2rem,4vw,3.5rem); align-items: start; margin-top: 2rem;
+}
+@media (max-width: 840px){ .match-wrap { grid-template-columns: 1fr; } }
+.match-form {
+  background: #141414; border: 1px solid var(--border);
+  border-radius: 16px; padding: clamp(1.4rem,2.4vw,2rem);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.match-form label {
+  font-family: var(--fb); font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt);
+  margin-bottom: -8px;
+}
+.match-form .f-sel, .match-form .f-in {
+  font-size: 14px; padding: 11px 14px; border-radius: 10px;
+  background: #1d1d1d; border: 1px solid var(--border);
+  color: var(--white); width: 100%; outline: none;
+  transition: border-color .15s; -webkit-appearance: none;
+}
+.match-form .f-sel:focus, .match-form .f-in:focus { border-color: var(--gold); }
+.match-btn {
+  margin-top: 6px; padding: 13px 20px; border-radius: 10px;
+  background: var(--gold); color: #0a0a0a; border: 0;
+  font-family: var(--fb); font-weight: 700; font-size: 13px;
+  letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.match-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(52,210,152,.25); }
+.match-btn:disabled { opacity: .6; cursor: wait; }
+.match-result {
+  background: #101010; border: 1px solid var(--border);
+  border-radius: 16px; padding: clamp(1.4rem,2.4vw,2rem);
+  min-height: 260px; position: relative;
+}
+.match-empty {
+  color: var(--tx-mid); font-size: 14px; text-align: center;
+  padding: 3rem 1rem; line-height: 1.6;
+}
+.match-empty .ai-pulse {
+  width: 44px; height: 44px; margin: 0 auto 1rem;
+  border-radius: 50%; background: radial-gradient(circle, rgba(52,210,152,.35), transparent 70%);
+  animation: aiPulse 2.4s ease-in-out infinite;
+}
+@keyframes aiPulse { 0%,100%{transform:scale(.8);opacity:.6} 50%{transform:scale(1.15);opacity:1} }
+.match-typing { color: var(--gold); font-family: var(--fb); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.match-typing::after { content:'▊'; animation: blink 1s steps(2) infinite; margin-left: 2px; }
+@keyframes blink { 50% { opacity: 0; } }
+.match-header { margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.match-header .label { color: var(--gold); }
+.match-header h4 { font-family: var(--fh); font-size: clamp(1.1rem, 1.8vw, 1.35rem); margin: .3rem 0 .4rem; color: var(--white); }
+.match-header p { color: var(--tx-mid); font-size: 13px; line-height: 1.55; }
+.match-item {
+  display: flex; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.match-item:last-child { border-bottom: 0; }
+.match-rank {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold), #1a8f65);
+  color: #0a0a0a; font-family: var(--fb); font-weight: 800;
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+.match-body h5 { font-family: var(--fh); font-size: 15px; color: var(--white); margin: 2px 0 4px; }
+.match-body .m-sector { font-size: 11px; font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.match-body p { font-size: 13px; color: var(--tx-mid); line-height: 1.5; }
+.match-score {
+  margin-left: auto; flex-shrink: 0; font-family: var(--fb);
+  font-size: 11px; color: var(--gold); text-align: right; white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -2008,6 +2083,52 @@ section { scroll-margin-top: var(--nav-h); }
       <div class="map-info-card"><p class="map-info-val">4-6</p><p class="map-info-lbl" data-t="map_lead">Weeks Lead Time</p></div>
       <div class="map-info-card"><p class="map-info-val">HS 8472.90</p><p class="map-info-lbl" data-t="map_hs">Tariff Classification</p></div>
       <div class="map-info-card"><p class="map-info-val">T/T</p><p class="map-info-lbl" data-t="map_tt">Payment Remittance</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AI CURATION / PARTNER MATCH-MAKING ═══ -->
+<section class="match-section" id="match">
+  <div class="container match-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">AI Curation Service</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Partner Match-making</h2>
+      <p class="body-lg" style="max-width:640px">Tell us your country and primary industry. Our AI instantly recommends the best-fit verified Korean suppliers and products from the ERGSN portfolio.</p>
+    </div>
+    <div class="match-wrap">
+      <form class="match-form reveal" id="matchForm" onsubmit="runMatch(event)">
+        <label>Your Country</label>
+        <input type="text" class="f-in" id="matchCountry" placeholder="e.g. United States, Saudi Arabia, Japan" autocomplete="off" required>
+        <label>Primary Industry</label>
+        <select class="f-sel" id="matchIndustry" required>
+          <option value="">— Select your sector —</option>
+          <option value="government">Government / Public Sector</option>
+          <option value="finance">Finance / Legal</option>
+          <option value="healthcare">Healthcare / Pharma</option>
+          <option value="education">Education / Research</option>
+          <option value="tech">Technology / IT</option>
+          <option value="manufacturing">Manufacturing / Industrial</option>
+          <option value="retail">Retail / E-commerce</option>
+          <option value="energy">Energy / Utilities</option>
+          <option value="hospitality">Hospitality / F&amp;B</option>
+          <option value="logistics">Logistics / Trading</option>
+        </select>
+        <label>Annual Procurement Volume (optional)</label>
+        <select class="f-sel" id="matchVolume">
+          <option value="">— Not specified —</option>
+          <option value="s">Under $50K</option>
+          <option value="m">$50K — $250K</option>
+          <option value="l">$250K — $1M</option>
+          <option value="xl">Over $1M</option>
+        </select>
+        <button type="submit" class="match-btn" id="matchBtn">Find My Match</button>
+      </form>
+      <div class="match-result reveal" id="matchResult">
+        <div class="match-empty" id="matchEmpty">
+          <div class="ai-pulse"></div>
+          <p>AI-powered curation<br><span style="font-size:12px;color:var(--tx-lt)">Enter your profile to see personalized supplier matches.</span></p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2485,6 +2606,74 @@ document.addEventListener('keydown', e => {
   if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
   else if (document.getElementById('modalOverlay').classList.contains('open')) closeModal();
 });
+
+/* ── AI Partner Match-making ──────────── */
+const MATCH_CATALOG = [
+  { id:'dl16xd', name:'DL-16XD Industrial Shredder', sector:'Office Security', tags:['government','finance','healthcare','education','manufacturing'], scale:['l','xl'], desc:'Department-grade, Level 3 security, 16-sheet capacity. HIPAA + GSA ready.' },
+  { id:'dl12xd', name:'DL-12XD Commercial Shredder', sector:'Office Security', tags:['finance','healthcare','tech','education','hospitality'], scale:['m','l'], desc:'Mid-volume workgroup shredder. Balanced throughput and footprint.' },
+  { id:'dl10xd', name:'DL-10XD Executive Shredder', sector:'Office Security', tags:['finance','tech','retail','hospitality','logistics'], scale:['s','m'], desc:'Compact executive unit. Ideal for private offices and small teams.' },
+  { id:'dl16x', name:'DL-16X Heavy-Duty Shredder', sector:'Office Security', tags:['government','manufacturing','logistics'], scale:['l','xl'], desc:'All-metal construction. Built for continuous high-volume destruction.' },
+  { id:'ktech-semi', name:'K-Tech: Semiconductor Modules', sector:'K-Tech', tags:['tech','manufacturing','energy'], scale:['l','xl'], desc:'Verified Korean fab partners — precision modules & display components. Joining Q2 2026.', coming:true },
+  { id:'ktech-sensor', name:'K-Tech: Industrial Sensors', sector:'K-Tech', tags:['manufacturing','energy','logistics','tech'], scale:['m','l'], desc:'High-precision IoT & industrial sensor suite from vetted Korean OEMs. Joining 2026.', coming:true },
+  { id:'smart-iot', name:'Smart Living: Connected Appliances', sector:'Smart Living', tags:['retail','hospitality'], scale:['m','l','xl'], desc:'Premium K-lifestyle IoT appliances curated for global retail. Joining 2026.', coming:true },
+  { id:'smart-wellness', name:'Smart Living: Wellness Devices', sector:'Smart Living', tags:['retail','healthcare','hospitality'], scale:['s','m'], desc:'Korean wellness & beauty-tech devices with certified export compliance. Joining 2026.', coming:true },
+  { id:'energy-solar', name:'Future Energy: Solar Modules', sector:'Future Energy', tags:['energy','government','manufacturing'], scale:['l','xl'], desc:'Verified Korean solar panel manufacturers & BOS components. Joining 2026.', coming:true },
+  { id:'energy-battery', name:'Future Energy: Battery Storage', sector:'Future Energy', tags:['energy','logistics','manufacturing','tech'], scale:['l','xl'], desc:'Commercial-grade ESS & EV-adjacent cells from top Korean cell makers. Joining 2026.', coming:true }
+];
+const REGION_HINTS = {
+  'united states':['healthcare','finance','government'], 'usa':['healthcare','finance','government'], 'us':['healthcare','finance','government'],
+  'canada':['healthcare','finance','energy'],
+  'saudi arabia':['government','energy','hospitality'], 'uae':['finance','hospitality','energy'], 'qatar':['government','hospitality'],
+  'japan':['manufacturing','tech','retail'], 'singapore':['finance','logistics','tech'],
+  'germany':['manufacturing','energy','tech'], 'france':['hospitality','retail','finance'], 'uk':['finance','government','healthcare'], 'united kingdom':['finance','government','healthcare'],
+  'mexico':['manufacturing','logistics','retail'], 'brazil':['manufacturing','energy','retail'],
+  'australia':['energy','logistics','government'], 'turkey':['manufacturing','retail','logistics'],
+  'india':['tech','manufacturing','retail'], 'vietnam':['manufacturing','logistics']
+};
+function scoreMatch(item, industry, scale, regionBonus) {
+  let s = 0;
+  if (item.tags.includes(industry)) s += 60;
+  if (regionBonus.includes(industry)) s += 8;
+  if (scale && item.scale.includes(scale)) s += 20;
+  regionBonus.forEach(r => { if (item.tags.includes(r) && r !== industry) s += 6; });
+  if (!item.coming) s += 10;
+  s += Math.random() * 4;
+  return Math.min(99, Math.round(s));
+}
+function runMatch(e) {
+  e.preventDefault();
+  const country = document.getElementById('matchCountry').value.trim();
+  const industry = document.getElementById('matchIndustry').value;
+  const scale = document.getElementById('matchVolume').value;
+  if (!country || !industry) return;
+  const btn = document.getElementById('matchBtn');
+  const out = document.getElementById('matchResult');
+  btn.disabled = true; btn.textContent = 'Analyzing…';
+  out.innerHTML = '<div class="match-empty"><div class="ai-pulse"></div><p class="match-typing">AI curating your matches</p></div>';
+  const regionBonus = REGION_HINTS[country.toLowerCase()] || [];
+  setTimeout(() => {
+    const ranked = MATCH_CATALOG
+      .map(it => ({ ...it, score: scoreMatch(it, industry, scale, regionBonus) }))
+      .sort((a,b) => b.score - a.score)
+      .slice(0, 3);
+    const industryLabel = document.querySelector(`#matchIndustry option[value="${industry}"]`).textContent;
+    let html = `<div class="match-header"><span class="label">AI Recommendation</span>`
+      + `<h4>Top matches for ${country.replace(/[<>]/g,'')} · ${industryLabel}</h4>`
+      + `<p>Based on your market profile, sector demand signals, and ERGSN's verified supplier network, these are the best-fit portfolio items for your operation.</p></div>`;
+    ranked.forEach((r,i) => {
+      html += `<div class="match-item">`
+        + `<div class="match-rank">${i+1}</div>`
+        + `<div class="match-body"><div class="m-sector">${r.sector}${r.coming?' · Coming Soon':''}</div>`
+        + `<h5>${r.name}</h5><p>${r.desc}</p></div>`
+        + `<div class="match-score">${r.score}%<br><span style="color:var(--tx-lt);font-size:10px">fit score</span></div>`
+        + `</div>`;
+    });
+    html += `<div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center">`
+      + `<a href="#rfq" class="match-btn" style="display:inline-block;text-decoration:none">Request Quote for These</a></div>`;
+    out.innerHTML = html;
+    btn.disabled = false; btn.textContent = 'Find My Match';
+  }, 1100);
+}
 
 function toggleMenu() {
   const h = document.getElementById('ham');
