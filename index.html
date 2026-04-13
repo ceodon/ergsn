@@ -1606,6 +1606,160 @@ section { scroll-margin-top: var(--nav-h); }
   padding-bottom: .4rem; border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
+/* ── Live Hub (Tier 1) ─────────────────── */
+.hub-section { background: #0a0a0a; border-top: 1px solid rgba(52,210,152,.15); border-bottom: 1px solid rgba(52,210,152,.15); position: relative; overflow: hidden; }
+.hub-section::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity:.5; }
+.hub-inner { padding: clamp(2rem,4vh,3rem) 0; }
+.hub-head { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem; }
+.hub-head h2 { font-family: var(--fh); font-size: clamp(1.1rem,1.8vw,1.4rem); color: var(--white); margin: 0; display:flex; align-items:center; gap:10px; }
+.hub-head h2::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 12px var(--gold); animation: livePulse 1.6s ease-in-out infinite; }
+@keyframes livePulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+.hub-date { font-family: var(--fb); font-size: 11px; letter-spacing:.1em; text-transform: uppercase; color: var(--tx-lt); }
+.hub-grid { display:grid; grid-template-columns: 2fr 1.3fr 1.3fr; gap: clamp(1rem,2vw,1.5rem); align-items:stretch; }
+@media (max-width: 960px){ .hub-grid { grid-template-columns: 1fr 1fr; } .hub-mission { grid-column: 1 / -1; } }
+@media (max-width: 640px){ .hub-grid { grid-template-columns: 1fr; } }
+.hub-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; display: flex; flex-direction: column; gap: .6rem; }
+.hub-card h3 { font-family: var(--fb); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0; }
+.pulse-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+.pulse-cell { background: #1a1a1a; border-radius: 8px; padding: 10px 12px; }
+.pulse-cell .k { font-size: 10px; font-family: var(--fb); letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); }
+.pulse-cell .v { font-family: var(--fh); font-size: 1.1rem; color: var(--white); margin-top: 3px; display: flex; align-items: baseline; gap: 6px; }
+.pulse-cell .v .d { font-size: 11px; font-family: var(--fb); font-weight: 700; }
+.pulse-cell .v .d.up { color: var(--gold); }
+.pulse-cell .v .d.dn { color: #ff7070; }
+.pulse-head { font-family: var(--fh); font-size: 1rem; color: var(--white); line-height: 1.3; }
+.pulse-head em { color: var(--gold); font-style: normal; }
+.ticker-wrap { height: 130px; overflow: hidden; position: relative; border-radius: 8px; }
+.ticker-wrap::after { content:''; position:absolute; inset:0; pointer-events:none; background: linear-gradient(180deg, rgba(20,20,20,.8) 0%, transparent 15%, transparent 85%, rgba(20,20,20,.8) 100%); }
+.ticker-list { display: flex; flex-direction: column; gap: 6px; animation: tickerScroll 25s linear infinite; }
+@keyframes tickerScroll { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+.ticker-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #1a1a1a; border-radius: 6px; font-size: 12px; color: var(--tx-mid); }
+.ticker-item .tf { font-size: 14px; }
+.ticker-item .th { color: var(--white); font-weight: 600; }
+.ticker-item .tt { color: var(--tx-lt); font-size: 11px; margin-left: auto; white-space: nowrap; }
+.hub-mission .mm-progress { background: #1a1a1a; border-radius: 8px; padding: 10px 12px; }
+.mm-bar { height: 6px; background: #262626; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.mm-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #1a8f65); width: 0%; transition: width .4s ease; }
+.mm-list { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.mm-task { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #1a1a1a; border-radius: 6px; font-size: 12px; color: var(--tx-mid); }
+.mm-task.done { color: var(--gold); }
+.mm-task .tk { width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 10px; }
+.mm-task.done .tk { background: var(--gold); color: #0a0a0a; border-color: var(--gold); }
+.mm-streak { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 11px; color: var(--tx-lt); }
+.mm-streak strong { color: var(--gold); font-family: var(--fh); font-size: 14px; }
+.hub-passport { position: relative; }
+.hub-passport .pp-state { font-size: 13px; color: var(--tx-mid); line-height: 1.55; }
+.hub-passport .pp-badge { display:inline-block; background: rgba(52,210,152,.15); color: var(--gold); padding: 3px 8px; border-radius: 6px; font-size: 10px; font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; margin-top: 6px; }
+.pp-btn { margin-top: auto; padding: 9px 12px; border-radius: 8px; background: var(--gold); color: #0a0a0a; border: 0; font-family: var(--fb); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+.pp-btn.ghost { background: transparent; color: var(--white); border: 1px solid var(--border); }
+.pp-btn.ghost:hover { border-color: var(--gold); color: var(--gold); }
+.pp-modal { display:none; position:fixed; inset:0; z-index:1100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); align-items:center; justify-content:center; padding:1rem; }
+.pp-modal.open { display:flex; }
+.pp-modal-inner { background:#151515; border:1px solid var(--border); border-radius:16px; max-width:460px; width:100%; padding:clamp(1.4rem,3vw,2rem); position:relative; }
+.pp-modal-inner h3 { color:var(--white); margin:0 0 .3rem; font-family:var(--fh); }
+.pp-modal-inner p { color:var(--tx-mid); font-size:13px; margin-bottom:1rem; }
+.pp-modal-inner form { display:flex; flex-direction:column; gap:12px; }
+.pp-modal-inner label { font-family:var(--fb); font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-lt); margin-bottom:-8px; }
+.pp-modal-inner input, .pp-modal-inner select { background:#1d1d1d; border:1px solid var(--border); border-radius:8px; color:var(--white); padding:10px 12px; font-size:14px; width:100%; outline:none; -webkit-appearance:none; font-family:inherit; }
+.pp-modal-inner input:focus, .pp-modal-inner select:focus { border-color:var(--gold); }
+.pp-modal-close { position:absolute; top:12px; right:14px; background:none; border:0; color:var(--tx-mid); font-size:22px; cursor:pointer; line-height:1; }
+
+/* ── K-Wave Radar (Tier 2) ─────────────── */
+.radar-section { background: #0f0f0f; }
+.radar-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.radar-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(1.5rem,3vw,2.5rem); margin-top: 2rem; align-items: start; }
+@media (max-width: 900px){ .radar-grid { grid-template-columns: 1fr; } }
+.radar-viz { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; position: relative; min-height: 380px; }
+.radar-world { width: 100%; height: 320px; position: relative; background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 80%); border-radius: 10px; overflow: hidden; }
+.radar-region { position: absolute; width: 90px; height: 90px; border-radius: 50%; display:flex; align-items:center; justify-content:center; cursor: pointer; transition: transform .2s; text-align:center; }
+.radar-region:hover { transform: scale(1.08); z-index: 2; }
+.radar-region .rr-glow { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(52,210,152,.4) 0%, transparent 70%); animation: radarPulse 3s ease-in-out infinite; }
+.radar-region.low .rr-glow { background: radial-gradient(circle, rgba(52,210,152,.2) 0%, transparent 70%); }
+.radar-region.hot .rr-glow { background: radial-gradient(circle, rgba(255,140,70,.5) 0%, transparent 70%); animation: radarPulse 1.6s ease-in-out infinite; }
+@keyframes radarPulse { 0%,100%{transform:scale(.85);opacity:.7} 50%{transform:scale(1.1);opacity:1} }
+.rr-label { position: relative; z-index: 1; font-family: var(--fb); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--white); font-weight: 700; line-height: 1.2; }
+.rr-label .heat { display: block; color: var(--gold); font-family: var(--fh); font-size: 16px; margin-top: 2px; }
+.radar-list { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; }
+.radar-list .rr-inner { max-width: 320px; margin: 0 auto; }
+.radar-list h4 { font-family: var(--fb); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: 0 0 .8rem; }
+.radar-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.radar-row:last-child { border-bottom: 0; }
+.radar-row .rr-name { font-size: 13px; color: var(--white); font-weight: 600; }
+.radar-row .rr-meta { font-size: 11px; color: var(--tx-lt); }
+.radar-row .rr-score { font-family: var(--fh); font-size: 15px; color: var(--gold); text-align: right; white-space: nowrap; }
+
+/* ── Leaderboard & Countdown (Tier 2) ── */
+.lb-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.2rem; margin-bottom: 1.6rem; }
+@media (max-width:760px){ .lb-wrap { grid-template-columns: 1fr; } }
+.lb-card { background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; }
+.lb-card h4 { font-family: var(--fb); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: 0 0 .6rem; }
+.lb-row { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:12px; }
+.lb-row:last-child { border-bottom: 0; }
+.lb-rank { width:20px; height:20px; border-radius:5px; background:linear-gradient(135deg,var(--gold),#1a8f65); color:#0a0a0a; font-family:var(--fb); font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.lb-name { color: var(--white); flex: 1; }
+.lb-n { color: var(--gold); font-family: var(--fh); font-size: 14px; }
+.countdown-card { text-align: center; }
+.countdown-timer { display:flex; justify-content:center; gap:10px; margin-top:.6rem; }
+.cd-cell { background:#1a1a1a; border-radius:8px; padding:10px 12px; min-width:56px; }
+.cd-cell .n { font-family:var(--fh); font-size:1.4rem; color:var(--white); display:block; line-height:1; }
+.cd-cell .l { font-family:var(--fb); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-lt); margin-top:4px; display:block; }
+
+/* ── Factory Shorts (Tier 2) ─────────── */
+.shorts-section { background: #0a0a0a; }
+.shorts-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.shorts-scroll { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 14px; margin-top: 2rem; -webkit-overflow-scrolling: touch; }
+.shorts-scroll::-webkit-scrollbar { height: 6px; }
+.shorts-scroll::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
+.short-card { flex: 0 0 240px; aspect-ratio: 9/16; border-radius: 14px; overflow: hidden; position: relative; scroll-snap-align: start; cursor: pointer; background:#1a1a1a; transition: transform .2s; }
+.short-card:hover { transform: scale(1.03); }
+.short-card .short-vis { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.short-card .short-overlay { position:absolute; inset:0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,.85)); display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; color:#fff; }
+.short-card .short-title { font-family: var(--fh); font-size: 15px; margin: 0 0 3px; }
+.short-card .short-meta { font-size: 11px; color: rgba(255,255,255,.7); }
+.short-card .short-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 54px; height: 54px; border-radius: 50%; background: rgba(52,210,152,.9); display:flex; align-items:center; justify-content:center; color: #0a0a0a; }
+.short-card .short-play svg { width: 22px; height: 22px; margin-left: 3px; }
+
+/* ── Trade Tools (Tier 3) ─────────────── */
+.tools-section { background: #0f0f0f; }
+.tools-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem,2vw,1.6rem); margin-top: 2rem; }
+@media (max-width: 900px){ .tools-grid { grid-template-columns: 1fr; } }
+.tool-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; display: flex; flex-direction: column; gap: .8rem; }
+.tool-card h3 { font-family: var(--fh); font-size: 1.1rem; color: var(--white); margin: 0; }
+.tool-card .t-sub { font-size: 12px; color: var(--tx-mid); margin: 0; }
+.tool-card label { font-family: var(--fb); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: -6px; }
+.tool-card input, .tool-card select { background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 9px 12px; font-size: 13px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; }
+.tool-card input:focus, .tool-card select:focus { border-color: var(--gold); }
+.tool-card button { background: var(--gold); color: #0a0a0a; padding: 10px; border: 0; border-radius: 8px; font-family: var(--fb); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; margin-top: .3rem; }
+.tool-result { background: #1a1a1a; border-radius: 8px; padding: 12px; font-size: 12px; color: var(--tx-mid); margin-top: .5rem; line-height: 1.6; min-height: 50px; }
+.tool-result.active { color: var(--white); border-left: 2px solid var(--gold); }
+.tool-result strong { color: var(--gold); font-family: var(--fh); }
+
+/* ── Q&A Wall (Tier 2) ─────────────── */
+.qa-section { background: #0a0a0a; }
+.qa-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.qa-wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(1.5rem,3vw,2.5rem); margin-top: 2rem; }
+@media (max-width: 900px){ .qa-wrap { grid-template-columns: 1fr; } }
+.qa-list { display: flex; flex-direction: column; gap: 10px; max-height: 440px; overflow-y: auto; padding-right: 4px; }
+.qa-item { background: #141414; border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; }
+.qa-q { font-size: 13px; color: var(--white); font-weight: 600; margin: 0 0 .4rem; display: flex; gap: 8px; }
+.qa-q::before { content:'Q'; color: var(--gold); font-family: var(--fh); flex-shrink: 0; }
+.qa-a { font-size: 12px; color: var(--tx-mid); line-height: 1.55; margin: 0; display: flex; gap: 8px; }
+.qa-a::before { content:'A'; color: var(--tx-lt); font-family: var(--fh); flex-shrink: 0; }
+.qa-meta { font-size: 10px; color: var(--tx-lt); font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; margin-top: .5rem; }
+.qa-form { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; display: flex; flex-direction: column; gap: 12px; height: fit-content; }
+.qa-form label { font-family: var(--fb); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: -8px; }
+.qa-form input, .qa-form select, .qa-form textarea { background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 10px 12px; font-size: 13px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; }
+.qa-form textarea { resize: vertical; min-height: 70px; }
+.qa-form button { background: var(--gold); color: #0a0a0a; padding: 10px; border: 0; border-radius: 8px; font-family: var(--fb); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+
+/* ── 3D Viewer spin (Tier 3) ─────────── */
+.spin-wrap { position: relative; }
+.spin-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); color: var(--gold); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 5px 12px; font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; z-index: 2; }
+.spin-btn:hover { background: var(--gold); color: #0a0a0a; }
+@keyframes spin3d { 0%{transform:perspective(800px) rotateY(0)} 100%{transform:perspective(800px) rotateY(360deg)} }
+.modal-main.spinning { animation: spin3d 6s linear infinite; }
+
 /* ── Spotlight / Pre-Launch Radar ──── */
 .spotlight-section { background: linear-gradient(180deg, #0a0a0a 0%, #0f1210 100%); }
 .spotlight-inner { padding: clamp(3rem,6vh,5rem) 0; }
@@ -1785,14 +1939,16 @@ section { scroll-margin-top: var(--nav-h); }
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="side-nav" id="sideNav" aria-label="Section navigation">
   <button class="side-dot" type="button" data-target="home"      onclick="sideNavGo('home')"><span class="sd-tip">Home</span></button>
+  <button class="side-dot" type="button" data-target="hub"       onclick="sideNavGo('hub')"><span class="sd-tip">Live Hub</span></button>
   <button class="side-dot" type="button" data-target="products"  onclick="sideNavGo('products')"><span class="sd-tip">Sectors</span></button>
   <button class="side-dot" type="button" data-target="about"     onclick="sideNavGo('about')"><span class="sd-tip">About</span></button>
-  <button class="side-dot" type="button" data-target="verify"    onclick="sideNavGo('verify')"><span class="sd-tip">Verification</span></button>
+  <button class="side-dot" type="button" data-target="shorts"    onclick="sideNavGo('shorts')"><span class="sd-tip">Shorts</span></button>
   <button class="side-dot" type="button" data-target="map"       onclick="sideNavGo('map')"><span class="sd-tip">Trade Map</span></button>
+  <button class="side-dot" type="button" data-target="radar"     onclick="sideNavGo('radar')"><span class="sd-tip">K-Wave Radar</span></button>
   <button class="side-dot" type="button" data-target="match"     onclick="sideNavGo('match')"><span class="sd-tip">AI Match</span></button>
   <button class="side-dot" type="button" data-target="spotlight" onclick="sideNavGo('spotlight')"><span class="sd-tip">Spotlight</span></button>
-  <button class="side-dot" type="button" data-target="compliance" onclick="sideNavGo('compliance')"><span class="sd-tip">Compliance</span></button>
-  <button class="side-dot" type="button" data-target="calculator" onclick="sideNavGo('calculator')"><span class="sd-tip">Calculator</span></button>
+  <button class="side-dot" type="button" data-target="tools"     onclick="sideNavGo('tools')"><span class="sd-tip">Trade Tools</span></button>
+  <button class="side-dot" type="button" data-target="qa"        onclick="sideNavGo('qa')"><span class="sd-tip">Q&amp;A</span></button>
   <button class="side-dot" type="button" data-target="rfq"       onclick="sideNavGo('rfq')"><span class="sd-tip">Contact</span></button>
 </div>
 
@@ -1829,16 +1985,21 @@ section { scroll-margin-top: var(--nav-h); }
           <a href="#about">Gateway</a>
           <ul class="nav-dropmenu">
             <li><a href="#about"><span class="ds-name">About ERGSN</span><span class="ds-desc">Who we are &amp; our mission</span></a></li>
+            <li><a href="#shorts"><span class="ds-name">Factory Shorts <span class="ds-tag">New</span></span><span class="ds-desc">30-sec partner production clips</span></a></li>
             <li><a href="#verify"><span class="ds-name">Verification Process</span><span class="ds-desc">4-step partner qualification</span></a></li>
             <li><a href="#map"><span class="ds-name">Trade Route Map</span><span class="ds-desc">Global shipping lanes from Korea</span></a></li>
+            <li><a href="#radar"><span class="ds-name">K-Wave Radar <span class="ds-tag">Live</span></span><span class="ds-desc">Regional demand heat map</span></a></li>
             <li><a href="#compliance"><span class="ds-name">Compliance</span><span class="ds-desc">HIPAA · GSA · DIN 66399</span></a></li>
+            <li><a href="#qa"><span class="ds-name">Q&amp;A Wall</span><span class="ds-desc">Buyer community questions</span></a></li>
           </ul>
         </li>
         <li class="nav-dropdown">
-          <a href="#match">Tools</a>
+          <a href="#hub">Tools</a>
           <ul class="nav-dropmenu">
-            <li><a href="#match"><span class="ds-name">AI Partner Match <span class="ds-tag">New</span></span><span class="ds-desc">Curated supplier recommendations</span></a></li>
+            <li><a href="#hub"><span class="ds-name">Live Hub <span class="ds-tag">Daily</span></span><span class="ds-desc">K-Market Pulse · Missions · Passport</span></a></li>
+            <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Curated supplier recommendations</span></a></li>
             <li><a href="#spotlight"><span class="ds-name">Spotlight <span class="ds-tag">Beta</span></span><span class="ds-desc">Pre-launch radar · vote &amp; inquire</span></a></li>
+            <li><a href="#tools"><span class="ds-name">Trade Tools</span><span class="ds-desc">Landed cost · Compliance · Book demo</span></a></li>
             <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB pricing</span></a></li>
           </ul>
         </li>
@@ -1868,12 +2029,17 @@ section { scroll-margin-top: var(--nav-h); }
     <li><a href="#products" onclick="switchSector('future-energy');closeMenu()">Future Energy</a></li>
     <li class="mm-group-title">Gateway</li>
     <li><a href="#about" onclick="closeMenu()">About ERGSN</a></li>
+    <li><a href="#shorts" onclick="closeMenu()">Factory Shorts</a></li>
     <li><a href="#verify" onclick="closeMenu()">Verification Process</a></li>
     <li><a href="#map" onclick="closeMenu()">Trade Route Map</a></li>
+    <li><a href="#radar" onclick="closeMenu()">K-Wave Radar</a></li>
     <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
+    <li><a href="#qa" onclick="closeMenu()">Q&amp;A Wall</a></li>
     <li class="mm-group-title">Tools</li>
+    <li><a href="#hub" onclick="closeMenu()">Live Hub · Daily</a></li>
     <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
     <li><a href="#spotlight" onclick="closeMenu()">Spotlight · Pre-Launch</a></li>
+    <li><a href="#tools" onclick="closeMenu()">Trade Tools</a></li>
     <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
     <li class="mm-group-title">Contact</li>
     <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
@@ -1928,6 +2094,86 @@ section { scroll-margin-top: var(--nav-h); }
     </div>
   </div>
 </section>
+
+<!-- ══ LIVE HUB (Tier 1) ══════════════════ -->
+<section class="hub-section" id="hub">
+  <div class="container hub-inner">
+    <div class="hub-head">
+      <h2>ERGSN Live Hub</h2>
+      <div class="hub-date" id="hubDate">—</div>
+    </div>
+    <div class="hub-grid">
+      <div class="hub-card">
+        <h3>Daily K-Market Pulse</h3>
+        <p class="pulse-head" id="pulseHead">—</p>
+        <div class="pulse-row">
+          <div class="pulse-cell"><span class="k">KRW/USD</span><span class="v" id="pulseFx">—</span></div>
+          <div class="pulse-cell"><span class="k">Shipping Index</span><span class="v" id="pulseShip">—</span></div>
+          <div class="pulse-cell"><span class="k">Hot Sector</span><span class="v" id="pulseSector">—</span></div>
+          <div class="pulse-cell"><span class="k">Spotlight Adds</span><span class="v" id="pulseAdds">—</span></div>
+        </div>
+      </div>
+      <div class="hub-card">
+        <h3>Live Activity Ticker</h3>
+        <div class="ticker-wrap"><div class="ticker-list" id="tickerList"></div></div>
+      </div>
+      <div class="hub-card hub-mission">
+        <h3>Daily Missions</h3>
+        <div class="mm-progress">
+          <div class="mm-streak"><span>Streak: <strong id="mmStreak">0</strong> days</span><span>Points: <strong id="mmPts">0</strong></span></div>
+          <div class="mm-bar"><div class="mm-bar-fill" id="mmBarFill"></div></div>
+        </div>
+        <div class="mm-list" id="mmList"></div>
+        <div class="mm-streak" style="margin-top:6px"><span id="mmBadge" style="color:var(--gold);font-family:var(--fb);font-size:11px;letter-spacing:.06em;text-transform:uppercase"></span></div>
+      </div>
+      <div class="hub-card hub-passport" style="grid-column:1 / -1">
+        <h3>Your Buyer Passport</h3>
+        <p class="pp-state" id="ppState">Create a quick profile to personalize your experience. We'll remember your country and sector interests — no login required.</p>
+        <div id="ppBadges"></div>
+        <div style="display:flex;gap:8px;margin-top:.8rem;flex-wrap:wrap">
+          <button class="pp-btn" onclick="openPassport()">Set / Update Profile</button>
+          <button class="pp-btn ghost" onclick="passportMatch()">Run My Personalized Match</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="pp-modal" id="ppModal" onclick="if(event.target.id==='ppModal')closePassport()">
+  <div class="pp-modal-inner">
+    <button type="button" class="pp-modal-close" onclick="closePassport()">×</button>
+    <h3>Buyer Passport</h3>
+    <p>Saves locally to your browser. Personalizes match results and missions.</p>
+    <form onsubmit="savePassport(event)">
+      <label>Company (optional)</label>
+      <input type="text" id="ppCompany" autocomplete="off">
+      <label>Country *</label>
+      <select id="ppCountry" required><option value="" disabled selected>Select country…</option></select>
+      <label>Primary Industry *</label>
+      <select id="ppIndustry" required>
+        <option value="" disabled selected>Select industry…</option>
+        <option value="government">Government / Public Sector</option>
+        <option value="finance">Finance / Legal</option>
+        <option value="healthcare">Healthcare / Pharma</option>
+        <option value="education">Education / Research</option>
+        <option value="tech">Technology / IT</option>
+        <option value="manufacturing">Manufacturing / Industrial</option>
+        <option value="retail">Retail / E-commerce</option>
+        <option value="energy">Energy / Utilities</option>
+        <option value="hospitality">Hospitality / F&amp;B</option>
+        <option value="logistics">Logistics / Trading</option>
+      </select>
+      <label>Interested Sectors</label>
+      <select id="ppSectors">
+        <option value="">— Any —</option>
+        <option value="office-security">Office Security</option>
+        <option value="k-tech">K-Tech</option>
+        <option value="smart-living">Smart Living</option>
+        <option value="future-energy">Future Energy</option>
+      </select>
+      <button class="pp-btn" type="submit" style="margin-top:6px">Save Passport</button>
+    </form>
+  </div>
+</div>
 
 <!-- ══ PRODUCTS ════════════════════════════ -->
 <section id="products">
@@ -2146,6 +2392,18 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ FACTORY SHORTS (Tier 2) ════════════ -->
+<section class="shorts-section" id="shorts">
+  <div class="container shorts-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">Behind The Partners</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Factory Shorts</h2>
+      <p class="body-lg" style="max-width:600px">30-second vertical clips from verified Korean production lines. Swipe to peek inside the makers behind ERGSN's catalog.</p>
+    </div>
+    <div class="shorts-scroll" id="shortsScroll"></div>
+  </div>
+</section>
+
 <!-- ══ VERIFICATION PROCESS ════════════════ -->
 <section class="verify-section" id="verify">
   <div class="container verify-inner">
@@ -2279,6 +2537,28 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ K-WAVE RADAR (Tier 2) ══════════════ -->
+<section class="radar-section" id="radar">
+  <div class="container radar-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">Global Demand Signal</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">K-Wave Radar</h2>
+      <p class="body-lg" style="max-width:620px">Which regions are heating up for Korean hi-tech? Heat map aggregates Spotlight interest, AI Match queries, and inquiry volume — updated live.</p>
+    </div>
+    <div class="radar-grid">
+      <div class="radar-viz reveal">
+        <div class="radar-world" id="radarWorld"></div>
+      </div>
+      <div class="radar-list reveal">
+        <div class="rr-inner">
+          <h4>Trending Regions</h4>
+          <div id="radarRows"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ AI CURATION / PARTNER MATCH-MAKING ═══ -->
 <section class="match-section" id="match">
   <div class="container match-inner">
@@ -2341,6 +2621,15 @@ section { scroll-margin-top: var(--nav-h); }
         <div class="sl-stat"><span class="n" id="slTotalVotes">0</span><span class="l">Preference Votes</span></div>
         <div class="sl-stat"><span class="n" id="slTotalInquiries">0</span><span class="l">Inquiries Logged</span></div>
       </div>
+    </div>
+    <div class="lb-wrap reveal">
+      <div class="lb-card"><h4>🏆 Leaderboard — Top Interest</h4><div id="lbRows"></div></div>
+      <div class="lb-card countdown-card"><h4>⏱ Next Concept Drops In</h4><div class="countdown-timer" id="countdown">
+        <div class="cd-cell"><span class="n" id="cdD">0</span><span class="l">Days</span></div>
+        <div class="cd-cell"><span class="n" id="cdH">0</span><span class="l">Hours</span></div>
+        <div class="cd-cell"><span class="n" id="cdM">0</span><span class="l">Min</span></div>
+        <div class="cd-cell"><span class="n" id="cdS">0</span><span class="l">Sec</span></div>
+      </div></div>
     </div>
     <div class="spotlight-grid" id="spotlightGrid"></div>
   </div>
@@ -2463,6 +2752,62 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ TRADE TOOLS (Tier 3) ═══════════════ -->
+<section class="tools-section" id="tools">
+  <div class="container tools-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">Decision Support</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Trade Tools</h2>
+      <p class="body-lg" style="max-width:620px">Three quick utilities before you commit: true landed cost, compliance checklist by country, and a live demo booking slot.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card reveal">
+        <h3>Landed Cost Simulator</h3>
+        <p class="t-sub">Product cost + freight + duties + VAT → true landed per unit.</p>
+        <label>Destination Country</label>
+        <select id="lcCountry"><option value="" disabled selected>Select…</option></select>
+        <label>Unit FOB Price (USD)</label>
+        <input type="number" id="lcPrice" min="1" step="1" placeholder="e.g. 850">
+        <label>Quantity</label>
+        <input type="number" id="lcQty" min="1" step="1" placeholder="e.g. 50">
+        <button type="button" onclick="runLandedCost()">Calculate</button>
+        <div class="tool-result" id="lcResult">Totals will appear here.</div>
+      </div>
+      <div class="tool-card reveal">
+        <h3>Compliance Checker</h3>
+        <p class="t-sub">What certifications and documents are required for your market?</p>
+        <label>Country</label>
+        <select id="ccCountry"><option value="" disabled selected>Select…</option></select>
+        <label>Industry</label>
+        <select id="ccIndustry">
+          <option value="" disabled selected>Select…</option>
+          <option value="government">Government / Public Sector</option>
+          <option value="healthcare">Healthcare / Pharma</option>
+          <option value="finance">Finance / Legal</option>
+          <option value="tech">Technology / IT</option>
+          <option value="manufacturing">Manufacturing / Industrial</option>
+          <option value="energy">Energy / Utilities</option>
+          <option value="retail">Retail / E-commerce</option>
+        </select>
+        <button type="button" onclick="runCompliance()">Check Requirements</button>
+        <div class="tool-result" id="ccResult">Your checklist will appear here.</div>
+      </div>
+      <div class="tool-card reveal">
+        <h3>Book a Live Demo</h3>
+        <p class="t-sub">30-minute Zoom with ERGSN trade team. KST business hours.</p>
+        <label>Your Name</label>
+        <input type="text" id="bdName" autocomplete="off">
+        <label>Email</label>
+        <input type="email" id="bdEmail" autocomplete="off">
+        <label>Preferred Slot</label>
+        <select id="bdSlot"><option value="" disabled selected>Select slot…</option></select>
+        <button type="button" onclick="bookDemo()">Request Booking</button>
+        <div class="tool-result" id="bdResult">Available slots populated automatically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══ RFQ ══════════════════════════════════ -->
 <section id="rfq">
   <div class="container rfq-inner">
@@ -2551,6 +2896,30 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ Q&A WALL (Tier 2) ═════════════════ -->
+<section class="qa-section" id="qa">
+  <div class="container qa-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">Buyer Community</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Q&amp;A Wall</h2>
+      <p class="body-lg" style="max-width:620px">Real questions from global buyers — answered by ERGSN's trade team. Post your own below.</p>
+    </div>
+    <div class="qa-wrap">
+      <div class="qa-list" id="qaList"></div>
+      <form class="qa-form reveal" onsubmit="submitQA(event)">
+        <h4 style="margin:0;font-family:var(--fh);color:var(--white);font-size:1.1rem">Ask a Question</h4>
+        <label>Your Name (or Anonymous)</label>
+        <input type="text" id="qaName" autocomplete="off" placeholder="e.g. Ahmed · Procurement Lead">
+        <label>Country</label>
+        <select id="qaCountry"><option value="" disabled selected>Select…</option></select>
+        <label>Question *</label>
+        <textarea id="qaQ" required placeholder="What would you like to know? (specs, MOQ, shipping, partnership…)"></textarea>
+        <button type="submit">Post Question</button>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- ══ FOOTER ════════════════════════════════ -->
 <footer id="footer">
   <div class="container footer-inner">
@@ -2574,16 +2943,20 @@ section { scroll-margin-top: var(--nav-h); }
         <p class="footer-col-title">Gateway</p>
         <ul class="footer-links">
           <li><a href="#about">About ERGSN</a></li>
+          <li><a href="#shorts">Factory Shorts</a></li>
           <li><a href="#verify">Verification Process</a></li>
           <li><a href="#map">Trade Route Map</a></li>
-          <li><a href="#compliance">Compliance</a></li>
+          <li><a href="#radar">K-Wave Radar</a></li>
+          <li><a href="#qa">Q&amp;A Wall</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Tools</p>
         <ul class="footer-links">
+          <li><a href="#hub">Live Hub</a></li>
           <li><a href="#match">AI Partner Match</a></li>
           <li><a href="#spotlight">Spotlight · Pre-Launch</a></li>
+          <li><a href="#tools">Trade Tools</a></li>
           <li><a href="#calculator">Quote Calculator</a></li>
         </ul>
       </div>
@@ -2788,7 +3161,7 @@ function openModal(id) {
       </div>
       <button class="modal-close" onclick="closeModal()" aria-label="Close">\u2715</button>
     </div>
-    ${p.img ? `<div class="modal-image-row"><img src="${p.img}" alt="ERGSN ${p.model} shredder" loading="lazy"></div>` : ''}
+    ${p.img ? `<div class="modal-image-row spin-wrap"><button type="button" class="spin-btn" onclick="toggleSpin(this)">⟳ 360° View</button><img src="${p.img}" class="modal-main" alt="ERGSN ${p.model} shredder" loading="lazy"></div>` : ''}
     <div class="modal-bd">
       <div><p class="modal-sec-title">Technical Specifications</p><table class="spec-tbl"><tbody>${specs}</tbody></table></div>
       <div><p class="modal-sec-title">Key Features &amp; Benefits</p><ul class="feat-list">${feats}</ul></div>
@@ -3247,7 +3620,392 @@ document.addEventListener('DOMContentLoaded', function initSpotlight(){
     });
   }
   renderSpotlight();
+  initLiveHub();
+  initRadar();
+  initShorts();
+  initTradeTools();
+  initQAWall();
+  startCountdown();
+  updateLeaderboard();
 });
+
+/* ── Tier 1: Daily Pulse ─────────────── */
+function dailySeed() { const d = new Date(); return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate(); }
+function seededRand(seed, n) { const x = Math.sin(seed) * 10000; return ((x - Math.floor(x)) * n) | 0; }
+const PULSE_SECTORS = ['K-Beauty Devices','Industrial IoT Sensors','Commercial ESS','K-Culture Goods','Precision Modules','Smart Appliances'];
+const PULSE_HEADLINES = [
+  'Korean <em>ESS exports</em> hit record this quarter',
+  'K-Beauty tech demand <em>surges across GCC</em>',
+  'Semiconductor modules <em>lead APAC</em> demand',
+  'Smart Living IoT <em>trending in LATAM</em>',
+  'Clean energy partners <em>onboarding fast</em>'
+];
+function initLiveHub() {
+  const seed = dailySeed();
+  const d = new Date();
+  const dateEl = document.getElementById('hubDate');
+  if (dateEl) dateEl.textContent = d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' }) + ' · KST';
+  const fx = (1310 + seededRand(seed, 60) - 30).toFixed(0);
+  const fxDelta = ((seededRand(seed+1, 200) - 100) / 100).toFixed(2);
+  const ship = (1450 + seededRand(seed+2, 300)).toFixed(0);
+  const shipDelta = ((seededRand(seed+3, 80) - 40) / 10).toFixed(1);
+  const sector = PULSE_SECTORS[seededRand(seed+4, PULSE_SECTORS.length)];
+  const adds = 2 + seededRand(seed+5, 5);
+  const head = PULSE_HEADLINES[seededRand(seed+6, PULSE_HEADLINES.length)];
+  const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+  set('pulseHead', head);
+  set('pulseFx', `₩${fx}<span class="d ${fxDelta>=0?'up':'dn'}">${fxDelta>=0?'▲':'▼'}${Math.abs(fxDelta)}%</span>`);
+  set('pulseShip', `${ship}<span class="d ${shipDelta>=0?'up':'dn'}">${shipDelta>=0?'▲':'▼'}${Math.abs(shipDelta)}</span>`);
+  set('pulseSector', sector);
+  set('pulseAdds', `+${adds}`);
+  renderTicker(seed);
+  renderMissions();
+  renderPassport();
+}
+
+/* ── Tier 1: Activity Ticker ─────────── */
+const TICKER_POOL = [
+  { f:'🇸🇦', h:'Riyadh buyer', a:'voted on K-Beauty Smart Mirror', t:'2 min ago' },
+  { f:'🇦🇪', h:'Dubai importer', a:'requested quote · DL-16XD', t:'8 min ago' },
+  { f:'🇯🇵', h:'Tokyo distributor', a:'joined AI Partner Match', t:'14 min ago' },
+  { f:'🇺🇸', h:'Baltimore procurement', a:'opened Industrial IoT Sensors', t:'22 min ago' },
+  { f:'🇧🇷', h:'São Paulo buyer', a:'marked interest · Commercial ESS', t:'35 min ago' },
+  { f:'🇩🇪', h:'Hamburg group', a:'booked a live demo', t:'48 min ago' },
+  { f:'🇸🇬', h:'Singapore trader', a:'ran landed cost · K-Tech', t:'1 hr ago' },
+  { f:'🇲🇽', h:'Mexico City partner', a:'voted on K-Culture Goods', t:'1 hr ago' },
+  { f:'🇹🇷', h:'Istanbul importer', a:'asked about Future Energy', t:'2 hr ago' },
+  { f:'🇮🇳', h:'Mumbai buyer', a:'requested compliance check', t:'3 hr ago' },
+  { f:'🇦🇺', h:'Sydney retailer', a:'watchlisted Smart Living', t:'3 hr ago' },
+  { f:'🇫🇷', h:'Paris distributor', a:'submitted Spotlight inquiry', t:'4 hr ago' }
+];
+function renderTicker(seed) {
+  const list = document.getElementById('tickerList'); if (!list) return;
+  const pool = [...TICKER_POOL].sort(() => seededRand(seed++, 2) - 0.5).slice(0, 8);
+  const html = pool.map(it => `<div class="ticker-item"><span class="tf">${it.f}</span><span class="th">${it.h}</span> <span>${it.a}</span><span class="tt">${it.t}</span></div>`).join('');
+  list.innerHTML = html + html;
+}
+
+/* ── Tier 1: Missions & Streaks ──────── */
+function missionStore() { try { return JSON.parse(localStorage.getItem('ergsn_miss') || '{}'); } catch (_) { return {}; } }
+function missionSave(s) { try { localStorage.setItem('ergsn_miss', JSON.stringify(s)); } catch (_) {} }
+const MISSIONS = [
+  { id:'visit', label:'Visit ERGSN today', pts:5 },
+  { id:'pulse', label:'Check Daily K-Market Pulse', pts:5 },
+  { id:'spotvote', label:'Vote on a Spotlight concept', pts:15 },
+  { id:'match', label:'Run AI Partner Match', pts:20 },
+  { id:'calc', label:'Try the Quote Calculator', pts:15 },
+  { id:'passport', label:'Set up your Buyer Passport', pts:25 }
+];
+function todayKey() { const d = new Date(); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
+function ensureMissionsState() {
+  let s = missionStore();
+  const tk = todayKey();
+  if (s.day !== tk) {
+    const prevDay = s.day ? new Date(s.day) : null;
+    const diff = prevDay ? Math.round((new Date(tk) - prevDay) / 86400000) : null;
+    s.streak = diff === 1 ? (s.streak || 0) + 1 : 1;
+    s.day = tk;
+    s.done = { visit: true };
+    missionSave(s);
+  }
+  s.pts = s.pts || 0;
+  s.done = s.done || {};
+  if (!s.done.visit) { s.done.visit = true; s.pts += 5; missionSave(s); }
+  return s;
+}
+function markMission(id) {
+  const s = ensureMissionsState();
+  if (s.done[id]) return;
+  const m = MISSIONS.find(x => x.id === id); if (!m) return;
+  s.done[id] = true; s.pts = (s.pts || 0) + m.pts;
+  missionSave(s);
+  renderMissions();
+}
+function renderMissions() {
+  const s = ensureMissionsState();
+  const total = MISSIONS.length;
+  const doneCount = MISSIONS.filter(m => s.done[m.id]).length;
+  const pct = Math.round(doneCount / total * 100);
+  const fill = document.getElementById('mmBarFill'); if (fill) fill.style.width = pct + '%';
+  const list = document.getElementById('mmList'); if (!list) return;
+  list.innerHTML = MISSIONS.map(m => `<div class="mm-task${s.done[m.id]?' done':''}"><span class="tk">${s.done[m.id]?'✓':''}</span><span>${m.label}</span><span style="margin-left:auto;font-size:10px;color:var(--tx-lt)">+${m.pts}</span></div>`).join('');
+  const streakEl = document.getElementById('mmStreak'); if (streakEl) streakEl.textContent = s.streak || 1;
+  const ptsEl = document.getElementById('mmPts'); if (ptsEl) ptsEl.textContent = s.pts || 0;
+  const badge = document.getElementById('mmBadge');
+  if (badge) {
+    const pts = s.pts || 0;
+    let txt = '';
+    if (pts >= 200) txt = '💎 Diamond Buyer · Priority quote unlocked';
+    else if (pts >= 100) txt = '🥇 Gold Buyer · Early Access unlocked';
+    else if (pts >= 50) txt = '🥈 Silver Buyer · Early preview perks';
+    else if (pts >= 20) txt = '🥉 Bronze Buyer · Keep going';
+    badge.textContent = txt;
+  }
+}
+// Hook existing flows
+const _origSlVote = window.slVote; if (_origSlVote) window.slVote = function(a,b){ _origSlVote(a,b); markMission('spotvote'); };
+const _origSlInt = window.slInterest; if (_origSlInt) window.slInterest = function(a){ _origSlInt(a); markMission('spotvote'); };
+const _origRunMatch = window.runMatch; if (_origRunMatch) window.runMatch = function(e){ _origRunMatch(e); markMission('match'); };
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  if (t && t.closest && t.closest('#calculator')) markMission('calc');
+  if (t && t.closest && t.closest('#hub [onclick*="pulse"]')) markMission('pulse');
+});
+document.addEventListener('DOMContentLoaded', () => markMission('pulse'));
+
+/* ── Tier 1: Buyer Passport ──────────── */
+function passportStore() { try { return JSON.parse(localStorage.getItem('ergsn_pp') || '{}'); } catch (_) { return {}; } }
+function passportSave(p) { try { localStorage.setItem('ergsn_pp', JSON.stringify(p)); } catch (_) {} }
+function renderPassport() {
+  const p = passportStore();
+  const state = document.getElementById('ppState');
+  const badges = document.getElementById('ppBadges');
+  if (!state) return;
+  if (p && p.country) {
+    state.innerHTML = `Welcome back${p.company ? ', <strong style="color:var(--white)">'+p.company+'</strong>' : ''}. Your profile is active — matches and missions personalize automatically.`;
+    const sec = p.sectors ? p.sectors.replace(/-/g,' ').replace(/\b\w/g, l=>l.toUpperCase()) : 'Any';
+    badges.innerHTML = `<span class="pp-badge">📍 ${p.country}</span><span class="pp-badge">🏢 ${p.industry}</span><span class="pp-badge">🎯 ${sec}</span>`;
+  } else {
+    state.textContent = "Create a quick profile to personalize your experience. We'll remember your country and sector interests — no login required.";
+    badges.innerHTML = '';
+  }
+}
+function openPassport() {
+  const sel = document.getElementById('ppCountry');
+  if (sel && sel.options.length <= 1 && typeof WORLD_PORTS !== 'undefined') {
+    Object.keys(WORLD_PORTS).forEach(c => { const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+  }
+  const p = passportStore();
+  if (p.company) document.getElementById('ppCompany').value = p.company;
+  if (p.country) document.getElementById('ppCountry').value = p.country;
+  if (p.industry) document.getElementById('ppIndustry').value = p.industry;
+  if (p.sectors) document.getElementById('ppSectors').value = p.sectors;
+  document.getElementById('ppModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePassport() { document.getElementById('ppModal').classList.remove('open'); document.body.style.overflow = ''; }
+function savePassport(e) {
+  e.preventDefault();
+  const p = {
+    company: document.getElementById('ppCompany').value.trim(),
+    country: document.getElementById('ppCountry').value,
+    industry: document.getElementById('ppIndustry').value,
+    sectors: document.getElementById('ppSectors').value
+  };
+  passportSave(p);
+  markMission('passport');
+  renderPassport();
+  closePassport();
+}
+function passportMatch() {
+  const p = passportStore();
+  if (!p.country) { openPassport(); return; }
+  const mc = document.getElementById('matchCountry'); if (mc) mc.value = p.country;
+  const mi = document.getElementById('matchIndustry'); if (mi) mi.value = p.industry;
+  document.getElementById('match').scrollIntoView({ behavior:'smooth', block:'start' });
+  setTimeout(() => { const f = document.getElementById('matchForm'); if (f) f.requestSubmit(); }, 600);
+}
+
+/* ── Tier 2: K-Wave Radar ────────────── */
+const RADAR_REGIONS = [
+  { id:'eu', name:'Europe', top:'16%', left:'4%', heat:0 },
+  { id:'af', name:'Africa', top:'58%', left:'10%', heat:0 },
+  { id:'me', name:'MENA', top:'36%', left:'22%', heat:0 },
+  { id:'as', name:'Asia-Pacific', top:'28%', left:'42%', heat:0 },
+  { id:'oc', name:'Oceania', top:'64%', left:'48%', heat:0 },
+  { id:'na', name:'North America', top:'18%', left:'70%', heat:0 },
+  { id:'sa', name:'Latin America', top:'58%', left:'76%', heat:0 }
+];
+function initRadar() {
+  const seed = dailySeed();
+  RADAR_REGIONS.forEach((r,i) => { r.heat = 30 + seededRand(seed+i*7, 70); });
+  RADAR_REGIONS.sort((a,b) => b.heat - a.heat);
+  const world = document.getElementById('radarWorld');
+  const rows = document.getElementById('radarRows');
+  if (!world || !rows) return;
+  world.innerHTML = RADAR_REGIONS.map(r => {
+    const cls = r.heat >= 75 ? 'hot' : (r.heat >= 45 ? '' : 'low');
+    return `<div class="radar-region ${cls}" style="top:${r.top};left:${r.left}" title="${r.name}"><div class="rr-glow"></div><div class="rr-label">${r.name.split(' ')[0]}<span class="heat">${r.heat}</span></div></div>`;
+  }).join('');
+  const sectorByRegion = { na:'Office Security', sa:'K-Culture Goods', eu:'Future Energy', me:'K-Beauty', af:'Solar ESS', as:'K-Tech', oc:'Smart Living' };
+  rows.innerHTML = RADAR_REGIONS.map((r,i) => `<div class="radar-row"><div><div class="rr-name">#${i+1} ${r.name}</div><div class="rr-meta">Leading: ${sectorByRegion[r.id]}</div></div><div class="rr-score">${r.heat}</div></div>`).join('');
+}
+
+/* ── Tier 2: Leaderboard + Countdown ── */
+function updateLeaderboard() {
+  const rows = document.getElementById('lbRows'); if (!rows) return;
+  const s = slStore();
+  const sorted = [...SPOTLIGHTS].map(sp => {
+    const st = s[sp.id] || {};
+    const votes = Object.values(st.votes || {}).reduce((a,b)=>a+b, 0);
+    const score = (st.interest || 0) * 3 + votes * 2 + (st.inquiries || 0) * 5;
+    return { sp, score, votes, interest: st.interest || 0 };
+  }).sort((a,b) => b.score - a.score).slice(0, 4);
+  rows.innerHTML = sorted.map((r, i) => `<div class="lb-row"><div class="lb-rank">${i+1}</div><div class="lb-name">${r.sp.title}</div><div class="lb-n">${r.score}</div></div>`).join('');
+}
+const _origSlNotify = window.slNotify; if (_origSlNotify) window.slNotify = function(){ _origSlNotify.apply(null, arguments); updateLeaderboard(); };
+function startCountdown() {
+  // Next concept drops every 14 days from an anchor date
+  const anchor = new Date('2026-04-01T00:00:00Z').getTime();
+  function tick() {
+    const now = Date.now();
+    const cycle = 14 * 86400 * 1000;
+    const next = anchor + Math.ceil((now - anchor) / cycle) * cycle;
+    let diff = Math.max(0, next - now);
+    const d = Math.floor(diff / 86400000); diff -= d*86400000;
+    const h = Math.floor(diff / 3600000); diff -= h*3600000;
+    const m = Math.floor(diff / 60000); diff -= m*60000;
+    const s = Math.floor(diff / 1000);
+    const set = (id,v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set('cdD', d); set('cdH', h); set('cdM', m); set('cdS', s);
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+/* ── Tier 2: Factory Shorts ──────────── */
+const SHORTS = [
+  { t:'Chain-drive assembly line', m:'Seoul · Office Security', g:'linear-gradient(135deg,#0a2e1f,#34d298)', i:'⚙️' },
+  { t:'Sensor fab cleanroom', m:'Gyeonggi · K-Tech', g:'linear-gradient(135deg,#1a1a2e,#0f3460)', i:'🔬' },
+  { t:'ESS module stacking', m:'Ulsan · Future Energy', g:'linear-gradient(135deg,#0a2e1f,#1a8f65)', i:'🔋' },
+  { t:'K-beauty R&D lab', m:'Seoul · Smart Living', g:'linear-gradient(135deg,#2e1a0a,#d4a574)', i:'💄' },
+  { t:'QC inspection station', m:'Incheon · All sectors', g:'linear-gradient(135deg,#1a0a2e,#8e44ad)', i:'🔍' },
+  { t:'Export packing & crating', m:'Busan Port', g:'linear-gradient(135deg,#0a1a2e,#4a90e2)', i:'📦' }
+];
+function initShorts() {
+  const el = document.getElementById('shortsScroll'); if (!el) return;
+  el.innerHTML = SHORTS.map(s => `<div class="short-card" onclick="alert('Full video coming soon — production walkthroughs will unlock for verified buyers.')">
+    <div class="short-vis" style="background:${s.g};font-size:64px">${s.i}</div>
+    <div class="short-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+    <div class="short-overlay"><p class="short-title">${s.t}</p><p class="short-meta">${s.m}</p></div>
+  </div>`).join('');
+}
+
+/* ── Tier 3: Landed Cost + Compliance + Book Demo ── */
+const DUTY_RATES = { 'United States':2.5, 'Canada':3.5, 'Mexico':5, 'Brazil':12, 'United Kingdom':4, 'Germany':4, 'France':4, 'Spain':4, 'Italy':4, 'Netherlands':4, 'Saudi Arabia':5, 'United Arab Emirates':5, 'Qatar':5, 'Japan':0, 'South Korea':0, 'Singapore':0, 'Australia':5, 'India':10, 'Turkey':6, 'China':8, 'Vietnam':5 };
+const VAT_RATES = { 'United States':0, 'Canada':5, 'Mexico':16, 'Brazil':17, 'United Kingdom':20, 'Germany':19, 'France':20, 'Spain':21, 'Italy':22, 'Netherlands':21, 'Saudi Arabia':15, 'United Arab Emirates':5, 'Qatar':0, 'Japan':10, 'South Korea':10, 'Singapore':9, 'Australia':10, 'India':18, 'Turkey':20, 'China':13, 'Vietnam':10 };
+function initTradeTools() {
+  ['lcCountry','ccCountry','qaCountry'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (sel && typeof WORLD_PORTS !== 'undefined') {
+      Object.keys(WORLD_PORTS).forEach(c => { const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+    }
+  });
+  // Demo slots
+  const bd = document.getElementById('bdSlot'); if (bd) {
+    const now = new Date();
+    for (let i=1; i<=10; i++) {
+      const d = new Date(now); d.setDate(d.getDate()+i);
+      if (d.getDay() === 0 || d.getDay() === 6) continue;
+      ['10:00 KST','14:00 KST','16:00 KST'].forEach(slot => {
+        const label = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) + ' · ' + slot;
+        const o = document.createElement('option'); o.value = label; o.textContent = label;
+        bd.appendChild(o);
+      });
+    }
+  }
+  const r = document.getElementById('bdResult'); if (r && bd) r.textContent = `${bd.options.length-1} slots available in the next 10 business days.`;
+}
+function runLandedCost() {
+  const c = document.getElementById('lcCountry').value;
+  const p = +document.getElementById('lcPrice').value;
+  const q = +document.getElementById('lcQty').value;
+  const r = document.getElementById('lcResult');
+  if (!c || !p || !q) { r.textContent = 'Please fill all fields.'; return; }
+  const fob = p * q;
+  const freight = fob * 0.08;  // ~8% rough CIF uplift
+  const insurance = fob * 0.01;
+  const cif = fob + freight + insurance;
+  const duty = cif * ((DUTY_RATES[c] || 5) / 100);
+  const vat = (cif + duty) * ((VAT_RATES[c] || 0) / 100);
+  const total = cif + duty + vat;
+  const perUnit = total / q;
+  r.classList.add('active');
+  r.innerHTML = `<strong>Landed total: $${total.toLocaleString(undefined,{maximumFractionDigits:0})}</strong><br>`
+    + `• CIF: $${cif.toLocaleString(undefined,{maximumFractionDigits:0})}<br>`
+    + `• Import duty (${DUTY_RATES[c]||5}%): $${duty.toLocaleString(undefined,{maximumFractionDigits:0})}<br>`
+    + `• VAT/GST (${VAT_RATES[c]||0}%): $${vat.toLocaleString(undefined,{maximumFractionDigits:0})}<br>`
+    + `• Per unit landed: <strong>$${perUnit.toLocaleString(undefined,{maximumFractionDigits:0})}</strong>`;
+  markMission('calc');
+}
+const COMPLIANCE_MAP = {
+  government: ['Country-specific public procurement registration','Certificate of Origin (Form K / FTA)','Export license from Korea (if applicable)','GSA Schedule (US) or equivalent'],
+  healthcare: ['HIPAA compliance statement','ISO 13485 (medical device quality)','Country medical device registration','FDA / CE / PMDA listing'],
+  finance: ['Data security certifications (SOC 2)','DIN 66399 / document destruction','Local financial regulator registration'],
+  tech: ['CE / FCC / KC emissions','RoHS / REACH compliance','Cybersecurity baseline (NIST, ISO 27001)'],
+  manufacturing: ['ISO 9001 quality system','Machinery directive compliance','Country-specific import tariff code (HS)'],
+  energy: ['IEC 61215 / 61730 (solar)','IEC 62619 (battery safety)','Local grid interconnect certification','UL / KS / TÜV listing'],
+  retail: ['Consumer product safety (CPSC / CE)','Labeling in local language','Importer of record registered']
+};
+function runCompliance() {
+  const c = document.getElementById('ccCountry').value;
+  const i = document.getElementById('ccIndustry').value;
+  const r = document.getElementById('ccResult');
+  if (!c || !i) { r.textContent = 'Please select both country and industry.'; return; }
+  const list = COMPLIANCE_MAP[i] || [];
+  r.classList.add('active');
+  r.innerHTML = `<strong>Required for ${c} · ${i}:</strong><br>` + list.map(x => `• ${x}`).join('<br>') + `<br><br><em style="color:var(--tx-lt)">ERGSN handles Korea-side documentation — your team handles import-side filings.</em>`;
+}
+function bookDemo() {
+  const name = document.getElementById('bdName').value.trim();
+  const email = document.getElementById('bdEmail').value.trim();
+  const slot = document.getElementById('bdSlot').value;
+  const r = document.getElementById('bdResult');
+  if (!name || !email || !slot) { r.textContent = 'Please fill all fields.'; return; }
+  const text = `📅 *Demo Booking Request*\n\n*Name:* ${name}\n*Email:* ${email}\n*Slot:* ${slot}\n\n_ceodon.github.io/ergsn_`;
+  try {
+    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode:'Markdown' })
+    }).catch(()=>{});
+    fetch(RFQ_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({ _cc: RFQ_CC, _subject:`[DEMO BOOKING] ${slot} — ${name}`, _template:'table', _captcha:'false', Name:name, Email:email, Slot:slot, Source:'ceodon.github.io/ergsn (Demo Booking)' })
+    }).catch(()=>{});
+  } catch(_) {}
+  r.classList.add('active');
+  r.innerHTML = `<strong>✓ Booking requested</strong><br>We'll confirm ${slot} to ${email} within 1 business day.`;
+}
+
+/* ── Tier 2: Q&A Wall ───────────────── */
+const QA_SEED = [
+  { name:'Ahmed · Procurement Lead', country:'Saudi Arabia', q:'Does DL-16XD support 220V/50Hz?', a:'Standard build is 115V/60Hz. Custom 220V/50Hz is available as OEM — please request via RFQ with voltage specified.', t:'3 days ago' },
+  { name:'Yuki · Distributor', country:'Japan', q:'When will K-Tech sector launch formally?', a:'Target Q2 2026. Early-access buyers from Spotlight (Industrial IoT Sensors) will be contacted first.', t:'5 days ago' },
+  { name:'Carlos · Retailer', country:'Mexico', q:'MOQ for K-Beauty Smart Mirror?', a:'Concept stage — MOQ being negotiated with the maker. Post an inquiry in Spotlight and we will reach out with options.', t:'1 week ago' },
+  { name:'Anna · Energy Buyer', country:'Germany', q:'Do your Korean ESS partners have IEC 62619?', a:'Yes — all Future Energy partners we onboard must hold IEC 62619 and country-specific grid certifications.', t:'1 week ago' }
+];
+function qaStore() { try { return JSON.parse(localStorage.getItem('ergsn_qa') || '[]'); } catch(_) { return []; } }
+function qaSave(l) { try { localStorage.setItem('ergsn_qa', JSON.stringify(l)); } catch(_) {} }
+function initQAWall() {
+  const combined = [...qaStore(), ...QA_SEED];
+  const el = document.getElementById('qaList'); if (!el) return;
+  el.innerHTML = combined.slice(0, 20).map(q => `<div class="qa-item"><p class="qa-q">${q.q}</p>${q.a?`<p class="qa-a">${q.a}</p>`:`<p class="qa-a" style="font-style:italic;opacity:.6">ERGSN team will answer shortly…</p>`}<p class="qa-meta">— ${q.name||'Anonymous'} · ${q.country||'Global'} · ${q.t||'just now'}</p></div>`).join('');
+}
+function submitQA(e) {
+  e.preventDefault();
+  const name = document.getElementById('qaName').value.trim() || 'Anonymous';
+  const country = document.getElementById('qaCountry').value || 'Global';
+  const q = document.getElementById('qaQ').value.trim();
+  if (!q) return;
+  const store = qaStore();
+  store.unshift({ name, country, q, a:'', t:'just now' });
+  qaSave(store);
+  try {
+    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ chat_id: TG_CHAT, text: `❓ *Q&A Wall submission*\n\n*From:* ${name} (${country})\n*Q:* ${q}`, parse_mode:'Markdown' })
+    }).catch(()=>{});
+  } catch(_) {}
+  document.getElementById('qaQ').value = '';
+  initQAWall();
+}
+
+/* ── Tier 3: 3D spin toggle ─────────── */
+function toggleSpin(btn) {
+  const img = btn.parentElement.querySelector('.modal-main');
+  if (!img) return;
+  img.classList.toggle('spinning');
+  btn.textContent = img.classList.contains('spinning') ? '⏸ Stop' : '⟳ 360° View';
+}
 
 function toggleMenu() {
   const h = document.getElementById('ham');
@@ -3519,7 +4277,7 @@ function fmtCompare(a,b) {
 }
 
 const KB = [
-  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's trade platform — we implant Korean hi-tech and cultural trends into global business through verified Korean producers. Ask me about:\n\n• Our 4 sectors (Office Security · K-Tech · Smart Living · Future Energy)\n• Flagship DL Series shredders\n• AI Partner Match · Spotlight (Pre-Launch) · Quote Calculator · Trade Route Map\n• Verification process · Compliance · Trade terms\n\nHow can I help?" },
+  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's trade platform — we implant Korean hi-tech and cultural trends into global business through verified Korean producers. Ask me about:\n\n• Our 4 sectors (Office Security · K-Tech · Smart Living · Future Energy)\n• Flagship DL Series shredders\n• Live Hub (Daily Pulse · Missions · Passport) · AI Partner Match · Spotlight\n• Trade Tools (Landed Cost · Compliance · Book Demo) · Calculator · Route Map\n• K-Wave Radar · Factory Shorts · Q&A Wall · Compliance · Trade terms\n\nHow can I help?" },
   { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
   { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
   { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
@@ -3540,7 +4298,12 @@ const KB = [
   { intent:'ai_match', kw:['ai match','partner match','match making','matchmaking','ai curation','recommendation tool','who is right','suggest supplier','fit for me'], followUp:['sectors','quote','calculator'], resp:"AI Partner Match-making is ERGSN's curation tool. Tell it:\n• Your country\n• Your primary industry (government, finance, healthcare, tech, manufacturing, energy, retail, etc.)\n• (Optional) annual procurement volume\n\nIt returns a ranked Top 3 of ERGSN portfolio items with a fit score — pulling from active DL Series products and upcoming K-Tech / Smart Living / Future Energy items.\n\nClick 'Request Quote for These' and your selections auto-fill into the RFQ form, which sends to ERGSN via email + Telegram." },
   { intent:'calculator', kw:['calculator','estimate','quote calculator','instant quote','price estimate','calc'], followUp:['quote','incoterms','shipping'], resp:"The Quote Calculator gives you an instant CIF/FOB estimate. Pick model, quantity, destination — it shows indicative pricing in your local currency (with live FX).\n\nThis is an estimate for planning. For a binding quote, use 'Request a Quote' (RFQ form) — we'll issue a formal Proforma Invoice." },
   { intent:'route_map', kw:['map','route','shipping route','trade route','lanes','ports','how do you ship','logistics map'], followUp:['shipping','incoterms','payment'], resp:"Our Trade Route Map visualizes shipping lanes from Seoul/Busan to 14 major ports worldwide — Baltimore, Los Angeles, Long Beach, Hamburg, Rotterdam, Jebel Ali, Singapore, Tokyo, Sydney and more.\n\nWe ship CIF to any major port. Lead time: 4–6 weeks after advance payment (2–3 weeks production + 2–4 weeks ocean freight)." },
-  { intent:'tools', kw:['tools','what tools','website features','interactive','services on site'], followUp:['ai_match','spotlight','calculator','route_map'], resp:"ERGSN website tools:\n• AI Partner Match — country + industry → Top-3 curated portfolio\n• Spotlight (Pre-Launch Radar) — vote, express interest, and submit inquiries on concepts before they launch\n• Quote Calculator — instant CIF/FOB estimate in your currency\n• Trade Route Map — live global shipping lanes from Korea\n• RFQ form — formal quote request (sent to ERGSN via email + Telegram)\n• Product compare — side-by-side DL Series specs" },
+  { intent:'tools', kw:['tools','what tools','website features','interactive','services on site','dashboard','hub','live'], followUp:['ai_match','spotlight','radar','trade_tools','calculator','route_map'], resp:"ERGSN interactive hub:\n• Live Hub — daily K-Market Pulse, activity ticker, missions, buyer passport\n• AI Partner Match — country + industry → Top-3 curated portfolio\n• Spotlight (Pre-Launch) — vote, express interest, submit inquiries on concepts\n• K-Wave Radar — regional demand heat map\n• Trade Tools — landed cost, compliance checker, book a live demo\n• Quote Calculator — instant CIF/FOB in your currency\n• Trade Route Map — live shipping lanes\n• Factory Shorts — 30-sec partner production clips\n• Q&A Wall — buyer community board\n• RFQ form · Product compare · 360° product viewer" },
+  { intent:'hub', kw:['live hub','daily pulse','market pulse','pulse','activity ticker','mission','streak','buyer passport','passport','points','badge','loyalty'], followUp:['ai_match','spotlight','tools'], resp:"The Live Hub is your daily entry point.\n\n📊 Daily K-Market Pulse — KRW/USD, shipping index, hot sector, today's Spotlight adds (refreshes every day)\n📡 Live Activity Ticker — anonymized real-time buyer activity from around the world\n🎯 Daily Missions — 6 quick actions (vote · match · calc · etc) earning points; keep a streak for compounding rewards\n🪪 Buyer Passport — saves your country + industry locally to personalize Match results and missions. No login needed.\n\nEarn Bronze (20pt) → Silver (50) → Gold (100 · Early Access) → Diamond (200 · Priority quotes)." },
+  { intent:'radar', kw:['radar','k-wave','heatmap','heat map','regional demand','where is hot','trending region','demand map'], followUp:['ai_match','spotlight','sectors'], resp:"K-Wave Radar visualizes global demand for Korean hi-tech in real time. Each region (North America, LATAM, Europe, MENA, Africa, Asia-Pacific, Oceania) shows a heat score aggregating:\n• Spotlight interest clicks\n• AI Match queries\n• Inquiry volume\n\nHotter regions pulse faster. The sidebar lists which sector is leading in each region — helping buyers see where peer demand is surging." },
+  { intent:'trade_tools', kw:['trade tools','landed cost','duties','tariff','vat','compliance checker','required certs','certifications checklist','book demo','demo booking','zoom','meeting','appointment'], followUp:['calculator','quote','verification'], resp:"Trade Tools section has three utilities:\n\n1. 🧾 Landed Cost Simulator — enter destination + FOB price + quantity. Returns CIF + import duty (country-specific) + VAT/GST + per-unit landed cost.\n\n2. ✅ Compliance Checker — pick country + industry. Returns the certification and documentation checklist for that market (HIPAA, CE, IEC, UL, KC, etc.)\n\n3. 📅 Book a Live Demo — pick a 30-min KST slot. Booking sent via email + Telegram to ERGSN trade team; confirmation within 1 business day." },
+  { intent:'shorts', kw:['shorts','factory shorts','video','clips','tour','behind scenes','see production','factory tour'], followUp:['verification','sectors','about'], resp:"Factory Shorts are 30-second vertical clips from verified Korean production lines — chain-drive assembly, sensor cleanrooms, ESS stacking, K-beauty R&D, QC stations, export packing. Swipe horizontally to browse. Full video walkthroughs unlock for verified buyers." },
+  { intent:'qa', kw:['q&a','qa','question wall','community','forum','ask question','post question','faq public'], followUp:['contact','tools','chat'], resp:"The Q&A Wall is ERGSN's public buyer community. Browse past buyer questions (MOQ, voltage, launch timing, certifications) with answers from our trade team. Post your own — we'll reply and publish it back to the wall. Great for SEO-friendly institutional knowledge." },
   { intent:'spotlight', kw:['spotlight','pre-launch','prelaunch','radar','concept','preview','upcoming product','market test','vote','poll','interest','what\'s next','early access','beta product','new product'], followUp:['ai_match','sectors','verification'], resp:"Spotlight is ERGSN's Pre-Launch Radar — concepts we're evaluating with verified Korean makers before formal launch.\n\nHow it works:\n• Browse concept cards tagged Concept / Prototype / Pilot\n• 👍 Click 'I'm Interested' — anonymous signal, boosts the concept's priority\n• 🗳️ Vote on the short preference poll on each card\n• 💬 Submit a quick inquiry (name + country + industry + est. volume + feedback)\n\nEvery interaction reaches our team via email + Telegram, helping us gauge global demand and shape which Korean products ERGSN brings to market next. Current concepts span K-Tech (Industrial IoT Sensors), Smart Living (K-Beauty Smart Mirror, K-Culture licensed goods) and Future Energy (Commercial ESS)." },
   { intent:'contact', kw:['contact','email','phone','telegram','reach','call','address'], resp:"ERGSN CO., LTD.\n📍 #503 Susong BD, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea\n📱 +82-10-5288-0006\n💬 Telegram: @ceodon\n📠 Fax: +82-50-4048-0006" },
   { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], followUp:['chain','oil','quote'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
