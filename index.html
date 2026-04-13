@@ -2352,7 +2352,7 @@ function closeMenu() {
 const CLAUDE_API_ENDPOINT = null;
 
 // ── Context memory + user profile ──
-let chatContext = { lastModel: null, history: [], topics: [], turnCount: 0, quotePrompted: false };
+let chatContext = { lastModel: null, history: [], topics: [], turnCount: 0, quotePrompted: false, awaitingReturn: null };
 let userProfile = { sector: null, size: null, needs: [] };
 function ctxPush(role, text) {
   chatContext.history.push({ role, text });
@@ -2417,7 +2417,7 @@ function handleYes() {
     chatBotMsg(`Great! Would you like to set up a quote for the ${P[chatContext.lastModel].model}?`, () => {
       chatOpts([
         { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskQualification(); }},
-        { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
+        { label: cl('specs'), action: () => { chatContext.awaitingReturn = { type:'browse', model: chatContext.lastModel }; toggleChat(); openModal(chatContext.lastModel); }},
       ]);
     });
   } else { chatBotMsg(cl('greet')); }
@@ -2436,7 +2436,7 @@ function handleMore() {
     const p = P[chatContext.lastModel];
     chatBotMsg(`More about ${p.model}:\n\n${p.desc}${cl('techNote')}`, () => {
       chatOpts([
-        { label: cl('specs'), action: () => { toggleChat(); openModal(chatContext.lastModel); }},
+        { label: cl('specs'), action: () => { chatContext.awaitingReturn = { type:'browse', model: chatContext.lastModel }; toggleChat(); openModal(chatContext.lastModel); }},
         { label: 'Key Features', action: () => { chatBotMsg(p.features.slice(0,5).map(f=>'• '+f).join('\n')); }},
         { label: cl('quote') + ' →', action: () => { chatState.model = chatContext.lastModel; chatAskQualification(); }},
       ]);
@@ -2807,7 +2807,7 @@ function handleSpec(text) {
   const p = P[id];
   chatBotMsg(`${p.model} — ${p.sub}\nPart No: ${p.part}\n\n${fmtSpecs(id)}${cl('techNote')}`, () => {
     chatOpts([
-      { label: cl('specs'), action: () => { toggleChat(); openModal(id); }},
+      { label: cl('specs'), action: () => { chatContext.awaitingReturn = { type:'browse', model: id }; toggleChat(); openModal(id); }},
       { label: cl('quote') + ' →', action: () => { chatState.model=id; chatAskQualification(); }},
       { label: 'Compare', action: () => chatBotMsg("Type: \"Compare " + p.model + " vs [other model]\"") },
     ]);
@@ -2849,7 +2849,7 @@ function handleCapacity(text) {
   if (needsGsa) response += '\n✓ GSA Schedule listed — eligible for federal procurement';
   chatBotMsg(response + cl('techNote'), () => {
     chatOpts([
-      { label: cl('specs'), action: () => { toggleChat(); openModal(rec); }},
+      { label: cl('specs'), action: () => { chatContext.awaitingReturn = { type:'browse', model: rec }; toggleChat(); openModal(rec); }},
       { label: cl('quote') + ' →', action: () => { chatState.model=rec; chatAskQualification(); }},
     ]);
   });
@@ -2965,7 +2965,43 @@ let chatOpen = false;
 function toggleChat(){
   chatOpen = !chatOpen;
   document.getElementById('chatPanel').classList.toggle('open', chatOpen);
-  if(chatOpen && !document.getElementById('chatBody').children.length) startChat();
+  if(chatOpen && !document.getElementById('chatBody').children.length) {
+    startChat();
+  } else if (chatOpen && chatContext.awaitingReturn) {
+    // User returned after being sent to view specs / a section — offer follow-up
+    const ret = chatContext.awaitingReturn;
+    chatContext.awaitingReturn = null;
+    setTimeout(() => offerReturnFollowUp(ret), 350);
+  }
+}
+
+function offerReturnFollowUp(ret) {
+  if (ret.type === 'browse' && ret.model && P[ret.model]) {
+    const m = P[ret.model];
+    chatBotMsg(`Welcome back! Did you have a chance to review the ${m.model} specifications? Is there anything I can help you with next?`, () => {
+      chatOpts([
+        { label: `Yes — request a quote for ${m.model}`, action: () => { chatState.model = ret.model; chatContext.lastModel = ret.model; chatAskQualification(); }},
+        { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Sure! Type "Compare ${m.model} vs [other model]" or pick one to compare.`, () => {
+          chatOpts(MODEL_IDS.filter(id => id !== ret.model).map(id => ({
+            label: `Compare with ${P[id].model}`,
+            action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
+          })));
+        })},
+        { label: 'Show me a different model', action: () => chatStep('browse_models') },
+        { label: `More about ${m.model}`, action: () => { handleSpec(ret.model); }},
+        { label: 'I have a different question', action: () => { document.getElementById('chatInput').focus(); }}
+      ]);
+    });
+  } else if (ret.type === 'section') {
+    chatBotMsg(`Welcome back! How can I help you next?`, () => {
+      chatOpts([
+        { label: 'Find the right shredder', action: () => chatStep('find_office_size') },
+        { label: 'Request a quote', action: () => chatStep('quote_direct') },
+        { label: 'About verification process', action: () => chatStep('verify_detail') },
+        { label: 'Trade terms', action: () => chatStep('trade_info') }
+      ]);
+    });
+  }
 }
 function startChat(){
   chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null;
@@ -3148,7 +3184,7 @@ function chatFinalize() {
   chatBotMsg(`Perfect! ${m.model} \u2014 ${dest}. Ready to request a quote?`, () => {
     chatOpts([
       { label: 'Request Quote', action: () => { chatPrefillAndQuote(); chatEndActions(); }},
-      { label: `View ${m.model} Specs`, action: () => { toggleChat(); openModal(chatState.model); chatEndActions(); }},
+      { label: `View ${m.model} Specs`, action: () => { chatContext.awaitingReturn = { type:'browse', model: chatState.model }; toggleChat(); openModal(chatState.model); chatEndActions(); }},
     ]);
   });
 }
@@ -3282,6 +3318,7 @@ function chatStep(key){
             if (o.action.startsWith('browse_')) {
               const id = o.action.replace('browse_', '');
               chatContext.lastModel = id;
+              chatContext.awaitingReturn = { type: 'browse', model: id };
               setTimeout(() => { toggleChat(); openModal(id); }, 200);
             } else if (o.action.startsWith('quote_')) {
               const id = o.action.replace('quote_', '');
