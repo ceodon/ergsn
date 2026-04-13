@@ -2186,6 +2186,28 @@ function closeMenu() {
   document.getElementById('mobileMenu').classList.remove('open');
 }
 
+/* ═══ RANDOM WORKPLACE IMAGES ════════════════ */
+(function rotateOfficeImages(){
+  const heroVariants = ['hero-workplace','hero-workplace-2','hero-workplace-3','hero-workplace-4','hero-workplace-5'];
+  const aboutVariants = ['about-workplace','about-workplace-2','about-workplace-3','about-workplace-4','about-workplace-5'];
+  const heroPick  = heroVariants[Math.floor(Math.random() * heroVariants.length)];
+  const aboutPick = aboutVariants[Math.floor(Math.random() * aboutVariants.length)];
+
+  // Hero: inject CSS overriding the default background
+  const style = document.createElement('style');
+  style.textContent = `#home::before { background-image: url('images/${heroPick}.jpg') !important; background-image: image-set(url('images/${heroPick}.webp') type('image/webp'), url('images/${heroPick}.jpg') type('image/jpeg')) !important; }`;
+  document.head.appendChild(style);
+
+  // About: swap <picture> source + img src
+  const aboutWrap = document.querySelector('.about-visual picture');
+  if (aboutWrap) {
+    const source = aboutWrap.querySelector('source');
+    const img = aboutWrap.querySelector('img');
+    if (source) source.srcset = `images/${aboutPick}.webp`;
+    if (img) img.src = `images/${aboutPick}.jpg`;
+  }
+})();
+
 /* ═══ ① PARTICLE HERO ═══════════════════════ */
 (function initParticles(){
   const c = document.getElementById('particleCanvas');
