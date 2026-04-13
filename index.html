@@ -249,6 +249,97 @@ section { scroll-margin-top: var(--nav-h); }
 .nav-links .nav-cta { background: var(--gold); color: #0f1110; padding: 7px 18px; border-radius: 20px; font-weight: 600; transition: background .15s; }
 .nav-links .nav-cta:hover { background: var(--gold-light); }
 
+/* Nav dropdown (Sectors) */
+.nav-dropdown { position: relative; }
+.nav-dropdown > a::after { content: ' \25BE'; font-size: 9px; opacity: .6; }
+.nav-dropmenu {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  background: var(--navy-2); border: 1px solid var(--border); border-radius: 10px;
+  min-width: 240px; padding: 8px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .18s, visibility .18s, transform .18s;
+  margin-top: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.5);
+  list-style: none;
+  z-index: 950;
+}
+.nav-dropdown:hover .nav-dropmenu,
+.nav-dropdown:focus-within .nav-dropmenu {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-dropmenu li { display: block; }
+.nav-dropmenu a {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 12px; border-radius: 6px;
+  color: var(--white); transition: background .15s;
+}
+.nav-dropmenu a:hover { background: rgba(52,210,152,.1); color: var(--white); }
+.nav-dropmenu .ds-name { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.nav-dropmenu .ds-tag {
+  font-size: 9px; padding: 2px 6px; border-radius: 8px;
+  background: rgba(52,210,152,.15); color: var(--gold);
+  letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+}
+.nav-dropmenu .ds-tag.soon { background: rgba(255,255,255,.06); color: var(--steel-lt); }
+.nav-dropmenu .ds-desc { font-size: 11px; color: var(--steel); font-weight: 400; }
+
+/* Sector tabs (above product grid) */
+.sector-tabs {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin: 1.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+.sector-tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--fb); font-size: 13px; font-weight: 600;
+  padding: 8px 16px; border-radius: 20px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--steel-lt); cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.sector-tab:hover { color: var(--white); border-color: var(--steel); }
+.sector-tab.active {
+  background: var(--gold); color: #0f1110; border-color: var(--gold);
+}
+.sector-tab .st-tag {
+  font-size: 8px; padding: 2px 6px; border-radius: 6px;
+  background: rgba(255,255,255,.15); letter-spacing: .04em;
+  text-transform: uppercase; font-weight: 700;
+}
+.sector-tab.active .st-tag { background: rgba(15,17,16,.25); }
+
+/* Coming Soon placeholder */
+.sector-placeholder {
+  text-align: center;
+  padding: clamp(3rem,6vh,5rem) 1.5rem;
+  background: #171717;
+  border: 1px dashed var(--border);
+  border-radius: 15px;
+  margin-top: 1rem;
+}
+.sector-placeholder .sp-icon {
+  width: 64px; height: 64px; margin: 0 auto 1.25rem;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--gold); border-radius: 16px;
+  color: var(--gold);
+  background: rgba(52,210,152,.05);
+}
+.sector-placeholder .sp-icon svg { width: 32px; height: 32px; }
+.sector-placeholder h3 {
+  font-family: var(--fd); font-size: clamp(20px,2.5vw,28px); font-weight: 400;
+  color: var(--white); text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: .5rem;
+}
+.sector-placeholder p { font-size: 14px; color: var(--tx-mid); max-width: 460px; margin: 0 auto 1.5rem; line-height: 1.6; }
+.sector-placeholder .sp-coming {
+  display: inline-block;
+  font-family: var(--fb); font-size: 11px; font-weight: 700;
+  color: var(--gold); letter-spacing: .15em; text-transform: uppercase;
+  padding: 6px 14px; background: rgba(52,210,152,.1); border-radius: 20px;
+}
+
 /* HAMBURGER */
 .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; }
 .hamburger span { width: 22px; height: 2px; background: var(--white); border-radius: 1px; transition: all .2s; display: block; }
@@ -1473,7 +1564,27 @@ section { scroll-margin-top: var(--nav-h); }
     </a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="#products" data-t="nav_products">Products</a></li>
+        <li class="nav-dropdown">
+          <a href="#products" data-t="nav_products">Sectors</a>
+          <ul class="nav-dropmenu">
+            <li><a href="#products" onclick="switchSector('office-security');return true">
+              <span class="ds-name">Office Security <span class="ds-tag">Active</span></span>
+              <span class="ds-desc">Document destruction · DL Series shredders</span>
+            </a></li>
+            <li><a href="#products" onclick="switchSector('k-tech');return true">
+              <span class="ds-name">K-Tech <span class="ds-tag soon">Coming Soon</span></span>
+              <span class="ds-desc">Korean precision electronics</span>
+            </a></li>
+            <li><a href="#products" onclick="switchSector('smart-living');return true">
+              <span class="ds-name">Smart Living <span class="ds-tag soon">Coming Soon</span></span>
+              <span class="ds-desc">Connected home &amp; lifestyle</span>
+            </a></li>
+            <li><a href="#products" onclick="switchSector('future-energy');return true">
+              <span class="ds-name">Future Energy <span class="ds-tag soon">Coming Soon</span></span>
+              <span class="ds-desc">Renewable &amp; sustainable tech</span>
+            </a></li>
+          </ul>
+        </li>
         <li><a href="#about" data-t="nav_about">About</a></li>
         <li><a href="#compliance" data-t="nav_compliance">Compliance</a></li>
         <li><a href="#rfq" class="nav-cta" data-t="nav_quote">Request Quote</a></li>
@@ -1555,10 +1666,33 @@ section { scroll-margin-top: var(--nav-h); }
   <div class="container products-inner">
     <div class="section-head reveal">
       <div class="section-head-text">
-        <span class="label" data-t="prod_tag">DL Series</span>
-        <h2 class="h-lg" data-t="prod_title">Cross-Cut Shredders</h2>
-        <p class="body-sm" style="max-width:500px" data-t="prod_desc">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
+        <span class="label">Multi-Sector Catalog</span>
+        <h2 class="h-lg">Verified Korean Products</h2>
+        <p class="body-sm" style="max-width:500px">Browse by sector. New verified manufacturers and product categories joining our network throughout 2026.</p>
       </div>
+    </div>
+
+    <!-- Sector Tabs -->
+    <div class="sector-tabs reveal" role="tablist">
+      <button class="sector-tab active" data-sector="office-security" onclick="switchSector('office-security')">
+        Office Security <span class="st-tag">Active</span>
+      </button>
+      <button class="sector-tab" data-sector="k-tech" onclick="switchSector('k-tech')">
+        K-Tech <span class="st-tag">Soon</span>
+      </button>
+      <button class="sector-tab" data-sector="smart-living" onclick="switchSector('smart-living')">
+        Smart Living <span class="st-tag">Soon</span>
+      </button>
+      <button class="sector-tab" data-sector="future-energy" onclick="switchSector('future-energy')">
+        Future Energy <span class="st-tag">Soon</span>
+      </button>
+    </div>
+
+    <!-- Active sector header -->
+    <div id="sectorHeader" class="reveal" style="margin-bottom:1.5rem">
+      <span class="label" data-t="prod_tag">DL Series</span>
+      <h3 class="h-md" style="margin:.4rem 0" data-t="prod_title">Cross-Cut Shredders</h3>
+      <p class="body-sm" style="max-width:500px;color:var(--tx-mid)" data-t="prod_desc">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
     </div>
 
     <div class="product-grid" id="productGrid">
@@ -1678,6 +1812,14 @@ section { scroll-margin-top: var(--nav-h); }
         </div>
       </div>
 
+    </div>
+
+    <!-- Coming Soon placeholder (hidden by default, shown when non-active sector clicked) -->
+    <div id="sectorPlaceholder" class="sector-placeholder" style="display:none">
+      <div class="sp-icon" id="spIcon"></div>
+      <h3 id="spTitle"></h3>
+      <p id="spDesc"></p>
+      <span class="sp-coming">Coming Soon · 2026</span>
     </div>
   </div>
 </section>
@@ -2280,6 +2422,64 @@ function closeModal() {
   });
 }
 function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+/* ── Sector Navigation ───────────────────── */
+const SECTORS = {
+  'office-security': {
+    active: true,
+    tag: 'DL Series',
+    title: 'Cross-Cut Shredders',
+    desc: 'Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.'
+  },
+  'k-tech': {
+    active: false,
+    tag: 'K-Tech',
+    title: 'Korean Precision Electronics',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2"/></svg>',
+    title2: 'K-Tech Sector',
+    desc: 'Semiconductors, display components, precision modules — verified Korean electronics manufacturers joining the network.'
+  },
+  'smart-living': {
+    active: false,
+    tag: 'Smart Living',
+    title: 'Connected Home & Lifestyle',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><circle cx="12" cy="15" r="2"/></svg>',
+    title2: 'Smart Living Sector',
+    desc: 'IoT appliances, wellness devices, and premium K-lifestyle goods curated for global retail.'
+  },
+  'future-energy': {
+    active: false,
+    tag: 'Future Energy',
+    title: 'Renewable & Sustainable Tech',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>',
+    title2: 'Future Energy Sector',
+    desc: 'Solar modules, battery storage, EV-adjacent components from verified Korean clean-tech partners.'
+  }
+};
+function switchSector(id) {
+  const s = SECTORS[id]; if (!s) return;
+  document.querySelectorAll('.sector-tab').forEach(b => b.classList.toggle('active', b.dataset.sector === id));
+  const header = document.getElementById('sectorHeader');
+  if (header) {
+    header.querySelector('.label').textContent = s.tag;
+    header.querySelector('h3').textContent = s.title;
+    header.querySelector('p').textContent = s.desc;
+  }
+  const grid = document.getElementById('productGrid');
+  const ph = document.getElementById('sectorPlaceholder');
+  if (s.active) {
+    if (grid) grid.style.display = '';
+    if (ph) ph.style.display = 'none';
+  } else {
+    if (grid) grid.style.display = 'none';
+    if (ph) {
+      ph.style.display = '';
+      document.getElementById('spIcon').innerHTML = s.icon || '';
+      document.getElementById('spTitle').textContent = s.title2 || s.title;
+      document.getElementById('spDesc').textContent = s.desc;
+    }
+  }
+}
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
