@@ -81,6 +81,8 @@
   ]
 }
 </script>
+<!-- Privacy-friendly analytics (uncomment after creating a Plausible account at https://plausible.io) -->
+<!-- <script defer data-domain="ceodon.github.io" src="https://plausible.io/js/script.outbound-links.js"></script> -->
 <style>
 /* ── TOKENS ───────────────────────────────── */
 :root {
@@ -1606,6 +1608,15 @@ section { scroll-margin-top: var(--nav-h); }
   padding-bottom: .4rem; border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
+/* ── Consent banner ────────────────────── */
+.consent { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 1300; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: none; align-items: center; gap: 14px; font-size: 13px; color: var(--tx-mid); box-shadow: 0 20px 50px rgba(0,0,0,.5); max-width: 720px; margin: 0 auto; flex-wrap: wrap; }
+.consent.open { display: flex; }
+.consent a { color: var(--gold); text-decoration: underline; }
+.consent button { margin-left: auto; background: var(--gold); color: #0a0a0a; border: 0; padding: 8px 16px; border-radius: 7px; font-family: var(--fb); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+
+/* ── Ticker "illustrative" badge ──────── */
+.tick-note { font-family: var(--fb); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-top: 6px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,.06); }
+
 /* ── Live Hub (Tier 1) ─────────────────── */
 .hub-section { background: #0a0a0a; border-top: 1px solid rgba(52,210,152,.15); border-bottom: 1px solid rgba(52,210,152,.15); position: relative; overflow: hidden; }
 .hub-section::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity:.5; }
@@ -2116,6 +2127,7 @@ section { scroll-margin-top: var(--nav-h); }
       <div class="hub-card">
         <h3>Live Activity Ticker</h3>
         <div class="ticker-wrap"><div class="ticker-list" id="tickerList"></div></div>
+        <div class="tick-note">Illustrative · real-time buyer signals coming soon</div>
       </div>
       <div class="hub-card hub-mission">
         <h3>Daily Missions</h3>
@@ -2969,7 +2981,7 @@ section { scroll-margin-top: var(--nav-h); }
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">&copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea</p>
+      <p class="footer-copy">&copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea &middot; <a href="privacy.html" style="color:var(--tx-lt)">Privacy</a> &middot; <a href="terms.html" style="color:var(--tx-lt)">Terms</a></p>
     </div>
   </div>
 </footer>
@@ -3526,13 +3538,7 @@ function slNotify(kind, id, detail) {
   const text = kind === 'interest'
     ? `📡 *Spotlight Interest*\n\n*Concept:* ${sp.title}\n*Sector:* ${sp.sector}\n*Status:* ${sp.status}\n\n_Anonymous click · ceodon.github.io/ergsn_`
     : `🗳️ *Spotlight Vote*\n\n*Concept:* ${sp.title}\n*Question:* ${sp.poll.q}\n*Answer:* ${detail || '-'}\n\n_Anonymous click · ceodon.github.io/ergsn_`;
-  try {
-    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: 'Markdown' })
-    }).catch(() => {});
-  } catch (_) {}
+  try { sendTG(text); } catch (_) {}
 }
 
 let _slCurrentConcept = null;
@@ -3593,11 +3599,7 @@ function submitSpotlight(e) {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(emailPayload)
     }),
-    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text: tgText, parse_mode: 'Markdown' })
-    })
+    sendTG(tgText)
   ]).then(() => {
     const s = slStore();
     if (!s[sp.id]) s[sp.id] = { interest: 0, vote: null, votes: {} };
@@ -3953,10 +3955,7 @@ function bookDemo() {
   if (!name || !email || !slot) { r.textContent = 'Please fill all fields.'; return; }
   const text = `📅 *Demo Booking Request*\n\n*Name:* ${name}\n*Email:* ${email}\n*Slot:* ${slot}\n\n_ceodon.github.io/ergsn_`;
   try {
-    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode:'Markdown' })
-    }).catch(()=>{});
+    sendTG(text);
     fetch(RFQ_ENDPOINT, {
       method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
       body: JSON.stringify({ _cc: RFQ_CC, _subject:`[DEMO BOOKING] ${slot} — ${name}`, _template:'table', _captcha:'false', Name:name, Email:email, Slot:slot, Source:'ceodon.github.io/ergsn (Demo Booking)' })
@@ -3989,12 +3988,7 @@ function submitQA(e) {
   const store = qaStore();
   store.unshift({ name, country, q, a:'', t:'just now' });
   qaSave(store);
-  try {
-    fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ chat_id: TG_CHAT, text: `❓ *Q&A Wall submission*\n\n*From:* ${name} (${country})\n*Q:* ${q}`, parse_mode:'Markdown' })
-    }).catch(()=>{});
-  } catch(_) {}
+  try { sendTG(`❓ *Q&A Wall submission*\n\n*From:* ${name} (${country})\n*Q:* ${q}`); } catch(_) {}
   document.getElementById('qaQ').value = '';
   initQAWall();
 }
@@ -5510,8 +5504,12 @@ updateCalc();
 
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
-const TG_BOT = '8682443200:AAHdCK-kkMDFuIZUvi4foAD3-ypNMRBGyGY';
-const TG_CHAT = '456668222';
+// Telegram is dispatched through a serverless proxy to avoid exposing the bot token.
+// Deploy cloudflare-worker.js and set TG_PROXY_URL to the worker URL.
+// If TG_PROXY_URL is empty, the site still works end-to-end through email (FormSubmit).
+const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
+const TG_BOT = '';
+const TG_CHAT = '';
 const MODEL_LABELS = {
   mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
   mDL10XD: 'DL-10XD', mDL12XD: 'DL-12XD', mDL16XD: 'DL-16XD'
@@ -5543,14 +5541,15 @@ function sendTelegram(fields) {
     '',
     `_Source: ceodon.github.io/ergsn_`
   ];
-  return fetch(`https://api.telegram.org/bot${TG_BOT}/sendMessage`, {
+  return sendTG(lines.join('\n'));
+}
+
+function sendTG(text, parseMode) {
+  if (!TG_PROXY_URL) return Promise.resolve();
+  return fetch(TG_PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: TG_CHAT,
-      text: lines.join('\n'),
-      parse_mode: 'Markdown'
-    })
+    body: JSON.stringify({ text, parse_mode: parseMode || 'Markdown' })
   }).catch(() => {});
 }
 
@@ -5636,6 +5635,23 @@ function submitRFQ() {
     sendBtn.disabled = false;
   });
 }
+
+/* ── Consent banner ─────────────────── */
+(function initConsent(){
+  try {
+    if (localStorage.getItem('ergsn_consent') === '1') return;
+    const el = document.createElement('div');
+    el.className = 'consent open';
+    el.innerHTML = `
+      <span>This site stores your language, buyer profile, and mission progress in your browser to personalize your experience. Submissions (RFQ, Spotlight, Demo) are sent to ERGSN. See <a href="privacy.html">Privacy</a> &amp; <a href="terms.html">Terms</a>.</span>
+      <button type="button">Got it</button>`;
+    document.body.appendChild(el);
+    el.querySelector('button').addEventListener('click', () => {
+      try { localStorage.setItem('ergsn_consent', '1'); } catch(_) {}
+      el.remove();
+    });
+  } catch(_) {}
+})();
 </script>
 </body>
 </html>
