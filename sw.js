@@ -6,7 +6,9 @@ const CORE = [
   '/ergsn/translations.js',
   '/ergsn/favicon.svg',
   '/ergsn/privacy.html',
-  '/ergsn/terms.html'
+  '/ergsn/terms.html',
+  '/ergsn/partners-kr.html',
+  '/ergsn/tracker.html'
 ];
 
 self.addEventListener('install', (e) => {

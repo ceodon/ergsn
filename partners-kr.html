@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERGSN 파트너 모집 — 한국 제조업체를 위한 글로벌 무역 플랫폼</title>
+<meta name="description" content="ERGSN은 검증된 한국 제조업체와 전 세계 바이어를 연결하는 무역 허브입니다. 13년 무역 경험, 14개 주요 항구 네트워크, GSA·HIPAA 수출 인증 노하우를 귀사의 해외 진출 여정에 더해드립니다.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0f0f0f">
+<script defer data-domain="ceodon.github.io/ergsn" src="https://plausible.io/js/script.outbound-links.js"></script>
+<style>
+  :root {
+    --gold: #34d298; --gold-light: #00ffa1;
+    --navy: #0f0f0f; --navy-2: #141414;
+    --white: #fff; --tx-mid: #cfcfcf; --tx-lt: #8a8b8d;
+    --border: #242424;
+    --fb: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0a0a; color: var(--tx-mid); font-family: var(--fb); line-height: 1.65; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 clamp(16px,3vw,28px); }
+  header { padding: 1.2rem 0; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,.92); backdrop-filter: blur(12px); }
+  header .inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: .12em; }
+  .logo .e { color: var(--gold); }
+  .back-link { font-size: 13px; color: var(--tx-lt); }
+  .back-link:hover { color: var(--gold); }
+
+  /* Hero */
+  .hero { padding: clamp(3rem,7vh,5.5rem) 0 clamp(2.5rem,5vh,4rem); text-align: center; background: radial-gradient(ellipse at top, rgba(52,210,152,.08) 0%, transparent 60%); }
+  .hero .tag { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 20px; background: rgba(52,210,152,.12); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .14em; margin-bottom: 1.4rem; }
+  .hero .tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+  .hero h1 { font-size: clamp(1.9rem,4vw,3rem); color: var(--white); font-weight: 800; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 1rem; }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero .sub { max-width: 680px; margin: 0 auto 2rem; font-size: clamp(15px,1.8vw,18px); color: var(--tx-mid); line-height: 1.7; }
+  .hero .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 10px; font-size: 13px; font-weight: 700; letter-spacing: .06em; cursor: pointer; border: 0; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+  .btn-gold { background: var(--gold); color: #0a0a0a; }
+  .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(52,210,152,.3); text-decoration: none; }
+  .btn-outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+
+  /* KPI row */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; max-width: 760px; margin-inline: auto; }
+  @media (max-width: 640px){ .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--navy-2); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; text-align: center; }
+  .kpi .n { font-size: clamp(1.4rem,2.2vw,1.9rem); color: var(--gold); font-weight: 800; display: block; line-height: 1; }
+  .kpi .l { font-size: 11px; color: var(--tx-lt); letter-spacing: .08em; margin-top: 6px; display: block; }
+
+  /* Section */
+  section.block { padding: clamp(3rem,6vh,5rem) 0; }
+  .section-head { margin-bottom: 2rem; }
+  .label { display: inline-block; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: .14em; text-transform: uppercase; margin-bottom: .6rem; }
+  h2 { font-size: clamp(1.4rem,2.8vw,2rem); color: var(--white); font-weight: 800; letter-spacing: -.01em; margin: 0 0 .8rem; }
+  .section-desc { color: var(--tx-mid); max-width: 680px; font-size: 15px; line-height: 1.7; }
+
+  /* Sectors */
+  .sector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 1.6rem; }
+  .sector-card { background: var(--navy-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; transition: border-color .2s, transform .2s; }
+  .sector-card:hover { border-color: rgba(52,210,152,.35); transform: translateY(-2px); }
+  .sector-card .icon { width: 36px; height: 36px; color: var(--gold); margin-bottom: .9rem; display: inline-flex; align-items: center; justify-content: center; }
+  .sector-card .icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .sector-card h3 { color: var(--white); font-size: 1.05rem; margin: 0 0 .3rem; font-weight: 800; }
+  .sector-card .sub { font-size: 11px; color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
+  .sector-card p { font-size: 13px; color: var(--tx-mid); margin: 0; line-height: 1.6; }
+
+  /* Verification steps */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 1.6rem; counter-reset: s; }
+  .step { background: var(--navy-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; position: relative; counter-increment: s; }
+  .step::before { content: counter(s); position: absolute; top: 14px; right: 16px; font-size: 2.2rem; font-weight: 800; color: rgba(52,210,152,.18); }
+  .step h3 { color: var(--white); font-size: 1rem; margin: 0 0 .4rem; font-weight: 800; }
+  .step p { font-size: 13px; color: var(--tx-mid); margin: 0; line-height: 1.6; }
+
+  /* Benefits list */
+  .benefits { list-style: none; padding: 0; margin: 1.6rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .benefits li { background: var(--navy-2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; font-size: 14px; color: var(--tx-mid); display: flex; gap: 10px; align-items: flex-start; line-height: 1.55; }
+  .benefits li::before { content: '✓'; color: var(--gold); font-weight: 800; flex-shrink: 0; }
+  .benefits li strong { color: var(--white); font-weight: 700; }
+
+  /* Form */
+  .form-section { background: linear-gradient(180deg, #0a0a0a 0%, #0f1210 100%); }
+  .form-wrap { background: var(--navy-2); border: 1px solid var(--border); border-radius: 16px; padding: clamp(1.6rem,3vw,2.4rem); max-width: 720px; margin: 2rem auto 0; }
+  .form-wrap label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: 6px; }
+  .form-wrap input, .form-wrap select, .form-wrap textarea {
+    width: 100%; background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px;
+    color: var(--white); padding: 11px 14px; font-size: 14px; font-family: inherit; outline: none;
+    -webkit-appearance: none;
+  }
+  .form-wrap input:focus, .form-wrap select:focus, .form-wrap textarea:focus { border-color: var(--gold); }
+  .form-wrap textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-grp { margin-bottom: 12px; }
+  @media (max-width: 560px){ .form-row { grid-template-columns: 1fr; } }
+  .form-wrap button { width: 100%; background: var(--gold); color: #0a0a0a; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 14px; letter-spacing: .06em; cursor: pointer; border: 0; margin-top: 8px; }
+  .form-wrap button:disabled { opacity: .6; cursor: wait; }
+  .form-note { text-align: center; font-size: 11px; color: var(--tx-lt); margin-top: 12px; }
+  .success { display: none; text-align: center; padding: 2rem 1rem; color: var(--gold); }
+  .success.open { display: block; }
+  .success .icon { font-size: 40px; margin-bottom: 10px; }
+
+  /* Contact alternatives */
+  .contact-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 1.4rem; }
+  .contact-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--navy-2); border: 1px solid var(--border); border-radius: 30px; font-size: 13px; color: var(--white); transition: border-color .15s, color .15s; }
+  .contact-chip:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+
+  footer { padding: 2rem 0 2.5rem; border-top: 1px solid var(--border); text-align: center; color: var(--tx-lt); font-size: 11px; margin-top: 3rem; }
+  footer a { color: var(--tx-lt); }
+
+  .toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: calc(100vw - 40px); }
+  .toast { background: var(--navy-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 16px; color: var(--white); font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,.5); animation: toastIn .25s ease-out; pointer-events: auto; max-width: 320px; }
+  @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<header>
+  <div class="container inner">
+    <a href="/ergsn/" class="logo"><span class="e">E</span>RGSN</a>
+    <a href="/ergsn/" class="back-link">← 글로벌 사이트로 (EN)</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="tag">ERGSN 파트너 모집 · 검증된 한국 제조사 대상</div>
+    <h1>당신의 기술을 <em>전 세계</em>로.<br>ERGSN의 검증 파트너가 되십시오.</h1>
+    <p class="sub">ERGSN은 13년간 미국·중동·동남아·유럽의 B2B 바이어와 직거래해 온 한국의 수출 허브입니다. 한국 제조사의 기술력과 품질을 전 세계 조달팀에 직접 전달하고, 수출 인증·통관·결제·물류의 복잡한 과정을 대신 처리해 드립니다.</p>
+    <div class="cta-row">
+      <a href="#apply" class="btn btn-gold">파트너 신청하기 →</a>
+      <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="btn btn-outline">텔레그램 상담</a>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><span class="n">13+</span><span class="l">년 무역 경력</span></div>
+      <div class="kpi"><span class="n">14</span><span class="l">주요 항구 네트워크</span></div>
+      <div class="kpi"><span class="n">6</span><span class="l">언어 글로벌 대응</span></div>
+      <div class="kpi"><span class="n">4</span><span class="l">섹터 확장 중</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS -->
+<section class="block">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">확장 중인 4개 섹터</span>
+      <h2>어느 분야든 한국이 강한 곳이라면</h2>
+      <p class="section-desc">현재 Office Security(세단기·보안 장비)는 미국 정부·대기업 조달 실적이 쌓인 주력 섹터입니다. 2026년부터 K-Tech · Smart Living · Future Energy 3개 섹터를 본격 확장하며, 각 분야 대표 한국 제조사를 파트너로 모집합니다.</p>
+    </div>
+    <div class="sector-grid">
+      <div class="sector-card">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <div class="sub">ACTIVE · 확장 중</div>
+        <h3>Office Security</h3>
+        <p>문서 보안 · 산업용 세단기 · 접근 통제 · 데이터 파기 장비. GSA · HIPAA · Level 3 인증 보유 업체 우대.</p>
+      </div>
+      <div class="sector-card">
+        <span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2"/></svg></span>
+        <div class="sub">2026 Q2 · 모집 중</div>
+        <h3>K-Tech</h3>
+        <p>반도체 모듈 · 디스플레이 부품 · 정밀 센서 · 산업용 IoT. Tier-1 팹 파트너사 및 중견 정밀 제조사 환영.</p>
+      </div>
+      <div class="sector-card">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><circle cx="12" cy="15" r="2"/></svg></span>
+        <div class="sub">2026 · 모집 중</div>
+        <h3>Smart Living</h3>
+        <p>K-뷰티 디바이스 · 웰니스 기기 · 커넥티드 가전 · 라이프스타일 프리미엄 굿즈. 해외 리테일 채널 확보 지원.</p>
+      </div>
+      <div class="sector-card">
+        <span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></span>
+        <div class="sub">2026 · 모집 중</div>
+        <h3>Future Energy</h3>
+        <p>태양광 모듈 · ESS · EV 관련 부품 · 청정기술. IEC · UL 인증 보유사, 상업용 규모 공급 가능 업체 우선.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="block" style="background:#0f0f0f">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">파트너 혜택</span>
+      <h2>귀사가 직접 해결하기 어려운 모든 것을 대신합니다</h2>
+      <p class="section-desc">수출 경험이 없거나 부족한 제조사도 ERGSN을 통해 해외 직접 판매가 가능합니다. 바이어 발굴부터 계약·통관·운송·사후관리까지 원스톱으로 대행합니다.</p>
+    </div>
+    <ul class="benefits">
+      <li><span><strong>해외 바이어 직접 연결</strong> — 자체 보유한 미주·유럽·중동·동남아 조달 네트워크로 B2B 수요를 바로 전달.</span></li>
+      <li><span><strong>수출 서류·인증 대행</strong> — Form K, FTA 원산지증명, 포워딩, 관세·VAT 처리까지 일괄 지원.</span></li>
+      <li><span><strong>GSA·HIPAA·CE·UL 인증 컨설팅</strong> — 귀사 제품의 해외 인증 취득 단계별 자문 제공.</span></li>
+      <li><span><strong>CIF·FOB 계약 스크립트 제공</strong> — Incoterms 2020 전 조건 대응, T/T 50/50 표준 결제 구조.</span></li>
+      <li><span><strong>브랜딩·마케팅 자료 제작</strong> — 영문 제품 카탈로그, 사이트 내 전용 페이지, 다국어 스펙시트 제작 지원.</span></li>
+      <li><span><strong>중개 수수료 구조 투명</strong> — 품목·거래량에 따른 명확한 commission 구조. 파트너십 계약서 별도 체결.</span></li>
+      <li><span><strong>Pre-Launch 시장 테스트</strong> — 신제품을 Spotlight 섹션에 등록, 공개 전 글로벌 수요·선호도 조사 가능.</span></li>
+      <li><span><strong>안정적 해외 결제</strong> — 대한민국 금융기관 원화 수취 기준, 환리스크 최소화 가이드 제공.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- VERIFICATION -->
+<section class="block">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">파트너 검증 프로세스</span>
+      <h2>서로에게 해가 되지 않는 관계를 위한 4단계</h2>
+      <p class="section-desc">ERGSN은 해외 바이어에게 "검증된 한국 제조사만 엄선" 이라고 약속합니다. 귀사의 평판을 ERGSN 이름으로 내보내기 전에 서로 신뢰할 수 있는지 확인하는 단계가 있습니다.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>1. 초기 상담</h3>
+        <p>온라인 신청서 접수 후 1영업일 이내 ERGSN 담당자가 연락. 제품·생산능력·기존 수출 이력 확인.</p>
+      </div>
+      <div class="step">
+        <h3>2. 공장·엔지니어링 실사</h3>
+        <p>생산 설비, 품질관리 시스템, 원자재 조달 구조 점검. 수도권은 방문 실사, 지방은 화상·영상 실사 가능.</p>
+      </div>
+      <div class="step">
+        <h3>3. 컴플라이언스 검토</h3>
+        <p>보유 인증·수출 이력·상표·특허 확인. 해외 판매에 필요한 추가 인증 로드맵 공동 수립.</p>
+      </div>
+      <div class="step">
+        <h3>4. 파트너 계약 체결</h3>
+        <p>품목·지역·commission 구조 확정. ERGSN 네트워크 정식 등록 후 첫 RFQ 파이프라인 개시.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY FORM -->
+<section class="block form-section" id="apply">
+  <div class="container">
+    <div class="section-head" style="text-align:center">
+      <span class="label">파트너 신청</span>
+      <h2>5분이면 충분합니다</h2>
+      <p class="section-desc" style="margin:0 auto">아래 양식을 제출하시면 1영업일 이내 ERGSN 담당자(이메일 또는 텔레그램)가 직접 연락드립니다. 제출 정보는 외부 공유되지 않으며 내부 검토 목적으로만 사용됩니다.</p>
+    </div>
+    <div class="form-wrap">
+      <form id="kForm" onsubmit="submitPartnerForm(event)">
+        <div class="form-row">
+          <div><label>회사명 *</label><input type="text" id="kCompany" required></div>
+          <div><label>대표자명 *</label><input type="text" id="kCeo" required></div>
+        </div>
+        <div class="form-row">
+          <div><label>이메일 *</label><input type="email" id="kEmail" required></div>
+          <div><label>연락처 (휴대폰/사무실) *</label><input type="tel" id="kPhone" required></div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>관심 섹터 *</label>
+            <select id="kSector" required>
+              <option value="" disabled selected>선택…</option>
+              <option value="Office Security">Office Security (보안·세단)</option>
+              <option value="K-Tech">K-Tech (반도체·센서·IoT)</option>
+              <option value="Smart Living">Smart Living (가전·뷰티·라이프)</option>
+              <option value="Future Energy">Future Energy (태양광·ESS)</option>
+              <option value="기타">기타 (아래 메시지에 기재)</option>
+            </select>
+          </div>
+          <div>
+            <label>월 생산능력</label>
+            <select id="kCapacity">
+              <option value="">선택 (선택사항)</option>
+              <option value="소규모 (~100 units/월)">소규모 (~100 units/월)</option>
+              <option value="중규모 (100~1000 units/월)">중규모 (100~1000 units/월)</option>
+              <option value="대규모 (1000+ units/월)">대규모 (1000+ units/월)</option>
+              <option value="주문생산 (MTO)">주문생산 (MTO)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grp">
+          <label>주력 제품 · 모델명 *</label>
+          <input type="text" id="kProducts" required placeholder="예: DL-16XD 대용량 세단기 · 산업용 IoT 센서 SX-200 · 가정용 ESS 10kWh">
+        </div>
+        <div class="form-grp">
+          <label>보유 인증 (해당 사항 모두 기재)</label>
+          <input type="text" id="kCerts" placeholder="예: ISO 9001 · KC · CE · HIPAA · GSA Schedule · UL · IEC 62619">
+        </div>
+        <div class="form-grp">
+          <label>기존 수출 이력 (있는 경우)</label>
+          <input type="text" id="kExport" placeholder="예: 미국 직수출 3년 · 일본 상사 경유 · 수출 경험 없음">
+        </div>
+        <div class="form-grp">
+          <label>전하고 싶은 말씀 (선택)</label>
+          <textarea id="kMsg" placeholder="ERGSN과 함께 하고 싶은 이유, 특별한 강점, 고민되는 부분 등 자유롭게 작성해 주세요."></textarea>
+        </div>
+        <button type="submit" id="kSubmit">파트너 신청 제출</button>
+        <p class="form-note">제출하시면 ERGSN의 <a href="privacy.html" target="_blank">개인정보 처리방침</a>에 동의하시는 것으로 간주됩니다.</p>
+      </form>
+      <div class="success" id="kSuccess">
+        <div class="icon">✓</div>
+        <h3 style="color:var(--white);margin:0 0 6px">신청 접수 완료</h3>
+        <p style="color:var(--tx-mid);font-size:14px">감사합니다. 1영업일 이내(한국시간 기준) 담당자가 직접 연락드리겠습니다.<br>급한 문의는 텔레그램 <strong style="color:var(--gold)">@ceodon</strong> 또는 <a href="https://wa.me/821052880006" style="color:var(--gold)">왓츠앱</a> 으로 직접 연락 주세요.</p>
+      </div>
+    </div>
+    <div class="contact-row">
+      <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="contact-chip">💬 텔레그램 @ceodon</a>
+      <a href="https://wa.me/821052880006" target="_blank" rel="noopener" class="contact-chip">📱 왓츠앱 +82-10-5288-0006</a>
+      <a href="tel:+821052880006" class="contact-chip">☎ 전화 상담</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2013 ERGSN CO., LTD. · 서울특별시 중구 서애로5길 12-21 수송빌딩 503호 · <a href="privacy.html">개인정보 처리방침</a> · <a href="terms.html">이용약관</a> · <a href="/ergsn/">글로벌 사이트 (EN) →</a></p>
+  </div>
+</footer>
+
+<script>
+const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
+const RFQ_CC = 'ceodon69@gmail.com';
+const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
+
+function toast(msg) {
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function submitPartnerForm(e) {
+  e.preventDefault();
+  const v = (id) => document.getElementById(id).value.trim();
+  const fields = {
+    회사명: v('kCompany'),
+    대표자: v('kCeo'),
+    이메일: v('kEmail'),
+    연락처: v('kPhone'),
+    섹터: v('kSector'),
+    월생산능력: v('kCapacity') || '-',
+    주력제품: v('kProducts'),
+    보유인증: v('kCerts') || '-',
+    수출이력: v('kExport') || '-',
+    메시지: v('kMsg') || '-'
+  };
+  const btn = document.getElementById('kSubmit');
+  btn.disabled = true; btn.textContent = '제출 중…';
+
+  const emailPayload = {
+    _cc: RFQ_CC,
+    _subject: `[파트너 신청] ${fields.회사명} — ${fields.섹터}`,
+    _template: 'table',
+    _captcha: 'false',
+    ...fields,
+    Source: 'ceodon.github.io/ergsn/partners-kr'
+  };
+  const tgText = [
+    '🏭 *한국 파트너 신청*', '',
+    `*회사:* ${fields.회사명}`,
+    `*대표:* ${fields.대표자}`,
+    `*연락:* ${fields.이메일} / ${fields.연락처}`,
+    '',
+    `*섹터:* ${fields.섹터}`,
+    `*생산능력:* ${fields.월생산능력}`,
+    `*주력제품:* ${fields.주력제품}`,
+    `*인증:* ${fields.보유인증}`,
+    `*수출이력:* ${fields.수출이력}`,
+    '',
+    `*메시지:* ${fields.메시지}`, '',
+    '_partners-kr · ceodon.github.io/ergsn_'
+  ].join('\n');
+
+  Promise.allSettled([
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(emailPayload)
+    }),
+    fetch(TG_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: tgText, parse_mode: 'Markdown' })
+    }).catch(()=>{})
+  ]).then(() => {
+    document.getElementById('kForm').style.display = 'none';
+    document.getElementById('kSuccess').classList.add('open');
+    toast('✓ 파트너 신청이 접수되었습니다.');
+    btn.disabled = false; btn.textContent = '파트너 신청 제출';
+  }).catch(() => {
+    alert('제출 중 문제가 발생했습니다. 텔레그램 @ceodon 또는 이메일로 직접 연락 부탁드립니다.');
+    btn.disabled = false; btn.textContent = '파트너 신청 제출';
+  });
+}
+</script>
+</body>
+</html>
