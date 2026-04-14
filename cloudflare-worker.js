@@ -32,13 +32,16 @@ export default {
     let body;
     try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers: cors }); }
     const text = String(body.text || '').slice(0, 3800);
-    const parse_mode = body.parse_mode === 'HTML' ? 'HTML' : 'Markdown';
     if (!text) return new Response('Empty', { status: 400, headers: cors });
+    const payload = { chat_id: env.TG_CHAT, text };
+    if (body.parse_mode === 'HTML' || body.parse_mode === 'Markdown' || body.parse_mode === 'MarkdownV2') {
+      payload.parse_mode = body.parse_mode;
+    }
 
     const tg = await fetch(`https://api.telegram.org/bot${env.TG_BOT}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: env.TG_CHAT, text, parse_mode })
+      body: JSON.stringify(payload)
     });
     const ok = tg.ok;
     return new Response(JSON.stringify({ ok }), {

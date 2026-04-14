@@ -3535,10 +3535,11 @@ function slVote(id, optIdx) {
 
 function slNotify(kind, id, detail) {
   const sp = SPOTLIGHTS.find(x => x.id === id); if (!sp) return;
+  const safe = (s) => String(s || '').replace(/[_*`\[\]]/g, '');
   const text = kind === 'interest'
-    ? `📡 *Spotlight Interest*\n\n*Concept:* ${sp.title}\n*Sector:* ${sp.sector}\n*Status:* ${sp.status}\n\n_Anonymous click · ceodon.github.io/ergsn_`
-    : `🗳️ *Spotlight Vote*\n\n*Concept:* ${sp.title}\n*Question:* ${sp.poll.q}\n*Answer:* ${detail || '-'}\n\n_Anonymous click · ceodon.github.io/ergsn_`;
-  try { sendTG(text); } catch (_) {}
+    ? `📡 Spotlight Interest\n\nConcept: ${safe(sp.title)}\nSector: ${safe(sp.sector)}\nStatus: ${safe(sp.status)}\n\nAnonymous click · ceodon.github.io/ergsn`
+    : `🗳 Spotlight Vote\n\nConcept: ${safe(sp.title)}\nQuestion: ${safe(sp.poll.q)}\nAnswer: ${safe(detail || '-')}\n\nAnonymous click · ceodon.github.io/ergsn`;
+  try { sendTG(text, 'plain'); } catch (_) {}
 }
 
 let _slCurrentConcept = null;
@@ -5546,10 +5547,13 @@ function sendTelegram(fields) {
 
 function sendTG(text, parseMode) {
   if (!TG_PROXY_URL) return Promise.resolve();
+  const body = { text };
+  if (parseMode && parseMode !== 'plain') body.parse_mode = parseMode;
+  else if (parseMode === undefined) body.parse_mode = 'Markdown';
   return fetch(TG_PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, parse_mode: parseMode || 'Markdown' })
+    body: JSON.stringify(body)
   }).catch(() => {});
 }
 
