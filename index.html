@@ -30,9 +30,8 @@
 
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f0f0f">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link href="https://fonts.bunny.net/css?family=anton:400|inter:300,400,500,600,700&display=swap" rel="stylesheet">
 
 <!-- LCP image preload (hero background) -->
 <link rel="preload" as="image" href="images/hero-workplace.webp" type="image/webp" fetchpriority="high">
@@ -83,8 +82,8 @@
   ]
 }
 </script>
-<!-- Privacy-friendly analytics (uncomment after creating a Plausible account at https://plausible.io) -->
-<!-- <script defer data-domain="ceodon.github.io" src="https://plausible.io/js/script.outbound-links.js"></script> -->
+<!-- Privacy-friendly analytics (Plausible — cookieless, GDPR-compliant) -->
+<script defer data-domain="ceodon.github.io" src="https://plausible.io/js/script.outbound-links.js"></script>
 <style>
 /* ── TOKENS ───────────────────────────────── */
 :root {
@@ -2095,6 +2094,8 @@ button:focus:not(:focus-visible) { outline: none; }
         <option value="fr">FR</option>
         <option value="ja">日本語</option>
         <option value="tr">TR</option>
+    <option value="zh-Hans">简体</option>
+    <option value="zh-Hant">繁體</option>
       </select>
       <button class="hamburger" id="ham" aria-label="Menu" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -2936,17 +2937,23 @@ button:focus:not(:focus-visible) { outline: none; }
         <button type="button" onclick="runCompliance()">Check Requirements</button>
         <div class="tool-result" id="ccResult">Your checklist will appear here.</div>
       </div>
-      <div class="tool-card reveal">
+      <div class="tool-card reveal" id="bdCard">
         <h3>Book a Live Demo</h3>
         <p class="t-sub">30-minute Zoom with ERGSN trade team. KST business hours.</p>
-        <label>Your Name</label>
-        <input type="text" id="bdName" autocomplete="off">
-        <label>Email</label>
-        <input type="email" id="bdEmail" autocomplete="off">
-        <label>Preferred Slot</label>
-        <select id="bdSlot"><option value="" disabled selected>Select slot…</option></select>
-        <button type="button" onclick="bookDemo()">Request Booking</button>
-        <div class="tool-result" id="bdResult">Available slots populated automatically.</div>
+        <div id="bdCalendlyWrap" style="display:none">
+          <button type="button" onclick="openCalendly()" style="margin-top:8px">Open Scheduler</button>
+          <div class="tool-result active">Pick any slot from ERGSN's live calendar. Instant confirmation.</div>
+        </div>
+        <div id="bdFormWrap">
+          <label>Your Name</label>
+          <input type="text" id="bdName" autocomplete="off">
+          <label>Email</label>
+          <input type="email" id="bdEmail" autocomplete="off">
+          <label>Preferred Slot</label>
+          <select id="bdSlot"><option value="" disabled selected>Select slot…</option></select>
+          <button type="button" onclick="bookDemo()">Request Booking</button>
+          <div class="tool-result" id="bdResult">Available slots populated automatically.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -3122,6 +3129,7 @@ button:focus:not(:focus-visible) { outline: none; }
         <p class="footer-col-title">Contact</p>
         <ul class="footer-links">
           <li><a href="#rfq">Request a Quote</a></li>
+          <li><a href="tracker.html">RFQ Tracker</a></li>
           <li><a href="https://t.me/ceodon" target="_blank" rel="noopener">Telegram</a></li>
         </ul>
       </div>
@@ -4052,6 +4060,16 @@ function initTradeTools() {
     }
   }
   const r = document.getElementById('bdResult'); if (r && bd) r.textContent = `${bd.options.length-1} slots available in the next 10 business days.`;
+  if (CALENDLY_URL) {
+    const cal = document.getElementById('bdCalendlyWrap');
+    const form = document.getElementById('bdFormWrap');
+    if (cal) cal.style.display = '';
+    if (form) form.style.display = 'none';
+  }
+}
+function openCalendly() {
+  if (!CALENDLY_URL) return;
+  window.open(CALENDLY_URL, '_blank', 'noopener');
 }
 function runLandedCost() {
   const c = document.getElementById('lcCountry').value;
@@ -5703,10 +5721,16 @@ updateCalc();
 
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
+// Calendly: set this to your public scheduling link (e.g. 'https://calendly.com/ceodon/30min').
+// When empty, Book Demo falls back to the existing slot-selection form.
+const CALENDLY_URL = 'https://calendly.com/ceodon/30min';
 // Telegram is dispatched through a serverless proxy to avoid exposing the bot token.
 // Deploy cloudflare-worker.js and set TG_PROXY_URL to the worker URL.
 // If TG_PROXY_URL is empty, the site still works end-to-end through email (FormSubmit).
 const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
+// RFQ Tracker: after deploying cloudflare-worker-rfq.js, paste its URL here.
+// When set, RFQ submissions receive a trackable ID and the success message shows it.
+const RFQ_TRACKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
 const TG_BOT = '';
 const TG_CHAT = '';
 const MODEL_LABELS = {
@@ -5810,7 +5834,15 @@ function submitRFQ() {
     msg: v('fMsg') || '-'
   };
 
-  // Send email + Telegram in parallel
+  // Create tracker record (optional), then send email + Telegram in parallel
+  const trackerPromise = RFQ_TRACKER_URL
+    ? fetch(RFQ_TRACKER_URL.replace(/\/$/, '') + '/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submission: emailPayload })
+      }).then(r => r.json()).catch(() => null)
+    : Promise.resolve(null);
+
   Promise.allSettled([
     fetch(RFQ_ENDPOINT, {
       method: 'POST',
@@ -5820,14 +5852,20 @@ function submitRFQ() {
       if (!(data && (data.success === 'true' || data.success === true)))
         throw new Error((data && data.message) || 'Email failed');
     }),
-    sendTelegram(tgFields)
+    sendTelegram(tgFields),
+    trackerPromise
   ]).then(results => {
     const emailOk = results[0].status === 'fulfilled';
     if (emailOk) {
+      const trk = results[2] && results[2].value;
+      if (trk && trk.ok && trk.id) {
+        const successEl = document.getElementById('rfqSuccess');
+        const msg = successEl.querySelector('p');
+        if (msg) msg.innerHTML = `Thank you. Your tracking ID is <strong style="color:var(--gold);font-family:var(--fh)">${trk.id}</strong><br>Check status anytime at <a href="tracker.html?id=${trk.id}" style="color:var(--gold)">RFQ Tracker</a>.<br><br>We will respond within 1 business day (KST, UTC+9).`;
+      }
       document.getElementById('rfqFields').style.display = 'none';
       document.getElementById('rfqSuccess').style.display = 'block';
-      // Auto-reset to a fresh form after 8 seconds so the user can submit another inquiry
-      setTimeout(() => { resetRFQForm(); }, 8000);
+      setTimeout(() => { resetRFQForm(); }, 12000);
     } else {
       throw results[0].reason || new Error('Submission failed');
     }

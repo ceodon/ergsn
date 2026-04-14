@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQ Tracker — ERGSN</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0f0f0f">
+<style>
+  :root { --gold:#34d298; --white:#fff; --tx-mid:#a5a6a7; --tx-lt:#8a8b8d; --border:#242424; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:Inter,system-ui,sans-serif; line-height:1.6; min-height:100vh; }
+  .wrap { max-width:640px; margin:0 auto; padding:3rem 1.4rem 4rem; }
+  h1 { color:var(--white); font-size:1.8rem; margin:0 0 .3rem; letter-spacing:-.01em; }
+  .sub { color:var(--tx-lt); font-size:13px; margin-bottom:2rem; }
+  .back { display:inline-block; margin-bottom:1.4rem; color:var(--gold); text-decoration:none; font-size:13px; }
+  .form-row { display:flex; gap:8px; margin-bottom:1rem; }
+  .form-row input { flex:1; background:#1d1d1d; border:1px solid var(--border); border-radius:8px; padding:12px 14px; color:var(--white); font-size:14px; outline:none; font-family:inherit; text-transform:uppercase; letter-spacing:.04em; }
+  .form-row input:focus { border-color:var(--gold); }
+  .form-row button { background:var(--gold); color:#0a0a0a; border:0; border-radius:8px; padding:0 22px; font-weight:700; font-size:12px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+  .form-row button:disabled { opacity:.6; cursor:wait; }
+  .result { background:#141414; border:1px solid var(--border); border-radius:14px; padding:1.5rem; margin-top:1.5rem; display:none; }
+  .result.open { display:block; }
+  .result h2 { color:var(--white); font-size:1.2rem; margin:0 0 .3rem; }
+  .result .meta { font-size:12px; color:var(--tx-lt); margin-bottom:1.2rem; }
+  .stages { display:flex; justify-content:space-between; gap:4px; margin:1.2rem 0; position:relative; }
+  .stages::before { content:''; position:absolute; top:14px; left:14px; right:14px; height:2px; background:#262626; z-index:0; }
+  .stage-dot { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; flex:1; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--tx-lt); text-align:center; }
+  .stage-dot .d { width:28px; height:28px; border-radius:50%; background:#262626; display:flex; align-items:center; justify-content:center; margin-bottom:6px; font-weight:700; color:var(--tx-lt); font-size:11px; }
+  .stage-dot.done .d, .stage-dot.current .d { background:var(--gold); color:#0a0a0a; }
+  .stage-dot.current { color:var(--gold); font-weight:700; }
+  .notes { background:#1a1a1a; border-left:2px solid var(--gold); padding:12px 14px; border-radius:8px; font-size:13px; color:var(--white); line-height:1.55; }
+  .err { color:#ff7070; font-size:13px; margin-top:1rem; display:none; }
+  .err.open { display:block; }
+  .help { margin-top:2rem; font-size:12px; color:var(--tx-lt); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/ergsn/" class="back">← Back to ERGSN</a>
+  <h1>RFQ Tracker</h1>
+  <p class="sub">Check the status of your quote request in real time.</p>
+  <form class="form-row" onsubmit="lookup(event)">
+    <input type="text" id="rfqId" placeholder="Enter RFQ ID (e.g. MEX28F3ABC4)" required>
+    <button type="submit" id="lookupBtn">Track</button>
+  </form>
+  <div class="err" id="err"></div>
+  <div class="result" id="result">
+    <h2>RFQ <span id="resId"></span></h2>
+    <div class="meta">Created: <span id="resCreated">—</span> · Last updated: <span id="resUpdated">—</span></div>
+    <div class="stages" id="stages"></div>
+    <div class="notes" id="resNotes"></div>
+  </div>
+  <p class="help">Don't have an RFQ ID? Submit a <a href="/ergsn/#rfq" style="color:var(--gold)">new quote request</a> — your ID will be displayed on confirmation.</p>
+</div>
+<script>
+const TRACKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+const STAGE_LABELS = { received:'Received', reviewed:'Reviewed', quoted:'Quoted', in_production:'In Production', shipped:'Shipped', closed:'Closed' };
+function fmtDate(ms){ const d = new Date(ms); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + ' ' + d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+async function lookup(e) {
+  e.preventDefault();
+  const id = document.getElementById('rfqId').value.trim().toUpperCase();
+  const btn = document.getElementById('lookupBtn');
+  const err = document.getElementById('err');
+  const res = document.getElementById('result');
+  err.classList.remove('open'); res.classList.remove('open');
+  if (!TRACKER_URL) { err.textContent = 'Tracker service not yet configured.'; err.classList.add('open'); return; }
+  btn.disabled = true; btn.textContent = '…';
+  try {
+    const r = await fetch(TRACKER_URL + '/status?id=' + encodeURIComponent(id));
+    const data = await r.json();
+    if (!data.ok) { err.textContent = data.error === 'not found' ? 'RFQ not found. Check your ID.' : 'Lookup failed.'; err.classList.add('open'); return; }
+    document.getElementById('resId').textContent = data.id;
+    document.getElementById('resCreated').textContent = fmtDate(data.createdAt);
+    document.getElementById('resUpdated').textContent = fmtDate(data.updatedAt);
+    const stages = document.getElementById('stages');
+    const currentIdx = data.stages.indexOf(data.stage);
+    stages.innerHTML = data.stages.map((s, i) => {
+      const cls = i < currentIdx ? 'done' : (i === currentIdx ? 'current' : '');
+      return '<div class="stage-dot ' + cls + '"><div class="d">' + (i+1) + '</div>' + STAGE_LABELS[s] + '</div>';
+    }).join('');
+    document.getElementById('resNotes').textContent = data.notes;
+    res.classList.add('open');
+  } catch (e) {
+    err.textContent = 'Network error. Please try again.'; err.classList.add('open');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Track';
+  }
+}
+// Prefill from ?id= query
+const params = new URLSearchParams(location.search);
+if (params.get('id')) { document.getElementById('rfqId').value = params.get('id'); document.querySelector('form').requestSubmit(); }
+</script>
+</body>
+</html>
