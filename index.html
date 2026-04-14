@@ -28,6 +28,8 @@
 <meta name="twitter:image" content="https://ceodon.github.io/ergsn/images/og-cover.jpg">
 <meta name="twitter:image:alt" content="ERGSN CO., LTD. — modern workplace and document security">
 
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f0f0f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1608,6 +1610,68 @@ section { scroll-margin-top: var(--nav-h); }
   padding-bottom: .4rem; border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
+/* ── Accessibility: focus rings ───────── */
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+.side-dot:focus-visible, .sector-tab:focus-visible, .hamburger:focus-visible, .nav-dropdown > a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+button:focus:not(:focus-visible) { outline: none; }
+
+/* ── Toast notifications ──────────────── */
+.toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: calc(100vw - 40px); }
+.toast { background: #1a1a1a; border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 16px; color: var(--white); font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,.5); animation: toastIn .25s ease-out; pointer-events: auto; max-width: 320px; }
+.toast.info { border-left-color: #4a90e2; }
+.toast.warn { border-left-color: #ffa940; }
+.toast.error { border-left-color: #ff7070; }
+@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.toast.leaving { animation: toastOut .25s ease-in forwards; }
+@keyframes toastOut { to { transform: translateX(110%); opacity: 0; } }
+
+/* ── WhatsApp FAB ─────────────────────── */
+.wa-fab { position: fixed; left: 20px; bottom: calc(20px + var(--chat-lift, 0px)); z-index: 900; width: 48px; height: 48px; border-radius: 50%; background: #25D366; color: #fff; border: 0; box-shadow: 0 8px 20px rgba(0,0,0,.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .2s, box-shadow .2s; text-decoration: none; }
+.wa-fab:hover { transform: scale(1.08); box-shadow: 0 12px 28px rgba(37,211,102,.4); }
+.wa-fab svg { width: 26px; height: 26px; }
+@media (max-width: 640px){ .wa-fab { left: 14px; width: 44px; height: 44px; } }
+
+/* ── Newsletter section ─────────────── */
+.news-section { background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%); }
+.news-inner { padding: clamp(2.5rem,5vh,4rem) 0; text-align: center; }
+.news-inner h2 { margin: .4rem 0 .8rem; }
+.news-inner p { color: var(--tx-mid); max-width: 540px; margin: 0 auto 1.6rem; font-size: 14px; }
+.news-form { display: flex; gap: 8px; max-width: 440px; margin: 0 auto; flex-wrap: wrap; }
+.news-form input { flex: 1; min-width: 200px; background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--white); font-size: 14px; font-family: inherit; outline: none; }
+.news-form input:focus { border-color: var(--gold); }
+.news-form button { background: var(--gold); color: #0a0a0a; border: 0; border-radius: 8px; padding: 12px 22px; font-family: var(--fb); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.news-mini { font-size: 11px; color: var(--tx-lt); margin-top: .8rem; }
+
+/* ── Partner logos + trust bar ────── */
+.partners-section { background: #0f0f0f; padding: clamp(2rem,4vh,3rem) 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.partners-title { font-family: var(--fb); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); text-align: center; margin-bottom: 1.4rem; }
+.partners-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(1.5rem,3vw,3rem); align-items: center; }
+.partner-item { font-family: var(--fh); font-size: clamp(14px,1.4vw,18px); color: var(--tx-mid); padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; background: #141414; transition: color .2s, border-color .2s; }
+.partner-item:hover { color: var(--gold); border-color: rgba(52,210,152,.3); }
+
+/* ── Case studies ──────────────────── */
+.cases-section { background: #0a0a0a; }
+.cases-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(1.2rem,2vw,1.8rem); margin-top: 2rem; }
+.case-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem; }
+.case-card .c-flag { font-size: 28px; line-height: 1; margin-bottom: .6rem; }
+.case-card h3 { font-family: var(--fh); font-size: 1.05rem; color: var(--white); margin: 0 0 .3rem; }
+.case-card .c-sub { font-size: 11px; color: var(--gold); font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; margin-bottom: .8rem; }
+.case-card p { font-size: 13px; color: var(--tx-mid); line-height: 1.55; margin: 0 0 .8rem; }
+.case-card .c-stats { display: flex; gap: 10px; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.05); }
+.case-card .c-stat { flex: 1; text-align: center; }
+.case-card .c-stat .n { font-family: var(--fh); font-size: 1.3rem; color: var(--gold); display: block; }
+.case-card .c-stat .l { font-size: 10px; font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; color: var(--tx-lt); margin-top: 3px; display: block; }
+
+/* ── PDF print mode ────────────────── */
+@media print {
+  nav, #nav, .consent, .wa-fab, .mobile-cta-bar, .compare-tray, .toast-wrap, #chatbot, .back-top-btn, .side-nav, .scroll-progress, .hub-section, .ticker-wrap, footer { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .modal { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .modal-close { display: none !important; }
+  * { color: black !important; background: white !important; }
+}
+
 /* ── Consent banner ────────────────────── */
 .consent { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 1300; background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; display: none; align-items: center; gap: 14px; font-size: 13px; color: var(--tx-mid); box-shadow: 0 20px 50px rgba(0,0,0,.5); max-width: 720px; margin: 0 auto; flex-wrap: wrap; }
 .consent.open { display: flex; }
@@ -1946,6 +2010,12 @@ section { scroll-margin-top: var(--nav-h); }
 </head>
 <body>
 
+<!-- ══ TOAST CONTAINER + WHATSAPP FAB ═════ -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+<a href="https://wa.me/821052880006" target="_blank" rel="noopener" class="wa-fab" aria-label="WhatsApp ERGSN">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.002-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
 <!-- ══ SCROLL PROGRESS + SIDE DOT NAV ═════ -->
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="side-nav" id="sideNav" aria-label="Section navigation">
@@ -1996,7 +2066,8 @@ section { scroll-margin-top: var(--nav-h); }
           <a href="#about">Gateway</a>
           <ul class="nav-dropmenu">
             <li><a href="#about"><span class="ds-name">About ERGSN</span><span class="ds-desc">Who we are &amp; our mission</span></a></li>
-            <li><a href="#shorts"><span class="ds-name">Factory Shorts <span class="ds-tag">New</span></span><span class="ds-desc">30-sec partner production clips</span></a></li>
+            <li><a href="#cases"><span class="ds-name">Case Studies <span class="ds-tag">New</span></span><span class="ds-desc">Real shipments &middot; real buyers</span></a></li>
+            <li><a href="#shorts"><span class="ds-name">Factory Shorts</span><span class="ds-desc">30-sec partner production clips</span></a></li>
             <li><a href="#verify"><span class="ds-name">Verification Process</span><span class="ds-desc">4-step partner qualification</span></a></li>
             <li><a href="#map"><span class="ds-name">Trade Route Map</span><span class="ds-desc">Global shipping lanes from Korea</span></a></li>
             <li><a href="#radar"><span class="ds-name">K-Wave Radar <span class="ds-tag">Live</span></span><span class="ds-desc">Regional demand heat map</span></a></li>
@@ -2400,6 +2471,67 @@ section { scroll-margin-top: var(--nav-h); }
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARTNER LOGOS (Trust bar) ═══════════ -->
+<section class="partners-section" aria-label="Trusted partners">
+  <div class="container">
+    <p class="partners-title">Trusted by procurement teams worldwide</p>
+    <div class="partners-grid">
+      <span class="partner-item">Capital Shredder</span>
+      <span class="partner-item">U.S. DoD</span>
+      <span class="partner-item">GSA Schedule</span>
+      <span class="partner-item">KOTRA Verified</span>
+      <span class="partner-item">Korea Customs</span>
+      <span class="partner-item">Tier-1 K-Fabs</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CASE STUDIES (Trust) ════════════════ -->
+<section class="cases-section" id="cases">
+  <div class="container cases-inner">
+    <div class="reveal">
+      <span class="label" style="color:var(--gold)">Proof In Numbers</span>
+      <h2 class="h-lg" style="margin:.6rem 0 1rem">Case Studies</h2>
+      <p class="body-lg" style="max-width:620px">Real shipments, real buyers. ERGSN-verified Korean partners delivering on time, to spec, across continents.</p>
+    </div>
+    <div class="cases-grid">
+      <article class="case-card reveal">
+        <div class="c-flag">🇺🇸</div>
+        <h3>Capital Shredder Corp.</h3>
+        <p class="c-sub">Rockville, MD · Long-term partnership</p>
+        <p>Multiple DL Series purchase orders delivered CIF Baltimore on schedule. Zero failed inspections. Ongoing re-orders for U.S. federal procurement.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">100%</span><span class="l">On-time</span></div>
+          <div class="c-stat"><span class="n">13+</span><span class="l">Years</span></div>
+          <div class="c-stat"><span class="n">0</span><span class="l">Defects</span></div>
+        </div>
+      </article>
+      <article class="case-card reveal">
+        <div class="c-flag">🇸🇦</div>
+        <h3>GCC Government Ministry</h3>
+        <p class="c-sub">Office Security · 48-unit deployment</p>
+        <p>DL-16XD department-grade shredders deployed across 12 ministerial offices. HIPAA/Level-3 compliance for classified document handling.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">48</span><span class="l">Units</span></div>
+          <div class="c-stat"><span class="n">6wk</span><span class="l">Lead</span></div>
+          <div class="c-stat"><span class="n">CIF</span><span class="l">Jeddah</span></div>
+        </div>
+      </article>
+      <article class="case-card reveal">
+        <div class="c-flag">🇯🇵</div>
+        <h3>Tokyo Healthcare Group</h3>
+        <p class="c-sub">HIPAA-equivalent · PHI destruction</p>
+        <p>DL-12XD fleet for 24-clinic network. Oil-free, all-metal construction selected for cleanroom adjacency. Zero service callouts in 18 months.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">24</span><span class="l">Clinics</span></div>
+          <div class="c-stat"><span class="n">0</span><span class="l">Callouts</span></div>
+          <div class="c-stat"><span class="n">18mo</span><span class="l">Uptime</span></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -2932,6 +3064,20 @@ section { scroll-margin-top: var(--nav-h); }
   </div>
 </section>
 
+<!-- ══ NEWSLETTER ═════════════════════════ -->
+<section class="news-section" id="newsletter">
+  <div class="container news-inner">
+    <span class="label" style="color:var(--gold)">Weekly · Free</span>
+    <h2 class="h-lg">K-Trade Digest</h2>
+    <p>Curated updates on Korean hi-tech launches, verified partners joining ERGSN, and regional trade signals. One email per week. Unsubscribe anytime.</p>
+    <form class="news-form" onsubmit="subscribeNewsletter(event)">
+      <input type="email" id="newsEmail" placeholder="you@company.com" required autocomplete="email">
+      <button type="submit">Subscribe</button>
+    </form>
+    <p class="news-mini">By subscribing you agree to our <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</p>
+  </div>
+</section>
+
 <!-- ══ FOOTER ════════════════════════════════ -->
 <footer id="footer">
   <div class="container footer-inner">
@@ -3184,6 +3330,7 @@ function openModal(id) {
     </div>
     <div class="modal-ft">
       <a href="#rfq" class="btn btn-gold" onclick="return requestQuote('${id}')">Request a Quote</a>
+      <button type="button" class="btn btn-outline" onclick="printSpecSheet()" style="margin-left:8px">📄 Save as PDF</button>
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
     </div>`;
   withViewTransition(() => {
@@ -3624,12 +3771,10 @@ document.addEventListener('DOMContentLoaded', function initSpotlight(){
   }
   renderSpotlight();
   initLiveHub();
-  initRadar();
-  initShorts();
   initTradeTools();
-  initQAWall();
   startCountdown();
   updateLeaderboard();
+  // initRadar, initShorts, initQAWall are lazy-loaded via IntersectionObserver (see lazyInit)
 });
 
 /* ── Tier 1: Daily Pulse ─────────────── */
@@ -3876,7 +4021,7 @@ const SHORTS = [
 ];
 function initShorts() {
   const el = document.getElementById('shortsScroll'); if (!el) return;
-  el.innerHTML = SHORTS.map(s => `<div class="short-card" onclick="alert('Full video coming soon — production walkthroughs will unlock for verified buyers.')">
+  el.innerHTML = SHORTS.map(s => `<div class="short-card" onclick="toast('Full video coming soon — production walkthroughs unlock for verified buyers.', 'info')">
     <div class="short-vis" style="background:${s.g};font-size:64px">${s.i}</div>
     <div class="short-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
     <div class="short-overlay"><p class="short-title">${s.t}</p><p class="short-meta">${s.m}</p></div>
@@ -3993,6 +4138,59 @@ function submitQA(e) {
   document.getElementById('qaQ').value = '';
   initQAWall();
 }
+
+/* ── Toast system ─────────────────────── */
+function toast(msg, kind) {
+  const wrap = document.getElementById('toastWrap'); if (!wrap) return;
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 260); }, 3600);
+}
+
+/* ── Newsletter ───────────────────────── */
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  const email = document.getElementById('newsEmail').value.trim();
+  if (!email) return;
+  try {
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ _cc: RFQ_CC, _subject: `[NEWSLETTER] ${email}`, _template: 'table', _captcha: 'false', Email: email, Source: 'ceodon.github.io/ergsn (Newsletter)' })
+    }).catch(()=>{});
+    sendTG(`📰 Newsletter signup: ${email}`, 'plain');
+  } catch(_) {}
+  document.getElementById('newsEmail').value = '';
+  toast('✓ Subscribed. Welcome to K-Trade Digest.');
+}
+
+/* ── PDF spec sheet (print-to-PDF) ───── */
+function printSpecSheet() {
+  toast('Opening print dialog — choose "Save as PDF" to download.');
+  setTimeout(() => window.print(), 400);
+}
+
+/* ── Lazy init deferred sections ────── */
+function lazyInit() {
+  if (!('IntersectionObserver' in window)) return;
+  const targets = [
+    { id: 'shorts', cb: () => typeof initShorts === 'function' && initShorts() },
+    { id: 'radar', cb: () => typeof initRadar === 'function' && initRadar() },
+    { id: 'qa', cb: () => typeof initQAWall === 'function' && initQAWall() }
+  ];
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const match = targets.find(t => t.id === e.target.id);
+      if (match && !match.done) { match.cb(); match.done = true; }
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '200px' });
+  targets.forEach(t => { const el = document.getElementById(t.id); if (el) io.observe(el); });
+}
+document.addEventListener('DOMContentLoaded', lazyInit);
 
 /* ── Tier 3: 3D spin toggle ─────────── */
 function toggleSpin(btn) {
@@ -5637,6 +5835,13 @@ function submitRFQ() {
     alert('Sorry, your inquiry could not be sent right now.\n\nPlease reach us on Telegram @ceodon or try again in a moment.\n\n(' + (err.message||err) + ')');
     sendBtn.innerHTML = originalLabel;
     sendBtn.disabled = false;
+  });
+}
+
+/* ── Service Worker registration ────── */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
 

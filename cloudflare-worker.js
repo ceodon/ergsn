@@ -28,6 +28,9 @@ export default {
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
     if (request.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: cors });
+    if (allow !== '*' && origin !== allow) {
+      return new Response(JSON.stringify({ ok: false, error: 'origin not allowed' }), { status: 403, headers: { ...cors, 'Content-Type': 'application/json' } });
+    }
 
     let body;
     try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers: cors }); }
