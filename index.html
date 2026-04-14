@@ -1734,6 +1734,8 @@ button:focus:not(:focus-visible) { outline: none; }
 .pulse-cell .v .d { font-size: 11px; font-family: var(--fb); font-weight: 700; }
 .pulse-cell .v .d.up { color: var(--gold); }
 .pulse-cell .v .d.dn { color: #ff7070; }
+.pulse-cell .src { display: block; margin-top: 5px; font-size: 9px; color: var(--tx-lt); letter-spacing: .04em; line-height: 1.3; font-family: var(--fb); }
+.pulse-cell .src.live { color: var(--gold); }
 .pulse-head { font-family: var(--fh); font-weight: 800; font-size: 1rem; color: var(--white); line-height: 1.3; }
 .pulse-head em { color: var(--gold); font-style: normal; }
 .ticker-wrap { height: 130px; overflow: hidden; position: relative; border-radius: 8px; }
@@ -2220,10 +2222,10 @@ button:focus:not(:focus-visible) { outline: none; }
         <h3>Daily K-Market Pulse</h3>
         <p class="pulse-head" id="pulseHead">—</p>
         <div class="pulse-row">
-          <div class="pulse-cell"><span class="k">KRW/USD</span><span class="v" id="pulseFx">—</span></div>
-          <div class="pulse-cell"><span class="k">Shipping Index</span><span class="v" id="pulseShip">—</span></div>
-          <div class="pulse-cell"><span class="k">Hot Sector</span><span class="v" id="pulseSector">—</span></div>
-          <div class="pulse-cell"><span class="k">Spotlight Adds</span><span class="v" id="pulseAdds">—</span></div>
+          <div class="pulse-cell"><span class="k">KRW/USD</span><span class="v" id="pulseFx">—</span><span class="src" id="pulseFxSrc">loading…</span></div>
+          <div class="pulse-cell"><span class="k">Shipping Index</span><span class="v" id="pulseShip">—</span><span class="src">Illustrative · SCFI proxy (Q3 2026 real-time)</span></div>
+          <div class="pulse-cell"><span class="k">Hot Sector</span><span class="v" id="pulseSector">—</span><span class="src">Weekly · derived from Match queries</span></div>
+          <div class="pulse-cell"><span class="k">Spotlight Adds</span><span class="v" id="pulseAdds">—</span><span class="src">Live · active concepts under evaluation</span></div>
         </div>
       </div>
       <div class="hub-card">
@@ -3839,6 +3841,37 @@ document.addEventListener('DOMContentLoaded', function initSpotlight(){
   // initRadar, initShorts, initQAWall are lazy-loaded via IntersectionObserver (see lazyInit)
 });
 
+/* ── Live FX (ECB reference via Frankfurter) ─ */
+async function fetchFxKRW() {
+  const CACHE_KEY = 'ergsn_fx_krw';
+  const CACHE_MS = 60 * 60 * 1000; // 1 hour
+  // Try cache first
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) {
+      const c = JSON.parse(raw);
+      if (c && c.t && (Date.now() - c.t) < CACHE_MS && c.rate) return { rate: c.rate, delta: c.delta, asOf: c.asOf || 'cached' };
+    }
+  } catch(_) {}
+  // Fetch latest + prior day to compute delta
+  const today = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=KRW').then(r => r.json());
+  if (!today || !today.rates || !today.rates.KRW) throw new Error('no rate');
+  const rate = today.rates.KRW;
+  let delta = null;
+  try {
+    const priorDate = new Date(today.date || Date.now());
+    priorDate.setDate(priorDate.getDate() - 7);
+    const priorStr = priorDate.toISOString().slice(0, 10);
+    const prior = await fetch(`https://api.frankfurter.dev/v1/${priorStr}?base=USD&symbols=KRW`).then(r => r.json());
+    if (prior && prior.rates && prior.rates.KRW) {
+      delta = ((rate - prior.rates.KRW) / prior.rates.KRW) * 100;
+    }
+  } catch(_) {}
+  const asOf = today.date ? `as of ${today.date}` : 'today';
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), rate, delta, asOf })); } catch(_) {}
+  return { rate, delta, asOf };
+}
+
 /* ── Tier 1: Daily Pulse ─────────────── */
 function dailySeed() { const d = new Date(); return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate(); }
 function seededRand(seed, n) { const x = Math.sin(seed) * 10000; return ((x - Math.floor(x)) * n) | 0; }
@@ -3855,19 +3888,29 @@ function initLiveHub() {
   const d = new Date();
   const dateEl = document.getElementById('hubDate');
   if (dateEl) dateEl.textContent = d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' }) + ' · KST';
-  const fx = (1310 + seededRand(seed, 60) - 30).toFixed(0);
-  const fxDelta = ((seededRand(seed+1, 200) - 100) / 100).toFixed(2);
   const ship = (1450 + seededRand(seed+2, 300)).toFixed(0);
   const shipDelta = ((seededRand(seed+3, 80) - 40) / 10).toFixed(1);
   const sector = PULSE_SECTORS[seededRand(seed+4, PULSE_SECTORS.length)];
-  const adds = 2 + seededRand(seed+5, 5);
+  // Real Spotlight count from the actual catalog
+  const spotlightCount = (typeof SPOTLIGHTS !== 'undefined' && Array.isArray(SPOTLIGHTS)) ? SPOTLIGHTS.length : 0;
   const head = PULSE_HEADLINES[seededRand(seed+6, PULSE_HEADLINES.length)];
   const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
   set('pulseHead', head);
-  set('pulseFx', `₩${fx}<span class="d ${fxDelta>=0?'up':'dn'}">${fxDelta>=0?'▲':'▼'}${Math.abs(fxDelta)}%</span>`);
   set('pulseShip', `${ship}<span class="d ${shipDelta>=0?'up':'dn'}">${shipDelta>=0?'▲':'▼'}${Math.abs(shipDelta)}</span>`);
   set('pulseSector', sector);
-  set('pulseAdds', `+${adds}`);
+  set('pulseAdds', `${spotlightCount}`);
+  // Live FX from Frankfurter (ECB reference) — cached 1h in localStorage to avoid hammering
+  fetchFxKRW().then(({rate, delta, asOf}) => {
+    set('pulseFx', `₩${rate.toLocaleString('en-US',{maximumFractionDigits:2})}` + (delta !== null ? `<span class="d ${delta>=0?'up':'dn'}">${delta>=0?'▲':'▼'}${Math.abs(delta).toFixed(2)}%</span>` : ''));
+    const src = document.getElementById('pulseFxSrc');
+    if (src) { src.textContent = `ECB ref · ${asOf}`; src.classList.add('live'); }
+  }).catch(() => {
+    // Fallback: last-known or seeded
+    const fx = (1350 + seededRand(seed, 60) - 30).toFixed(0);
+    set('pulseFx', `₩${fx}<span class="d" style="color:var(--tx-lt)">ref</span>`);
+    const src = document.getElementById('pulseFxSrc');
+    if (src) src.textContent = 'Reference only · live feed unavailable';
+  });
   renderTicker(seed);
   renderMissions();
   renderPassport();
