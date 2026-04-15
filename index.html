@@ -1586,6 +1586,22 @@ section { scroll-margin-top: var(--nav-h); }
   color: var(--gold); margin: 1.2rem 0 .4rem;
   padding-bottom: .4rem; border-bottom: 1px solid rgba(255,255,255,.08);
 }
+.mobile-menu details { border-bottom: 1px solid rgba(255,255,255,.06); }
+.mobile-menu details > summary {
+  list-style: none; cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--fb); font-size: 13px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--white); padding: 14px 4px;
+}
+.mobile-menu details > summary::-webkit-details-marker { display: none; }
+.mobile-menu details > summary::after {
+  content: '+'; font-size: 20px; font-weight: 400; color: var(--gold);
+  transition: transform .2s;
+}
+.mobile-menu details[open] > summary::after { content: '−'; }
+.mobile-menu details ul { padding: 0 0 10px 4px; }
+.mobile-menu details ul li a { padding: 10px 0; font-size: 14px; }
 
 /* ── RFQ 2-step progress ──────────────── */
 .rfq-steps { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
@@ -2108,28 +2124,38 @@ button:focus:not(:focus-visible) { outline: none; }
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <ul>
-    <li class="mm-group-title">Shop</li>
-    <li><a href="#products" onclick="switchSector('office-security');closeMenu()">Office Security (Active)</a></li>
-    <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (Sourcing)</a></li>
-    <li><a href="#products" onclick="switchSector('smart-living');closeMenu()">Smart Living (Sourcing)</a></li>
-    <li><a href="#products" onclick="switchSector('future-energy');closeMenu()">Future Energy (Sourcing)</a></li>
-    <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
-    <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
-    <li class="mm-group-title">Trust</li>
-    <li><a href="#about" onclick="closeMenu()">About ERGSN</a></li>
-    <li><a href="#cases" onclick="closeMenu()">Case Studies</a></li>
-    <li><a href="#verify" onclick="closeMenu()">Verification Process</a></li>
-    <li><a href="#map" onclick="closeMenu()">Trade Route Map</a></li>
-    <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
-    <li><a href="#spotlight" onclick="closeMenu()">Spotlight Concepts</a></li>
-    <li class="mm-group-title">Connect</li>
-    <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
-    <li><a href="#tools" onclick="closeMenu()">Book a Demo · Compliance Checker</a></li>
-    <li><a href="tracker.html" onclick="closeMenu()">RFQ Tracker</a></li>
-    <li><a href="#qa" onclick="closeMenu()">Q&amp;A Wall</a></li>
-    <li><a href="partners-kr.html" onclick="closeMenu()"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold)">KR</span>한국 파트너 문의</a></li>
-  </ul>
+  <details>
+    <summary>Shop</summary>
+    <ul>
+      <li><a href="#products" onclick="switchSector('office-security');closeMenu()">Office Security (Active)</a></li>
+      <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('smart-living');closeMenu()">Smart Living (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('future-energy');closeMenu()">Future Energy (Sourcing)</a></li>
+      <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
+      <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
+    </ul>
+  </details>
+  <details>
+    <summary>Trust</summary>
+    <ul>
+      <li><a href="#about" onclick="closeMenu()">About ERGSN</a></li>
+      <li><a href="#cases" onclick="closeMenu()">Case Studies</a></li>
+      <li><a href="#verify" onclick="closeMenu()">Verification Process</a></li>
+      <li><a href="#map" onclick="closeMenu()">Trade Route Map</a></li>
+      <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
+      <li><a href="#spotlight" onclick="closeMenu()">Spotlight Concepts</a></li>
+    </ul>
+  </details>
+  <details>
+    <summary>Connect</summary>
+    <ul>
+      <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
+      <li><a href="#tools" onclick="closeMenu()">Book a Demo · Compliance Checker</a></li>
+      <li><a href="tracker.html" onclick="closeMenu()">RFQ Tracker</a></li>
+      <li><a href="#qa" onclick="closeMenu()">Q&amp;A Wall</a></li>
+      <li><a href="partners-kr.html" onclick="closeMenu()"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold)">KR</span>한국 파트너 문의</a></li>
+    </ul>
+  </details>
   <select class="lang-sel" id="langSelMobile" style="margin:16px 0" onchange="setLang(this.value)" aria-label="Language">
     <option value="en">EN</option>
     <option value="es">ES</option>
