@@ -665,6 +665,10 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .compare-tray.open,
 .compare-tray:has(.compare-chip) { transform: translateY(0); }
+@media (max-width: 760px) {
+  .compare-tray, .compare-tray.open, .compare-tray:has(.compare-chip) { display: none !important; }
+  .compare-btn { display: none !important; }
+}
 .compare-tray-left {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1;
   min-width: 0;
