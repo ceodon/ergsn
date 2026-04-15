@@ -1457,34 +1457,6 @@ section { scroll-margin-top: var(--nav-h); }
 .chat-send:hover { background: var(--gold-light); }
 .chat-send svg { width: 16px; height: 16px; }
 
-/* SOCIAL PROOF TOAST */
-#socialProof {
-  position: fixed;
-  left: clamp(16px,3vw,32px);
-  bottom: calc(clamp(56px,6vw,72px) + var(--bottom-cta-h));
-  background: #171717; border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 16px;
-  max-width: 310px; z-index: 750;
-  display: flex; gap: 10px; align-items: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,.5);
-  opacity: 0; transform: translateX(-20px);
-  transition: opacity .35s ease, transform .35s ease;
-  pointer-events: none;
-}
-#socialProof.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
-.sp-flag { font-size: 22px; flex-shrink: 0; }
-.sp-text { font-size: 12px; color: var(--tx-mid); line-height: 1.5; }
-.sp-text strong { color: var(--gold); font-weight: 600; }
-.sp-time { font-size: 10px; color: var(--tx-lt); margin-top: 2px; }
-.sp-close {
-  position: absolute; top: 6px; right: 8px;
-  font-size: 12px; color: var(--tx-lt); cursor: pointer;
-  background: none; border: none; line-height: 1;
-}
-@media (max-width: 760px) {
-  #socialProof { max-width: 260px; padding: 10px 12px; }
-}
-
 /* QUOTE CALCULATOR */
 .calc-section { background: #0a0a0a; }
 .calc-inner { padding: clamp(3rem,6vh,5rem) 0; }
@@ -3208,22 +3180,7 @@ button:focus:not(:focus-visible) { outline: none; }
   <div class="compare-modal" id="compareModalContent"></div>
 </div>
 
-<!-- ══ MOBILE CTA BAR ══════════════════════════ -->
-<div class="mobile-cta-bar" aria-label="Quick contact">
-  <a href="https://t.me/ceodon" target="_blank" rel="noopener" class="mcta-call"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 1 0 24 12.056A12.013 12.013 0 0 0 11.944 0Zm5.654 8.22l-1.636 7.706c-.12.548-.44.68-.896.424l-2.47-1.822-1.192 1.148a.622.622 0 0 1-.498.242l.178-2.518 4.58-4.138c.2-.178-.044-.276-.308-.1l-5.66 3.564-2.44-.762c-.53-.166-.54-.53.112-.786l9.534-3.676c.442-.16.828.108.696.718Z"/></svg><span data-t="cta_telegram">Telegram</span></a>
-  <a href="#rfq" class="mcta-quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-t="cta_quote">Request Quote</span></a>
-</div>
-
 <!-- ══ SOCIAL PROOF ═══════════════════════════ -->
-<div id="socialProof">
-  <span class="sp-flag" id="spFlag"></span>
-  <div>
-    <p class="sp-text" id="spText"></p>
-    <p class="sp-time" id="spTime"></p>
-  </div>
-  <button class="sp-close" onclick="dismissSP()">&times;</button>
-</div>
-
 <!-- ══ CHATBOT ════════════════════════════════ -->
 <button id="chatToggle" type="button" aria-label="Product advisor" onclick="toggleChat()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
@@ -5809,36 +5766,6 @@ function onIncotermsChange() {
   const destWrap = document.getElementById('fDestWrap');
   destWrap.style.display = val === 'EXW' ? 'none' : '';
 }
-
-/* ═══ ① SOCIAL PROOF TICKER ══════════════════ */
-const SP_DATA = [
-  { flag:'🇺🇸', text:'Company in <strong>Houston, TX</strong> requested quote for <strong>DL-16XD</strong>', time:'2 min ago' },
-  { flag:'🇩🇪', text:'Logistics firm in <strong>Munich</strong> comparing <strong>DL-12X vs DL-16X</strong>', time:'5 min ago' },
-  { flag:'🇦🇪', text:'Government agency in <strong>Dubai</strong> ordered <strong>DL-12XD (20 units)</strong>', time:'12 min ago' },
-  { flag:'🇬🇧', text:'Healthcare group in <strong>London</strong> requested HIPAA specs', time:'18 min ago' },
-  { flag:'🇯🇵', text:'Office supplier in <strong>Tokyo</strong> viewing <strong>DL-10X</strong>', time:'25 min ago' },
-  { flag:'🇧🇷', text:'Bank in <strong>São Paulo</strong> requested quote for <strong>DL-16XD</strong>', time:'32 min ago' },
-  { flag:'🇸🇬', text:'Law firm in <strong>Singapore</strong> ordered <strong>DL-12X (15 units)</strong>', time:'40 min ago' },
-  { flag:'🇫🇷', text:'University in <strong>Paris</strong> comparing <strong>DL-10XD vs DL-12XD</strong>', time:'48 min ago' },
-  { flag:'🇹🇷', text:'Manufacturer in <strong>Istanbul</strong> requested CIF quote', time:'55 min ago' },
-  { flag:'🇦🇺', text:'Hospital in <strong>Sydney</strong> ordered <strong>DL-12XD (25 units)</strong>', time:'1 hr ago' },
-  { flag:'🇸🇦', text:'Ministry in <strong>Riyadh</strong> viewing GSA-listed models', time:'1 hr ago' },
-  { flag:'🇲🇽', text:'Distributor in <strong>Mexico City</strong> requested OEM pricing', time:'2 hrs ago' },
-];
-let spIdx = 0, spTimer = null, spDismissed = false;
-function showSP() {
-  if (spDismissed) return;
-  const el = document.getElementById('socialProof');
-  const d = SP_DATA[spIdx % SP_DATA.length];
-  document.getElementById('spFlag').textContent = d.flag;
-  document.getElementById('spText').innerHTML = d.text;
-  document.getElementById('spTime').textContent = d.time;
-  el.classList.add('show');
-  setTimeout(() => { el.classList.remove('show'); }, 5000);
-  spIdx++;
-}
-function dismissSP() { spDismissed = true; document.getElementById('socialProof').classList.remove('show'); clearInterval(spTimer); }
-setTimeout(() => { showSP(); spTimer = setInterval(showSP, 12000); }, 4000);
 
 /* ═══ ② INSTANT QUOTE CALCULATOR ════════════ */
 const CALC_PRICES = { dl10x:1450, dl12x:1680, dl16x:2100, dl10xd:3200, dl12xd:2600, dl16xd:7800 };
