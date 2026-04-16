@@ -349,6 +349,10 @@ section { scroll-margin-top: var(--nav-h); }
   padding: 6px 14px; background: rgba(52,210,152,.1); border-radius: 20px;
 }
 
+/* K-Tech product card SVG visual (services have no photo) */
+.card-image.card-image-svg { padding: 0; background: #0b1d38; }
+.card-image.card-image-svg svg { width: 100%; height: 100%; display: block; }
+
 /* HAMBURGER */
 .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; }
 .hamburger span { width: 22px; height: 2px; background: var(--white); border-radius: 1px; transition: all .2s; display: block; }
@@ -767,6 +771,12 @@ section { scroll-margin-top: var(--nav-h); }
   padding: 8px; margin: 0 0 10px;
 }
 .compare-table .ct-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.compare-table .ct-img-svc {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--navy), var(--navy-3));
+  color: var(--gold); font-family: var(--fd); font-size: 13px; font-weight: 800;
+  letter-spacing: .08em; border-radius: 3px;
+}
 .compare-table .ct-model {
   font-family: var(--fd); font-size: clamp(18px,2vw,24px);
   font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 4px;
@@ -2240,7 +2250,7 @@ button:focus:not(:focus-visible) { outline: none; }
         Office Security <span class="st-tag">Active</span>
       </button>
       <button class="sector-tab" data-sector="k-tech" onclick="switchSector('k-tech')">
-        K-Tech <span class="st-tag">Soon</span>
+        K-Tech <span class="st-tag">Active</span>
       </button>
       <button class="sector-tab" data-sector="k-bio" onclick="switchSector('k-bio')">
         K-Bio <span class="st-tag">Soon</span>
@@ -2388,6 +2398,108 @@ button:focus:not(:focus-visible) { outline: none; }
       <h3 id="spTitle"></h3>
       <p id="spDesc"></p>
       <span class="sp-coming">Coming Soon · 2026</span>
+    </div>
+
+    <!-- K-Tech product grid: 2D → 3D Stereoscopic Conversion services -->
+    <div class="product-grid" id="ktechGrid" style="display:none">
+
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="kt3dx" onclick="openModal('kt3dx')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dx')">
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="ktg1" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1d38"/><stop offset="1" stop-color="#1a3460"/></linearGradient>
+            </defs>
+            <rect width="200" height="150" fill="url(#ktg1)"/>
+            <g stroke="#c8932a" stroke-width="1.2" fill="none" opacity=".8">
+              <rect x="30" y="42" width="58" height="38" rx="3"/>
+              <rect x="112" y="42" width="58" height="38" rx="3" transform="translate(4 2)"/>
+            </g>
+            <g fill="#c8932a" opacity=".55"><circle cx="59" cy="61" r="3"/><circle cx="145" cy="63" r="3"/></g>
+            <text x="100" y="115" text-anchor="middle" fill="#c8932a" font-family="Syncopate,sans-serif" font-size="11" font-weight="800" letter-spacing="2">2D &#8594; 3D</text>
+            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="8" letter-spacing="1">STEREOSCOPIC CONVERSION</text>
+          </svg>
+        </div>
+        <p class="card-tag">Film &middot; Broadcast &middot; 3D TV</p>
+        <p class="card-model">KT-3DX</p>
+        <p class="card-part">Part No: KT3DX (STD-2D3D)</p>
+        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
+        <p class="card-desc">Proprietary 2D-to-3D stereoscopic conversion &mdash; the standard profile tuned for theatrical 3D, 3D TVs, and broadcast delivery.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Input Formats</p><p class="spec-val">ProRes / H.264</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">SBS / OU / MVC</p></div>
+          <div><p class="spec-lbl">Max Resolution</p><p class="spec-val">4K UHD</p></div>
+          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">2&ndash;4 weeks</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DX to compare" onclick="event.stopPropagation();toggleCompare('kt3dx',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="kt3dxvr" onclick="openModal('kt3dxvr')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dxvr')">
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="ktg2" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#122242"/><stop offset="1" stop-color="#0b1d38"/></linearGradient>
+            </defs>
+            <rect width="200" height="150" fill="url(#ktg2)"/>
+            <path d="M40 68 Q40 50 60 50 H140 Q160 50 160 68 V88 Q160 100 148 100 H130 L118 112 L100 100 L82 112 L70 100 H52 Q40 100 40 88 Z" fill="none" stroke="#c8932a" stroke-width="1.5"/>
+            <circle cx="80" cy="78" r="6" fill="#c8932a" opacity=".7"/>
+            <circle cx="120" cy="78" r="6" fill="#c8932a" opacity=".7"/>
+            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="9" letter-spacing="2" font-weight="700">HMD &middot; VR PROFILE</text>
+          </svg>
+        </div>
+        <p class="card-tag">HMD &middot; VR &middot; Immersive</p>
+        <p class="card-model">KT-3DX&middot;VR</p>
+        <p class="card-part">Part No: KT3DXVR (HMD-PROFILE)</p>
+        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
+        <p class="card-desc">Head-mounted display profile &mdash; 2D content converted with per-eye parallax tuning for HMDs and VR viewers. Low-latency output.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Target</p><p class="spec-val">HMD / VR</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">Stereo MP4 / MKV</p></div>
+          <div><p class="spec-lbl">Frame Rate</p><p class="spec-val">Up to 90 fps</p></div>
+          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">3&ndash;5 weeks</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DX VR to compare" onclick="event.stopPropagation();toggleCompare('kt3dxvr',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="kt3dxauto" onclick="openModal('kt3dxauto')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dxauto')">
+        <span class="card-badge">New</span>
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="ktg3" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1d38"/><stop offset="1" stop-color="#122242"/></linearGradient>
+            </defs>
+            <rect width="200" height="150" fill="url(#ktg3)"/>
+            <g stroke="#c8932a" stroke-width="1" opacity=".55" fill="none">
+              <line x1="55" y1="45" x2="55" y2="95"/><line x1="75" y1="45" x2="75" y2="95"/>
+              <line x1="95" y1="45" x2="95" y2="95"/><line x1="115" y1="45" x2="115" y2="95"/>
+              <line x1="135" y1="45" x2="135" y2="95"/><line x1="145" y1="45" x2="145" y2="95"/>
+            </g>
+            <rect x="45" y="38" width="110" height="62" rx="3" fill="none" stroke="#c8932a" stroke-width="1.5"/>
+            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="9" letter-spacing="2" font-weight="700">GLASSES-FREE 3D</text>
+          </svg>
+        </div>
+        <p class="card-tag">Glasses-Free &middot; Tablet &middot; Mobile</p>
+        <p class="card-model">KT-3DX&middot;AUTO</p>
+        <p class="card-part">Part No: KT3DXAUTO (AUTOSTEREO)</p>
+        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
+        <p class="card-desc">Autostereoscopic profile &mdash; multi-view 2D-to-3D output tuned for glasses-free 3D TVs, tablets, and lenticular displays.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Target</p><p class="spec-val">Autostereo</p></div>
+          <div><p class="spec-lbl">Views</p><p class="spec-val">5 / 9 / 28-view</p></div>
+          <div><p class="spec-lbl">Max Resolution</p><p class="spec-val">4K UHD</p></div>
+          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">3&ndash;6 weeks</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DX Auto to compare" onclick="event.stopPropagation();toggleCompare('kt3dxauto',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2943,6 +3055,9 @@ button:focus:not(:focus-visible) { outline: none; }
               <label class="model-cb"><input type="checkbox" id="mDL10XD"><span class="model-cb-lbl">DL-10XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL12XD"><span class="model-cb-lbl">DL-12XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL16XD"><span class="model-cb-lbl">DL-16XD</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DX"><span class="model-cb-lbl">KT-3DX</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DXVR"><span class="model-cb-lbl">KT-3DX&middot;VR</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DXAUTO"><span class="model-cb-lbl">KT-3DX&middot;AUTO</span></label>
             </div>
           </div>
           <div class="f-row">
@@ -3199,6 +3314,24 @@ const P = {
     specs:[['Cut Type','Level 3 / P-4 Cross Cut'],['Entry Width','16\u201d'],['Sheet Capacity','Up to 90 sheets'],['Shred Size','5/32\u201d \u00d7 1-3/4\u201d'],['Speed','31 FPM'],['Motor','3.25 Hp'],['Waste Bin','45 Gallons'],['Dimensions','42\u201d \u00d7 34\u201d \u00d7 39\u201d'],['Voltage','115V, 30 Amp'],['Plug','NEMA L5-30P Locking'],['Cord','12/3 SO/SOWA, 10 ft'],['Oil Required','No (Oil-Free)'],['Cabinet','Heavy Duty All Metal'],['Mobility','Swivel Casters'],['Packaging','Individual Crate'],['Compliance','HIPAA \u2014 GSA Schedule']],
     features:['Flagship high-volume model \u2014 up to 90 sheets per pass at 31 FPM','3.25 Hp motor \u2014 highest-power DL Series shredder','45-Gallon waste bin \u2014 extended runtime between empties','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','115V / 30 Amp \u2014 U.S. electrical standards (NEMA L5-30P)','Individually crated for secure ocean freight','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder engineered for continuous heavy-duty operation. With up to 90 sheets per pass at 31 FPM and a 3.25 Hp motor, it delivers the highest throughput in the DL Series. Pre-wired for U.S. electrical standards at 115V / 30A with NEMA L5-30P locking plug and 12/3 cord, it installs directly in U.S. commercial and industrial facilities. A 45-gallon waste bin minimizes downtime, and the unit is individually crated for secure ocean freight.'
+  },
+  kt3dx: {
+    model:'KT-3DX', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 Film, Broadcast & 3D TV Standard Profile', part:'KT3DX (STD-2D3D)',
+    specs:[['Service Type','2D-to-3D Stereoscopic Conversion'],['Target Devices','3D TVs, Theatrical 3D, 3D Notebooks, 3D Smartphones'],['Input Formats','ProRes 422/4444, H.264, H.265, DPX, EXR'],['Output Formats','Side-by-Side, Over-Under, MVC, Frame-Packed'],['Max Resolution','4K UHD (3840\u00d72160)'],['Color Depth','8-bit / 10-bit per channel'],['Frame Rate','23.976 / 24 / 25 / 29.97 / 30 / 50 / 60 fps'],['Depth Grading','Custom per-scene, director-reviewed'],['Turnaround','2\u20134 weeks (feature-length pipeline)'],['Sample Clip','5\u201310 min test reel available'],['Delivery','FTP / Aspera / physical drive']],
+    features:['Proprietary 2D-to-3D conversion engine developed through continuous ERGSN R&D','Market-competitive pricing \u2014 below industry average for converted 3D content','Addresses the global 3D content shortage \u2014 unlock your 2D library for 3D distribution','Ideal for U.S. market demand, where conversion of standard films is preferred over original 3D production','Per-scene depth grading with director/DoP review cycles','Device-optimised output profiles for each target screen','Handles feature-length, broadcast episodic, and short-form content','Scalable pipeline \u2014 multiple concurrent titles supported'],
+    desc:'KT-3DX is ERGSN\'s standard 2D-to-3D stereoscopic conversion service, engineered to address the global shortage of 3D content. The film industry faces significant supply gaps relative to demand, with conversion costing more than 3\u00d7 that of regular 2D production \u2014 a barrier that causes many broadcasters and studios to hesitate. ERGSN\'s proprietary conversion technology, refined through continuous R&D, delivers device-optimised 3D output at market-competitive prices. KT-3DX is tuned for theatrical 3D, 3D TV broadcast, and mainstream stereoscopic delivery, with 4K UHD, multi-framerate, and multiple output container support.'
+  },
+  kt3dxvr: {
+    model:'KT-3DX\u00b7VR', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 HMD / VR Profile', part:'KT3DXVR (HMD-PROFILE)',
+    specs:[['Service Type','2D-to-3D Conversion (HMD-optimised)'],['Target Devices','3D HMDs, VR Headsets, Spatial Displays'],['Input Formats','ProRes, H.264, H.265, 180/360 source optional'],['Output Formats','Stereo MP4, MKV, side-by-side half/full'],['Max Resolution','Per-eye up to 4K (8K combined SBS)'],['Frame Rate','Up to 90 fps (HMD-friendly)'],['Parallax','Per-eye IPD-tuned, comfort-graded'],['Viewing Comfort','Low-motion-sickness profile, depth-budget controlled'],['Turnaround','3\u20135 weeks'],['Sample Clip','3\u20138 min HMD test reel available'],['Delivery','FTP / Aspera / digital drop']],
+    features:['HMD-optimised parallax \u2014 tuned per-eye for head-mounted viewing comfort','High frame rate output (up to 90 fps) for low-latency VR playback','Depth-budget control to minimise motion sickness','Compatible with major VR/HMD platforms','Leverages the same ERGSN proprietary conversion engine','Cost-competitive alternative to native 3D capture for VR content libraries','Suitable for VR cinema, location-based entertainment, training simulation','Proven pipeline for feature and short-form immersive content'],
+    desc:'KT-3DX\u00b7VR is the HMD and VR profile of ERGSN\'s 2D-to-3D conversion service. As 3D HMDs expand in both consumer and enterprise markets \u2014 alongside 3D TVs, smartphones, notebooks, tablets, and glasses-free 3D TVs \u2014 demand for VR-ready stereoscopic content continues to grow. KT-3DX\u00b7VR re-masters existing 2D footage with per-eye parallax tuning, depth-budget controls, and high-frame-rate output specifically calibrated for head-mounted display viewing comfort. Ideal for VR cinema, LBE, and training-sim libraries that need 3D output from legacy 2D masters.'
+  },
+  kt3dxauto: {
+    model:'KT-3DX\u00b7AUTO', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 Glasses-Free Autostereoscopic Profile', part:'KT3DXAUTO (AUTOSTEREO)',
+    specs:[['Service Type','2D-to-3D Multi-View Conversion'],['Target Devices','Glasses-Free 3D TVs, Autostereo Tablets, Lenticular Displays'],['Input Formats','ProRes, H.264, H.265, DPX'],['Output Formats','Multi-view interlaced, per-view streams'],['View Counts','5-view / 9-view / 28-view'],['Max Resolution','4K UHD per composite frame'],['Color Depth','8-bit / 10-bit per channel'],['Calibration','Per-panel geometry profile supported'],['Turnaround','3\u20136 weeks'],['Sample Clip','Autostereo test reel on request'],['Delivery','FTP / Aspera / digital drop']],
+    features:['Multi-view output \u2014 5, 9, or 28-view formats for lenticular and parallax-barrier panels','Per-panel geometry calibration for target displays','Tuned for tablets, glasses-free 3D TVs, and autostereoscopic signage','Same proprietary ERGSN conversion engine, optimised for multi-view','Cost-competitive vs. native multi-camera capture','Suitable for retail signage, museum/exhibit displays, device OEM demos','Per-scene depth grading to maintain comfortable autostereo viewing','Scalable delivery pipeline for OEM/retail/museum deployments'],
+    desc:'KT-3DX\u00b7AUTO is the glasses-free (autostereoscopic) profile of ERGSN\'s 2D-to-3D conversion service. Advancements in display technology have produced a wide array of glasses-free 3D-enabled devices \u2014 tablets, lenticular TVs, parallax-barrier signage. KT-3DX\u00b7AUTO converts 2D content into multi-view output (5, 9, or 28-view formats) calibrated per target panel, letting device OEMs, retailers, and exhibitors deliver 3D experiences without eyewear. As demand for 3D content continues to grow across device categories, ERGSN provides autostereoscopic output at market-competitive cost.'
   }
 };
 
@@ -3312,17 +3445,19 @@ function closeModalOutside(e) { if (e.target === document.getElementById('modalO
 const SECTORS = {
   'office-security': {
     active: true,
+    gridId: 'productGrid',
     tag: 'DL Series',
     title: 'Cross-Cut Shredders',
     desc: 'Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.'
   },
   'k-tech': {
-    active: false,
-    tag: 'K-Tech',
-    title: 'Korean Precision Electronics',
+    active: true,
+    gridId: 'ktechGrid',
+    tag: 'K-Tech · ERGSN Technology',
+    title: '2D → 3D Stereoscopic Conversion',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2"/></svg>',
     title2: 'K-Tech Sector',
-    desc: 'Semiconductors, display components, precision modules — verified Korean electronics manufacturers joining the network.'
+    desc: 'Proprietary 2D-to-3D conversion technology — device-optimised stereoscopic content for 3D TVs, HMDs, smartphones, tablets, and glasses-free displays.'
   },
   'k-bio': {
     active: false,
@@ -3366,13 +3501,12 @@ function switchSector(id) {
     header.querySelector('h3').textContent = s.title;
     header.querySelector('p').textContent = s.desc;
   }
-  const grid = document.getElementById('productGrid');
   const ph = document.getElementById('sectorPlaceholder');
+  const grids = document.querySelectorAll('#products .product-grid');
+  grids.forEach(g => { g.style.display = (s.active && s.gridId === g.id) ? '' : 'none'; });
   if (s.active) {
-    if (grid) grid.style.display = '';
     if (ph) ph.style.display = 'none';
   } else {
-    if (grid) grid.style.display = 'none';
     if (ph) {
       ph.style.display = '';
       document.getElementById('spIcon').innerHTML = s.icon || '';
@@ -3424,6 +3558,7 @@ const MATCH_CATALOG = [
   { id:'dl12xd', name:'DL-12XD Commercial Shredder', sector:'Office Security', tags:['finance','healthcare','tech','education','hospitality'], scale:['m','l'], desc:'Mid-volume workgroup shredder. Balanced throughput and footprint.' },
   { id:'dl10xd', name:'DL-10XD Executive Shredder', sector:'Office Security', tags:['finance','tech','retail','hospitality','logistics'], scale:['s','m'], desc:'Compact executive unit. Ideal for private offices and small teams.' },
   { id:'dl16x', name:'DL-16X Heavy-Duty Shredder', sector:'Office Security', tags:['government','manufacturing','logistics'], scale:['l','xl'], desc:'All-metal construction. Built for continuous high-volume destruction.' },
+  { id:'ktech-3dconv', name:'K-Tech: 2D → 3D Stereoscopic Conversion', sector:'K-Tech', tags:['tech','retail','hospitality','education'], scale:['s','m','l','xl'], desc:'ERGSN proprietary 2D-to-3D conversion — device-optimised output for 3D TVs, HMDs, tablets, glasses-free displays. Available now.' },
   { id:'ktech-semi', name:'K-Tech: Semiconductor Modules', sector:'K-Tech', tags:['tech','manufacturing','energy'], scale:['l','xl'], desc:'Verified Korean fab partners — precision modules & display components. Joining Q2 2026.', coming:true },
   { id:'ktech-sensor', name:'K-Tech: Industrial Sensors', sector:'K-Tech', tags:['manufacturing','energy','logistics','tech'], scale:['m','l'], desc:'High-precision IoT & industrial sensor suite from vetted Korean OEMs. Joining 2026.', coming:true },
   { id:'smart-iot', name:'Smart Living: Connected Appliances', sector:'Smart Living', tags:['retail','hospitality'], scale:['m','l','xl'], desc:'Premium K-lifestyle IoT appliances curated for global retail. Joining 2026.', coming:true },
@@ -5230,7 +5365,7 @@ function openCompareModal() {
   const specMap = items.map(it => Object.fromEntries(it.specs));
   const headCells = items.map(it => `
     <th>
-      <div class="ct-img"><img src="${it.img}" alt="ERGSN ${it.model}" loading="lazy"></div>
+      <div class="ct-img">${it.img ? `<img src="${it.img}" alt="ERGSN ${it.model}" loading="lazy">` : `<div class="ct-img-svc">${it.model}</div>`}</div>
       <p class="ct-model">${it.model}</p>
       <p class="ct-part">Part No: ${it.part}</p>
     </th>`).join('');
