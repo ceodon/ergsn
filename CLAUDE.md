@@ -4,7 +4,7 @@
 
 이 프로젝트의 배포 대상은 다음 저장소입니다:
 
-- **Remote**: `https://github.com/ceodon/ergsn.git`
+- **Remote**: `git@github.com:ceodon/ergsn.git` (SSH)
 - **Branch**: `main`
 
 "배포해줘" 요청이 오면 변경사항을 커밋하고 위 저장소의 `main` 브랜치로 푸시합니다.
@@ -16,8 +16,12 @@
 
 ### 인증
 
-푸시는 HTTPS + Personal Access Token을 사용합니다. 토큰은 저장소에 저장하지 않고,
-푸시할 때마다 사용자에게 요청합니다. 사용 후 폐기(Revoke)를 안내할 것.
+SSH 키 기반 자동 인증을 사용합니다. 사용자 개입 없이 바로 푸시하세요.
+
+- 키 위치: `~/.ssh/id_ed25519` (ed25519, 2026-04-17 생성)
+- GitHub 등록: `ceodon` 계정의 Authentication Key
+- PAT은 더 이상 요구하지 않습니다. 혹시 SSH 인증이 실패하면 키 만료·삭제 가능성을
+  사용자에게 알리고, PAT 폴백 전환은 사용자 승인 후 진행합니다.
 
 ### 제외 항목
 
