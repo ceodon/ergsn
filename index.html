@@ -4475,7 +4475,13 @@ function handleMore() {
     });
   } else {
     chatBotMsg("What would you like to know more about?", () => {
-      chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatContext.lastModel=id; handleSpec(id); }})));
+      chatOpts([
+        { label: 'Browse K-Security (DL Series)', action: () => chatStep('browse_models') },
+        { label: 'Browse K-Tech 3D services', action: () => chatStep('browse_ktech') },
+        { label: 'K-Bio · Rosetta Plus', action: () => chatStep('browse_kbio') },
+        { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living / Energy)', action: () => chatStep('browse_sourcing') },
+        { label: cl('quote') + ' →', action: () => chatStep('quote_direct') }
+      ]);
     });
   }
 }
@@ -4502,7 +4508,8 @@ function dynamicSpecLookup(text, modelId) {
   if (!id) return null;
   const p = P[id];
   const lower = text.toLowerCase();
-  const specKeywords = {
+  const sector = sectorOf(id);
+  const shredderKeywords = {
     'entry width':['entry','width','throat','opening','feed'],
     'sheet capacity':['sheet','capacity','pages','how many'],
     'shred size':['shred','particle','cut size'],
@@ -4515,7 +4522,33 @@ function dynamicSpecLookup(text, modelId) {
     'compliance':['hipaa','compliance','certif'],
     'cut type':['cut type','security','level','p-4']
   };
-  for (const [specKey, keywords] of Object.entries(specKeywords)) {
+  const ktechKeywords = {
+    'service type':['service type','what service','what it is'],
+    'use cases':['use case','use cases','what for','when to use'],
+    'output formats':['output format','format','side-by-side','over-under','mvc','frame-packed','dcp'],
+    'max resolution':['resolution','4k','uhd','hd'],
+    'color depth':['color depth','bit depth','10-bit','12-bit','8-bit'],
+    'frame rate':['frame rate','fps','24fps','60fps','23.976'],
+    'turnaround':['turnaround','lead time','how long','how fast','weeks'],
+    'input formats':['input format','source','prores','h.264','h.265','dpx','exr'],
+    'delivery':['delivery','deliver','download','aspera','drive'],
+    'depth grading':['depth grading','depth','review','grading','qc'],
+    'revisions':['revision','rounds','review cycle']
+  };
+  const kbioKeywords = {
+    'target function':['function','depression','psychosis','panic','mental','wellness','efficacy','claim'],
+    'certifications':['certification','haccp','kfda','fda','license','compliance','certified'],
+    'production capacity':['capacity','volume','units','production','scale','output'],
+    'active export markets':['export','market','country','where','mexico','yemen','india'],
+    'form':['form','liquid','emulsion','capsule','tablet','format'],
+    'process':['process','how made','manufactur','fermentation','extract'],
+    'core raw materials':['raw material','ingredient','cholecalciferol','glycosamin','lecithin','mucoda','what is in','composition'],
+    'origin':['origin','country of origin','where from','made in'],
+    'packaging':['packaging','pack','lot','batch'],
+    'lead time':['lead time','turnaround','how long','when ready','delivery time']
+  };
+  const keywordMap = sector === 'k-tech' ? ktechKeywords : sector === 'k-bio' ? kbioKeywords : shredderKeywords;
+  for (const [specKey, keywords] of Object.entries(keywordMap)) {
     if (keywords.some(kw => lower.includes(kw))) {
       const match = p.specs.find(([k]) => k.toLowerCase().includes(specKey.split(' ')[0]));
       if (match) {
@@ -4559,14 +4592,31 @@ const CHAT_L = {
 };
 function cl(key) { const lang = document.documentElement.lang || 'en'; return (CHAT_L[lang] && CHAT_L[lang][key]) || CHAT_L.en[key] || ''; }
 
-const MODEL_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
+const SHREDDER_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
+const KTECH_IDS = ['kt3dad','kt3dvid','kt3dcine'];
+const KBIO_IDS = ['rosettaplus'];
+const MODEL_IDS = [...SHREDDER_IDS, ...KTECH_IDS, ...KBIO_IDS];
+
+function sectorOf(id) {
+  if (SHREDDER_IDS.includes(id)) return 'k-security';
+  if (KTECH_IDS.includes(id)) return 'k-tech';
+  if (KBIO_IDS.includes(id)) return 'k-bio';
+  return null;
+}
 
 function findModelInText(text) {
   const t = text.toLowerCase().replace(/[- ]/g,'');
   for (const id of MODEL_IDS) {
     if (t.includes(id) || t.includes(id.replace('dl','dl-'))) return id;
   }
-  const aliases = {dl10x:'10x',dl12x:'12x',dl16x:/(^|\s)16x(\s|$)/,dl10xd:'10xd',dl12xd:'12xd',dl16xd:'16xd'};
+  const aliases = {
+    dl10x:'10x', dl12x:'12x', dl16x:/(^|[^d])16x([^d]|$)/,
+    dl10xd:'10xd', dl12xd:'12xd', dl16xd:'16xd',
+    kt3dad: /(kt3dad|3dad|3dadvert|3dcommerc|3dcm|3dad(s|vertis))/,
+    kt3dcine: /(kt3dcine|3dcine|cinema|feature\s?film|remaster|theatrical)/,
+    kt3dvid: /(kt3dvid|3dvid|3dvideo|2dto3d|2d→3d|stereoscop|3dconvert|3dconvers|stereoconv)/,
+    rosettaplus: /(rosetta|rosettaplus|hff|healthfunctional|kfda|haccp|glycosaminoglycan|cholecalcif)/
+  };
   for (const [id,pat] of Object.entries(aliases)) {
     if (typeof pat === 'string' ? t.includes(pat) : pat.test(t)) return id;
   }
@@ -4588,7 +4638,7 @@ function fmtCompare(a,b) {
 }
 
 const KB = [
-  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's B2B trade gateway connecting verified Korean manufacturers to global buyers. Ask me about:\n\n• Flagship DL Series shredders (MOQ · lead time · price ranges)\n• AI Partner Match — country + industry → Top-3 recommendations\n• Spotlight — concepts under buyer-interest evaluation\n• Quote Calculator · Landed Cost · Compliance Checker · Book a Demo\n• Verification Process · Case Studies · Trade Route Map\n• RFQ Tracker · Q&A Wall · Korean partner signup\n\nHow can I help?" },
+  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's B2B trade gateway connecting verified Korean manufacturers to global buyers. Active catalog:\n\n• K-Security — DL Series industrial shredders (6 models, GSA Schedule, HIPAA · Level 3 / P-4)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD advertising · KT-3DVID video · KT-3DCINE feature film)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing in 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living · K-Energy.\n\nAsk me about specs, MOQ, lead times, Incoterms, certifications, Partner Match, Spotlight concepts, Quote Calculator, RFQ Tracker — or anything else. How can I help?" },
   { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
   { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
   { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
@@ -4616,12 +4666,19 @@ const KB = [
   { intent:'contact', kw:['contact','email','phone','telegram','reach','call','address'], resp:"ERGSN CO., LTD.\n📍 #503 Susong BD, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea\n📱 +82-10-5288-0006\n💬 Telegram: @ceodon\n📠 Fax: +82-50-4048-0006" },
   { intent:'competitor', kw:['fellowes','hsm','intimus','kobra','dahle','destroyit','amazon','competitor','brand'], followUp:['chain','oil','quote'], resp:"ERGSN differentiates from competitors with:\n• All-metal chain drive (no nylon/plastic gears)\n• Oil-free operation (zero maintenance cost)\n• Direct manufacturer pricing (no middleman markup)\n• CIF delivery to any port worldwide\n• GSA Schedule listed for U.S. government procurement\n\nOur machines are built for institutional-grade daily use, not consumer/office-retail." },
   { intent:'custom', kw:['custom','oem','odm','private label','brand','modify','special'], resp:"ERGSN supports OEM/ODM across sectors through our verified Korean partner network:\n• K-Security (DL Series) — private label, voltage mods (115V/220V), custom packaging\n• K-Tech — custom module specifications, Korean-fab precision builds, 2D→3D conversion contracts\n• K-Bio — white-label HFF formulations with HACCP/KFDA support\n• K-Smart Living — co-branded IoT / wellness devices\n• K-Culture Goods — licensed merchandise collaborations\n• K-Franchise — master-franchise territory agreements\n• K-Energy — solar / ESS configurations for your market\n\nMinimum order quantities apply. Submit an RFQ — we'll match you with the right verified Korean producer." },
+  { intent:'k_tech_service', kw:['2d to 3d','2d->3d','2d→3d','stereoscopic','stereo','3d conversion','3d advert','3d ad','3d video','3d film','3d remaster','3d ott','ktech','k-tech','k tech','kt3d','kt-3d','kt3dad','kt3dvid','kt3dcine','dcp','stereo dcp','side-by-side','over-under','mvc','depth grading','glasses-free','hmd'], followUp:['sectors','verification','quote'], resp:"K-Tech · 2D → 3D Stereoscopic Conversion (ACTIVE)\nProprietary ERGSN conversion engine tuned per delivery surface (theater · 3D TV · DOOH · HMD · glasses-free displays).\n\n• KT-3DAD — 3D Advertising Production. Concept → storyboard → live shoot/CGI → stereoscopic finishing. 15s–3min master + social cutdowns. Turnaround 3–6 weeks.\n• KT-3DVID — General 2D → 3D Video Conversion. Corporate · training · event · documentary · broadcast episodic. Turnaround 2–4 weeks for ≤90 min.\n• KT-3DCINE — Feature Film 2D → 3D Remaster. Per-shot depth grading, stereo DCP delivery for theatrical re-release & OTT. Turnaround 8–16 weeks.\n\nAll services: up to 4K UHD, 8/10/12-bit, Side-by-Side / Over-Under / MVC / Frame-Packed. Per-scene depth grading with client review." },
+  { intent:'k_bio_rosetta', kw:['rosetta','rosetta plus','hff','health functional food','kfda','haccp','mental wellness','cholecalciferol','glycosaminoglycan','depression','panic disorder','panic','psychosis','k-bio','kbio','k bio','endocannabinoid','macrophage','mucoda','lecithin','neurotransmitter','emulsion'], followUp:['sectors','verification','quote'], resp:"K-Bio · Rosetta Plus (ACTIVE)\nKFDA-assured Health Functional Food. Representative function: improvement of depression, psychosis, and panic disorder.\n\n• Certifications: HACCP · Health Functional Food assured by KFDA\n• Production capacity: 1,000+ units / month (large-scale, ready to scale)\n• Active export markets: Mexico, Yemen, India\n• Form: glycosaminoglycan emulsion (proto-molecular multimolecular bonding)\n• Process: microbial fermentation → secondary metabolite extraction\n• Three core raw materials: positive-electron carrier (cholecalciferol / endocannabinoid receptors / macrophage activation), per-mucoda anti-inflammatory / anti-cancer protein, unsaturated lecithin envelope for neurotransmitter delivery\n• Lead time: 4–6 weeks (volume-dependent)" },
+  { intent:'k_beauty', kw:['k-beauty','kbeauty','k beauty','skincare','skin care','cosmetic','cosmetics','beauty device','beauty devices','cgmp','iso 22716','duty-free','duty free'], resp:"K-Beauty (Sourcing — joining 2026)\nPremium Korean skincare, color cosmetics, and beauty devices from audited Korean brands curated for global retail and duty-free.\n\n• Prioritized partners: CGMP · ISO 22716 · FDA/EU-registered formulators\n• Channels supported: duty-free · e-commerce · global retail\n• White-label / OEM available across formulations and device lines\n\nUse Spotlight or submit a sourcing inquiry to be matched with verified Korean K-Beauty partners as they onboard." },
+  { intent:'k_culture_goods', kw:['k-culture','kculture','culture goods','kpop','k-pop','kpop merch','k-pop merchandise','licensed merchandise','hanbok','ceramic','ceramics','fashion accessory','fashion accessories','k-drama','kdrama','fandom','collector','official license'], resp:"K-Culture Goods (Sourcing — joining 2026)\nOfficially-licensed K-pop and K-drama merchandise, traditional Korean crafts, and designer fashion accessories.\n\n• K-pop / K-drama licensed merchandise (from rights-holding Korean IP consortiums)\n• Traditional crafts: hanbok, ceramics, heritage accessories\n• Designer fashion — contemporary Korean streetwear & luxury accessories\n• Channels: fandom retail · global DTC · duty-free · collector platforms\n\nEarly sourcing inquiries welcome via Spotlight." },
+  { intent:'k_franchise', kw:['franchise','master franchise','cafe franchise','cafe','bakery','qsr','f&b','fnb','food and beverage','retail franchise','service franchise','brand licensing','territory','master-franchise','k-franchise','kfranchise'], resp:"K-Franchise (Sourcing — joining 2026)\nVerified Korean F&B, café, retail, and service franchise systems.\n\n• Turnkey brand licensing with operations playbooks\n• Master-franchise territory-exclusive structures available\n• Supply chain, training, and concept handover included\n• Covers: café · bakery · QSR · beauty retail · lifestyle retail · service concepts\n\nApplicable for groups seeking single-territory or multi-country master rights. Pilot enquiries accepted via Spotlight or direct RFQ." },
+  { intent:'k_smart_living', kw:['k-smart','ksmart','smart living','connected appliance','iot appliance','wellness device','smart home','k-lifestyle','klifestyle','lifestyle good'], resp:"K-Smart Living (Sourcing — joining 2026)\nConnected Korean appliances, wellness devices, and premium lifestyle goods curated for global retail.\n\n• Categories: IoT appliances · wellness & beauty-tech · premium lifestyle goods\n• Co-branded / OEM arrangements supported\n• Suitable for global retail, hospitality and curated e-commerce\n\nSpotlight currently includes K-Beauty Smart Mirror (concept stage) as a representative K-Smart Living preview item." },
+  { intent:'k_energy', kw:['solar','ess','battery storage','renewable','clean-tech','clean tech','energy storage','iec 62619','iec','ev cell','bos','photovoltaic','pv module','grid-tied','k-energy','kenergy','future energy'], followUp:['sectors','verification','quote'], resp:"K-Energy (Sourcing — joining 2026)\nVerified Korean solar modules, battery storage (ESS), and EV-adjacent components.\n\n• Solar panels & BOS components from Tier-1 Korean cell makers\n• Commercial-grade ESS — modular, stackable, grid-tied\n• IEC 62619 + country-specific grid certifications required for partner onboarding\n• Target volumes: commercial & utility-scale\n\nSpotlight currently includes a 50 kWh modular Commercial ESS (pilot stage) as a K-Energy preview item." },
   { intent:'capacity', kw:['office','people','employees','volume','capacity','daily','many','sheets per day'], resp:null, handler:'handleCapacity' },
   { intent:'spec', kw:['spec','specification','detail','feature','info about','tell me about'], resp:null, handler:'handleSpec' },
   { intent:'compare', kw:['compare','vs','versus','difference','better','or'], resp:null, handler:'handleCompareText' },
   { intent:'recommend', kw:['recommend','suggest','which','best','right','need','looking for','suitable'], resp:null, handler:'handleRecommendText' },
   { intent:'quote', kw:['quote','rfq','inquiry','order','buy','purchase','get a quote'], resp:null, handler:'handleQuoteChat' },
-  { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd'], resp:null, handler:'handleSpec' }
+  { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd','kt-3dad','kt3dad','kt-3dvid','kt3dvid','kt-3dcine','kt3dcine','rosetta','rosetta plus','rosettaplus'], resp:null, handler:'handleSpec' }
 ];
 
 // Synonym expansion for broader matching
@@ -4663,7 +4720,16 @@ function matchIntent(text) {
 async function callClaudeAPI(text) {
   if (!CLAUDE_API_ENDPOINT) return null;
   try {
-    const sysPrompt = `You are the ERGSN Product Advisor. ERGSN CO., LTD. is a Seoul-based manufacturer of industrial paper shredders (DL Series: DL-10X, DL-12X, DL-16X, DL-10XD, DL-12XD, DL-16XD). All models: Level 3/P-4 cross-cut, all-metal chain drive, oil-free, HIPAA compliant, GSA Schedule. Trade: CIF any port, T/T 50%/50%, 4-6 weeks. Never quote exact prices — redirect to quote form. Be concise (under 150 words). Support EN/ES/AR/FR/JA/TR.`;
+    const sysPrompt = `You are the ERGSN Trade Advisor. ERGSN CO., LTD. is a Seoul-based trade gateway / platform (est. 2013) that curates verified Korean producers for global buyers.
+
+ACTIVE sectors (products ready to quote):
+- K-Security: DL Series industrial shredders (DL-10X, DL-12X, DL-16X, DL-10XD, DL-12XD, DL-16XD). All models Level 3 / P-4 cross-cut, all-metal chain drive, oil-free, HIPAA · GSA Schedule. DL-16XD flagship: up to 90 sheets/pass at 31 FPM, 3.25 Hp, 115V/30A NEMA L5-30P.
+- K-Tech: proprietary 2D → 3D stereoscopic conversion services — KT-3DAD (3D advertising production, 3–6 wk), KT-3DVID (2D→3D video conversion, 2–4 wk for ≤90 min), KT-3DCINE (feature-film 3D remaster, 8–16 wk). Output up to 4K UHD, Side-by-Side / Over-Under / MVC / Frame-Packed / Stereo DCP.
+- K-Bio: Rosetta Plus HFF — HACCP-certified, KFDA-assured Health Functional Food, representative function of improving depression, psychosis and panic disorder. Capacity 1,000+ units/month. Already exporting to Mexico, Yemen, India.
+
+SOURCING in 2026 (partner-matching open, inquiries via Spotlight): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness) · K-Energy (solar, ESS, EV-adjacent, IEC 62619).
+
+Trade: CIF any major port, T/T 50%/50%, 4–6 wk lead time for DL Series. Never quote exact prices — redirect to RFQ form. Be concise (under 150 words). Support EN/ES/AR/FR/JA/TR/zh-Hans/zh-Hant.`;
     const resp = await fetch(CLAUDE_API_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -4858,22 +4924,37 @@ function handleSpec(text) {
 }
 
 function handleCompareText(text) {
+  const t = text.toLowerCase().replace(/\s+/g,' ');
   const found = [];
-  for (const id of MODEL_IDS) { if (findModelInText(text) === id || text.toLowerCase().includes(id.replace('dl','dl-'))) found.push(id); }
-  if (found.length < 2) {
-    const t = text.toLowerCase();
-    for (const id of MODEL_IDS) { if (t.includes(P[id].model.toLowerCase().replace('-',''))) found.push(id); }
+  for (const id of SHREDDER_IDS) {
+    const code = id.replace('dl','dl-');
+    if (t.includes(code) || t.includes(id) || t.includes(P[id].model.toLowerCase())) {
+      if (!found.includes(id)) found.push(id);
+    }
   }
   if (found.length >= 2) {
     const result = fmtCompare(found[0], found[1]);
     chatBotMsg(result || "Could not compare those models.");
-  } else {
-    chatBotMsg("Which two models would you like to compare? For example: \"Compare DL-12X vs DL-16XD\"");
+    return;
   }
+  // Non-shredder sector comparison is not spec-for-spec compatible
+  const nonShredder = [...KTECH_IDS, ...KBIO_IDS].filter(id => t.includes(id) || t.includes(P[id].model.toLowerCase()));
+  if (nonShredder.length >= 1) {
+    chatBotMsg("Spec-to-spec comparison is currently available within the DL Series (K-Security). K-Tech services (KT-3DAD / KT-3DVID / KT-3DCINE) and K-Bio Rosetta Plus use different spec dimensions — ask me about any of them individually and I'll walk through the details.");
+    return;
+  }
+  chatBotMsg("Which two DL Series models would you like to compare? For example: \"Compare DL-12X vs DL-16XD\"");
 }
 
 function handleCapacity(text) {
   const lower = text.toLowerCase();
+  // If the query is clearly about a non-shredder product, don't force a shredder recommendation.
+  const nonShredderHint = findModelInText(text);
+  if (nonShredderHint && !SHREDDER_IDS.includes(nonShredderHint)) { handleSpec(nonShredderHint); return; }
+  if (/(3d|stereoscop|rosetta|hff|kfda|k-tech|k-bio|k-beauty|k-culture|k-franchise|k-smart|k-energy|solar|ess)/i.test(lower)) {
+    chatBotMsg("The capacity-based recommendation engine is tuned for DL Series shredders. For K-Tech 3D services, K-Bio (Rosetta Plus), or upcoming sectors, ask me directly and I'll walk through the relevant specs.");
+    return;
+  }
   const num = parseInt(text.match(/(\d+)/)?.[1] || '0');
   // Composite: check if HIPAA/GSA is also mentioned
   const needsHipaa = /hipaa|medical|hospital|health/i.test(lower);
@@ -4901,17 +4982,18 @@ function handleCapacity(text) {
 function handleRecommendText(text) { handleCapacity(text); }
 
 function handleQuoteChat() {
-  chatBotMsg("Let's set up your quote! First, which model are you interested in?", () => {
-    chatOpts(MODEL_IDS.map(id => ({ label: P[id].model, action: () => { chatState.model=id; chatContext.lastModel=id; chatAskQualification(); }})));
-  });
+  chatStep('quote_direct');
 }
 
 const CHAT_TREE = {
   start: {
-    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway \u2014 we connect verified Korean manufacturers with global procurement teams. Every product on our platform passes a rigorous 4-step verification (vendor audit, quality testing, compliance check, long-term partnership) before being offered to international buyers.\n\nWe currently offer the DL Series industrial shredders (GSA Schedule listed, U.S. defense procured), with additional product categories joining our network soon.\n\nHow may I assist you today?",
+    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway — every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security — DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing partners for 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living · K-Energy.\n\nHow may I assist you today?",
     opts: [
       { label: 'Find the right shredder for me', next: 'find_office_size' },
-      { label: 'Browse all DL Series models', next: 'browse_models' },
+      { label: 'Browse K-Security (DL Series)', next: 'browse_models' },
+      { label: 'Browse K-Tech 3D services', next: 'browse_ktech' },
+      { label: 'Ask about K-Bio (Rosetta Plus)', next: 'browse_kbio' },
+      { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living / Energy)', next: 'browse_sourcing' },
       { label: 'About ERGSN & verification', next: 'about_company' },
       { label: 'Trade terms (CIF, payment, shipping)', next: 'trade_info' },
       { label: 'Request a quote directly', next: 'quote_direct' }
@@ -4926,7 +5008,7 @@ const CHAT_TREE = {
     ]
   },
   browse_models: {
-    msg: "We currently carry six DL Series cross-cut shredders, all manufactured by ERGSN CO., LTD. (verified partner). Which model would you like to learn about?",
+    msg: "K-Security catalog — six DL Series cross-cut shredders, all manufactured by ERGSN CO., LTD. (verified partner). Level 3 / P-4, all-metal chain drive, oil-free, HIPAA · GSA Schedule. Which model would you like to learn about?",
     opts: [
       { label: 'DL-10X', action: 'browse_dl10x' },
       { label: 'DL-12X', action: 'browse_dl12x' },
@@ -4934,6 +5016,30 @@ const CHAT_TREE = {
       { label: 'DL-10XD', action: 'browse_dl10xd' },
       { label: 'DL-12XD', action: 'browse_dl12xd' },
       { label: 'DL-16XD (Flagship)', action: 'browse_dl16xd' }
+    ]
+  },
+  browse_ktech: {
+    msg: "K-Tech · 2D → 3D Stereoscopic Conversion (ACTIVE). Proprietary ERGSN conversion engine tuned per delivery surface (theater · 3D TV · DOOH · HMD · glasses-free displays). Which service would you like to learn about?",
+    opts: [
+      { label: 'KT-3DAD — 3D Advertising Production', action: 'browse_kt3dad' },
+      { label: 'KT-3DVID — 2D → 3D Video Conversion', action: 'browse_kt3dvid' },
+      { label: 'KT-3DCINE — Feature Film 3D Remaster', action: 'browse_kt3dcine' }
+    ]
+  },
+  browse_kbio: {
+    msg: "K-Bio · Rosetta Plus (ACTIVE). KFDA-assured Health Functional Food with representative function of improving depression, psychosis and panic disorder. HACCP production; 1,000+ units/month capacity; currently exporting to Mexico, Yemen and India. What would you like to see?",
+    opts: [
+      { label: 'View Rosetta Plus full spec sheet', action: 'browse_rosettaplus' },
+      { label: 'Request a Rosetta Plus quote', action: 'quote_rosettaplus' },
+      { label: 'Back to main menu', next: 'start' }
+    ]
+  },
+  browse_sourcing: {
+    msg: "Sectors we're sourcing in 2026 — pilot enquiries and early-access buyers welcome now via Spotlight:\n\n• K-Beauty — skincare · cosmetics · beauty devices (CGMP · ISO 22716 priority)\n• K-Culture Goods — licensed K-pop / K-drama merchandise · traditional crafts · fashion\n• K-Franchise — turnkey F&B / café / retail / service concepts with master-franchise\n• K-Smart Living — connected appliances · wellness · lifestyle goods\n• K-Energy — solar modules · ESS · EV-adjacent (IEC 62619)\n\nWhat would you like to do?",
+    opts: [
+      { label: 'Submit a sourcing inquiry', next: 'quote_direct' },
+      { label: 'Browse active products instead', next: 'start' },
+      { label: 'Trade terms', next: 'trade_info' }
     ]
   },
   about_company: {
@@ -4959,14 +5065,18 @@ const CHAT_TREE = {
     ]
   },
   quote_direct: {
-    msg: "I can set up a formal quote request for you. Which model are you interested in?",
+    msg: "I can set up a formal quote request for you. Which product are you interested in?",
     opts: [
-      { label: 'DL-10X', action: 'quote_dl10x' },
-      { label: 'DL-12X', action: 'quote_dl12x' },
-      { label: 'DL-16X', action: 'quote_dl16x' },
-      { label: 'DL-10XD', action: 'quote_dl10xd' },
-      { label: 'DL-12XD', action: 'quote_dl12xd' },
-      { label: 'DL-16XD', action: 'quote_dl16xd' },
+      { label: 'DL-10X (K-Security)', action: 'quote_dl10x' },
+      { label: 'DL-12X (K-Security)', action: 'quote_dl12x' },
+      { label: 'DL-16X (K-Security)', action: 'quote_dl16x' },
+      { label: 'DL-10XD (K-Security)', action: 'quote_dl10xd' },
+      { label: 'DL-12XD (K-Security)', action: 'quote_dl12xd' },
+      { label: 'DL-16XD \u2014 Flagship (K-Security)', action: 'quote_dl16xd' },
+      { label: 'KT-3DAD \u2014 3D Advertising (K-Tech)', action: 'quote_kt3dad' },
+      { label: 'KT-3DVID \u2014 2D\u21923D Video (K-Tech)', action: 'quote_kt3dvid' },
+      { label: 'KT-3DCINE \u2014 Feature Film 3D (K-Tech)', action: 'quote_kt3dcine' },
+      { label: 'Rosetta Plus (K-Bio)', action: 'quote_rosettaplus' },
       { label: 'Not sure yet \u2014 help me choose', next: 'find_office_size' }
     ]
   },
@@ -5044,18 +5154,22 @@ function offerReturnFollowUp(ret) {
       return;
     }
 
+    const retIsShredder = SHREDDER_IDS.includes(ret.model);
+    const compareOpt = retIsShredder ? [{ label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Pick a model to compare with ${m.model}:`, () => {
+      chatOpts(SHREDDER_IDS.filter(id => id !== ret.model).map(id => ({
+        label: `vs ${P[id].model}`,
+        action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
+      })));
+    })}] : [];
+    const browseDifferentStep = retIsShredder ? 'browse_models' : (KTECH_IDS.includes(ret.model) ? 'browse_ktech' : 'start');
+
     // STAGE 2: Qualification done but no delivery (or partial) — continue setup
     if (hasQual && hasModel) {
       chatBotMsg(`Welcome back! You've completed the buyer profile (${q.tier}) for ${P[chatState.model].model}. Let's set up your delivery terms next?`, () => {
         chatOpts([
           { label: 'Continue — set up delivery', action: () => chatAskIncoterms() },
-          { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Pick a model to compare with ${m.model}:`, () => {
-            chatOpts(MODEL_IDS.filter(id => id !== ret.model).slice(0,5).map(id => ({
-              label: `vs ${P[id].model}`,
-              action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
-            })));
-          })},
-          { label: 'Browse a different model', action: () => chatStep('browse_models') },
+          ...compareOpt,
+          { label: 'Browse a different product', action: () => chatStep(browseDifferentStep) },
           { label: 'I have a different question', action: () => { document.getElementById('chatInput').focus(); }}
         ]);
       });
@@ -5063,16 +5177,11 @@ function offerReturnFollowUp(ret) {
     }
 
     // STAGE 1: Just browsed a model (no qualification yet) — first return
-    chatBotMsg(`Welcome back! Did you have a chance to review the ${m.model} specifications? Is there anything I can help you with next?`, () => {
+    chatBotMsg(`Welcome back! Did you have a chance to review the ${m.model} details? Is there anything I can help you with next?`, () => {
       chatOpts([
         { label: `Yes — request a quote for ${m.model}`, action: () => { chatState.model = ret.model; chatContext.lastModel = ret.model; chatAskQualification(); }},
-        { label: `Compare ${m.model} with another model`, action: () => chatBotMsg(`Pick a model to compare with ${m.model}:`, () => {
-          chatOpts(MODEL_IDS.filter(id => id !== ret.model).slice(0,5).map(id => ({
-            label: `vs ${P[id].model}`,
-            action: () => chatBotMsg(fmtCompare(ret.model, id) || 'Comparison unavailable.')
-          })));
-        })},
-        { label: 'Show me a different model', action: () => chatStep('browse_models') },
+        ...compareOpt,
+        { label: 'Show me a different product', action: () => chatStep(browseDifferentStep) },
         { label: `More about ${m.model}`, action: () => { handleSpec(ret.model); }},
         { label: 'I have a different question', action: () => { document.getElementById('chatInput').focus(); }}
       ]);
