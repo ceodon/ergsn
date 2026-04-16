@@ -580,6 +580,9 @@ section { scroll-margin-top: var(--nav-h); }
   padding: 1rem;
   overflow: hidden;
 }
+/* Let <picture> be transparent to flex so the inner <img> obeys the
+   card-image flex container's sizing rules directly. */
+.card-image picture { display: contents; }
 .card-image img {
   max-width: 100%; max-height: 100%;
   object-fit: contain;
