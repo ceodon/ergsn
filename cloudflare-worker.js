@@ -4,17 +4,19 @@
  * Deployment (one-time, 5 minutes):
  * 1. Sign up at https://dash.cloudflare.com (free)
  * 2. Workers & Pages → Create Worker → paste this file
- * 3. Settings → Variables → add secrets:
- *      TG_BOT     = 8682443200:AAHdCK-kkMDFuIZUvi4foAD3-ypNMRBGyGY
- *      TG_CHAT    = 456668222
+ * 3. Settings → Variables → add secrets (all values are SECRETS — never commit real values):
+ *      TG_BOT       = <telegram-bot-token from @BotFather>
+ *      TG_CHAT      = <telegram-chat-id>
  *      ALLOW_ORIGIN = https://ceodon.github.io
  * 4. Deploy → copy the workers.dev URL (e.g. https://ergsn-tg.<sub>.workers.dev)
  * 5. In index.html set:   const TG_PROXY_URL = 'https://ergsn-tg.<sub>.workers.dev';
  *
- * After deployment, rotate the original bot token (Telegram @BotFather → /revoke)
- * and replace TG_BOT in the Cloudflare secret with the new token.
- *
- * The bot token never ships to the browser again.
+ * Token rotation policy:
+ *   - Never paste live tokens in this file or any committed code.
+ *   - Store tokens only as Cloudflare Worker Secrets.
+ *   - If a token has ever been committed (check git history), treat it as
+ *     compromised: @BotFather → /revoke → issue new token → update the
+ *     Cloudflare secret. The browser never sees the token either way.
  */
 export default {
   async fetch(request, env) {
@@ -35,7 +37,14 @@ export default {
     let body;
     try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers: cors }); }
 
-    const photos = Array.isArray(body.photos) ? body.photos.filter(u => typeof u === 'string' && /^https?:\/\//i.test(u)).slice(0, 10) : [];
+    // Only allow photo URLs hosted on our own GitHub Pages product image path.
+    // Prevents abuse of the worker as an image relay for arbitrary third-party content.
+    const PHOTO_ALLOW_PREFIX = 'https://ceodon.github.io/ergsn/images/';
+    const rawPhotos = Array.isArray(body.photos) ? body.photos : [];
+    if (rawPhotos.some(u => typeof u !== 'string' || !u.startsWith(PHOTO_ALLOW_PREFIX))) {
+      return new Response(JSON.stringify({ ok: false, error: 'photos must start with ' + PHOTO_ALLOW_PREFIX }), { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } });
+    }
+    const photos = rawPhotos.slice(0, 10);
     const text = String(body.text || '').slice(0, 3800);
 
     let api, payload;

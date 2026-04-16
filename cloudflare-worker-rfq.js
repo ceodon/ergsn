@@ -71,9 +71,12 @@ export default {
       }
       let body;
       try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers }); }
+      const submission = JSON.stringify(body.submission || {});
+      if (submission.length > 8192) {
+        return new Response(JSON.stringify({ ok: false, error: 'submission too large (max 8KB)' }), { status: 413, headers: { ...headers, 'Content-Type': 'application/json' } });
+      }
       const id = genId();
       const now = Date.now();
-      const submission = JSON.stringify(body.submission || {});
       const notes = 'Your request has been received. We will review within 1 business day (KST).';
       await env.RFQ.prepare('INSERT INTO rfq (id, stage, createdAt, updatedAt, submission, notes) VALUES (?1, ?2, ?3, ?3, ?4, ?5)')
         .bind(id, 'received', now, submission, notes).run();
@@ -108,9 +111,15 @@ export default {
       const id = (body.id || '').trim().toUpperCase();
       const stage = body.stage;
       if (!id || !STAGES.includes(stage)) return new Response(JSON.stringify({ ok: false, error: 'invalid id/stage' }), { status: 400, headers: { ...headers, 'Content-Type': 'application/json' } });
-      const existing = await env.RFQ.prepare('SELECT id, notes FROM rfq WHERE id = ?1').bind(id).first();
+      const existing = await env.RFQ.prepare('SELECT id, stage, notes FROM rfq WHERE id = ?1').bind(id).first();
       if (!existing) return new Response(JSON.stringify({ ok: false, error: 'not found' }), { status: 404, headers: { ...headers, 'Content-Type': 'application/json' } });
-      const notes = body.notes || existing.notes;
+      const fromIdx = STAGES.indexOf(existing.stage);
+      const toIdx = STAGES.indexOf(stage);
+      if (toIdx < fromIdx) {
+        return new Response(JSON.stringify({ ok: false, error: 'stage cannot go backwards (' + existing.stage + ' -> ' + stage + ')' }), { status: 400, headers: { ...headers, 'Content-Type': 'application/json' } });
+      }
+      let notes = (typeof body.notes === 'string' && body.notes.length) ? body.notes : existing.notes;
+      if (typeof notes === 'string' && notes.length > 2000) notes = notes.slice(0, 2000);
       const now = Date.now();
       await env.RFQ.prepare('UPDATE rfq SET stage = ?1, notes = ?2, updatedAt = ?3 WHERE id = ?4').bind(stage, notes, now, id).run();
       return new Response(JSON.stringify({ ok: true, id, stage, updatedAt: now }), { status: 200, headers: { ...headers, 'Content-Type': 'application/json' } });

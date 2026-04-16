@@ -1,4 +1,4 @@
-const T = {
+window.TRANSLATIONS_FULL = {
   en: {
     nav_products: "Products",
     nav_about: "About",

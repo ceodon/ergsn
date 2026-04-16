@@ -1779,17 +1779,6 @@ button:focus:not(:focus-visible) { outline: none; }
 .consent a { color: var(--gold); text-decoration: underline; }
 .consent button { margin-left: auto; background: var(--gold); color: #0a0a0a; border: 0; padding: 8px 16px; border-radius: 7px; font-family: var(--fb); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 
-/* ── Ticker "illustrative" badge ──────── */
-.tick-note { font-family: var(--fb); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-top: 6px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,.06); }
-
-/* ── Commitment bar (trust signals) ───── */
-.commit-bar { background: linear-gradient(180deg, #0a0a0a 0%, #0f1210 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.2rem 0; }
-.commit-inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; align-items: center; }
-@media (max-width: 760px){ .commit-inner { grid-template-columns: 1fr 1fr; gap: 14px; } }
-.commit-cell { text-align: center; padding: 0 clamp(8px,1vw,16px); }
-.commit-n { display: block; font-family: var(--fh); font-weight: 800; font-size: clamp(1.3rem,2vw,1.7rem); color: var(--gold); line-height: 1; }
-.commit-l { display: block; font-family: var(--fb); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-mid); margin-top: 6px; }
-
 /* ── Commercial strip inside product modal ── */
 .commercial-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 14px; background: #111; border-radius: 12px; border: 1px solid var(--border); margin: 1rem 0 1.2rem; }
 @media (max-width: 640px){ .commercial-strip { grid-template-columns: 1fr 1fr; } }
@@ -1797,121 +1786,6 @@ button:focus:not(:focus-visible) { outline: none; }
 .commercial-strip .c-l { font-family: var(--fb); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--tx-lt); }
 .commercial-strip .c-v { font-family: var(--fh); font-weight: 800; font-size: 14px; color: var(--white); }
 .commercial-strip .c-sub { font-family: var(--fb); font-weight: 500; font-size: 11px; color: var(--tx-lt); }
-
-/* ── Live Hub (Tier 1) ─────────────────── */
-.hub-section { background: #0a0a0a; border-top: 1px solid rgba(52,210,152,.15); border-bottom: 1px solid rgba(52,210,152,.15); position: relative; overflow: hidden; }
-.hub-section::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity:.5; }
-.hub-inner { padding: clamp(2rem,4vh,3rem) 0; }
-.hub-head { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem; }
-.hub-head h2 { font-family: var(--fh); font-weight: 800; font-size: clamp(1.1rem,1.8vw,1.4rem); color: var(--white); margin: 0; display:flex; align-items:center; gap:10px; }
-.hub-head h2::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--gold); box-shadow:0 0 12px var(--gold); animation: livePulse 1.6s ease-in-out infinite; }
-@keyframes livePulse { 0%,100%{opacity:.6} 50%{opacity:1} }
-.hub-date { font-family: var(--fb); font-size: 11px; letter-spacing:.1em; text-transform: uppercase; color: var(--tx-lt); }
-.hub-grid { display:grid; grid-template-columns: 2fr 1.3fr 1.3fr; gap: clamp(1rem,2vw,1.5rem); align-items:stretch; }
-@media (max-width: 960px){ .hub-grid { grid-template-columns: 1fr 1fr; } .hub-mission { grid-column: 1 / -1; } }
-@media (max-width: 640px){ .hub-grid { grid-template-columns: 1fr; } }
-.hub-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; display: flex; flex-direction: column; gap: .6rem; }
-.hub-card h3 { font-family: var(--fb); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0; }
-.pulse-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
-.pulse-cell { background: #1a1a1a; border-radius: 8px; padding: 10px 12px; }
-.pulse-cell .k { font-size: 10px; font-family: var(--fb); letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); }
-.pulse-cell .v { font-family: var(--fh); font-weight: 800; font-size: 1.1rem; color: var(--white); margin-top: 3px; display: flex; align-items: baseline; gap: 6px; }
-.pulse-cell .v .d { font-size: 11px; font-family: var(--fb); font-weight: 700; }
-.pulse-cell .v .d.up { color: var(--gold); }
-.pulse-cell .v .d.dn { color: #ff7070; }
-.pulse-cell .src { display: block; margin-top: 5px; font-size: 9px; color: var(--tx-lt); letter-spacing: .04em; line-height: 1.3; font-family: var(--fb); }
-.pulse-cell .src.live { color: var(--gold); }
-.pulse-head { font-family: var(--fh); font-weight: 800; font-size: 1rem; color: var(--white); line-height: 1.3; }
-.pulse-head em { color: var(--gold); font-style: normal; }
-.ticker-wrap { height: 130px; overflow: hidden; position: relative; border-radius: 8px; }
-.ticker-wrap::after { content:''; position:absolute; inset:0; pointer-events:none; background: linear-gradient(180deg, rgba(20,20,20,.8) 0%, transparent 15%, transparent 85%, rgba(20,20,20,.8) 100%); }
-.ticker-list { display: flex; flex-direction: column; gap: 6px; animation: tickerScroll 25s linear infinite; }
-@keyframes tickerScroll { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
-.ticker-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #1a1a1a; border-radius: 6px; font-size: 12px; color: var(--tx-mid); }
-.ticker-item .tf { font-size: 14px; }
-.ticker-item .th { color: var(--white); font-weight: 600; }
-.ticker-item .tt { color: var(--tx-lt); font-size: 11px; margin-left: auto; white-space: nowrap; }
-.hub-mission .mm-progress { background: #1a1a1a; border-radius: 8px; padding: 10px 12px; }
-.mm-bar { height: 6px; background: #262626; border-radius: 3px; overflow: hidden; margin-top: 8px; }
-.mm-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #1a8f65); width: 0%; transition: width .4s ease; }
-.mm-list { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
-.mm-task { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: #1a1a1a; border-radius: 6px; font-size: 12px; color: var(--tx-mid); }
-.mm-task.done { color: var(--gold); }
-.mm-task .tk { width: 16px; height: 16px; flex-shrink: 0; border-radius: 50%; border: 1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size: 10px; }
-.mm-task.done .tk { background: var(--gold); color: #0a0a0a; border-color: var(--gold); }
-.mm-streak { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 11px; color: var(--tx-lt); }
-.mm-streak strong { color: var(--gold); font-family: var(--fh); font-weight: 800; font-size: 14px; }
-.hub-passport { position: relative; }
-.hub-passport .pp-state { font-size: 13px; color: var(--tx-mid); line-height: 1.55; }
-.hub-passport .pp-badge { display:inline-block; background: rgba(52,210,152,.15); color: var(--gold); padding: 3px 8px; border-radius: 6px; font-size: 10px; font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; margin-top: 6px; }
-.pp-btn { margin-top: auto; padding: 9px 12px; border-radius: 8px; background: var(--gold); color: #0a0a0a; border: 0; font-family: var(--fb); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
-.pp-btn.ghost { background: transparent; color: var(--white); border: 1px solid var(--border); }
-.pp-btn.ghost:hover { border-color: var(--gold); color: var(--gold); }
-.pp-modal { display:none; position:fixed; inset:0; z-index:1100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); align-items:center; justify-content:center; padding:1rem; }
-.pp-modal.open { display:flex; }
-.pp-modal-inner { background:#151515; border:1px solid var(--border); border-radius:16px; max-width:460px; width:100%; padding:clamp(1.4rem,3vw,2rem); position:relative; }
-.pp-modal-inner h3 { color:var(--white); margin:0 0 .3rem; font-family:var(--fh); font-weight: 800; }
-.pp-modal-inner p { color:var(--tx-mid); font-size:13px; margin-bottom:1rem; }
-.pp-modal-inner form { display:flex; flex-direction:column; gap:12px; }
-.pp-modal-inner label { font-family:var(--fb); font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-lt); margin-bottom:-8px; }
-.pp-modal-inner input, .pp-modal-inner select { background:#1d1d1d; border:1px solid var(--border); border-radius:8px; color:var(--white); padding:10px 12px; font-size:14px; width:100%; outline:none; -webkit-appearance:none; font-family:inherit; }
-.pp-modal-inner input:focus, .pp-modal-inner select:focus { border-color:var(--gold); }
-.pp-modal-close { position:absolute; top:12px; right:14px; background:none; border:0; color:var(--tx-mid); font-size:22px; cursor:pointer; line-height:1; }
-
-/* ── K-Wave Radar (Tier 2) ─────────────── */
-.radar-section { background: #0f0f0f; }
-.radar-inner { padding: clamp(3rem,6vh,5rem) 0; }
-.radar-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(1.5rem,3vw,2.5rem); margin-top: 2rem; align-items: start; }
-@media (max-width: 900px){ .radar-grid { grid-template-columns: 1fr; } }
-.radar-viz { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; position: relative; min-height: 380px; }
-.radar-world { width: 100%; height: 320px; position: relative; background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 80%); border-radius: 10px; overflow: hidden; }
-.radar-region { position: absolute; width: 90px; height: 90px; border-radius: 50%; display:flex; align-items:center; justify-content:center; cursor: pointer; transition: transform .2s; text-align:center; }
-.radar-region:hover { transform: scale(1.08); z-index: 2; }
-.radar-region .rr-glow { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, rgba(52,210,152,.4) 0%, transparent 70%); animation: radarPulse 3s ease-in-out infinite; }
-.radar-region.low .rr-glow { background: radial-gradient(circle, rgba(52,210,152,.2) 0%, transparent 70%); }
-.radar-region.hot .rr-glow { background: radial-gradient(circle, rgba(255,140,70,.5) 0%, transparent 70%); animation: radarPulse 1.6s ease-in-out infinite; }
-@keyframes radarPulse { 0%,100%{transform:scale(.85);opacity:.7} 50%{transform:scale(1.1);opacity:1} }
-.rr-label { position: relative; z-index: 1; font-family: var(--fb); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--white); font-weight: 700; line-height: 1.2; }
-.rr-label .heat { display: block; color: var(--gold); font-family: var(--fh); font-weight: 800; font-size: 16px; margin-top: 2px; }
-.radar-list { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; }
-.radar-list .rr-inner { max-width: 320px; margin: 0 auto; }
-.radar-list h4 { font-family: var(--fb); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: 0 0 .8rem; }
-.radar-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
-.radar-row:last-child { border-bottom: 0; }
-.radar-row .rr-name { font-size: 13px; color: var(--white); font-weight: 600; }
-.radar-row .rr-meta { font-size: 11px; color: var(--tx-lt); }
-.radar-row .rr-score { font-family: var(--fh); font-weight: 800; font-size: 15px; color: var(--gold); text-align: right; white-space: nowrap; }
-
-/* ── Leaderboard & Countdown (Tier 2) ── */
-.lb-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.2rem; margin-bottom: 1.6rem; }
-@media (max-width:760px){ .lb-wrap { grid-template-columns: 1fr; } }
-.lb-card { background: #141414; border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; }
-.lb-card h4 { font-family: var(--fb); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin: 0 0 .6rem; }
-.lb-row { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:12px; }
-.lb-row:last-child { border-bottom: 0; }
-.lb-rank { width:20px; height:20px; border-radius:5px; background:linear-gradient(135deg,var(--gold),#1a8f65); color:#0a0a0a; font-family:var(--fb); font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.lb-name { color: var(--white); flex: 1; }
-.lb-n { color: var(--gold); font-family: var(--fh); font-weight: 800; font-size: 14px; }
-.countdown-card { text-align: center; }
-.countdown-timer { display:flex; justify-content:center; gap:10px; margin-top:.6rem; }
-.cd-cell { background:#1a1a1a; border-radius:8px; padding:10px 12px; min-width:56px; }
-.cd-cell .n { font-family:var(--fh); font-weight: 800; font-size:1.4rem; color:var(--white); display:block; line-height:1; }
-.cd-cell .l { font-family:var(--fb); font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--tx-lt); margin-top:4px; display:block; }
-
-/* ── Factory Shorts (Tier 2) ─────────── */
-.shorts-section { background: #0a0a0a; display: none; }
-.shorts-inner { padding: clamp(3rem,6vh,5rem) 0; }
-.shorts-scroll { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 14px; margin-top: 2rem; -webkit-overflow-scrolling: touch; }
-.shorts-scroll::-webkit-scrollbar { height: 6px; }
-.shorts-scroll::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
-.short-card { flex: 0 0 240px; aspect-ratio: 9/16; border-radius: 14px; overflow: hidden; position: relative; scroll-snap-align: start; cursor: pointer; background:#1a1a1a; transition: transform .2s; }
-.short-card:hover { transform: scale(1.03); }
-.short-card .short-vis { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-.short-card .short-overlay { position:absolute; inset:0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,.85)); display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; color:#fff; }
-.short-card .short-title { font-family: var(--fh); font-weight: 800; font-size: 15px; margin: 0 0 3px; }
-.short-card .short-meta { font-size: 11px; color: rgba(255,255,255,.7); }
-.short-card .short-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 54px; height: 54px; border-radius: 50%; background: rgba(52,210,152,.9); display:flex; align-items:center; justify-content:center; color: #0a0a0a; }
-.short-card .short-play svg { width: 22px; height: 22px; margin-left: 3px; }
 
 /* ── Trade Tools (Tier 3) ─────────────── */
 .tools-section { background: #0f0f0f; }
@@ -1946,110 +1820,6 @@ button:focus:not(:focus-visible) { outline: none; }
 .qa-form input, .qa-form select, .qa-form textarea { background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: 10px 12px; font-size: 13px; width: 100%; outline: none; -webkit-appearance: none; font-family: inherit; }
 .qa-form textarea { resize: vertical; min-height: 70px; }
 .qa-form button { background: var(--gold); color: #0a0a0a; padding: 10px; border: 0; border-radius: 8px; font-family: var(--fb); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
-
-/* ── 3D Viewer spin (Tier 3) ─────────── */
-.spin-wrap { position: relative; }
-.spin-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); color: var(--gold); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 5px 12px; font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; z-index: 2; }
-.spin-btn:hover { background: var(--gold); color: #0a0a0a; }
-@keyframes spin3d { 0%{transform:perspective(800px) rotateY(0)} 100%{transform:perspective(800px) rotateY(360deg)} }
-.modal-main.spinning { animation: spin3d 6s linear infinite; }
-
-/* ── Spotlight / Pre-Launch Radar ──── */
-.spotlight-section { background: linear-gradient(180deg, #0a0a0a 0%, #0f1210 100%); }
-.spotlight-inner { padding: clamp(3rem,6vh,5rem) 0; }
-.spotlight-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-.spotlight-stats { display: flex; gap: clamp(1rem,2vw,2rem); flex-wrap: wrap; }
-.sl-stat { background: #151515; border: 1px solid var(--border); border-radius: 10px; padding: .8rem 1.2rem; }
-.sl-stat .n { font-family: var(--fh); font-weight: 800; font-size: clamp(1.3rem,2vw,1.7rem); color: var(--gold); display: block; line-height: 1; }
-.sl-stat .l { font-family: var(--fb); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-top: 4px; display: block; }
-.spotlight-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: clamp(1.2rem,2vw,1.8rem);
-}
-.sl-card {
-  background: #141414; border: 1px solid var(--border); border-radius: 16px;
-  overflow: hidden; display: flex; flex-direction: column;
-  transition: transform .2s, border-color .2s, box-shadow .2s;
-}
-.sl-card:hover { transform: translateY(-3px); border-color: rgba(52,210,152,.3); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
-.sl-visual {
-  height: 160px; position: relative; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-}
-.sl-visual.gradient-1 { background: linear-gradient(135deg, #0a2e1f 0%, #0f5a3e 50%, #34d298 100%); }
-.sl-visual.gradient-2 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-.sl-visual.gradient-3 { background: linear-gradient(135deg, #2e1a0a 0%, #5c3317 50%, #d4a574 100%); }
-.sl-visual.gradient-4 { background: linear-gradient(135deg, #1a0a2e 0%, #3a1a5c 50%, #8e44ad 100%); }
-.sl-visual-icon { width: 72px; height: 72px; color: rgba(255,255,255,.85); }
-.sl-visual::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,.15), transparent 60%);
-  pointer-events: none;
-}
-.sl-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 1; }
-.sl-badge {
-  font-family: var(--fb); font-size: 10px; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-  padding: 4px 8px; border-radius: 6px;
-  background: rgba(0,0,0,.7); color: #fff; backdrop-filter: blur(4px);
-}
-.sl-badge.status-concept { background: rgba(139,111,255,.9); }
-.sl-badge.status-prototype { background: rgba(255,179,71,.9); color: #1a1a1a; }
-.sl-badge.status-pilot { background: rgba(52,210,152,.9); color: #0a0a0a; }
-.sl-body { padding: 1.2rem 1.3rem 1.3rem; flex: 1; display: flex; flex-direction: column; gap: .7rem; }
-.sl-sector { font-family: var(--fb); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
-.sl-title { font-family: var(--fh); font-weight: 800; font-size: 1.15rem; color: var(--white); margin: 0; line-height: 1.2; }
-.sl-tag { font-size: 13px; color: var(--tx-mid); line-height: 1.5; margin: 0; }
-.sl-origin { font-size: 11px; color: var(--tx-lt); font-style: italic; }
-.sl-poll { margin-top: .5rem; padding-top: .8rem; border-top: 1px dashed rgba(255,255,255,.08); }
-.sl-poll-q { font-family: var(--fb); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: .5rem; }
-.sl-poll-opt {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 7px 10px; margin-bottom: 5px;
-  background: #1a1a1a; border: 1px solid var(--border); border-radius: 8px;
-  cursor: pointer; font-size: 12px; color: var(--white);
-  transition: background .15s, border-color .15s; position: relative; overflow: hidden;
-}
-.sl-poll-opt:hover { border-color: rgba(52,210,152,.4); }
-.sl-poll-opt.voted { cursor: default; }
-.sl-poll-opt.voted.picked { border-color: var(--gold); }
-.sl-poll-bar { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(52,210,152,.12); transition: width .4s ease; z-index: 0; }
-.sl-poll-opt > span { position: relative; z-index: 1; }
-.sl-poll-pct { font-family: var(--fb); font-size: 11px; color: var(--gold); }
-.sl-actions { display: flex; gap: 8px; margin-top: auto; padding-top: .8rem; }
-.sl-btn-int, .sl-btn-inq {
-  flex: 1; padding: 10px 12px; border-radius: 8px;
-  font-family: var(--fb); font-size: 12px; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
-  transition: transform .15s, background .15s; border: 0;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.sl-btn-int { background: var(--gold); color: #0a0a0a; }
-.sl-btn-int:hover { transform: translateY(-1px); background: var(--gold-light, #5be3b5); }
-.sl-btn-int.voted { background: rgba(52,210,152,.15); color: var(--gold); cursor: default; }
-.sl-btn-inq { background: transparent; color: var(--white); border: 1px solid var(--border); }
-.sl-btn-inq:hover { background: #1d1d1d; border-color: var(--gold); color: var(--gold); }
-.sl-count { font-size: 11px; color: var(--tx-lt); margin-top: 4px; text-align: center; }
-
-/* Quick inquiry modal */
-.sl-modal { display: none; position: fixed; inset: 0; z-index: 1100; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
-.sl-modal.open { display: flex; }
-.sl-modal-inner { background: #151515; border: 1px solid var(--border); border-radius: 16px; max-width: 460px; width: 100%; padding: clamp(1.4rem,3vw,2rem); position: relative; max-height: 90vh; overflow-y: auto; }
-.sl-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: 0; color: var(--tx-mid); font-size: 22px; cursor: pointer; line-height: 1; }
-.sl-modal h3 { font-family: var(--fh); font-weight: 800; color: var(--white); margin: 0 0 .3rem; font-size: 1.2rem; }
-.sl-modal .sl-m-sub { font-size: 13px; color: var(--tx-mid); margin-bottom: 1rem; }
-.sl-modal form { display: flex; flex-direction: column; gap: 12px; }
-.sl-modal label { font-family: var(--fb); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: -8px; }
-.sl-modal input, .sl-modal select, .sl-modal textarea {
-  background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px;
-  color: var(--white); padding: 10px 12px; font-size: 14px; outline: none; width: 100%;
-  font-family: inherit; -webkit-appearance: none;
-}
-.sl-modal input:focus, .sl-modal select:focus, .sl-modal textarea:focus { border-color: var(--gold); }
-.sl-modal textarea { resize: vertical; min-height: 70px; }
-.sl-modal .sl-submit { background: var(--gold); color: #0a0a0a; font-family: var(--fb); font-weight: 700; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; padding: 12px; border-radius: 8px; border: 0; cursor: pointer; margin-top: 4px; }
-.sl-modal .sl-submit:disabled { opacity: .6; cursor: wait; }
-.sl-success { text-align: center; padding: 1.5rem 0; color: var(--gold); font-family: var(--fh); font-weight: 800; }
 
 /* ── AI Curation / Partner Match-making ── */
 .match-section { background: radial-gradient(ellipse at top, #131616 0%, #0a0a0a 70%); }
@@ -2138,7 +1908,6 @@ button:focus:not(:focus-visible) { outline: none; }
   <button class="side-dot" type="button" data-target="home"      onclick="sideNavGo('home')"><span class="sd-tip">Home</span></button>
   <button class="side-dot" type="button" data-target="products"  onclick="sideNavGo('products')"><span class="sd-tip">Shop</span></button>
   <button class="side-dot" type="button" data-target="cases"     onclick="sideNavGo('cases')"><span class="sd-tip">Trust</span></button>
-  <button class="side-dot" type="button" data-target="spotlight" onclick="sideNavGo('spotlight')"><span class="sd-tip">Spotlight</span></button>
   <button class="side-dot" type="button" data-target="rfq"       onclick="sideNavGo('rfq')"><span class="sd-tip">Connect</span></button>
 </div>
 
@@ -2173,7 +1942,6 @@ button:focus:not(:focus-visible) { outline: none; }
             <li><a href="#verify"><span class="ds-name">Verification Process</span><span class="ds-desc">4-step partner qualification</span></a></li>
             <li><a href="#map"><span class="ds-name">Trade Route Map</span><span class="ds-desc">Global shipping lanes from Korea</span></a></li>
             <li><a href="#compliance"><span class="ds-name">Compliance</span><span class="ds-desc">HIPAA · GSA · DIN 66399</span></a></li>
-            <li><a href="#spotlight"><span class="ds-name">Spotlight</span><span class="ds-desc">Concepts under evaluation</span></a></li>
           </ul>
         </li>
         <li class="nav-dropdown">
@@ -2228,7 +1996,6 @@ button:focus:not(:focus-visible) { outline: none; }
       <li><a href="#verify" onclick="closeMenu()">Verification Process</a></li>
       <li><a href="#map" onclick="closeMenu()">Trade Route Map</a></li>
       <li><a href="#compliance" onclick="closeMenu()">Compliance</a></li>
-      <li><a href="#spotlight" onclick="closeMenu()">Spotlight Concepts</a></li>
     </ul>
   </details>
   <details>
@@ -2294,16 +2061,6 @@ button:focus:not(:focus-visible) { outline: none; }
   </div>
 </section>
 
-<!-- ══ TRADE COMMITMENT BAR ══════════════ -->
-<section class="commit-bar" aria-label="ERGSN trade commitments">
-  <div class="container commit-inner">
-    <div class="commit-cell"><span class="commit-n" id="commitFx">—</span><span class="commit-l" id="commitFxL">KRW/USD · ECB ref</span></div>
-    <div class="commit-cell"><span class="commit-n">~12 min</span><span class="commit-l">Avg. Inquiry Response <span style="color:var(--tx-lt)">(KST business)</span></span></div>
-    <div class="commit-cell"><span class="commit-n">1 biz day</span><span class="commit-l">Formal Quote Turnaround</span></div>
-    <div class="commit-cell"><span class="commit-n">4–6 wk</span><span class="commit-l">Standard Lead Time</span></div>
-  </div>
-</section>
-
 <!-- ══ PRODUCTS ════════════════════════════ -->
 <section id="products">
   <div class="container products-inner">
@@ -2353,7 +2110,7 @@ button:focus:not(:focus-visible) { outline: none; }
     <div class="product-grid" id="productGrid">
 
       <div class="product-card reveal" style="--i:0" tabindex="0" data-model="dl10x" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl10x')">
-        <div class="card-image"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-10x.webp" type="image/webp"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></picture></div>
         <p class="card-tag">Entry Mid-Sized Office</p>
         <p class="card-model">DL-10X</p>
         <p class="card-part">Part No: DL10X (RS-2200A)</p>
@@ -2372,7 +2129,7 @@ button:focus:not(:focus-visible) { outline: none; }
       </div>
 
       <div class="product-card reveal" style="--i:1" tabindex="0" data-model="dl12x" onclick="openModal('dl12x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl12x')">
-        <div class="card-image"><img src="images/products/dl-12x.jpg" alt="ERGSN DL-12X crosscut paper shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-12x.webp" type="image/webp"><img src="images/products/dl-12x.jpg" alt="ERGSN DL-12X crosscut paper shredder" loading="lazy"></picture></div>
         <p class="card-tag">Mid-Sized Office</p>
         <p class="card-model">DL-12X</p>
         <p class="card-part">Part No: DL12X (RS-3300A)</p>
@@ -2391,7 +2148,7 @@ button:focus:not(:focus-visible) { outline: none; }
       </div>
 
       <div class="product-card reveal" style="--i:2" tabindex="0" data-model="dl16x" onclick="openModal('dl16x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl16x')">
-        <div class="card-image"><img src="images/products/dl-16x.jpg" alt="ERGSN DL-16X crosscut paper shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-16x.webp" type="image/webp"><img src="images/products/dl-16x.jpg" alt="ERGSN DL-16X crosscut paper shredder" loading="lazy"></picture></div>
         <p class="card-tag">Large Office / Departmental</p>
         <p class="card-model">DL-16X</p>
         <p class="card-part">Part No: DL16X (RS-3890A)</p>
@@ -2410,7 +2167,7 @@ button:focus:not(:focus-visible) { outline: none; }
       </div>
 
       <div class="product-card reveal" style="--i:3" tabindex="0" data-model="dl10xd" onclick="openModal('dl10xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl10xd')">
-        <div class="card-image"><img src="images/products/dl-10xd.jpg" alt="ERGSN DL-10XD high volume crosscut shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-10xd.webp" type="image/webp"><img src="images/products/dl-10xd.jpg" alt="ERGSN DL-10XD high volume crosscut shredder" loading="lazy"></picture></div>
         <p class="card-tag">High-Capacity 10" Class</p>
         <p class="card-model">DL-10XD</p>
         <p class="card-part">Part No: DL10XD (RS-6602A)</p>
@@ -2429,7 +2186,7 @@ button:focus:not(:focus-visible) { outline: none; }
       </div>
 
       <div class="product-card reveal" style="--i:4" tabindex="0" data-model="dl12xd" onclick="openModal('dl12xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl12xd')">
-        <div class="card-image"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-12xd.webp" type="image/webp"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD high capacity crosscut shredder" loading="lazy"></picture></div>
         <p class="card-tag">High-Capacity 12" Class</p>
         <p class="card-model">DL-12XD</p>
         <p class="card-part">Part No: DL12XD</p>
@@ -2449,7 +2206,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
       <div class="product-card reveal" style="--i:5" tabindex="0" data-model="dl16xd" onclick="openModal('dl16xd')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl16xd')">
         <span class="card-badge">Flagship</span>
-        <div class="card-image"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD flagship industrial shredder" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/dl-16xd.webp" type="image/webp"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD flagship industrial shredder" loading="lazy"></picture></div>
         <p class="card-tag">Heavy-Duty Industrial</p>
         <p class="card-model">DL-16XD</p>
         <p class="card-part">Part No: DL16XD (RS-8200A)</p>
@@ -2618,7 +2375,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
       <div class="product-card reveal" style="--i:0" tabindex="0" data-model="rosettaplus" onclick="openModal('rosettaplus')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('rosettaplus')">
         <span class="card-badge">Flagship</span>
-        <div class="card-image"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus — KFDA-assured Health Functional Food" loading="lazy"></div>
+        <div class="card-image"><picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus — KFDA-assured Health Functional Food" loading="lazy"></picture></div>
         <p class="card-tag">Mental Wellness &middot; HFF &middot; HACCP</p>
         <p class="card-model">ROSETTA<span style="color:var(--gold)">+</span></p>
         <p class="card-part">Part No: ROSETTAPLUS (HFF-RST+)</p>
@@ -2641,7 +2398,7 @@ button:focus:not(:focus-visible) { outline: none; }
 </section>
 
 <!-- ══ MODAL ═══════════════════════════════ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalContentHeading" aria-hidden="true" onclick="closeModalOutside(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
@@ -2948,70 +2705,6 @@ button:focus:not(:focus-visible) { outline: none; }
     </div>
   </div>
 </section>
-
-<!-- ══ SPOTLIGHT / PRE-LAUNCH RADAR ════════ -->
-<section class="spotlight-section" id="spotlight">
-  <div class="container spotlight-inner">
-    <div class="spotlight-head">
-      <div class="reveal">
-        <span class="label" style="color:var(--gold)">Pre-Launch Radar</span>
-        <h2 class="h-lg" style="margin:.6rem 0 1rem">Spotlight · Beta Testing</h2>
-        <p class="body-lg" style="max-width:620px">Concepts we're evaluating with verified Korean makers — not yet launched. Your interest, preferences, and inquiries directly shape what ERGSN brings to market next.</p>
-      </div>
-      <div class="spotlight-stats reveal">
-        <div class="sl-stat"><span class="n" id="slTotalInterest">0</span><span class="l">Total Interest</span></div>
-        <div class="sl-stat"><span class="n" id="slTotalVotes">0</span><span class="l">Preference Votes</span></div>
-        <div class="sl-stat"><span class="n" id="slTotalInquiries">0</span><span class="l">Inquiries Logged</span></div>
-      </div>
-    </div>
-    <div class="spotlight-grid" id="spotlightGrid"></div>
-  </div>
-</section>
-
-<!-- Quick Inquiry Modal -->
-<div class="sl-modal" id="slModal" onclick="if(event.target.id==='slModal')closeSlModal()">
-  <div class="sl-modal-inner">
-    <button type="button" class="sl-modal-close" onclick="closeSlModal()" aria-label="Close">×</button>
-    <h3 id="slModalTitle">Quick Inquiry</h3>
-    <p class="sl-m-sub" id="slModalSub">Tell us what you'd want to see in this concept. 60-second input.</p>
-    <form id="slForm" onsubmit="submitSpotlight(event)">
-      <label>Your Name *</label>
-      <input type="text" id="slName" required autocomplete="off">
-      <label>Email *</label>
-      <input type="email" id="slEmail" required autocomplete="off">
-      <label>Country *</label>
-      <select id="slCountry" required autocomplete="off">
-        <option value="" disabled selected>Select country…</option>
-      </select>
-      <label>Primary Industry</label>
-      <select id="slIndustry">
-        <option value="">— Optional —</option>
-        <option value="Government">Government / Public Sector</option>
-        <option value="Finance">Finance / Legal</option>
-        <option value="Healthcare">Healthcare / Pharma</option>
-        <option value="Education">Education / Research</option>
-        <option value="Technology">Technology / IT</option>
-        <option value="Manufacturing">Manufacturing / Industrial</option>
-        <option value="Retail">Retail / E-commerce</option>
-        <option value="Energy">Energy / Utilities</option>
-        <option value="Hospitality">Hospitality / F&amp;B</option>
-        <option value="Logistics">Logistics / Trading</option>
-      </select>
-      <label>Estimated Interest Volume</label>
-      <select id="slVolume">
-        <option value="">— Not sure —</option>
-        <option value="<100 units">&lt; 100 units</option>
-        <option value="100–500 units">100 – 500 units</option>
-        <option value="500–2000 units">500 – 2,000 units</option>
-        <option value="2000+ units">2,000+ units</option>
-      </select>
-      <label>What would make this compelling?</label>
-      <textarea id="slMessage" placeholder="Specs, certifications, price point, timeline — anything."></textarea>
-      <button type="submit" class="sl-submit" id="slSubmitBtn">Send Inquiry</button>
-    </form>
-    <div class="sl-success" id="slSuccess" style="display:none">✓ Inquiry logged. Thank you — we'll update you as this concept progresses.</div>
-  </div>
-</div>
 
 <!-- ══ COMPLIANCE ═══════════════════════════ -->
 <section id="compliance">
@@ -3327,7 +3020,6 @@ button:focus:not(:focus-visible) { outline: none; }
           <li><a href="#verify">Verification Process</a></li>
           <li><a href="#map">Trade Route Map</a></li>
           <li><a href="#compliance">Compliance</a></li>
-          <li><a href="#spotlight">Spotlight</a></li>
         </ul>
       </div>
       <div>
@@ -3362,7 +3054,7 @@ button:focus:not(:focus-visible) { outline: none; }
 </div>
 
 <!-- ══ COMPARE MODAL ═══════════════════════════ -->
-<div class="modal-overlay" id="compareOverlay" onclick="closeCompareOutside(event)">
+<div class="modal-overlay" id="compareOverlay" role="dialog" aria-modal="true" aria-label="Compare products" aria-hidden="true" onclick="closeCompareOutside(event)">
   <div class="compare-modal" id="compareModalContent"></div>
 </div>
 
@@ -3371,11 +3063,11 @@ button:focus:not(:focus-visible) { outline: none; }
 <button id="chatToggle" type="button" aria-label="Product advisor" onclick="toggleChat()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
 </button>
-<div id="chatPanel">
+<div id="chatPanel" role="dialog" aria-modal="false" aria-label="ERGSN Product Advisor" aria-hidden="true">
   <div class="chat-hd">
     <span class="chat-hd-dot"></span>
     <div><p class="chat-hd-title">ERGSN Product Advisor</p><p class="chat-hd-sub">Find the right shredder</p></div>
-    <button class="chat-close" onclick="toggleChat()">&times;</button>
+    <button class="chat-close" onclick="toggleChat()" aria-label="Close chat">&times;</button>
   </div>
   <div class="chat-body" id="chatBody"></div>
   <div class="chat-input-row">
@@ -3390,29 +3082,98 @@ button:focus:not(:focus-visible) { outline: none; }
 </button>
 
 <!-- ══ DATA + JS ══════════════════════════════ -->
-<script src="translations.js"></script>
 <script>
+/* English translations inlined on every page load (~5KB). Other languages are
+   lazy-loaded from translations.js only when the visitor switches. */
+const T = {
+  en: {
+    nav_products: "Products", nav_about: "About", nav_compliance: "Compliance", nav_quote: "Request Quote",
+    hero_tag: "Made in Korea · Est. Seoul",
+    hero_t1: "Industrial", hero_t2: "Shredders", hero_t3: "Built to Last.",
+    hero_desc: "ERGSN is a platform that implants Korea's hi-tech and cultural trends into global business. We identify, vet, and partner with verified Korean producers \u2014 then deliver their best to procurement teams worldwide. Starting with our flagship DL Series (GSA Schedule, U.S. defense procured), now expanding into K-Tech, K-Bio, K-Culture Goods, K-Franchise, K-Smart Living, and K-Energy.",
+    hero_btn1: "View Products", hero_btn2: "Request a Quote",
+    stat_years: "Years Manufacturing", stat_port: "Baltimore Port", stat_gsa: "Schedule Listed", stat_sec: "Security Level",
+    trust_1: "All-Metal Chain Drive", trust_2: "Oil-Free Operation", trust_3: "HIPAA Compliant",
+    trust_4: "GSA Schedule", trust_5: "CIF Baltimore", trust_6: "T/T Payment",
+    sim_label: "Interactive Demo", sim_title: "Try It Yourself",
+    sim_desc: "See how our DL Series shredders destroy documents at P-4 security level. Select a model and feed a document.",
+    sim_btn: "Feed Document",
+    prod_tag: "DL Series", prod_title: "Cross-Cut Shredders",
+    prod_desc: "Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.",
+    card_cta: "View Full Specs", compare_text: "Compare",
+    about_label: "Our Identity", about_title: "From K-Industry. Into Your Business.",
+    about_p1: "ERGSN is not a manufacturer \u2014 we are a trade platform. Our role is to implant Korea's high-technology and cultural trends directly into global business operations. Every product reaching our network is sourced from manufacturers we have personally vetted, audited, and partnered with over years.",
+    about_p2: "Our verification standard is relentless. Before any Korean producer joins the ERGSN network, their engineering, compliance, export history, and long-term reliability are audited by our team \u2014 the same rigor that shaped our flagship DL Series (all-metal chain drive, oil-free, GSA Schedule).",
+    about_p3: "13+ years of trade track record. Long-term supply partner of Capital Shredder Corp. (Rockville, MD). Now scaling the same verification standard across K-Tech, K-Bio, K-Culture Goods, K-Franchise, K-Smart Living, and K-Energy sectors.",
+    about_visual: "Document security, engineered for the modern office.",
+    kpi_models: "DL Series Models", kpi_port: "Baltimore Port Terms", kpi_sec: "Security Level", kpi_metal: "All-Metal Construction",
+    map_label: "Global Logistics", map_title: "Seoul to the World",
+    map_desc: "Every ERGSN shredder travels from our facility in Seoul across the Pacific to the Port of Baltimore \u2014 CIF terms, on schedule.",
+    map_cif: "Any Port Worldwide", map_lead: "Weeks Lead Time", map_hs: "Tariff Classification", map_tt: "Payment Remittance",
+    comp_label: "Certifications & Standards", comp_title: "Built for U.S. Compliance",
+    comp_desc: "Engineered to meet the regulatory requirements of U.S. healthcare, government, and enterprise procurement.",
+    rfq_label: "Get in Touch", rfq_title: "Request a Quote",
+    rfq_desc: "Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).",
+    rfq_btn: "Send Inquiry", rfq_note: "Sent directly to ERGSN CO., LTD. in Seoul \u2014 reply within 1 business day (KST, UTC+9).",
+    f_first: "First Name", f_last: "Last Name", f_company: "Company", f_email: "Email", f_phone: "Phone",
+    f_models: "Models of Interest", f_qty: "Est. Quantity", f_incoterms: "Incoterms",
+    f_country: "Country", f_port: "Port / Place", f_msg: "Message / Special Requirements",
+    success_title: "Inquiry Received",
+    success_msg: "Thank you for your interest in ERGSN products. Our team will review your inquiry and respond within 1 business day.",
+    footer_products: "Products", footer_company: "Company", footer_contact: "Contact",
+    cta_telegram: "Telegram", cta_quote: "Request Quote",
+    tray_comparing: "Comparing", tray_clear: "Clear", lang_label: "Language"
+  }
+};
+
 /* ── i18n ─────────────────────────────── */
-function setLang(lang) {
-  if (!T[lang]) return;
+let _langsLoaded = false;
+let _langsPromise = null;
+function loadLangs() {
+  if (_langsLoaded) return Promise.resolve();
+  if (_langsPromise) return _langsPromise;
+  _langsPromise = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'translations.js?v=2';
+    s.async = true;
+    s.onload = () => {
+      // translations.js declares `const T = {...}`. Merge its non-en locales into our T.
+      try {
+        if (typeof window.TRANSLATIONS_FULL !== 'undefined') {
+          Object.keys(window.TRANSLATIONS_FULL).forEach(k => { if (k !== 'en') T[k] = window.TRANSLATIONS_FULL[k]; });
+        }
+      } catch(_) {}
+      _langsLoaded = true; resolve();
+    };
+    s.onerror = () => { _langsPromise = null; reject(new Error('Failed to load translations')); };
+    document.head.appendChild(s);
+  });
+  return _langsPromise;
+}
+function applyLang(lang) {
+  if (!T[lang]) return false;
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.dataset.t;
     if (T[lang][key]) el.textContent = T[lang][key];
   });
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
-  document.getElementById('langSel').value = lang;
-  const mobSel = document.getElementById('langSelMobile');
-  if (mobSel) mobSel.value = lang;
-  localStorage.setItem('ergsn_lang', lang);
+  const sel = document.getElementById('langSel'); if (sel) sel.value = lang;
+  const mobSel = document.getElementById('langSelMobile'); if (mobSel) mobSel.value = lang;
+  try { localStorage.setItem('ergsn_lang', lang); } catch(_) {}
+  return true;
+}
+function setLang(lang) {
+  if (T[lang]) { applyLang(lang); return; }
+  loadLangs().then(() => applyLang(lang)).catch(() => {});
 }
 // Initialize language from localStorage or browser preference
 (function initLang(){
-  const saved = localStorage.getItem('ergsn_lang');
-  if (saved && T[saved]) { setLang(saved); return; }
-  const browser = (navigator.language || '').slice(0,2);
+  const saved = (function(){ try { return localStorage.getItem('ergsn_lang'); } catch(_) { return null; } })();
+  const browser = (navigator.language || '').slice(0,2).toLowerCase();
   const supported = { en:1, es:1, ar:1, fr:1, ja:1, tr:1 };
-  if (supported[browser]) setLang(browser);
+  const target = (saved && saved !== 'en') ? saved : (supported[browser] && browser !== 'en' ? browser : null);
+  if (target) setLang(target);
 })();
 
 const P = {
@@ -3564,7 +3325,7 @@ function openModal(id) {
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-hd">
       <div class="modal-hd-text">
-        <p class="modal-model">${p.model}</p>
+        <p class="modal-model" id="modalContentHeading">${p.model}</p>
         <p class="modal-sub">${p.sub}</p>
         <p class="modal-part">Part No: ${p.part}</p>
       </div>
@@ -3586,13 +3347,19 @@ function openModal(id) {
       <span class="modal-ft-note">CIF Baltimore &middot; T/T Payment &middot; 4&ndash;6 weeks lead time</span>
     </div>`;
   withViewTransition(() => {
-    document.getElementById('modalOverlay').classList.add('open');
+    const ov = document.getElementById('modalOverlay');
+    ov.classList.add('open');
+    ov.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    const closeBtn = ov.querySelector('.modal-close');
+    if (closeBtn) closeBtn.focus();
   });
 }
 function closeModal() {
   withViewTransition(() => {
-    document.getElementById('modalOverlay').classList.remove('open');
+    const ov = document.getElementById('modalOverlay');
+    ov.classList.remove('open');
+    ov.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   });
 }
@@ -3693,6 +3460,7 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
   else if (document.getElementById('modalOverlay').classList.contains('open')) closeModal();
+  else if (typeof chatOpen !== 'undefined' && chatOpen) toggleChat();
 });
 
 /* ── Scroll progress + side dot nav ──── */
@@ -3798,8 +3566,7 @@ function runMatch(e) {
     window._lastMatch = { country, industry: industryLabel, scale, ranked };
     if (typeof logEvent === 'function') logEvent('match', industryLabel);
     html += `<div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center">`
-      + `<button type="button" class="match-btn" onclick="applyMatchToRFQ()">Request Quote for These</button>`
-      + `<div style="margin-top:.8rem;font-size:12px;color:var(--tx-mid)">Or explore <a href="#spotlight" style="color:var(--gold);text-decoration:underline">Spotlight concepts</a> — pre-launch items looking for early bidder feedback.</div></div>`;
+      + `<button type="button" class="match-btn" onclick="applyMatchToRFQ()">Request Quote for These</button></div>`;
     out.innerHTML = html;
     btn.disabled = false; btn.textContent = 'Find My Match';
   }, 1100);
@@ -3830,305 +3597,15 @@ function applyMatchToRFQ() {
   document.getElementById('rfq').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ── Spotlight / Pre-Launch Radar ────── */
-const SPOTLIGHTS = [
-  {
-    id: 'sl-kbeauty',
-    sector: 'K-Beauty',
-    status: 'concept',
-    gradient: 'gradient-3',
-    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><path d="M9 2h6l1 4H8zM7 6h10l-1 16H8z"/><circle cx="12" cy="14" r="3"/></svg>',
-    title: 'K-Beauty Device · Smart Mirror',
-    tag: 'AI-driven skin analysis + Korean skincare tech. Salon-grade, home-ready.',
-    origin: 'Korean maker · 12 years in aesthetic devices',
-    poll: { q: 'Most important to you?', opts: ['Salon-grade accuracy', 'Competitive price point', 'Sleek design', 'Clinical certification'] }
-  },
-  {
-    id: 'sl-semisensor',
-    sector: 'K-Tech',
-    status: 'prototype',
-    gradient: 'gradient-2',
-    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2M9 9h6v6H9z"/></svg>',
-    title: 'Industrial IoT Sensor Suite',
-    tag: 'High-precision environmental & vibration sensors for smart factories. Korean fab-grade.',
-    origin: 'Korean OEM · Tier-1 semiconductor fab partner',
-    poll: { q: 'Primary use case?', opts: ['Predictive maintenance', 'Energy monitoring', 'Quality control', 'Safety compliance'] }
-  },
-  {
-    id: 'sl-ess',
-    sector: 'K-Energy',
-    status: 'pilot',
-    gradient: 'gradient-1',
-    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><rect x="5" y="8" width="14" height="12" rx="2"/><path d="M9 8V4h6v4M9 14h6"/></svg>',
-    title: 'Commercial ESS · Modular Battery',
-    tag: '50 kWh modular energy storage, Korean cell technology. Stackable, grid-tied.',
-    origin: 'Korean clean-tech partner · ESS export-ready',
-    poll: { q: 'Deal-breaker feature?', opts: ['Price per kWh', 'Cycle life (10,000+)', 'Local certification', 'Integration support'] }
-  },
-  {
-    id: 'sl-kpop-merch',
-    sector: 'K-Culture Goods',
-    status: 'concept',
-    gradient: 'gradient-4',
-    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="sl-visual-icon"><circle cx="12" cy="12" r="9"/><path d="M8 14c1 2 3 3 4 3s3-1 4-3"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/></svg>',
-    title: 'K-Culture Licensed Lifestyle Goods',
-    tag: 'Premium licensed Korean-pop & drama merchandise for global retail. White-label possible.',
-    origin: 'Seoul licensing consortium',
-    poll: { q: 'Your channel?', opts: ['Online retail', 'Physical stores', 'B2B distributor', 'Brand co-promo'] }
-  }
-];
-
-function slStore() {
-  try { return JSON.parse(localStorage.getItem('ergsn_spotlight') || '{}'); } catch (_) { return {}; }
-}
-function slSave(s) { try { localStorage.setItem('ergsn_spotlight', JSON.stringify(s)); } catch (_) {} }
-
-function renderSpotlight() {
-  const grid = document.getElementById('spotlightGrid');
-  if (!grid) return;
-  const s = slStore();
-  grid.innerHTML = SPOTLIGHTS.map(sp => {
-    const state = s[sp.id] || { interest: 0, vote: null, votes: {} };
-    const voted = state.vote != null;
-    const interested = !!state.interested;
-    const totalVotes = Object.values(state.votes || {}).reduce((a,b) => a+b, 0) || 0;
-    const pollHtml = sp.poll.opts.map((opt, i) => {
-      const count = (state.votes && state.votes[i]) || 0;
-      const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
-      const picked = state.vote === i ? ' picked' : '';
-      return `<div class="sl-poll-opt${voted ? ' voted' + picked : ''}" onclick="${voted ? '' : `slVote('${sp.id}',${i})`}">`
-        + (voted ? `<div class="sl-poll-bar" style="width:${pct}%"></div>` : '')
-        + `<span>${opt}</span>`
-        + (voted ? `<span class="sl-poll-pct">${pct}%</span>` : '')
-        + `</div>`;
-    }).join('');
-    return `<article class="sl-card reveal">
-      <div class="sl-visual ${sp.gradient}">
-        <div class="sl-badges">
-          <span class="sl-badge status-${sp.status}">${sp.status}</span>
-          <span class="sl-badge">${sp.sector}</span>
-        </div>
-        ${sp.icon}
-      </div>
-      <div class="sl-body">
-        <span class="sl-sector">${sp.sector}</span>
-        <h3 class="sl-title">${sp.title}</h3>
-        <p class="sl-tag">${sp.tag}</p>
-        <p class="sl-origin">${sp.origin}</p>
-        <div class="sl-poll">
-          <p class="sl-poll-q">${sp.poll.q}</p>
-          ${pollHtml}
-        </div>
-        <div class="sl-actions">
-          <button class="sl-btn-int${interested ? ' voted' : ''}" onclick="slInterest('${sp.id}')" ${interested?'disabled':''}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 11v10H3V11h4zm14.5-2c0-.8-.7-1.5-1.5-1.5h-5.8L15 3.5l.1-.4c0-.3-.1-.6-.3-.9L13.5 1 7 7.6V21h10.5c.8 0 1.5-.5 1.7-1.2l2.2-7.1c.1-.2.1-.4.1-.6V11l-.1-2z"/></svg>
-            ${interested ? 'Interested' : "I'm Interested"}
-          </button>
-          <button class="sl-btn-inq" onclick="openSlModal('${sp.id}')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Inquiry
-          </button>
-        </div>
-        <div class="sl-count">${state.interest || 0} interested · ${totalVotes} voted</div>
-      </div>
-    </article>`;
-  }).join('');
-  slUpdateTotals();
-}
-
-function slUpdateTotals() {
-  const s = slStore();
-  let interest = 0, votes = 0, inq = 0;
-  SPOTLIGHTS.forEach(sp => {
-    const st = s[sp.id] || {};
-    interest += st.interest || 0;
-    votes += Object.values(st.votes || {}).reduce((a,b) => a+b, 0);
-    inq += st.inquiries || 0;
-  });
-  const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  setT('slTotalInterest', interest);
-  setT('slTotalVotes', votes);
-  setT('slTotalInquiries', inq);
-}
-
-function slInterest(id) {
-  const s = slStore();
-  if (!s[id]) s[id] = { interest: 0, vote: null, votes: {} };
-  if (s[id].interested) return;
-  s[id].interested = true;
-  s[id].interest = (s[id].interest || 0) + 1;
-  slSave(s);
-  slNotify('interest', id);
-  const sp = SPOTLIGHTS.find(x => x.id === id);
-  if (typeof logEvent === 'function') logEvent('interest', sp ? sp.title : '');
-  renderSpotlight();
-}
-
-function slVote(id, optIdx) {
-  const s = slStore();
-  if (!s[id]) s[id] = { interest: 0, vote: null, votes: {} };
-  if (s[id].vote != null) return;
-  s[id].vote = optIdx;
-  s[id].votes = s[id].votes || {};
-  s[id].votes[optIdx] = (s[id].votes[optIdx] || 0) + 1;
-  slSave(s);
-  const sp = SPOTLIGHTS.find(x => x.id === id);
-  slNotify('vote', id, sp && sp.poll.opts[optIdx]);
-  if (typeof logEvent === 'function') logEvent('vote', sp ? sp.title : '');
-  renderSpotlight();
-}
-
-function slNotify(kind, id, detail) {
-  const sp = SPOTLIGHTS.find(x => x.id === id); if (!sp) return;
-  const safe = (s) => String(s || '').replace(/[_*`\[\]]/g, '');
-  const text = kind === 'interest'
-    ? `📡 Spotlight Interest\n\nConcept: ${safe(sp.title)}\nSector: ${safe(sp.sector)}\nStatus: ${safe(sp.status)}\n\nAnonymous click · ceodon.github.io/ergsn`
-    : `🗳 Spotlight Vote\n\nConcept: ${safe(sp.title)}\nQuestion: ${safe(sp.poll.q)}\nAnswer: ${safe(detail || '-')}\n\nAnonymous click · ceodon.github.io/ergsn`;
-  try { sendTG(text, 'plain'); } catch (_) {}
-}
-
-let _slCurrentConcept = null;
-function openSlModal(id) {
-  const sp = SPOTLIGHTS.find(x => x.id === id); if (!sp) return;
-  _slCurrentConcept = sp;
-  document.getElementById('slModalTitle').textContent = `Inquiry · ${sp.title}`;
-  document.getElementById('slModalSub').textContent = `Pre-launch concept in ${sp.sector}. Share what would make this compelling for your market.`;
-  document.getElementById('slForm').reset();
-  document.getElementById('slForm').style.display = '';
-  document.getElementById('slSuccess').style.display = 'none';
-  document.getElementById('slModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeSlModal() {
-  document.getElementById('slModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function submitSpotlight(e) {
-  e.preventDefault();
-  const sp = _slCurrentConcept; if (!sp) return;
-  const btn = document.getElementById('slSubmitBtn');
-  btn.disabled = true; btn.textContent = 'Sending…';
-  const fields = {
-    name: document.getElementById('slName').value.trim(),
-    email: document.getElementById('slEmail').value.trim(),
-    country: document.getElementById('slCountry').value,
-    industry: document.getElementById('slIndustry').value || '-',
-    volume: document.getElementById('slVolume').value || '-',
-    message: document.getElementById('slMessage').value.trim() || '-'
-  };
-  const emailPayload = {
-    _cc: RFQ_CC,
-    _subject: `[SPOTLIGHT INQUIRY] ${sp.title} — ${fields.name}`,
-    _template: 'table', _captcha: 'false',
-    'Concept': sp.title, 'Sector': sp.sector, 'Status': sp.status,
-    'Name': fields.name, 'Email': fields.email,
-    'Country': fields.country, 'Industry': fields.industry,
-    'Est. Volume': fields.volume, 'Feedback': fields.message,
-    'Source': 'ceodon.github.io/ergsn (Spotlight)'
-  };
-  const tgText = [
-    `🚀 *SPOTLIGHT INQUIRY*`, '',
-    `*Concept:* ${sp.title}`,
-    `*Sector:* ${sp.sector} (${sp.status})`, '',
-    `*Name:* ${fields.name}`,
-    `*Email:* ${fields.email}`,
-    `*Country:* ${fields.country}`,
-    `*Industry:* ${fields.industry}`,
-    `*Est. Volume:* ${fields.volume}`, '',
-    `*Feedback:* ${fields.message}`, '',
-    `_Pre-launch market test · ceodon.github.io/ergsn_`
-  ].join('\n');
-  Promise.allSettled([
-    fetch(RFQ_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(emailPayload)
-    }),
-    sendTG(tgText)
-  ]).then(() => {
-    const s = slStore();
-    if (!s[sp.id]) s[sp.id] = { interest: 0, vote: null, votes: {} };
-    s[sp.id].inquiries = (s[sp.id].inquiries || 0) + 1;
-    slSave(s);
-    document.getElementById('slForm').style.display = 'none';
-    document.getElementById('slSuccess').style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Send Inquiry';
-    slUpdateTotals();
-    setTimeout(closeSlModal, 2400);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function initSpotlight(){
-  const sel = document.getElementById('slCountry');
-  if (sel && typeof WORLD_PORTS !== 'undefined') {
-    Object.keys(WORLD_PORTS).forEach(c => {
-      const o = document.createElement('option'); o.value = c; o.textContent = c;
-      sel.appendChild(o);
-    });
-  }
-  renderSpotlight();
-  initCommitBar();
+document.addEventListener('DOMContentLoaded', function initPageWidgets(){
   initTradeTools();
   // initQAWall is lazy-loaded via IntersectionObserver
 });
 
-/* ── Commitment bar: live FX only ─── */
-function initCommitBar() {
-  const fxEl = document.getElementById('commitFx');
-  if (!fxEl) return;
-  fetchFxKRW().then(({rate, asOf}) => {
-    fxEl.textContent = `₩${rate.toLocaleString('en-US',{maximumFractionDigits:0})}`;
-    const lbl = document.getElementById('commitFxL');
-    if (lbl) lbl.innerHTML = `KRW/USD · <span style="color:var(--tx-lt)">ECB ${asOf}</span>`;
-  }).catch(() => { fxEl.textContent = '—'; });
-}
-
-/* ── Live FX (ECB reference via Frankfurter) ─ */
-async function fetchFxKRW() {
-  const CACHE_KEY = 'ergsn_fx_krw';
-  const CACHE_MS = 60 * 60 * 1000; // 1 hour
-  // Try cache first
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (raw) {
-      const c = JSON.parse(raw);
-      if (c && c.t && (Date.now() - c.t) < CACHE_MS && c.rate) return { rate: c.rate, delta: c.delta, asOf: c.asOf || 'cached' };
-    }
-  } catch(_) {}
-  // Fetch latest + prior day to compute delta
-  const today = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=KRW').then(r => r.json());
-  if (!today || !today.rates || !today.rates.KRW) throw new Error('no rate');
-  const rate = today.rates.KRW;
-  let delta = null;
-  try {
-    const priorDate = new Date(today.date || Date.now());
-    priorDate.setDate(priorDate.getDate() - 7);
-    const priorStr = priorDate.toISOString().slice(0, 10);
-    const prior = await fetch(`https://api.frankfurter.dev/v1/${priorStr}?base=USD&symbols=KRW`).then(r => r.json());
-    if (prior && prior.rates && prior.rates.KRW) {
-      delta = ((rate - prior.rates.KRW) / prior.rates.KRW) * 100;
-    }
-  } catch(_) {}
-  const asOf = today.date ? `as of ${today.date}` : 'today';
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), rate, delta, asOf })); } catch(_) {}
-  return { rate, delta, asOf };
-}
-
-/* Daily Pulse / Ticker / Missions / Passport / Radar / Leaderboard / Countdown / Shorts / Referral
-   all removed in 2026 cleanup — too consumer-feeling for B2B trade. Safe no-ops below avoid
-   breaking any residual call sites. */
-function seededRand(seed, n) { const x = Math.sin(seed) * 10000; return ((x - Math.floor(x)) * n) | 0; }
+/* No-op stubs preserved for any residual call sites referencing the old
+   gamification layer (Spotlight/Mission Control/Live Events/Commit Bar all removed). */
 function markMission() {}
 function logEvent() {}
-function toggleSpin() {}
-const _NOOP_POOL = [
-  'Korean <em>ESS exports</em> hit record this quarter',
-  'K-Beauty tech demand <em>surges across GCC</em>',
-  'Semiconductor modules <em>lead APAC</em> demand',
-  'K-Smart Living IoT <em>trending in LATAM</em>',
-  'Clean energy partners <em>onboarding fast</em>'
-];
 
 /* ── Tier 3: Landed Cost + Compliance + Book Demo ── */
 const DUTY_RATES = { 'United States':2.5, 'Canada':3.5, 'Mexico':5, 'Brazil':12, 'United Kingdom':4, 'Germany':4, 'France':4, 'Spain':4, 'Italy':4, 'Netherlands':4, 'Saudi Arabia':5, 'United Arab Emirates':5, 'Qatar':5, 'Japan':0, 'South Korea':0, 'Singapore':0, 'Australia':5, 'India':10, 'Turkey':6, 'China':8, 'Vietnam':5 };
@@ -4220,7 +3697,7 @@ function bookDemo() {
     sendTG(text);
     fetch(RFQ_ENDPOINT, {
       method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify({ _cc: RFQ_CC, _subject:`[DEMO BOOKING] ${slot} — ${name}`, _template:'table', _captcha:'false', Name:name, Email:email, Slot:slot, Source:'ceodon.github.io/ergsn (Demo Booking)' })
+      body: JSON.stringify({ _cc: RFQ_CC, _subject:`[DEMO BOOKING] ${slot} — ${name}`, _template:'table', _captcha:'true', Name:name, Email:email, Slot:slot, Source:'ceodon.github.io/ergsn (Demo Booking)' })
     }).catch(()=>{});
   } catch(_) {}
   r.classList.add('active');
@@ -4231,8 +3708,8 @@ function bookDemo() {
 /* ── Tier 2: Q&A Wall ───────────────── */
 const QA_SEED = [
   { name:'Ahmed · Procurement Lead', country:'Saudi Arabia', q:'Does DL-16XD support 220V/50Hz?', a:'Standard build is 115V/60Hz. Custom 220V/50Hz is available as OEM — please request via RFQ with voltage specified.', t:'3 days ago' },
-  { name:'Yuki · Distributor', country:'Japan', q:'When will K-Tech sector launch formally?', a:'Target Q2 2026. Early-access buyers from Spotlight (Industrial IoT Sensors) will be contacted first.', t:'5 days ago' },
-  { name:'Carlos · Retailer', country:'Mexico', q:'MOQ for K-Beauty Smart Mirror?', a:'Concept stage — MOQ being negotiated with the maker. Post an inquiry in Spotlight and we will reach out with options.', t:'1 week ago' },
+  { name:'Yuki · Distributor', country:'Japan', q:'When will K-Tech sector launch formally?', a:'Target Q2 2026. Early-access buyers will be contacted first — please leave an RFQ indicating interest.', t:'5 days ago' },
+  { name:'Carlos · Retailer', country:'Mexico', q:'MOQ for K-Beauty Smart Mirror?', a:'Concept stage — MOQ being negotiated with the maker. Submit an RFQ with your target volume and we will reach out with options.', t:'1 week ago' },
   { name:'Anna · Energy Buyer', country:'Germany', q:'Do your Korean ESS partners have IEC 62619?', a:'Yes — all K-Energy partners we onboard must hold IEC 62619 and country-specific grid certifications.', t:'1 week ago' }
 ];
 function qaStore() { try { return JSON.parse(localStorage.getItem('ergsn_qa') || '[]'); } catch(_) { return []; } }
@@ -4275,7 +3752,7 @@ function subscribeNewsletter(e) {
     fetch(RFQ_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ _cc: RFQ_CC, _subject: `[NEWSLETTER] ${email}`, _template: 'table', _captcha: 'false', Email: email, Source: 'ceodon.github.io/ergsn (Newsletter)' })
+      body: JSON.stringify({ _cc: RFQ_CC, _subject: `[NEWSLETTER] ${email}`, _template: 'table', _captcha: 'true', Email: email, Source: 'ceodon.github.io/ergsn (Newsletter)' })
     }).catch(()=>{});
     sendTG(`📰 Newsletter signup: ${email}`, 'plain');
   } catch(_) {}
@@ -4731,7 +4208,7 @@ ACTIVE sectors (products ready to quote):
 - K-Tech: proprietary 2D → 3D stereoscopic conversion services — KT-3DAD (3D advertising production, 3–6 wk), KT-3DVID (2D→3D video conversion, 2–4 wk for ≤90 min), KT-3DCINE (feature-film 3D remaster, 8–16 wk). Output up to 4K UHD, Side-by-Side / Over-Under / MVC / Frame-Packed / Stereo DCP.
 - K-Bio: Rosetta Plus HFF — HACCP-certified, KFDA-assured Health Functional Food, representative function of improving depression, psychosis and panic disorder. Capacity 1,000+ units/month. Already exporting to Mexico, Yemen, India.
 
-SOURCING in 2026 (partner-matching open, inquiries via Spotlight): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness) · K-Energy (solar, ESS, EV-adjacent, IEC 62619).
+SOURCING in 2026 (partner-matching in progress — direct to RFQ for early inquiries): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness) · K-Energy (solar, ESS, EV-adjacent, IEC 62619).
 
 Trade: CIF any major port, T/T 50%/50%, 4–6 wk lead time for DL Series. Never quote exact prices — redirect to RFQ form. Be concise (under 150 words). Support EN/ES/AR/FR/JA/TR/zh-Hans/zh-Hant.`;
     const resp = await fetch(CLAUDE_API_ENDPOINT, {
@@ -5120,7 +4597,9 @@ let chatOpen = false;
 
 function toggleChat(){
   chatOpen = !chatOpen;
-  document.getElementById('chatPanel').classList.toggle('open', chatOpen);
+  const panel = document.getElementById('chatPanel');
+  panel.classList.toggle('open', chatOpen);
+  panel.setAttribute('aria-hidden', chatOpen ? 'false' : 'true');
   if(chatOpen && !document.getElementById('chatBody').children.length) {
     startChat();
   } else if (chatOpen && chatContext.awaitingReturn) {
@@ -5476,8 +4955,25 @@ function chatPrefillAndQuote() {
   }, 150);
 }
 
+/* Chat node resolver — allows per-language overrides.
+ * To localize the chatbot, add to translations.js under each lang:
+ *   chat: { start: { msg: '...', opts: [{label: '...', next: 'find_office_size'}, ...] }, ... }
+ * Keys mirror CHAT_TREE's top-level node names (start, find_office_size, browse_models, etc.).
+ * Missing keys fall back to the English CHAT_TREE entry. */
+function getChatNode(key) {
+  const lang = document.documentElement.lang || 'en';
+  const overlay = (typeof T !== 'undefined' && T[lang] && T[lang].chat && T[lang].chat[key]) || null;
+  const base = CHAT_TREE[key];
+  if (!base) return null;
+  if (!overlay) return base;
+  return {
+    ...base,
+    msg: overlay.msg || base.msg,
+    opts: (overlay.opts && overlay.opts.length) ? overlay.opts : base.opts
+  };
+}
 function chatStep(key){
-  const node = CHAT_TREE[key];
+  const node = getChatNode(key);
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
   typing.className = 'chat-typing';
@@ -5683,14 +5179,18 @@ function openCompareModal() {
       <a href="#rfq" class="btn btn-gold" onclick='return requestQuote(${JSON.stringify(compareState)})'>Request a Quote</a>
     </div>`;
   withViewTransition(() => {
-    document.getElementById('compareOverlay').classList.add('open');
+    const ov = document.getElementById('compareOverlay');
+    ov.classList.add('open');
+    ov.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   });
 }
 
 function closeCompareModal() {
   withViewTransition(() => {
-    document.getElementById('compareOverlay').classList.remove('open');
+    const ov = document.getElementById('compareOverlay');
+    ov.classList.remove('open');
+    ov.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   });
 }
@@ -6252,7 +5752,7 @@ function submitRFQ() {
       _autoresponse: buyerLines,
       _subject: `[${trackerBase.tier}]${trackingId ? ' [' + trackingId + ']' : ''} ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
       _template: 'table',
-      _captcha: 'false',
+      _captcha: 'true',
       'RFQ Tracker ID': trackingId || '(tracker offline)',
       'RFQ Tracker Link': trackerLink || '(n/a)',
       'First Name': v('fFirst'),
@@ -6305,7 +5805,32 @@ function submitRFQ() {
       if (trackingId) {
         const successEl = document.getElementById('rfqSuccess');
         const msg = successEl.querySelector('p');
-        if (msg) msg.innerHTML = `Thank you. Your tracking ID is <strong style="color:var(--gold);font-family:var(--fh)">${trackingId}</strong><br>A copy of this RFQ has been sent to <strong>${buyerEmail}</strong>.<br>Check status anytime at <a href="tracker.html?id=${trackingId}" style="color:var(--gold)">RFQ Tracker</a>.<br><br>We will respond within 1 business day (KST, UTC+9).`;
+        if (msg) {
+          msg.replaceChildren();
+          msg.appendChild(document.createTextNode('Thank you. Your tracking ID is '));
+          const idStrong = document.createElement('strong');
+          idStrong.style.color = 'var(--gold)';
+          idStrong.style.fontFamily = 'var(--fh)';
+          idStrong.textContent = trackingId;
+          msg.appendChild(idStrong);
+          msg.appendChild(document.createElement('br'));
+          msg.appendChild(document.createTextNode('A copy of this RFQ has been sent to '));
+          const emailStrong = document.createElement('strong');
+          emailStrong.textContent = buyerEmail;
+          msg.appendChild(emailStrong);
+          msg.appendChild(document.createTextNode('.'));
+          msg.appendChild(document.createElement('br'));
+          msg.appendChild(document.createTextNode('Check status anytime at '));
+          const link = document.createElement('a');
+          link.href = 'tracker.html?id=' + encodeURIComponent(trackingId);
+          link.style.color = 'var(--gold)';
+          link.textContent = 'RFQ Tracker';
+          msg.appendChild(link);
+          msg.appendChild(document.createTextNode('.'));
+          msg.appendChild(document.createElement('br'));
+          msg.appendChild(document.createElement('br'));
+          msg.appendChild(document.createTextNode('We will respond within 1 business day (KST, UTC+9).'));
+        }
       }
       document.getElementById('rfqFields').style.display = 'none';
       document.getElementById('rfqSuccess').style.display = 'block';
@@ -6333,7 +5858,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     const el = document.createElement('div');
     el.className = 'consent open';
     el.innerHTML = `
-      <span>This site stores your language, buyer profile, and mission progress in your browser to personalize your experience. Submissions (RFQ, Spotlight, Demo) are sent to ERGSN. See <a href="privacy.html">Privacy</a> &amp; <a href="terms.html">Terms</a>.</span>
+      <span>This site stores your language preference and buyer profile in your browser to personalize your experience. Submissions (RFQ, Demo) are sent to ERGSN. See <a href="privacy.html">Privacy</a> &amp; <a href="terms.html">Terms</a>.</span>
       <button type="button">Got it</button>`;
     document.body.appendChild(el);
     el.querySelector('button').addEventListener('click', () => {
