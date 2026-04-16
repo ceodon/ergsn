@@ -2088,7 +2088,7 @@ button:focus:not(:focus-visible) { outline: none; }
           <ul class="nav-dropmenu">
             <li><a href="#products" onclick="switchSector('office-security');return true"><span class="ds-name">Office Security <span class="ds-tag">Active</span></span><span class="ds-desc">DL Series shredders · in stock</span></a></li>
             <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag">Active</span></span><span class="ds-desc">2D → 3D stereoscopic conversion</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Biotech · diagnostics · pharma</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag">Active</span></span><span class="ds-desc">Rosetta Plus · HACCP · KFDA</span></a></li>
             <li><a href="#products" onclick="switchSector('k-beauty');return true"><span class="ds-name">K-Beauty <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Skincare · cosmetics · devices</span></a></li>
             <li><a href="#products" onclick="switchSector('smart-living');return true"><span class="ds-name">Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · K-culture</span></a></li>
             <li><a href="#products" onclick="switchSector('future-energy');return true"><span class="ds-name">Future Energy <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Solar · ESS · clean-tech</span></a></li>
@@ -2141,7 +2141,7 @@ button:focus:not(:focus-visible) { outline: none; }
     <ul>
       <li><a href="#products" onclick="switchSector('office-security');closeMenu()">Office Security (Active)</a></li>
       <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (2D → 3D)</a></li>
-      <li><a href="#products" onclick="switchSector('k-bio');closeMenu()">K-Bio (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('k-bio');closeMenu()">K-Bio (Rosetta Plus)</a></li>
       <li><a href="#products" onclick="switchSector('k-beauty');closeMenu()">K-Beauty (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('smart-living');closeMenu()">Smart Living (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('future-energy');closeMenu()">Future Energy (Sourcing)</a></li>
@@ -2253,7 +2253,7 @@ button:focus:not(:focus-visible) { outline: none; }
         K-Tech <span class="st-tag">Active</span>
       </button>
       <button class="sector-tab" data-sector="k-bio" onclick="switchSector('k-bio')">
-        K-Bio <span class="st-tag">Soon</span>
+        K-Bio <span class="st-tag">Active</span>
       </button>
       <button class="sector-tab" data-sector="k-beauty" onclick="switchSector('k-beauty')">
         K-Beauty <span class="st-tag">Soon</span>
@@ -2559,6 +2559,64 @@ button:focus:not(:focus-visible) { outline: none; }
         <div class="card-foot">
           <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add KT-3DCINE to compare" onclick="event.stopPropagation();toggleCompare('kt3dcine',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- K-Bio product grid: Rosetta Plus -->
+    <div class="product-grid" id="kbioGrid" style="display:none">
+
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="rosettaplus" onclick="openModal('rosettaplus')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('rosettaplus')">
+        <span class="card-badge">Flagship</span>
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="kbg1bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
+              <linearGradient id="kbg1silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
+              <pattern id="kbg1grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
+            </defs>
+            <rect width="200" height="150" fill="url(#kbg1bg)"/>
+            <rect width="200" height="150" fill="url(#kbg1grid)"/>
+            <!-- Double helix motif (DNA) -->
+            <g stroke="#c8932a" stroke-width="1.2" fill="none">
+              <path d="M78 38 Q100 52 78 66 Q56 80 78 94 Q100 108 78 122" opacity=".85"/>
+              <path d="M122 38 Q100 52 122 66 Q144 80 122 94 Q100 108 122 122" opacity=".85"/>
+            </g>
+            <g stroke="#c8932a" stroke-width=".5" opacity=".55">
+              <line x1="80" y1="44" x2="120" y2="44"/>
+              <line x1="92" y1="56" x2="108" y2="56"/>
+              <line x1="80" y1="68" x2="120" y2="68"/>
+              <line x1="92" y1="80" x2="108" y2="80"/>
+              <line x1="80" y1="92" x2="120" y2="92"/>
+              <line x1="92" y1="104" x2="108" y2="104"/>
+              <line x1="80" y1="116" x2="120" y2="116"/>
+            </g>
+            <!-- Centered molecular dot -->
+            <circle cx="100" cy="80" r="3" fill="#c8932a"/>
+            <!-- Corner tick marks -->
+            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
+            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
+            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KB / RST+</text>
+            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-BIO</text>
+            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#kbg1silver)" stroke-width=".8"/>
+            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">ROSETTA PLUS &middot; HFF &middot; KFDA</text>
+          </svg>
+        </div>
+        <p class="card-tag">Mental Wellness &middot; HFF &middot; HACCP</p>
+        <p class="card-model">ROSETTA<span style="color:var(--gold)">+</span></p>
+        <p class="card-part">Part No: ROSETTAPLUS (HFF-RST+)</p>
+        <p class="card-mfg">Verified Korean K-Bio Partner <span class="card-verified">&#10003; HACCP &middot; KFDA</span></p>
+        <p class="card-desc">KFDA-assured Health Functional Food &mdash; addresses depression, psychosis, and panic disorder. Already exporting to Mexico, Yemen, and India.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Category</p><p class="spec-val">HFF</p></div>
+          <div><p class="spec-lbl">Capacity</p><p class="spec-val">1,000+ /mo</p></div>
+          <div><p class="spec-lbl">Certifications</p><p class="spec-val">HACCP &middot; KFDA</p></div>
+          <div><p class="spec-lbl">Export Ready</p><p class="spec-val">MX &middot; YE &middot; IN</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add Rosetta Plus to compare" onclick="event.stopPropagation();toggleCompare('rosettaplus',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
 
@@ -3120,6 +3178,7 @@ button:focus:not(:focus-visible) { outline: none; }
               <label class="model-cb"><input type="checkbox" id="mKT3DAD"><span class="model-cb-lbl">KT-3DAD</span></label>
               <label class="model-cb"><input type="checkbox" id="mKT3DVID"><span class="model-cb-lbl">KT-3DVID</span></label>
               <label class="model-cb"><input type="checkbox" id="mKT3DCINE"><span class="model-cb-lbl">KT-3DCINE</span></label>
+              <label class="model-cb"><input type="checkbox" id="mROSETTAPLUS"><span class="model-cb-lbl">Rosetta Plus</span></label>
             </div>
           </div>
           <div class="f-row">
@@ -3389,6 +3448,12 @@ const P = {
     features:['Convert existing 2D video libraries into stereoscopic 3D at scale','Proprietary ERGSN 2D-to-3D conversion engine \u2014 refined through continuous R&D','Market-competitive pricing vs. traditional post-production vendors','Device-tuned output: 3D TVs, HMDs, tablets, glasses-free displays, notebooks','Per-scene depth grading with client review cycle included','Scales from single event clips to full broadcast series runs','Fast turnaround \u2014 2 to 4 weeks for typical duration','Ideal for corporate, training, event, documentary, and episodic broadcast'],
     desc:'KT-3DVID converts general 2D video \u2014 corporate films, training content, event coverage, documentary, broadcast episodic \u2014 into stereoscopic 3D. The global 3D content gap extends beyond theatrical film: broadcasters, enterprises, and event producers need 3D output for 3D TVs, HMDs, tablets, and glasses-free displays, but traditional conversion workflows are cost-prohibitive. Powered by ERGSN\'s proprietary conversion engine, KT-3DVID delivers device-optimised stereoscopic output at market-competitive pricing \u2014 unlocking existing 2D video libraries for 3D distribution across corporate, broadcast, and event channels.'
   },
+  rosettaplus: {
+    model:'ROSETTA PLUS', sub:'Health Functional Food \u2014 Mental Wellness & Cellular Renewal Formula', part:'ROSETTAPLUS (HFF-RST+)',
+    specs:[['Category','Health Functional Food (HFF)'],['Target Function','Improvement of depression, psychosis, and panic disorder (representative function)'],['Certifications','HACCP &middot; Health Functional Food assured by KFDA'],['Production Capacity','Large-scale &mdash; 1,000+ units / month'],['Active Export Markets','Mexico, Yemen, India'],['Form','Glycosaminoglycan emulsion solution (proto-molecular multimolecular bonding)'],['Process','Microbial fermentation \u2014 secondary metabolite extraction'],['Core Raw Materials','3 functional polymolecules (see Features)'],['Origin','Republic of Korea'],['Packaging','Export-ready, HACCP-controlled lot batching'],['Lead Time','4\u20136 weeks (volume-dependent)']],
+    features:['Representative function: improvement of depression, psychosis, and panic disorder','HACCP-certified production line; Health Functional Food assured by KFDA','Large-scale capacity: 1,000+ units per month, ready to scale','Active export operations to Mexico, Yemen, and India','Three secondary metabolites extracted via microbial fermentation','Multimolecular bonding of proto-molecular forms (glycosaminoglycan emulsion solution)','Continuous molecular subdivision after intake \u2014 maximised absorption rate','Core Raw Material 1: Restored natural cholecalciferol mitochondrial function, increased endocannabinoid receptors, macrophage activation factor production (positive electron carrier)','Core Raw Material 2: Per-mucoda protein \u2014 anti-inflammatory and anti-cancer functions (negative former)','Core Raw Material 3: Unsaturated lecithin envelope frame \u2014 extreme neurotransmitter delivery'],
+    desc:'Rosetta Plus is the flagship K-Bio Health Functional Food in the ERGSN network \u2014 produced under HACCP certification and assured as a Health Functional Food by the Korean Food &amp; Drug Administration (KFDA). Its representative function is improvement of depression, psychosis, and panic disorder. Production runs at large-scale capacity (1,000+ units / month) with active export operations underway to Mexico, Yemen, and India. The Rosetta scientific principle is built on extraction of three secondary metabolites through microbial fermentation, multimolecular bonding of proto-molecular forms (a glycosaminoglycan emulsion solution), and continuous molecular subdivision after intake \u2014 maximising in-body absorption. The proprietary formulation combines three core raw materials: (1) a positive-electron carrier restoring natural cholecalciferol mitochondrial function, increasing endocannabinoid receptors, and producing macrophage activation factors; (2) a per-mucoda protein with anti-inflammatory and anti-cancer functions; and (3) an unsaturated lecithin envelope frame that delivers extreme neurotransmitters. ERGSN handles export documentation, HACCP-controlled lot batching, and overseas buyer onboarding.'
+  },
   kt3dcine: {
     model:'KT-3DCINE', sub:'Legacy 2D Film \u2192 3D Remaster \u2014 Theatrical & OTT Re-Release', part:'KT3DCINE (CINEMA-REMASTER)',
     specs:[['Service Type','Feature-Length 2D-to-3D Film Remaster'],['Use Cases','Theatrical 3D re-release, OTT/streaming, catalog monetisation'],['Input Formats','DPX, EXR, ProRes 4444 XQ, DCP source'],['Output Formats','Stereo DCP, MVC, Side-by-Side, Frame-Packed'],['Max Resolution','4K DCP / UHD (3840\u00d72160)'],['Color Depth','12-bit DPX, 10-bit ProRes'],['Frame Rate','23.976 / 24 / 48 fps'],['Depth Grading','Per-shot, director / DoP reviewed'],['QC','Full-reel stereoscopic review before final master'],['Turnaround','8\u201316 weeks (feature-length)'],['Delivery','DCP, master files via Aspera / secure drive']],
@@ -3522,12 +3587,13 @@ const SECTORS = {
     desc: 'Proprietary 2D-to-3D conversion technology — device-optimised stereoscopic content for 3D TVs, HMDs, smartphones, tablets, and glasses-free displays.'
   },
   'k-bio': {
-    active: false,
-    tag: 'K-Bio',
-    title: 'Korean Biotech & Life Sciences',
+    active: true,
+    gridId: 'kbioGrid',
+    tag: 'K-Bio · Health Functional Food',
+    title: 'Rosetta Plus — KFDA-Assured HFF',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v4c0 3 5 5 5 9s-5 6-5 9"/><path d="M17 3v4c0 3-5 5-5 9s5 6 5 9"/><path d="M7 3h10M7 21h10"/><path d="M9 9h6M9 15h6"/></svg>',
     title2: 'K-Bio Sector',
-    desc: 'Biotech, diagnostics, and pharmaceutical partners — verified Korean life-science manufacturers entering the network.'
+    desc: 'Korean Health Functional Food (HFF) — HACCP-certified, KFDA-assured. Flagship Rosetta Plus already exporting to Mexico, Yemen and India.'
   },
   'k-beauty': {
     active: false,
@@ -3623,6 +3689,7 @@ const MATCH_CATALOG = [
   { id:'kt3dad', name:'K-Tech: KT-3DAD · 3D Advertising Production', sector:'K-Tech', tags:['retail','hospitality','tech','education'], scale:['s','m','l'], desc:'End-to-end 3D ad production — brand commercials, product launches, DOOH. Available now.' },
   { id:'kt3dvid', name:'K-Tech: KT-3DVID · 2D → 3D Video Conversion', sector:'K-Tech', tags:['tech','retail','education','hospitality'], scale:['s','m','l','xl'], desc:'Convert corporate, training, event, and broadcast 2D video into stereoscopic 3D. Available now.' },
   { id:'kt3dcine', name:'K-Tech: KT-3DCINE · 2D Film → 3D Remaster', sector:'K-Tech', tags:['tech','retail','hospitality','education'], scale:['l','xl'], desc:'Theatrical-grade 2D-to-3D feature film remaster for theatrical re-release and OTT. Available now.' },
+  { id:'rosettaplus', name:'K-Bio: Rosetta Plus · KFDA-Assured HFF', sector:'K-Bio', tags:['healthcare','retail','hospitality'], scale:['m','l','xl'], desc:'Health Functional Food (HACCP · KFDA) for depression, psychosis, and panic disorder. Already exporting to MX, YE, IN.' },
   { id:'ktech-semi', name:'K-Tech: Semiconductor Modules', sector:'K-Tech', tags:['tech','manufacturing','energy'], scale:['l','xl'], desc:'Verified Korean fab partners — precision modules & display components. Joining Q2 2026.', coming:true },
   { id:'ktech-sensor', name:'K-Tech: Industrial Sensors', sector:'K-Tech', tags:['manufacturing','energy','logistics','tech'], scale:['m','l'], desc:'High-precision IoT & industrial sensor suite from vetted Korean OEMs. Joining 2026.', coming:true },
   { id:'smart-iot', name:'Smart Living: Connected Appliances', sector:'Smart Living', tags:['retail','hospitality'], scale:['m','l','xl'], desc:'Premium K-lifestyle IoT appliances curated for global retail. Joining 2026.', coming:true },
@@ -3689,7 +3756,7 @@ function runMatch(e) {
 }
 function applyMatchToRFQ() {
   const m = window._lastMatch; if (!m) { location.hash = '#rfq'; return; }
-  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE' };
+  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE','rosettaplus':'mROSETTAPLUS' };
   document.querySelectorAll('#rfqFields .model-cb input').forEach(cb => cb.checked = false);
   m.ranked.forEach(r => { const id = modelMap[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
   const cSel = document.getElementById('fCountry');
