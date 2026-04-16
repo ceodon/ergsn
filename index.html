@@ -3038,33 +3038,37 @@ button:focus:not(:focus-visible) { outline: none; }
     <p class="body-lg" style="max-width:520px">Get an estimated CIF price in seconds. For a formal quotation, click "Get Formal Quote" below.</p>
     <div class="calc-grid">
       <div class="calc-form">
+        <label>Product Family</label>
+        <select class="f-sel" id="calcSector" onchange="onCalcSectorChange()">
+          <option value="k-security">K-Security &mdash; Paper Shredders (DL Series)</option>
+          <option value="k-bio">K-Bio &mdash; Health Functional Food (Rosetta Plus)</option>
+          <option value="k-tech">K-Tech &mdash; 3D Content Services</option>
+        </select>
         <label>Model</label>
-        <select class="f-sel" id="calcModel" onchange="updateCalc()">
-          <option value="dl10x">DL-10X — Entry Mid-Size</option>
-          <option value="dl12x">DL-12X — Mid-Size Office</option>
-          <option value="dl16x" selected>DL-16X — Large Office</option>
-          <option value="dl10xd">DL-10XD — High Capacity 10"</option>
-          <option value="dl12xd">DL-12XD — High Capacity 12"</option>
-          <option value="dl16xd">DL-16XD — Flagship Industrial</option>
-        </select>
-        <label>Quantity</label>
+        <select class="f-sel" id="calcModel" onchange="updateCalc()"></select>
+        <label><span id="calcQtyLbl">Quantity</span></label>
         <input class="f-in" type="number" id="calcQty" value="10" min="1" max="500" onchange="updateCalc()" oninput="updateCalc()">
-        <label>Destination</label>
-        <select class="f-sel" id="calcDest" onchange="updateCalc()">
-          <option value="us">United States (Baltimore)</option>
-          <option value="eu">Europe (Rotterdam)</option>
-          <option value="me">Middle East (Dubai)</option>
-          <option value="sea">SE Asia (Singapore)</option>
-          <option value="jp">Japan (Tokyo)</option>
-          <option value="au">Australia (Sydney)</option>
-          <option value="sa">South America (Santos)</option>
-          <option value="af">Africa (Durban)</option>
+        <label>Incoterms <span style="opacity:.55;font-weight:400">&middot; Payment: T/T</span></label>
+        <select class="f-sel" id="calcTerms" onchange="onCalcTermsChange()">
+          <optgroup label="Most Common">
+            <option value="CIF" selected>CIF (Cost, Insurance &amp; Freight) &middot; T/T</option>
+            <option value="FOB">FOB (Free On Board, Busan) &middot; T/T</option>
+            <option value="CFR">CFR (Cost &amp; Freight) &middot; T/T</option>
+            <option value="EXW">EXW (Ex Works, Seoul) &middot; T/T</option>
+          </optgroup>
+          <optgroup label="Other Terms">
+            <option value="DDP">DDP (Delivered Duty Paid) &middot; T/T</option>
+            <option value="DAP">DAP (Delivered At Place) &middot; T/T</option>
+          </optgroup>
         </select>
-        <label>Incoterms</label>
-        <select class="f-sel" id="calcTerms" onchange="updateCalc()">
-          <option value="cif">CIF (Cost + Insurance + Freight)</option>
-          <option value="fob">FOB (Free On Board, Busan)</option>
-        </select>
+        <div id="calcDestWrap" style="display:contents">
+          <label>Country</label>
+          <select class="f-sel" id="calcCountry" onchange="onCalcCountryChange()"></select>
+          <label>Port / Place</label>
+          <select class="f-sel" id="calcPort" onchange="updateCalc()" disabled>
+            <option value="" disabled selected>Select country first&hellip;</option>
+          </select>
+        </div>
       </div>
       <div>
         <div class="calc-result" id="calcResult">
@@ -5780,6 +5784,8 @@ const WORLD_PORTS = {
 (function initDestDropdowns(){
   const countryEl = document.getElementById('fCountry');
   const matchEl = document.getElementById('matchCountry');
+  const calcEl = document.getElementById('calcCountry');
+  if (calcEl) calcEl.innerHTML = '<option value="" disabled selected>Select country\u2026</option>';
   Object.keys(WORLD_PORTS).forEach(c => {
     const opt = document.createElement('option');
     opt.value = c; opt.textContent = c;
@@ -5788,6 +5794,11 @@ const WORLD_PORTS = {
       const opt2 = document.createElement('option');
       opt2.value = c; opt2.textContent = c;
       matchEl.appendChild(opt2);
+    }
+    if (calcEl) {
+      const opt3 = document.createElement('option');
+      opt3.value = c; opt3.textContent = c;
+      calcEl.appendChild(opt3);
     }
   });
 })();
@@ -5823,50 +5834,189 @@ function onIncotermsChange() {
 }
 
 /* ═══ ② INSTANT QUOTE CALCULATOR ════════════ */
-const CALC_PRICES = { dl10x:1450, dl12x:1680, dl16x:2100, dl10xd:3200, dl12xd:2600, dl16xd:7800 };
+// Indicative unit prices. "physical" controls whether freight/insurance/duty/port apply.
+const CALC_CATALOG = {
+  'k-security': {
+    label: 'K-Security', physical: true, qtyUnit: 'units', rfqCheckboxPrefix: 'm',
+    models: [
+      ['dl10x',  'DL-10X — Entry Mid-Size',      1450],
+      ['dl12x',  'DL-12X — Mid-Size Office',     1680],
+      ['dl16x',  'DL-16X — Large Office',        2100],
+      ['dl10xd', 'DL-10XD — High Capacity 10"',  3200],
+      ['dl12xd', 'DL-12XD — High Capacity 12"',  2600],
+      ['dl16xd', 'DL-16XD — Flagship Industrial',7800]
+    ]
+  },
+  'k-bio': {
+    label: 'K-Bio', physical: true, qtyUnit: 'units', rfqCheckboxPrefix: 'm',
+    models: [
+      ['rosettaplus', 'Rosetta Plus — HFF (KFDA)', 28]
+    ]
+  },
+  'k-tech': {
+    label: 'K-Tech', physical: false, qtyUnit: 'projects', rfqCheckboxPrefix: 'm',
+    models: [
+      ['kt3dad',   'KT-3DAD — 3D Advertising (per campaign)',     15000],
+      ['kt3dvid',  'KT-3DVID — 2D\u21923D Video (per minute)',      800],
+      ['kt3dcine', 'KT-3DCINE — Film Remaster (per feature)',    120000]
+    ]
+  }
+};
+
+// Region classification for freight rates (reuses existing region table).
+const CALC_REGION_BY_COUNTRY = {
+  'United States':'us','Canada':'us',
+  'Mexico':'sa','Brazil':'sa','Colombia':'sa','Panama':'sa','Chile':'sa','Argentina':'sa','Peru':'sa',
+  'United Kingdom':'eu','Germany':'eu','Netherlands':'eu','Belgium':'eu','France':'eu','Spain':'eu',
+  'Italy':'eu','Greece':'eu','Poland':'eu','Turkey':'eu','Sweden':'eu','Portugal':'eu','Russia':'eu',
+  'Japan':'jp',
+  'China':'sea','South Korea':'sea','Taiwan':'sea','Hong Kong':'sea','Singapore':'sea',
+  'Vietnam':'sea','Thailand':'sea','Malaysia':'sea','Indonesia':'sea','Philippines':'sea',
+  'India':'sea','Bangladesh':'sea','Pakistan':'sea','Sri Lanka':'sea',
+  'Australia':'au','New Zealand':'au',
+  'UAE':'me','Saudi Arabia':'me','Qatar':'me','Oman':'me','Kuwait':'me','Bahrain':'me','Israel':'me',
+  'Egypt':'af','South Africa':'af','Nigeria':'af','Kenya':'af','Ghana':'af','Morocco':'af','Tanzania':'af',
+  'Other':'sea'
+};
 const CALC_FREIGHT = { us:280, eu:350, me:300, sea:180, jp:150, au:380, sa:450, af:420 };
-const CALC_FX = { USD:1, EUR:0.92, GBP:0.79, JPY:149.5, AED:3.67, BRL:4.97, SGD:1.34, AUD:1.53, TRY:32.1, SAR:3.75 };
-const CALC_DEST_FX = { us:'USD', eu:'EUR', me:'AED', sea:'SGD', jp:'JPY', au:'AUD', sa:'BRL', af:'USD' };
-const CALC_DEST_NAME = { us:'Baltimore', eu:'Rotterdam', me:'Dubai', sea:'Singapore', jp:'Tokyo', au:'Sydney', sa:'Santos', af:'Durban' };
+const CALC_DUTY = { us:0.03, eu:0.05, me:0.05, sea:0.07, jp:0.04, au:0.05, sa:0.14, af:0.10 };
+const CALC_FX = { USD:1, EUR:0.92, GBP:0.79, JPY:149.5, AED:3.67, BRL:4.97, SGD:1.34, AUD:1.53, TRY:32.1, SAR:3.75, KRW:1350 };
+const CALC_REGION_FX = { us:'USD', eu:'EUR', me:'AED', sea:'SGD', jp:'JPY', au:'AUD', sa:'BRL', af:'USD' };
+
+function calcCurrentModel() {
+  const sector = document.getElementById('calcSector').value;
+  const modelId = document.getElementById('calcModel').value;
+  const def = CALC_CATALOG[sector];
+  const m = def && def.models.find(x => x[0] === modelId);
+  return m ? { sector, sectorDef: def, id: modelId, label: m[1], price: m[2] } : null;
+}
+function onCalcSectorChange() {
+  const sector = document.getElementById('calcSector').value;
+  const def = CALC_CATALOG[sector];
+  const modelSel = document.getElementById('calcModel');
+  modelSel.innerHTML = '';
+  def.models.forEach(([id, label]) => {
+    const o = document.createElement('option');
+    o.value = id; o.textContent = label;
+    modelSel.appendChild(o);
+  });
+  document.getElementById('calcQtyLbl').textContent = def.physical ? 'Quantity' : 'Quantity (' + def.qtyUnit + ')';
+  calcUpdateDestVisibility();
+  updateCalc();
+}
+function onCalcTermsChange() {
+  calcUpdateDestVisibility();
+  updateCalc();
+}
+function calcUpdateDestVisibility() {
+  const sector = document.getElementById('calcSector').value;
+  const def = CALC_CATALOG[sector];
+  const terms = document.getElementById('calcTerms').value;
+  const wrap = document.getElementById('calcDestWrap');
+  const show = def.physical && terms !== 'EXW';
+  wrap.style.display = show ? 'contents' : 'none';
+}
+function onCalcCountryChange() {
+  const country = document.getElementById('calcCountry').value;
+  const portEl = document.getElementById('calcPort');
+  portEl.innerHTML = '';
+  if (!country) {
+    portEl.innerHTML = '<option value="" disabled selected>Select country first\u2026</option>';
+    portEl.disabled = true; updateCalc(); return;
+  }
+  const ports = WORLD_PORTS[country];
+  if (typeof ports === 'string') {
+    portEl.innerHTML = `<option value="${ports}">${ports}</option>`;
+    portEl.disabled = false;
+  } else {
+    portEl.innerHTML = '<option value="" disabled selected>Select port\u2026</option>';
+    ports.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p; opt.textContent = p;
+      portEl.appendChild(opt);
+    });
+    portEl.disabled = false;
+  }
+  updateCalc();
+}
 
 function updateCalc() {
-  const model = document.getElementById('calcModel').value;
+  const item = calcCurrentModel();
+  if (!item) return;
   const qty = Math.max(1, parseInt(document.getElementById('calcQty').value) || 1);
-  const dest = document.getElementById('calcDest').value;
   const terms = document.getElementById('calcTerms').value;
-  const unitPrice = CALC_PRICES[model];
-  const freight = terms === 'cif' ? CALC_FREIGHT[dest] * qty * 0.12 : 0;
-  const insurance = terms === 'cif' ? unitPrice * qty * 0.008 : 0;
-  const subtotal = unitPrice * qty;
-  const total = subtotal + freight + insurance;
-  const localCur = CALC_DEST_FX[dest];
+  const country = document.getElementById('calcCountry').value;
+  const port = document.getElementById('calcPort').value;
+  const physical = item.sectorDef.physical;
+
+  const subtotal = item.price * qty;
+  let freight = 0, insurance = 0, duty = 0;
+  let region = null;
+  if (physical && terms !== 'EXW' && country) {
+    region = CALC_REGION_BY_COUNTRY[country] || 'sea';
+    const freightBase = CALC_FREIGHT[region] || 0;
+    if (terms === 'CFR' || terms === 'CIF' || terms === 'DAP' || terms === 'DDP') freight = freightBase * qty * 0.12;
+    if (terms === 'CIF' || terms === 'DAP' || terms === 'DDP') insurance = subtotal * 0.008;
+    if (terms === 'DDP') duty = (subtotal + freight + insurance) * (CALC_DUTY[region] || 0.05);
+  }
+  const total = subtotal + freight + insurance + duty;
+  const localCur = region ? CALC_REGION_FX[region] : 'USD';
   const localRate = CALC_FX[localCur] || 1;
   const localTotal = total * localRate;
 
-  let rows = `
-    <div class="calc-row"><span class="calc-row-label">${P[model].model} × ${qty}</span><span class="calc-row-val">$${subtotal.toLocaleString()}</span></div>`;
-  if (terms === 'cif') {
-    rows += `
-    <div class="calc-row"><span class="calc-row-label">Ocean Freight → ${CALC_DEST_NAME[dest]}</span><span class="calc-row-val">$${Math.round(freight).toLocaleString()}</span></div>
-    <div class="calc-row"><span class="calc-row-label">Marine Insurance</span><span class="calc-row-val">$${Math.round(insurance).toLocaleString()}</span></div>`;
+  let rows = `<div class="calc-row"><span class="calc-row-label">${item.label.split(' \u2014 ')[0]} × ${qty}${physical ? '' : ' (' + item.sectorDef.qtyUnit + ')'}</span><span class="calc-row-val">$${subtotal.toLocaleString()}</span></div>`;
+  if (!physical) {
+    rows += `<div class="calc-row"><span class="calc-row-label">Delivery</span><span class="calc-row-val" style="font-family:var(--fb);font-weight:500">Digital (FTP / Aspera / DCP)</span></div>`;
+  } else if (terms === 'EXW') {
+    rows += `<div class="calc-row"><span class="calc-row-label">Pickup</span><span class="calc-row-val" style="font-family:var(--fb);font-weight:500">Ex Works · Seoul, KR</span></div>`;
+  } else {
+    const destTxt = port ? `${port}, ${country}` : (country || 'Select destination');
+    if (freight)    rows += `<div class="calc-row"><span class="calc-row-label">Ocean Freight \u2192 ${destTxt}</span><span class="calc-row-val">$${Math.round(freight).toLocaleString()}</span></div>`;
+    if (insurance)  rows += `<div class="calc-row"><span class="calc-row-label">Marine Insurance</span><span class="calc-row-val">$${Math.round(insurance).toLocaleString()}</span></div>`;
+    if (duty)       rows += `<div class="calc-row"><span class="calc-row-label">Est. Import Duty</span><span class="calc-row-val">$${Math.round(duty).toLocaleString()}</span></div>`;
+    if (!country)   rows += `<div class="calc-row"><span class="calc-row-label">Destination</span><span class="calc-row-val" style="color:var(--gold)">Select country for freight</span></div>`;
   }
+  rows += `<div class="calc-row"><span class="calc-row-label">Incoterms</span><span class="calc-row-val" style="font-family:var(--fb)">${terms}</span></div>`;
+  rows += `<div class="calc-row"><span class="calc-row-label">Payment Terms</span><span class="calc-row-val" style="font-family:var(--fb);font-weight:500">T/T 50% advance &middot; 50% before shipment</span></div>`;
   document.getElementById('calcRows').innerHTML = rows;
   document.getElementById('calcTotal').textContent = '$' + Math.round(total).toLocaleString();
-  document.getElementById('calcFx').innerHTML = localCur !== 'USD' ? `≈ ${localCur} ${Math.round(localTotal).toLocaleString()} <span style="opacity:.6">(rate: ${localRate})</span>` : '';
+  document.getElementById('calcFx').innerHTML = (localCur !== 'USD')
+    ? `\u2248 ${localCur} ${Math.round(localTotal).toLocaleString()} <span style="opacity:.6">(rate: ${localRate})</span>` : '';
 }
+
 function calcToQuote() {
+  const item = calcCurrentModel();
+  if (!item) return;
+  if (typeof switchSector === 'function') { try { switchSector(item.sector); } catch(_) {} }
   resetRFQForm();
-  const model = document.getElementById('calcModel').value;
-  const cb = document.getElementById('m' + model.toUpperCase());
+  const rfqIdMap = {
+    dl10x:'mDL10X', dl12x:'mDL12X', dl16x:'mDL16X',
+    dl10xd:'mDL10XD', dl12xd:'mDL12XD', dl16xd:'mDL16XD',
+    kt3dad:'mKT3DAD', kt3dvid:'mKT3DVID', kt3dcine:'mKT3DCINE',
+    rosettaplus:'mROSETTAPLUS'
+  };
+  const cb = document.getElementById(rfqIdMap[item.id]);
   if (cb) cb.checked = true;
+
   const qty = document.getElementById('calcQty').value;
-  document.getElementById('fQty').value = qty + ' units';
-  const termsMap = { cif:'CIF', fob:'FOB' };
+  document.getElementById('fQty').value = qty + ' ' + item.sectorDef.qtyUnit;
+
   const incoEl = document.getElementById('fIncoterms');
-  if (incoEl) { incoEl.value = termsMap[document.getElementById('calcTerms').value] || 'CIF'; onIncotermsChange(); }
+  if (incoEl) { incoEl.value = document.getElementById('calcTerms').value; onIncotermsChange(); }
+
+  if (item.sectorDef.physical && incoEl.value !== 'EXW') {
+    const country = document.getElementById('calcCountry').value;
+    const port = document.getElementById('calcPort').value;
+    if (country) {
+      const countryEl = document.getElementById('fCountry');
+      countryEl.value = country; onCountryChange();
+      if (port) document.getElementById('fPort').value = port;
+    }
+  }
   document.getElementById('rfq').scrollIntoView({ behavior:'smooth' });
 }
-updateCalc();
+
+(function initCalc(){ onCalcSectorChange(); })();
 
 /* ═══ ③ GeoIP PERSONALIZATION ═══════════════ */
 (function initGeoIP(){
@@ -5886,12 +6036,25 @@ updateCalc();
       if (autoLang) setLang(autoLang);
     }
 
-    // Set calculator destination based on region
-    const regionMap = { US:'us',CA:'us', GB:'eu',DE:'eu',FR:'eu',NL:'eu',BE:'eu',IT:'eu',ES:'eu',PL:'eu',SE:'eu',
-      AE:'me',SA:'me',QA:'me',KW:'me',BH:'me', SG:'sea',MY:'sea',TH:'sea',VN:'sea',PH:'sea',ID:'sea',
-      JP:'jp', AU:'au',NZ:'au', BR:'sa',AR:'sa',CL:'sa',CO:'sa',MX:'sa', ZA:'af',NG:'af',KE:'af' };
-    const destSel = document.getElementById('calcDest');
-    if (destSel && regionMap[cc]) { destSel.value = regionMap[cc]; updateCalc(); }
+    // Pre-select calculator Country based on visitor's IP country
+    const ccToCountry = {
+      US:'United States', CA:'Canada', MX:'Mexico', BR:'Brazil', CO:'Colombia', PA:'Panama',
+      CL:'Chile', AR:'Argentina', PE:'Peru',
+      GB:'United Kingdom', DE:'Germany', NL:'Netherlands', BE:'Belgium', FR:'France',
+      ES:'Spain', IT:'Italy', GR:'Greece', PL:'Poland', TR:'Turkey', SE:'Sweden', PT:'Portugal', RU:'Russia',
+      JP:'Japan', CN:'China', KR:'South Korea', TW:'Taiwan', HK:'Hong Kong', SG:'Singapore',
+      VN:'Vietnam', TH:'Thailand', MY:'Malaysia', ID:'Indonesia', PH:'Philippines',
+      IN:'India', BD:'Bangladesh', PK:'Pakistan', LK:'Sri Lanka',
+      AU:'Australia', NZ:'New Zealand',
+      AE:'UAE', SA:'Saudi Arabia', QA:'Qatar', OM:'Oman', KW:'Kuwait', BH:'Bahrain', IL:'Israel',
+      EG:'Egypt', ZA:'South Africa', NG:'Nigeria', KE:'Kenya', GH:'Ghana', MA:'Morocco', TZ:'Tanzania'
+    };
+    const calcCountryEl = document.getElementById('calcCountry');
+    const autoCountry = ccToCountry[cc];
+    if (calcCountryEl && autoCountry && WORLD_PORTS[autoCountry]) {
+      calcCountryEl.value = autoCountry;
+      onCalcCountryChange();
+    }
   }).catch(()=>{});
 })();
 
@@ -5919,10 +6082,28 @@ const MODEL_LABELS = {
   mROSETTAPLUS: 'Rosetta Plus'
 };
 
+const PRODUCT_IMAGE_BASE = 'https://ceodon.github.io/ergsn/images/products/';
+// KT-3D services are SVG monograms (no photo) and are intentionally omitted.
+const PRODUCT_IMAGE_FILES = {
+  'DL-10X': 'dl-10x.jpg',
+  'DL-12X': 'dl-12x.jpg',
+  'DL-16X': 'dl-16x.jpg',
+  'DL-10XD': 'dl-10xd.jpg',
+  'DL-12XD': 'dl-12xd.jpg',
+  'DL-16XD': 'dl-16xd.jpg',
+  'Rosetta Plus': 'rosseta-plus.jpg'
+};
+function imageUrlsFor(modelNames) {
+  return modelNames
+    .map(n => PRODUCT_IMAGE_FILES[n] ? PRODUCT_IMAGE_BASE + PRODUCT_IMAGE_FILES[n] : null)
+    .filter(Boolean);
+}
+
 function sendTelegram(fields) {
   const tierIcon = /^A /.test(fields.tier) ? '\ud83d\udd25' : /^B /.test(fields.tier) ? '\u2b50' : '\ud83d\udce8';
   const lines = [
     `${tierIcon} *NEW RFQ — ${fields.tier}*`,
+    ...(fields.trackingId ? [`*RFQ Tracker ID:* \`${fields.trackingId}\``] : []),
     '',
     `*Name:* ${fields.first} ${fields.last}`,
     `*Company:* ${fields.company}`,
@@ -5945,7 +6126,12 @@ function sendTelegram(fields) {
     '',
     `_Source: ceodon.github.io/ergsn_`
   ];
-  return sendTG(lines.join('\n'));
+  return sendTG(lines.join('\n')).then(() => {
+    if (fields.images && fields.images.length) {
+      const caption = `RFQ ${fields.trackingId ? fields.trackingId + ' \u2014 ' : ''}${fields.company} \u2014 ${fields.models}`;
+      return sendTGPhotos(fields.images, caption);
+    }
+  });
 }
 
 function sendTG(text, parseMode) {
@@ -5957,6 +6143,15 @@ function sendTG(text, parseMode) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
+  }).catch(() => {});
+}
+
+function sendTGPhotos(urls, caption) {
+  if (!TG_PROXY_URL || !urls || !urls.length) return Promise.resolve();
+  return fetch(TG_PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ photos: urls, caption: caption || '' })
   }).catch(() => {});
 }
 
@@ -5994,78 +6189,129 @@ function submitRFQ() {
   const country = v('fIncoterms') === 'EXW' ? 'N/A (Ex Works)' : (v('fCountry') || '(not specified)');
   const port = v('fIncoterms') === 'EXW' ? 'N/A' : (v('fPort') || '(not specified)');
 
-  const emailPayload = {
-    _cc: RFQ_CC,
-    _subject: `[${(typeof chatState !== 'undefined' && chatState.qual.tier) || 'Unqualified'}] ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
-    _template: 'table',
-    _captcha: 'false',
-    'First Name': v('fFirst'),
-    'Last Name': v('fLast'),
-    'Company': v('fCo'),
-    'Email': v('fEmail'),
-    'Phone': v('fPhone') || '(not provided)',
-    'Models of Interest': selected.join(', '),
-    'Estimated Quantity': v('fQty') || '(not specified)',
-    'Incoterms': incoterms,
-    'Destination Country': country,
-    'Destination Port': port,
-    'Annual Volume': (typeof chatState !== 'undefined' && chatState.qual.volume) || '(not asked)',
-    'Timeline': (typeof chatState !== 'undefined' && chatState.qual.timeline) || '(not asked)',
-    'Import Experience': (typeof chatState !== 'undefined' && chatState.qual.experience) || '(not asked)',
-    'Payment Terms Response': (typeof chatState !== 'undefined' && chatState.qual.payment) || '(not asked)',
-    'Buyer Tier': (typeof chatState !== 'undefined' && chatState.qual.tier) || 'Unqualified',
-    'Message / Requirements': v('fMsg') || '(none)',
-    'Source': 'ceodon.github.io/ergsn'
+  const buyerEmail = v('fEmail');
+  const imageUrls = imageUrlsFor(selected);
+  const trackerBase = { tier: (typeof chatState !== 'undefined' && chatState.qual.tier) || 'Unqualified' };
+
+  // Build a preliminary submission snapshot for the tracker (ID is assigned by the worker).
+  const trackerSnapshot = {
+    tier: trackerBase.tier,
+    company: v('fCo'), email: buyerEmail, phone: v('fPhone') || '',
+    first: v('fFirst'), last: v('fLast'),
+    models: selected, incoterms, country, port,
+    qty: v('fQty') || '',
+    msg: v('fMsg') || '',
+    bant: (typeof chatState !== 'undefined') ? chatState.qual : {},
+    images: imageUrls
   };
 
-  const q = (typeof chatState !== 'undefined') ? chatState.qual : {};
-  const tgFields = {
-    first: v('fFirst'), last: v('fLast'), company: v('fCo'),
-    email: v('fEmail'), phone: v('fPhone') || '-',
-    models: selected.join(', '), qty: v('fQty') || '-',
-    incoterms, country, port,
-    volume: q.volume || '-', timeline: q.timeline || '-',
-    experience: q.experience || '-', paymentResp: q.payment || '-',
-    tier: q.tier || 'Unqualified',
-    msg: v('fMsg') || '-'
-  };
-
-  // Create tracker record (optional), then send email + Telegram in parallel
   const trackerPromise = RFQ_TRACKER_URL
     ? fetch(RFQ_TRACKER_URL.replace(/\/$/, '') + '/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submission: emailPayload })
+        body: JSON.stringify({ submission: trackerSnapshot })
       }).then(r => r.json()).catch(() => null)
     : Promise.resolve(null);
 
-  Promise.allSettled([
-    fetch(RFQ_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(emailPayload)
-    }).then(r => r.json()).then(data => {
-      if (!(data && (data.success === 'true' || data.success === true)))
-        throw new Error((data && data.message) || 'Email failed');
-    }),
-    sendTelegram(tgFields),
-    trackerPromise
-  ]).then(results => {
-    const emailOk = results[0].status === 'fulfilled';
-    if (emailOk) {
-      const trk = results[2] && results[2].value;
-      if (trk && trk.ok && trk.id) {
+  // Wait for tracker ID first, then dispatch email + Telegram in parallel with ID attached.
+  trackerPromise.then(trk => {
+    const trackingId = (trk && trk.ok && trk.id) ? trk.id : '';
+    const trackerLink = trackingId ? `https://ceodon.github.io/ergsn/tracker.html?id=${trackingId}` : '';
+    const imageLines = imageUrls.length ? imageUrls.join('\n') : '(none — service/SVG product)';
+
+    // Buyer-facing copy: no tier, no BANT. Delivered via FormSubmit _autoresponse.
+    const buyerLines = [
+      'Dear ' + v('fFirst') + ',',
+      '',
+      'Thank you for your quote request with ERGSN. We have received your submission and will respond within 1 business day (KST, UTC+9).',
+      '',
+      trackingId ? 'RFQ Tracker ID: ' + trackingId : '',
+      trackingId ? 'Track status: ' + trackerLink : '',
+      '',
+      '\u2500\u2500 Your Request \u2500\u2500',
+      'Company: ' + v('fCo'),
+      'Contact: ' + v('fFirst') + ' ' + v('fLast') + ' <' + buyerEmail + '>' + (v('fPhone') ? ' / ' + v('fPhone') : ''),
+      'Models of Interest: ' + selected.join(', '),
+      'Estimated Quantity: ' + (v('fQty') || '(not specified)'),
+      'Incoterms: ' + incoterms,
+      'Destination: ' + country + (port !== 'N/A' ? ' \u2014 ' + port : ''),
+      'Message: ' + (v('fMsg') || '(none)'),
+      '',
+      imageUrls.length ? '\u2500\u2500 Product References \u2500\u2500' : '',
+      ...imageUrls,
+      '',
+      'If you need to update anything, reply to this email and reference your Tracker ID.',
+      '',
+      'Best regards,',
+      'ERGSN CO., LTD.',
+      'https://ceodon.github.io/ergsn'
+    ].filter(l => l !== '').join('\n');
+
+    const emailPayload = {
+      _cc: RFQ_CC,
+      _autoresponse: buyerLines,
+      _subject: `[${trackerBase.tier}]${trackingId ? ' [' + trackingId + ']' : ''} ERGSN RFQ \u2014 ${v('fCo')} (${selected.join(', ')}) ${incoterms} ${port}`.trim(),
+      _template: 'table',
+      _captcha: 'false',
+      'RFQ Tracker ID': trackingId || '(tracker offline)',
+      'RFQ Tracker Link': trackerLink || '(n/a)',
+      'First Name': v('fFirst'),
+      'Last Name': v('fLast'),
+      'Company': v('fCo'),
+      'Email': buyerEmail,
+      'Phone': v('fPhone') || '(not provided)',
+      'Models of Interest': selected.join(', '),
+      'Product Images': imageLines,
+      'Estimated Quantity': v('fQty') || '(not specified)',
+      'Incoterms': incoterms,
+      'Destination Country': country,
+      'Destination Port': port,
+      'Annual Volume': (typeof chatState !== 'undefined' && chatState.qual.volume) || '(not asked)',
+      'Timeline': (typeof chatState !== 'undefined' && chatState.qual.timeline) || '(not asked)',
+      'Import Experience': (typeof chatState !== 'undefined' && chatState.qual.experience) || '(not asked)',
+      'Payment Terms Response': (typeof chatState !== 'undefined' && chatState.qual.payment) || '(not asked)',
+      'Buyer Tier': trackerBase.tier,
+      'Message / Requirements': v('fMsg') || '(none)',
+      'Source': 'ceodon.github.io/ergsn'
+    };
+
+    const q = (typeof chatState !== 'undefined') ? chatState.qual : {};
+    const tgFields = {
+      trackingId,
+      first: v('fFirst'), last: v('fLast'), company: v('fCo'),
+      email: buyerEmail, phone: v('fPhone') || '-',
+      models: selected.join(', '), qty: v('fQty') || '-',
+      incoterms, country, port,
+      volume: q.volume || '-', timeline: q.timeline || '-',
+      experience: q.experience || '-', paymentResp: q.payment || '-',
+      tier: q.tier || 'Unqualified',
+      msg: v('fMsg') || '-',
+      images: imageUrls
+    };
+
+    return Promise.allSettled([
+      fetch(RFQ_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(emailPayload)
+      }).then(r => r.json()).then(data => {
+        if (!(data && (data.success === 'true' || data.success === true)))
+          throw new Error((data && data.message) || 'Email failed');
+      }),
+      sendTelegram(tgFields)
+    ]).then(results => {
+      const emailOk = results[0].status === 'fulfilled';
+      if (!emailOk) throw results[0].reason || new Error('Submission failed');
+      if (trackingId) {
         const successEl = document.getElementById('rfqSuccess');
         const msg = successEl.querySelector('p');
-        if (msg) msg.innerHTML = `Thank you. Your tracking ID is <strong style="color:var(--gold);font-family:var(--fh)">${trk.id}</strong><br>Check status anytime at <a href="tracker.html?id=${trk.id}" style="color:var(--gold)">RFQ Tracker</a>.<br><br>We will respond within 1 business day (KST, UTC+9).`;
+        if (msg) msg.innerHTML = `Thank you. Your tracking ID is <strong style="color:var(--gold);font-family:var(--fh)">${trackingId}</strong><br>A copy of this RFQ has been sent to <strong>${buyerEmail}</strong>.<br>Check status anytime at <a href="tracker.html?id=${trackingId}" style="color:var(--gold)">RFQ Tracker</a>.<br><br>We will respond within 1 business day (KST, UTC+9).`;
       }
       document.getElementById('rfqFields').style.display = 'none';
       document.getElementById('rfqSuccess').style.display = 'block';
       if (typeof logEvent === 'function') logEvent('rfq', v('fCo'));
       setTimeout(() => { resetRFQForm(); }, 12000);
-    } else {
-      throw results[0].reason || new Error('Submission failed');
-    }
+    });
   }).catch(err => {
     alert('Sorry, your inquiry could not be sent right now.\n\nPlease reach us on Telegram @ceodon or try again in a moment.\n\n(' + (err.message||err) + ')');
     sendBtn.innerHTML = originalLabel;

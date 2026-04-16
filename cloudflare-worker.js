@@ -34,14 +34,37 @@ export default {
 
     let body;
     try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers: cors }); }
+
+    const photos = Array.isArray(body.photos) ? body.photos.filter(u => typeof u === 'string' && /^https?:\/\//i.test(u)).slice(0, 10) : [];
     const text = String(body.text || '').slice(0, 3800);
-    if (!text) return new Response('Empty', { status: 400, headers: cors });
-    const payload = { chat_id: env.TG_CHAT, text };
-    if (body.parse_mode === 'HTML' || body.parse_mode === 'Markdown' || body.parse_mode === 'MarkdownV2') {
-      payload.parse_mode = body.parse_mode;
+
+    let api, payload;
+    if (photos.length > 1) {
+      api = 'sendMediaGroup';
+      const caption = String(body.caption || '').slice(0, 1000);
+      const media = photos.map((u, i) => {
+        const item = { type: 'photo', media: u };
+        if (i === 0 && caption) {
+          item.caption = caption;
+          if (body.parse_mode === 'HTML' || body.parse_mode === 'Markdown' || body.parse_mode === 'MarkdownV2') item.parse_mode = body.parse_mode;
+        }
+        return item;
+      });
+      payload = { chat_id: env.TG_CHAT, media };
+    } else if (photos.length === 1) {
+      api = 'sendPhoto';
+      payload = { chat_id: env.TG_CHAT, photo: photos[0] };
+      const caption = String(body.caption || '').slice(0, 1000);
+      if (caption) payload.caption = caption;
+      if (body.parse_mode === 'HTML' || body.parse_mode === 'Markdown' || body.parse_mode === 'MarkdownV2') payload.parse_mode = body.parse_mode;
+    } else {
+      if (!text) return new Response('Empty', { status: 400, headers: cors });
+      api = 'sendMessage';
+      payload = { chat_id: env.TG_CHAT, text };
+      if (body.parse_mode === 'HTML' || body.parse_mode === 'Markdown' || body.parse_mode === 'MarkdownV2') payload.parse_mode = body.parse_mode;
     }
 
-    const tg = await fetch(`https://api.telegram.org/bot${env.TG_BOT}/sendMessage`, {
+    const tg = await fetch(`https://api.telegram.org/bot${env.TG_BOT}/${api}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
