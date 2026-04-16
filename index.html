@@ -2078,6 +2078,8 @@ button:focus:not(:focus-visible) { outline: none; }
           <ul class="nav-dropmenu">
             <li><a href="#products" onclick="switchSector('office-security');return true"><span class="ds-name">Office Security <span class="ds-tag">Active</span></span><span class="ds-desc">DL Series shredders · in stock</span></a></li>
             <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Precision electronics · IoT sensors</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Biotech · diagnostics · pharma</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-beauty');return true"><span class="ds-name">K-Beauty <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Skincare · cosmetics · devices</span></a></li>
             <li><a href="#products" onclick="switchSector('smart-living');return true"><span class="ds-name">Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · K-culture</span></a></li>
             <li><a href="#products" onclick="switchSector('future-energy');return true"><span class="ds-name">Future Energy <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Solar · ESS · clean-tech</span></a></li>
             <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Country + industry → Top-3 matches</span></a></li>
@@ -2129,6 +2131,8 @@ button:focus:not(:focus-visible) { outline: none; }
     <ul>
       <li><a href="#products" onclick="switchSector('office-security');closeMenu()">Office Security (Active)</a></li>
       <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('k-bio');closeMenu()">K-Bio (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('k-beauty');closeMenu()">K-Beauty (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('smart-living');closeMenu()">Smart Living (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('future-energy');closeMenu()">Future Energy (Sourcing)</a></li>
       <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
@@ -2237,6 +2241,12 @@ button:focus:not(:focus-visible) { outline: none; }
       </button>
       <button class="sector-tab" data-sector="k-tech" onclick="switchSector('k-tech')">
         K-Tech <span class="st-tag">Soon</span>
+      </button>
+      <button class="sector-tab" data-sector="k-bio" onclick="switchSector('k-bio')">
+        K-Bio <span class="st-tag">Soon</span>
+      </button>
+      <button class="sector-tab" data-sector="k-beauty" onclick="switchSector('k-beauty')">
+        K-Beauty <span class="st-tag">Soon</span>
       </button>
       <button class="sector-tab" data-sector="smart-living" onclick="switchSector('smart-living')">
         Smart Living <span class="st-tag">Soon</span>
@@ -3043,6 +3053,8 @@ button:focus:not(:focus-visible) { outline: none; }
         <ul class="footer-links">
           <li><a href="#products" onclick="switchSector('office-security')">Office Security</a></li>
           <li><a href="#products" onclick="switchSector('k-tech')">K-Tech</a></li>
+          <li><a href="#products" onclick="switchSector('k-bio')">K-Bio</a></li>
+          <li><a href="#products" onclick="switchSector('k-beauty')">K-Beauty</a></li>
           <li><a href="#products" onclick="switchSector('smart-living')">Smart Living</a></li>
           <li><a href="#products" onclick="switchSector('future-energy')">Future Energy</a></li>
           <li><a href="#match">AI Partner Match</a></li>
@@ -3311,6 +3323,22 @@ const SECTORS = {
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2"/></svg>',
     title2: 'K-Tech Sector',
     desc: 'Semiconductors, display components, precision modules — verified Korean electronics manufacturers joining the network.'
+  },
+  'k-bio': {
+    active: false,
+    tag: 'K-Bio',
+    title: 'Korean Biotech & Life Sciences',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v4c0 3 5 5 5 9s-5 6-5 9"/><path d="M17 3v4c0 3-5 5-5 9s5 6 5 9"/><path d="M7 3h10M7 21h10"/><path d="M9 9h6M9 15h6"/></svg>',
+    title2: 'K-Bio Sector',
+    desc: 'Biotech, diagnostics, and pharmaceutical partners — verified Korean life-science manufacturers entering the network.'
+  },
+  'k-beauty': {
+    active: false,
+    tag: 'K-Beauty',
+    title: 'Korean Skincare & Cosmetics',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8v4H8z"/><path d="M7 7h10l-1 14H8z"/><path d="M10 12h4M10 16h4"/></svg>',
+    title2: 'K-Beauty Sector',
+    desc: 'Premium skincare, cosmetics, and beauty devices from audited Korean brands curated for global retail and duty-free.'
   },
   'smart-living': {
     active: false,
