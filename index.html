@@ -2087,7 +2087,7 @@ button:focus:not(:focus-visible) { outline: none; }
           <a href="#products">Shop</a>
           <ul class="nav-dropmenu">
             <li><a href="#products" onclick="switchSector('office-security');return true"><span class="ds-name">Office Security <span class="ds-tag">Active</span></span><span class="ds-desc">DL Series shredders · in stock</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Precision electronics · IoT sensors</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag">Active</span></span><span class="ds-desc">2D → 3D stereoscopic conversion</span></a></li>
             <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Biotech · diagnostics · pharma</span></a></li>
             <li><a href="#products" onclick="switchSector('k-beauty');return true"><span class="ds-name">K-Beauty <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Skincare · cosmetics · devices</span></a></li>
             <li><a href="#products" onclick="switchSector('smart-living');return true"><span class="ds-name">Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · K-culture</span></a></li>
@@ -2140,7 +2140,7 @@ button:focus:not(:focus-visible) { outline: none; }
     <summary>Shop</summary>
     <ul>
       <li><a href="#products" onclick="switchSector('office-security');closeMenu()">Office Security (Active)</a></li>
-      <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (2D → 3D)</a></li>
       <li><a href="#products" onclick="switchSector('k-bio');closeMenu()">K-Bio (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-beauty');closeMenu()">K-Beauty (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('smart-living');closeMenu()">Smart Living (Sourcing)</a></li>
@@ -2403,100 +2403,162 @@ button:focus:not(:focus-visible) { outline: none; }
     <!-- K-Tech product grid: 2D → 3D Stereoscopic Conversion services -->
     <div class="product-grid" id="ktechGrid" style="display:none">
 
-      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="kt3dx" onclick="openModal('kt3dx')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dx')">
+      <!-- Card 1: 3D Advertising Production -->
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="kt3dad" onclick="openModal('kt3dad')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dad')">
         <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
             <defs>
-              <linearGradient id="ktg1" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1d38"/><stop offset="1" stop-color="#1a3460"/></linearGradient>
+              <linearGradient id="ktg1bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
+              <linearGradient id="ktg1silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
+              <pattern id="ktg1grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
             </defs>
-            <rect width="200" height="150" fill="url(#ktg1)"/>
-            <g stroke="#c8932a" stroke-width="1.2" fill="none" opacity=".8">
-              <rect x="30" y="42" width="58" height="38" rx="3"/>
-              <rect x="112" y="42" width="58" height="38" rx="3" transform="translate(4 2)"/>
-            </g>
-            <g fill="#c8932a" opacity=".55"><circle cx="59" cy="61" r="3"/><circle cx="145" cy="63" r="3"/></g>
-            <text x="100" y="115" text-anchor="middle" fill="#c8932a" font-family="Syncopate,sans-serif" font-size="11" font-weight="800" letter-spacing="2">2D &#8594; 3D</text>
-            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="8" letter-spacing="1">STEREOSCOPIC CONVERSION</text>
+            <rect width="200" height="150" fill="url(#ktg1bg)"/>
+            <rect width="200" height="150" fill="url(#ktg1grid)"/>
+            <!-- Stacked offset display frames (brand visibility / stereoscopic depth) -->
+            <rect x="62" y="32" width="88" height="54" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".35"/>
+            <rect x="56" y="36" width="88" height="54" fill="none" stroke="#c8932a" stroke-width=".8" opacity=".65"/>
+            <rect x="50" y="40" width="88" height="54" fill="#0a1830" stroke="#c8932a" stroke-width="1.2"/>
+            <line x1="58" y1="48" x2="130" y2="48" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
+            <line x1="58" y1="86" x2="130" y2="86" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
+            <text x="94" y="72" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="3">3D&middot;AD</text>
+            <!-- Corner tick marks -->
+            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
+            <!-- Engineering callouts -->
+            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
+            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DAD</text>
+            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
+            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg1silver)" stroke-width=".8"/>
+            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">STEREOSCOPIC &middot; AD &middot; PRODUCTION</text>
           </svg>
         </div>
-        <p class="card-tag">Film &middot; Broadcast &middot; 3D TV</p>
-        <p class="card-model">KT-3DX</p>
-        <p class="card-part">Part No: KT3DX (STD-2D3D)</p>
+        <p class="card-tag">Brand &middot; Product &middot; DOOH</p>
+        <p class="card-model">KT-3DAD</p>
+        <p class="card-part">Part No: KT3DAD (AD-PROD)</p>
         <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
-        <p class="card-desc">Proprietary 2D-to-3D stereoscopic conversion &mdash; the standard profile tuned for theatrical 3D, 3D TVs, and broadcast delivery.</p>
+        <p class="card-desc">End-to-end 3D advertising production &mdash; concept, storyboard, shoot/CG, and stereoscopic finishing for brand commercials, product launches, and DOOH.</p>
         <div class="card-specs">
-          <div><p class="spec-lbl">Input Formats</p><p class="spec-val">ProRes / H.264</p></div>
-          <div><p class="spec-lbl">Output</p><p class="spec-val">SBS / OU / MVC</p></div>
-          <div><p class="spec-lbl">Max Resolution</p><p class="spec-val">4K UHD</p></div>
-          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">2&ndash;4 weeks</p></div>
-        </div>
-        <div class="card-foot">
-          <span class="card-cta" data-t="card_cta">View Full Specs</span>
-          <button class="compare-btn" type="button" aria-label="Add KT-3DX to compare" onclick="event.stopPropagation();toggleCompare('kt3dx',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
-        </div>
-      </div>
-
-      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="kt3dxvr" onclick="openModal('kt3dxvr')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dxvr')">
-        <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="ktg2" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#122242"/><stop offset="1" stop-color="#0b1d38"/></linearGradient>
-            </defs>
-            <rect width="200" height="150" fill="url(#ktg2)"/>
-            <path d="M40 68 Q40 50 60 50 H140 Q160 50 160 68 V88 Q160 100 148 100 H130 L118 112 L100 100 L82 112 L70 100 H52 Q40 100 40 88 Z" fill="none" stroke="#c8932a" stroke-width="1.5"/>
-            <circle cx="80" cy="78" r="6" fill="#c8932a" opacity=".7"/>
-            <circle cx="120" cy="78" r="6" fill="#c8932a" opacity=".7"/>
-            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="9" letter-spacing="2" font-weight="700">HMD &middot; VR PROFILE</text>
-          </svg>
-        </div>
-        <p class="card-tag">HMD &middot; VR &middot; Immersive</p>
-        <p class="card-model">KT-3DX&middot;VR</p>
-        <p class="card-part">Part No: KT3DXVR (HMD-PROFILE)</p>
-        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
-        <p class="card-desc">Head-mounted display profile &mdash; 2D content converted with per-eye parallax tuning for HMDs and VR viewers. Low-latency output.</p>
-        <div class="card-specs">
-          <div><p class="spec-lbl">Target</p><p class="spec-val">HMD / VR</p></div>
-          <div><p class="spec-lbl">Output</p><p class="spec-val">Stereo MP4 / MKV</p></div>
-          <div><p class="spec-lbl">Frame Rate</p><p class="spec-val">Up to 90 fps</p></div>
-          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">3&ndash;5 weeks</p></div>
-        </div>
-        <div class="card-foot">
-          <span class="card-cta" data-t="card_cta">View Full Specs</span>
-          <button class="compare-btn" type="button" aria-label="Add KT-3DX VR to compare" onclick="event.stopPropagation();toggleCompare('kt3dxvr',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
-        </div>
-      </div>
-
-      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="kt3dxauto" onclick="openModal('kt3dxauto')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dxauto')">
-        <span class="card-badge">New</span>
-        <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="ktg3" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0b1d38"/><stop offset="1" stop-color="#122242"/></linearGradient>
-            </defs>
-            <rect width="200" height="150" fill="url(#ktg3)"/>
-            <g stroke="#c8932a" stroke-width="1" opacity=".55" fill="none">
-              <line x1="55" y1="45" x2="55" y2="95"/><line x1="75" y1="45" x2="75" y2="95"/>
-              <line x1="95" y1="45" x2="95" y2="95"/><line x1="115" y1="45" x2="115" y2="95"/>
-              <line x1="135" y1="45" x2="135" y2="95"/><line x1="145" y1="45" x2="145" y2="95"/>
-            </g>
-            <rect x="45" y="38" width="110" height="62" rx="3" fill="none" stroke="#c8932a" stroke-width="1.5"/>
-            <text x="100" y="132" text-anchor="middle" fill="#ffffff" opacity=".7" font-family="Barlow,sans-serif" font-size="9" letter-spacing="2" font-weight="700">GLASSES-FREE 3D</text>
-          </svg>
-        </div>
-        <p class="card-tag">Glasses-Free &middot; Tablet &middot; Mobile</p>
-        <p class="card-model">KT-3DX&middot;AUTO</p>
-        <p class="card-part">Part No: KT3DXAUTO (AUTOSTEREO)</p>
-        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
-        <p class="card-desc">Autostereoscopic profile &mdash; multi-view 2D-to-3D output tuned for glasses-free 3D TVs, tablets, and lenticular displays.</p>
-        <div class="card-specs">
-          <div><p class="spec-lbl">Target</p><p class="spec-val">Autostereo</p></div>
-          <div><p class="spec-lbl">Views</p><p class="spec-val">5 / 9 / 28-view</p></div>
+          <div><p class="spec-lbl">Use Case</p><p class="spec-val">Ads / DOOH</p></div>
+          <div><p class="spec-lbl">Duration</p><p class="spec-val">15s &ndash; 3 min</p></div>
           <div><p class="spec-lbl">Max Resolution</p><p class="spec-val">4K UHD</p></div>
           <div><p class="spec-lbl">Turnaround</p><p class="spec-val">3&ndash;6 weeks</p></div>
         </div>
         <div class="card-foot">
           <span class="card-cta" data-t="card_cta">View Full Specs</span>
-          <button class="compare-btn" type="button" aria-label="Add KT-3DX Auto to compare" onclick="event.stopPropagation();toggleCompare('kt3dxauto',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DAD to compare" onclick="event.stopPropagation();toggleCompare('kt3dad',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <!-- Card 2: General Video → 3D Conversion -->
+      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="kt3dvid" onclick="openModal('kt3dvid')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dvid')">
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="ktg2bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
+              <linearGradient id="ktg2silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
+              <pattern id="ktg2grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
+            </defs>
+            <rect width="200" height="150" fill="url(#ktg2bg)"/>
+            <rect width="200" height="150" fill="url(#ktg2grid)"/>
+            <!-- Left 2D video frame -->
+            <rect x="24" y="44" width="62" height="46" fill="none" stroke="#c8932a" stroke-width="1.2"/>
+            <polygon points="46,60 46,78 64,69" fill="#c8932a" opacity=".85"/>
+            <text x="55" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="2.5" opacity=".75">2D</text>
+            <!-- Conversion arrow -->
+            <line x1="92" y1="67" x2="112" y2="67" stroke="#c8932a" stroke-width="1.2"/>
+            <polyline points="107,63 112,67 107,71" fill="none" stroke="#c8932a" stroke-width="1.2"/>
+            <!-- Right 3D stereo-pair frame (offset double) -->
+            <rect x="118" y="40" width="62" height="46" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".45"/>
+            <rect x="114" y="44" width="62" height="46" fill="#0a1830" stroke="#c8932a" stroke-width="1.2"/>
+            <polygon points="136,60 136,78 154,69" fill="#c8932a" opacity=".85"/>
+            <polygon points="140,60 140,78 158,69" fill="none" stroke="#c8932a" stroke-width=".8"/>
+            <text x="145" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="2.5">3D</text>
+            <!-- Corner tick marks -->
+            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
+            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
+            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DVID</text>
+            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
+            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg2silver)" stroke-width=".8"/>
+            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">VIDEO &middot; 2D &rarr; 3D CONVERSION</text>
+          </svg>
+        </div>
+        <p class="card-tag">Corporate &middot; Event &middot; Broadcast</p>
+        <p class="card-model">KT-3DVID</p>
+        <p class="card-part">Part No: KT3DVID (VIDEO-2D3D)</p>
+        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
+        <p class="card-desc">Convert everyday 2D video &mdash; corporate, training, event, documentary, broadcast episodic &mdash; into stereoscopic 3D with device-tuned output.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Use Case</p><p class="spec-val">Video &rarr; 3D</p></div>
+          <div><p class="spec-lbl">Input</p><p class="spec-val">ProRes / H.264</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">SBS / OU / MVC</p></div>
+          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">2&ndash;4 weeks</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DVID to compare" onclick="event.stopPropagation();toggleCompare('kt3dvid',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Legacy 2D Film → 3D Remaster -->
+      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="kt3dcine" onclick="openModal('kt3dcine')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dcine')">
+        <span class="card-badge">Flagship</span>
+        <div class="card-image card-image-svg">
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="ktg3bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
+              <linearGradient id="ktg3silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
+              <pattern id="ktg3grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
+            </defs>
+            <rect width="200" height="150" fill="url(#ktg3bg)"/>
+            <rect width="200" height="150" fill="url(#ktg3grid)"/>
+            <!-- Film strip body -->
+            <rect x="22" y="42" width="156" height="58" fill="#08152a" stroke="#c8932a" stroke-width="1.2"/>
+            <line x1="22" y1="52" x2="178" y2="52" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
+            <line x1="22" y1="90" x2="178" y2="90" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
+            <!-- Sprocket holes (top + bottom, 10 per row) -->
+            <g fill="#c8932a" opacity=".85">
+              <rect x="28" y="44" width="5" height="4"/><rect x="42" y="44" width="5" height="4"/>
+              <rect x="56" y="44" width="5" height="4"/><rect x="70" y="44" width="5" height="4"/>
+              <rect x="84" y="44" width="5" height="4"/><rect x="98" y="44" width="5" height="4"/>
+              <rect x="112" y="44" width="5" height="4"/><rect x="126" y="44" width="5" height="4"/>
+              <rect x="140" y="44" width="5" height="4"/><rect x="154" y="44" width="5" height="4"/>
+              <rect x="168" y="44" width="5" height="4"/>
+              <rect x="28" y="94" width="5" height="4"/><rect x="42" y="94" width="5" height="4"/>
+              <rect x="56" y="94" width="5" height="4"/><rect x="70" y="94" width="5" height="4"/>
+              <rect x="84" y="94" width="5" height="4"/><rect x="98" y="94" width="5" height="4"/>
+              <rect x="112" y="94" width="5" height="4"/><rect x="126" y="94" width="5" height="4"/>
+              <rect x="140" y="94" width="5" height="4"/><rect x="154" y="94" width="5" height="4"/>
+              <rect x="168" y="94" width="5" height="4"/>
+            </g>
+            <!-- Frame divider -->
+            <line x1="100" y1="56" x2="100" y2="86" stroke="#c8932a" stroke-width=".4" opacity=".5" stroke-dasharray="2 2"/>
+            <!-- 2D → 3D transformation typography -->
+            <text x="62" y="79" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="15" font-weight="800" letter-spacing="3">2D</text>
+            <line x1="80" y1="72" x2="120" y2="72" stroke="#c8932a" stroke-width=".5" opacity=".4"/>
+            <polyline points="115,69 120,72 115,75" fill="none" stroke="#c8932a" stroke-width=".8" opacity=".7"/>
+            <text x="138" y="79" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="15" font-weight="800" letter-spacing="3">3D</text>
+            <!-- Corner tick marks -->
+            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
+            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
+            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DCINE</text>
+            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
+            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg3silver)" stroke-width=".8"/>
+            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">FEATURE FILM &middot; 3D REMASTER</text>
+          </svg>
+        </div>
+        <p class="card-tag">Feature &middot; Theatrical &middot; Catalog</p>
+        <p class="card-model">KT-3DCINE</p>
+        <p class="card-part">Part No: KT3DCINE (CINEMA-REMASTER)</p>
+        <p class="card-mfg">Delivered by ERGSN CO., LTD. <span class="card-verified">&#10003; Verified Technology</span></p>
+        <p class="card-desc">Remaster existing 2D feature films into stereoscopic 3D &mdash; per-shot depth grading, director-reviewed, ready for theatrical 3D and OTT re-release.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Use Case</p><p class="spec-val">2D Film &rarr; 3D</p></div>
+          <div><p class="spec-lbl">Duration</p><p class="spec-val">Feature-length</p></div>
+          <div><p class="spec-lbl">Max Resolution</p><p class="spec-val">4K DCP / UHD</p></div>
+          <div><p class="spec-lbl">Turnaround</p><p class="spec-val">8&ndash;16 weeks</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KT-3DCINE to compare" onclick="event.stopPropagation();toggleCompare('kt3dcine',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
 
@@ -3055,9 +3117,9 @@ button:focus:not(:focus-visible) { outline: none; }
               <label class="model-cb"><input type="checkbox" id="mDL10XD"><span class="model-cb-lbl">DL-10XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL12XD"><span class="model-cb-lbl">DL-12XD</span></label>
               <label class="model-cb"><input type="checkbox" id="mDL16XD"><span class="model-cb-lbl">DL-16XD</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DX"><span class="model-cb-lbl">KT-3DX</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DXVR"><span class="model-cb-lbl">KT-3DX&middot;VR</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DXAUTO"><span class="model-cb-lbl">KT-3DX&middot;AUTO</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DAD"><span class="model-cb-lbl">KT-3DAD</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DVID"><span class="model-cb-lbl">KT-3DVID</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKT3DCINE"><span class="model-cb-lbl">KT-3DCINE</span></label>
             </div>
           </div>
           <div class="f-row">
@@ -3315,23 +3377,23 @@ const P = {
     features:['Flagship high-volume model \u2014 up to 90 sheets per pass at 31 FPM','3.25 Hp motor \u2014 highest-power DL Series shredder','45-Gallon waste bin \u2014 extended runtime between empties','All-Metal Chain Drive \u2014 no nylon or plastic internal gears','Oil-Free Operation \u2014 lower long-term cost, eco-friendly','115V / 30 Amp \u2014 U.S. electrical standards (NEMA L5-30P)','Individually crated for secure ocean freight','Safety Interlock Switches \u2014 full bin / open door shut-off','HIPAA Compliant \u2014 GSA Schedule'],
     desc:'The DL-16XD (RS-8200A) is ERGSN\'s flagship industrial shredder engineered for continuous heavy-duty operation. With up to 90 sheets per pass at 31 FPM and a 3.25 Hp motor, it delivers the highest throughput in the DL Series. Pre-wired for U.S. electrical standards at 115V / 30A with NEMA L5-30P locking plug and 12/3 cord, it installs directly in U.S. commercial and industrial facilities. A 45-gallon waste bin minimizes downtime, and the unit is individually crated for secure ocean freight.'
   },
-  kt3dx: {
-    model:'KT-3DX', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 Film, Broadcast & 3D TV Standard Profile', part:'KT3DX (STD-2D3D)',
-    specs:[['Service Type','2D-to-3D Stereoscopic Conversion'],['Target Devices','3D TVs, Theatrical 3D, 3D Notebooks, 3D Smartphones'],['Input Formats','ProRes 422/4444, H.264, H.265, DPX, EXR'],['Output Formats','Side-by-Side, Over-Under, MVC, Frame-Packed'],['Max Resolution','4K UHD (3840\u00d72160)'],['Color Depth','8-bit / 10-bit per channel'],['Frame Rate','23.976 / 24 / 25 / 29.97 / 30 / 50 / 60 fps'],['Depth Grading','Custom per-scene, director-reviewed'],['Turnaround','2\u20134 weeks (feature-length pipeline)'],['Sample Clip','5\u201310 min test reel available'],['Delivery','FTP / Aspera / physical drive']],
-    features:['Proprietary 2D-to-3D conversion engine developed through continuous ERGSN R&D','Market-competitive pricing \u2014 below industry average for converted 3D content','Addresses the global 3D content shortage \u2014 unlock your 2D library for 3D distribution','Ideal for U.S. market demand, where conversion of standard films is preferred over original 3D production','Per-scene depth grading with director/DoP review cycles','Device-optimised output profiles for each target screen','Handles feature-length, broadcast episodic, and short-form content','Scalable pipeline \u2014 multiple concurrent titles supported'],
-    desc:'KT-3DX is ERGSN\'s standard 2D-to-3D stereoscopic conversion service, engineered to address the global shortage of 3D content. The film industry faces significant supply gaps relative to demand, with conversion costing more than 3\u00d7 that of regular 2D production \u2014 a barrier that causes many broadcasters and studios to hesitate. ERGSN\'s proprietary conversion technology, refined through continuous R&D, delivers device-optimised 3D output at market-competitive prices. KT-3DX is tuned for theatrical 3D, 3D TV broadcast, and mainstream stereoscopic delivery, with 4K UHD, multi-framerate, and multiple output container support.'
+  kt3dad: {
+    model:'KT-3DAD', sub:'3D Advertising Production \u2014 Brand Commercials, Product Launches & DOOH', part:'KT3DAD (AD-PROD)',
+    specs:[['Service Type','3D Advertising Production (end-to-end)'],['Use Cases','TV commercials, product launch films, DOOH, retail signage, social cutdowns'],['Scope','Concept \u2013 storyboard \u2013 live shoot / CGI \u2013 stereoscopic finishing'],['Duration','15s \u2013 3 min (master + social cuts)'],['Output Formats','Side-by-Side, Over-Under, MVC, anaglyph preview'],['Max Resolution','4K UHD (3840\u00d72160)'],['Color Depth','10-bit per channel, Rec.709 / Rec.2020'],['Frame Rate','24 / 25 / 29.97 / 30 / 50 / 60 fps'],['Delivery Assets','Master DCP/ProRes, social 16:9/9:16/1:1, still key art'],['Turnaround','3\u20136 weeks (concept to final)'],['Revisions','2 rounds of director review included']],
+    features:['End-to-end 3D ad production \u2014 from concept brief to stereoscopic master','Brand-safe creative direction with 3D-native storyboarding','Live-action + CGI hybrid pipeline for product hero shots','Multi-format delivery: theatrical 3D, 3D TV, DOOH, social cutdowns','Proprietary ERGSN 2D-to-3D tooling for cost-efficient stereoscopic finishing','Depth grading tuned for each delivery surface (theater vs. DOOH vs. HMD)','Below-industry-average cost structure for 3D creative production','Ideal for brand launches, flagship retail windows, immersive campaigns'],
+    desc:'KT-3DAD is ERGSN\'s end-to-end 3D advertising production service. We take a client brief through concept, 3D-native storyboarding, live shoot or CGI production, and stereoscopic finishing \u2014 delivering a theatrical-grade 3D commercial plus social cutdowns. The global advertising market is adopting 3D aggressively for flagship brand campaigns, product launches, and DOOH activations, but cost and technical complexity remain barriers. Leveraging ERGSN\'s proprietary 3D conversion engine, KT-3DAD keeps production costs competitive while delivering stereoscopic output tuned for each delivery surface \u2014 theater, 3D TV, digital out-of-home, and mobile.'
   },
-  kt3dxvr: {
-    model:'KT-3DX\u00b7VR', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 HMD / VR Profile', part:'KT3DXVR (HMD-PROFILE)',
-    specs:[['Service Type','2D-to-3D Conversion (HMD-optimised)'],['Target Devices','3D HMDs, VR Headsets, Spatial Displays'],['Input Formats','ProRes, H.264, H.265, 180/360 source optional'],['Output Formats','Stereo MP4, MKV, side-by-side half/full'],['Max Resolution','Per-eye up to 4K (8K combined SBS)'],['Frame Rate','Up to 90 fps (HMD-friendly)'],['Parallax','Per-eye IPD-tuned, comfort-graded'],['Viewing Comfort','Low-motion-sickness profile, depth-budget controlled'],['Turnaround','3\u20135 weeks'],['Sample Clip','3\u20138 min HMD test reel available'],['Delivery','FTP / Aspera / digital drop']],
-    features:['HMD-optimised parallax \u2014 tuned per-eye for head-mounted viewing comfort','High frame rate output (up to 90 fps) for low-latency VR playback','Depth-budget control to minimise motion sickness','Compatible with major VR/HMD platforms','Leverages the same ERGSN proprietary conversion engine','Cost-competitive alternative to native 3D capture for VR content libraries','Suitable for VR cinema, location-based entertainment, training simulation','Proven pipeline for feature and short-form immersive content'],
-    desc:'KT-3DX\u00b7VR is the HMD and VR profile of ERGSN\'s 2D-to-3D conversion service. As 3D HMDs expand in both consumer and enterprise markets \u2014 alongside 3D TVs, smartphones, notebooks, tablets, and glasses-free 3D TVs \u2014 demand for VR-ready stereoscopic content continues to grow. KT-3DX\u00b7VR re-masters existing 2D footage with per-eye parallax tuning, depth-budget controls, and high-frame-rate output specifically calibrated for head-mounted display viewing comfort. Ideal for VR cinema, LBE, and training-sim libraries that need 3D output from legacy 2D masters.'
+  kt3dvid: {
+    model:'KT-3DVID', sub:'2D \u2192 3D Video Conversion \u2014 Corporate, Event, Documentary & Broadcast', part:'KT3DVID (VIDEO-2D3D)',
+    specs:[['Service Type','General 2D-to-3D Video Conversion'],['Use Cases','Corporate films, training video, event coverage, documentary, broadcast episodic'],['Input Formats','ProRes 422/4444, H.264, H.265, DPX, EXR'],['Output Formats','Side-by-Side, Over-Under, MVC, Frame-Packed'],['Max Resolution','4K UHD (3840\u00d72160)'],['Color Depth','8-bit / 10-bit per channel'],['Frame Rate','23.976 / 24 / 25 / 29.97 / 30 / 50 / 60 fps'],['Depth Grading','Per-scene, client-reviewed'],['Minimum Length','No minimum; priced by runtime'],['Turnaround','2\u20134 weeks (typical \u226490 min source)'],['Delivery','FTP / Aspera / physical drive']],
+    features:['Convert existing 2D video libraries into stereoscopic 3D at scale','Proprietary ERGSN 2D-to-3D conversion engine \u2014 refined through continuous R&D','Market-competitive pricing vs. traditional post-production vendors','Device-tuned output: 3D TVs, HMDs, tablets, glasses-free displays, notebooks','Per-scene depth grading with client review cycle included','Scales from single event clips to full broadcast series runs','Fast turnaround \u2014 2 to 4 weeks for typical duration','Ideal for corporate, training, event, documentary, and episodic broadcast'],
+    desc:'KT-3DVID converts general 2D video \u2014 corporate films, training content, event coverage, documentary, broadcast episodic \u2014 into stereoscopic 3D. The global 3D content gap extends beyond theatrical film: broadcasters, enterprises, and event producers need 3D output for 3D TVs, HMDs, tablets, and glasses-free displays, but traditional conversion workflows are cost-prohibitive. Powered by ERGSN\'s proprietary conversion engine, KT-3DVID delivers device-optimised stereoscopic output at market-competitive pricing \u2014 unlocking existing 2D video libraries for 3D distribution across corporate, broadcast, and event channels.'
   },
-  kt3dxauto: {
-    model:'KT-3DX\u00b7AUTO', sub:'2D \u2192 3D Stereoscopic Conversion \u2014 Glasses-Free Autostereoscopic Profile', part:'KT3DXAUTO (AUTOSTEREO)',
-    specs:[['Service Type','2D-to-3D Multi-View Conversion'],['Target Devices','Glasses-Free 3D TVs, Autostereo Tablets, Lenticular Displays'],['Input Formats','ProRes, H.264, H.265, DPX'],['Output Formats','Multi-view interlaced, per-view streams'],['View Counts','5-view / 9-view / 28-view'],['Max Resolution','4K UHD per composite frame'],['Color Depth','8-bit / 10-bit per channel'],['Calibration','Per-panel geometry profile supported'],['Turnaround','3\u20136 weeks'],['Sample Clip','Autostereo test reel on request'],['Delivery','FTP / Aspera / digital drop']],
-    features:['Multi-view output \u2014 5, 9, or 28-view formats for lenticular and parallax-barrier panels','Per-panel geometry calibration for target displays','Tuned for tablets, glasses-free 3D TVs, and autostereoscopic signage','Same proprietary ERGSN conversion engine, optimised for multi-view','Cost-competitive vs. native multi-camera capture','Suitable for retail signage, museum/exhibit displays, device OEM demos','Per-scene depth grading to maintain comfortable autostereo viewing','Scalable delivery pipeline for OEM/retail/museum deployments'],
-    desc:'KT-3DX\u00b7AUTO is the glasses-free (autostereoscopic) profile of ERGSN\'s 2D-to-3D conversion service. Advancements in display technology have produced a wide array of glasses-free 3D-enabled devices \u2014 tablets, lenticular TVs, parallax-barrier signage. KT-3DX\u00b7AUTO converts 2D content into multi-view output (5, 9, or 28-view formats) calibrated per target panel, letting device OEMs, retailers, and exhibitors deliver 3D experiences without eyewear. As demand for 3D content continues to grow across device categories, ERGSN provides autostereoscopic output at market-competitive cost.'
+  kt3dcine: {
+    model:'KT-3DCINE', sub:'Legacy 2D Film \u2192 3D Remaster \u2014 Theatrical & OTT Re-Release', part:'KT3DCINE (CINEMA-REMASTER)',
+    specs:[['Service Type','Feature-Length 2D-to-3D Film Remaster'],['Use Cases','Theatrical 3D re-release, OTT/streaming, catalog monetisation'],['Input Formats','DPX, EXR, ProRes 4444 XQ, DCP source'],['Output Formats','Stereo DCP, MVC, Side-by-Side, Frame-Packed'],['Max Resolution','4K DCP / UHD (3840\u00d72160)'],['Color Depth','12-bit DPX, 10-bit ProRes'],['Frame Rate','23.976 / 24 / 48 fps'],['Depth Grading','Per-shot, director / DoP reviewed'],['QC','Full-reel stereoscopic review before final master'],['Turnaround','8\u201316 weeks (feature-length)'],['Delivery','DCP, master files via Aspera / secure drive']],
+    features:['Remaster existing 2D feature films into theatrical-grade stereoscopic 3D','Per-shot depth grading with director / DoP review cycles','Proprietary ERGSN 2D-to-3D engine \u2014 developed through continuous R&D','Addresses strong U.S. market preference for converting standard films to 3D','Unlock catalog value \u2014 convert back-catalog titles for theatrical re-release or OTT','Below-industry-average cost for feature-length conversion','Stereo DCP delivery for theatrical 3D projection','Suitable for studios, OTT platforms, and rights-holders with back catalogs'],
+    desc:'KT-3DCINE is ERGSN\'s flagship 2D-to-3D feature film remastering service. The U.S. film market continues to release 3D titles steadily, with a strong emphasis on converting standard films into 3D rather than producing original 3D content \u2014 but conversion costs remain more than 3\u00d7 that of regular 2D production, a significant barrier to broader adoption. Using ERGSN\'s proprietary conversion technology refined through continuous R&D, KT-3DCINE delivers theatrical-grade stereoscopic remasters at market-competitive pricing. Studios and rights-holders can unlock back-catalog 2D titles for theatrical 3D re-release, OTT streaming, and international distribution with per-shot depth grading and stereo DCP delivery.'
   }
 };
 
@@ -3558,7 +3620,9 @@ const MATCH_CATALOG = [
   { id:'dl12xd', name:'DL-12XD Commercial Shredder', sector:'Office Security', tags:['finance','healthcare','tech','education','hospitality'], scale:['m','l'], desc:'Mid-volume workgroup shredder. Balanced throughput and footprint.' },
   { id:'dl10xd', name:'DL-10XD Executive Shredder', sector:'Office Security', tags:['finance','tech','retail','hospitality','logistics'], scale:['s','m'], desc:'Compact executive unit. Ideal for private offices and small teams.' },
   { id:'dl16x', name:'DL-16X Heavy-Duty Shredder', sector:'Office Security', tags:['government','manufacturing','logistics'], scale:['l','xl'], desc:'All-metal construction. Built for continuous high-volume destruction.' },
-  { id:'ktech-3dconv', name:'K-Tech: 2D → 3D Stereoscopic Conversion', sector:'K-Tech', tags:['tech','retail','hospitality','education'], scale:['s','m','l','xl'], desc:'ERGSN proprietary 2D-to-3D conversion — device-optimised output for 3D TVs, HMDs, tablets, glasses-free displays. Available now.' },
+  { id:'kt3dad', name:'K-Tech: KT-3DAD · 3D Advertising Production', sector:'K-Tech', tags:['retail','hospitality','tech','education'], scale:['s','m','l'], desc:'End-to-end 3D ad production — brand commercials, product launches, DOOH. Available now.' },
+  { id:'kt3dvid', name:'K-Tech: KT-3DVID · 2D → 3D Video Conversion', sector:'K-Tech', tags:['tech','retail','education','hospitality'], scale:['s','m','l','xl'], desc:'Convert corporate, training, event, and broadcast 2D video into stereoscopic 3D. Available now.' },
+  { id:'kt3dcine', name:'K-Tech: KT-3DCINE · 2D Film → 3D Remaster', sector:'K-Tech', tags:['tech','retail','hospitality','education'], scale:['l','xl'], desc:'Theatrical-grade 2D-to-3D feature film remaster for theatrical re-release and OTT. Available now.' },
   { id:'ktech-semi', name:'K-Tech: Semiconductor Modules', sector:'K-Tech', tags:['tech','manufacturing','energy'], scale:['l','xl'], desc:'Verified Korean fab partners — precision modules & display components. Joining Q2 2026.', coming:true },
   { id:'ktech-sensor', name:'K-Tech: Industrial Sensors', sector:'K-Tech', tags:['manufacturing','energy','logistics','tech'], scale:['m','l'], desc:'High-precision IoT & industrial sensor suite from vetted Korean OEMs. Joining 2026.', coming:true },
   { id:'smart-iot', name:'Smart Living: Connected Appliances', sector:'Smart Living', tags:['retail','hospitality'], scale:['m','l','xl'], desc:'Premium K-lifestyle IoT appliances curated for global retail. Joining 2026.', coming:true },
@@ -3625,7 +3689,7 @@ function runMatch(e) {
 }
 function applyMatchToRFQ() {
   const m = window._lastMatch; if (!m) { location.hash = '#rfq'; return; }
-  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD' };
+  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE' };
   document.querySelectorAll('#rfqFields .model-cb input').forEach(cb => cb.checked = false);
   m.ranked.forEach(r => { const id = modelMap[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
   const cSel = document.getElementById('fCountry');
