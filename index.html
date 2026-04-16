@@ -1696,15 +1696,20 @@ button:focus:not(:focus-visible) { outline: none; }
   body.printing-spec .modal-model { font-size: 22pt !important; line-height: 1 !important; margin: 0 !important; }
   body.printing-spec .modal-sub { font-size: 10pt !important; margin: 2mm 0 0 !important; }
   body.printing-spec .modal-part { font-size: 8pt !important; margin: 1mm 0 0 !important; }
-  body.printing-spec .modal-image-row { margin: 0 0 3mm 0 !important; padding: 0 !important; text-align: center !important; }
+  body.printing-spec .modal-image-row { margin: 0 0 3mm 0 !important; padding: 0 !important; text-align: center !important; min-height: 0 !important; page-break-inside: avoid !important; }
   body.printing-spec .modal-image-row img { max-height: 55mm !important; width: auto !important; max-width: 70% !important; object-fit: contain !important; margin: 0 auto !important; display: block !important; }
-  body.printing-spec .modal-bd { display: grid !important; grid-template-columns: 1.1fr 1fr !important; gap: 4mm !important; margin: 0 !important; padding: 0 !important; page-break-inside: avoid !important; }
-  body.printing-spec .modal-sec-title { font-size: 9pt !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; margin: 0 0 2mm !important; padding: 0 0 1mm !important; border-bottom: 1px solid #888 !important; }
+  body.printing-spec .modal-image-row.modal-svg-row { background: #fff !important; }
+  body.printing-spec .modal-image-row.modal-svg-row svg { height: 48mm !important; width: auto !important; max-width: 72mm !important; margin: 0 auto !important; display: inline-block !important; }
+  body.printing-spec .modal-bd { display: grid !important; grid-template-columns: 1.1fr 1fr !important; gap: 4mm !important; margin: 0 !important; padding: 0 !important; }
+  body.printing-spec .modal-bd > div { page-break-inside: auto !important; }
+  body.printing-spec .modal-sec-title { font-size: 9pt !important; font-weight: 800 !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; margin: 0 0 2mm !important; padding: 0 0 1mm !important; border-bottom: 1px solid #888 !important; page-break-after: avoid !important; }
   body.printing-spec .spec-tbl { width: 100% !important; border-collapse: collapse !important; font-size: 8.5pt !important; }
+  body.printing-spec .spec-tbl tr { page-break-inside: avoid !important; }
   body.printing-spec .spec-tbl td { padding: 1mm 2mm !important; border-bottom: 1px solid #ddd !important; vertical-align: top !important; }
   body.printing-spec .spec-tbl td:first-child { color: #555 !important; width: 45% !important; }
   body.printing-spec .feat-list { margin: 0 !important; padding: 0 0 0 4mm !important; font-size: 8.5pt !important; }
-  body.printing-spec .feat-list li { margin: 0 0 1.5mm !important; line-height: 1.3 !important; }
+  body.printing-spec .feat-list li { margin: 0 0 1.5mm !important; line-height: 1.3 !important; page-break-inside: avoid !important; }
+  body.printing-spec .modal-hd { page-break-after: avoid !important; }
   @page { size: A4; margin: 10mm; }
 }
 
