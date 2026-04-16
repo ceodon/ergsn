@@ -350,7 +350,7 @@ section { scroll-margin-top: var(--nav-h); }
 }
 
 /* K-Tech product card SVG visual (services have no photo) */
-.card-image.card-image-svg { padding: 0; background: #0b1d38; }
+.card-image.card-image-svg { padding: 0; background: #ffffff; }
 .card-image.card-image-svg svg { width: 100%; height: 100%; display: block; }
 
 /* HAMBURGER */
@@ -923,6 +923,8 @@ section { scroll-margin-top: var(--nav-h); }
   max-width: 100%; max-height: clamp(200px, 28vh, 320px);
   object-fit: contain;
 }
+.modal-image-row.modal-svg-row { padding: 0; background: #ffffff; }
+.modal-image-row.modal-svg-row svg { width: 100%; max-width: 560px; height: auto; display: block; }
 .modal-bd {
   padding: clamp(1.25rem,3vw,2.5rem);
   display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem,3vw,2.5rem);
@@ -2403,32 +2405,32 @@ button:focus:not(:focus-visible) { outline: none; }
     <!-- K-Tech product grid: 2D → 3D Stereoscopic Conversion services -->
     <div class="product-grid" id="ktechGrid" style="display:none">
 
-      <!-- Card 1: 3D Advertising Production -->
+      <!-- Card 1: 3D Advertising Production — Luxury Monogram -->
       <div class="product-card reveal" style="--i:0" tabindex="0" data-model="kt3dad" onclick="openModal('kt3dad')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dad')">
         <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="ktg1bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
-              <linearGradient id="ktg1silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
-              <pattern id="ktg1grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
-            </defs>
-            <rect width="200" height="150" fill="url(#ktg1bg)"/>
-            <rect width="200" height="150" fill="url(#ktg1grid)"/>
-            <!-- Stacked offset display frames (brand visibility / stereoscopic depth) -->
-            <rect x="62" y="32" width="88" height="54" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".35"/>
-            <rect x="56" y="36" width="88" height="54" fill="none" stroke="#c8932a" stroke-width=".8" opacity=".65"/>
-            <rect x="50" y="40" width="88" height="54" fill="#0a1830" stroke="#c8932a" stroke-width="1.2"/>
-            <line x1="58" y1="48" x2="130" y2="48" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
-            <line x1="58" y1="86" x2="130" y2="86" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
-            <text x="94" y="72" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="3">3D&middot;AD</text>
-            <!-- Corner tick marks -->
-            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
-            <!-- Engineering callouts -->
-            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
-            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DAD</text>
-            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
-            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg1silver)" stroke-width=".8"/>
-            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">STEREOSCOPIC &middot; AD &middot; PRODUCTION</text>
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+            <!-- Outer luxury frame -->
+            <rect x="12" y="12" width="176" height="126" fill="none" stroke="#0a1830" stroke-width=".7" opacity=".85"/>
+            <!-- Inner gold hairline frame -->
+            <rect x="18" y="18" width="164" height="114" fill="none" stroke="#c8932a" stroke-width=".4" opacity=".65"/>
+            <!-- Corner L-flourishes (gold, luxury atelier feel) -->
+            <g stroke="#c8932a" stroke-width="1" fill="none">
+              <path d="M12 26 L12 12 L26 12"/>
+              <path d="M188 26 L188 12 L174 12"/>
+              <path d="M12 124 L12 138 L26 138"/>
+              <path d="M188 124 L188 138 L174 138"/>
+            </g>
+            <!-- Top seal: brand mark flanked by hairlines -->
+            <line x1="46" y1="34" x2="72" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <text x="100" y="37" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3">K-TECH &middot; ERGSN</text>
+            <line x1="128" y1="34" x2="154" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <!-- Central monogram stack -->
+            <text x="100" y="82" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="32" font-weight="800" letter-spacing="6">3D</text>
+            <line x1="88" y1="88" x2="112" y2="88" stroke="#c8932a" stroke-width=".6"/>
+            <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="8">AD</text>
+            <!-- Bottom seal -->
+            <text x="100" y="124" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="4.5" letter-spacing="3" font-weight="700" opacity=".6">STEREOSCOPIC AD PRODUCTION</text>
+            <text x="100" y="131" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="3.8" letter-spacing="2.5" font-weight="700" opacity=".4">N&deg; KT-3DAD &middot; SEOUL &middot; MMXXVI</text>
           </svg>
         </div>
         <p class="card-tag">Brand &middot; Product &middot; DOOH</p>
@@ -2448,37 +2450,27 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </div>
 
-      <!-- Card 2: General Video → 3D Conversion -->
+      <!-- Card 2: General Video → 3D Conversion — Luxury Monogram -->
       <div class="product-card reveal" style="--i:1" tabindex="0" data-model="kt3dvid" onclick="openModal('kt3dvid')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dvid')">
         <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="ktg2bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
-              <linearGradient id="ktg2silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
-              <pattern id="ktg2grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
-            </defs>
-            <rect width="200" height="150" fill="url(#ktg2bg)"/>
-            <rect width="200" height="150" fill="url(#ktg2grid)"/>
-            <!-- Left 2D video frame -->
-            <rect x="24" y="44" width="62" height="46" fill="none" stroke="#c8932a" stroke-width="1.2"/>
-            <polygon points="46,60 46,78 64,69" fill="#c8932a" opacity=".85"/>
-            <text x="55" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="2.5" opacity=".75">2D</text>
-            <!-- Conversion arrow -->
-            <line x1="92" y1="67" x2="112" y2="67" stroke="#c8932a" stroke-width="1.2"/>
-            <polyline points="107,63 112,67 107,71" fill="none" stroke="#c8932a" stroke-width="1.2"/>
-            <!-- Right 3D stereo-pair frame (offset double) -->
-            <rect x="118" y="40" width="62" height="46" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".45"/>
-            <rect x="114" y="44" width="62" height="46" fill="#0a1830" stroke="#c8932a" stroke-width="1.2"/>
-            <polygon points="136,60 136,78 154,69" fill="#c8932a" opacity=".85"/>
-            <polygon points="140,60 140,78 158,69" fill="none" stroke="#c8932a" stroke-width=".8"/>
-            <text x="145" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="8" font-weight="800" letter-spacing="2.5">3D</text>
-            <!-- Corner tick marks -->
-            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
-            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
-            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DVID</text>
-            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
-            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg2silver)" stroke-width=".8"/>
-            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">VIDEO &middot; 2D &rarr; 3D CONVERSION</text>
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+            <rect x="12" y="12" width="176" height="126" fill="none" stroke="#0a1830" stroke-width=".7" opacity=".85"/>
+            <rect x="18" y="18" width="164" height="114" fill="none" stroke="#c8932a" stroke-width=".4" opacity=".65"/>
+            <g stroke="#c8932a" stroke-width="1" fill="none">
+              <path d="M12 26 L12 12 L26 12"/>
+              <path d="M188 26 L188 12 L174 12"/>
+              <path d="M12 124 L12 138 L26 138"/>
+              <path d="M188 124 L188 138 L174 138"/>
+            </g>
+            <line x1="46" y1="34" x2="72" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <text x="100" y="37" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3">K-TECH &middot; ERGSN</text>
+            <line x1="128" y1="34" x2="154" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <!-- Central monogram: VID over 3D -->
+            <text x="100" y="82" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="26" font-weight="800" letter-spacing="5">VID</text>
+            <line x1="88" y1="88" x2="112" y2="88" stroke="#c8932a" stroke-width=".6"/>
+            <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="8">3D</text>
+            <text x="100" y="124" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="4.5" letter-spacing="3" font-weight="700" opacity=".6">2D TO 3D VIDEO CONVERSION</text>
+            <text x="100" y="131" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="3.8" letter-spacing="2.5" font-weight="700" opacity=".4">N&deg; KT-3DVID &middot; SEOUL &middot; MMXXVI</text>
           </svg>
         </div>
         <p class="card-tag">Corporate &middot; Event &middot; Broadcast</p>
@@ -2498,51 +2490,33 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </div>
 
-      <!-- Card 3: Legacy 2D Film → 3D Remaster -->
+      <!-- Card 3: Legacy 2D Film → 3D Remaster — Luxury Monogram (Flagship) -->
       <div class="product-card reveal" style="--i:2" tabindex="0" data-model="kt3dcine" onclick="openModal('kt3dcine')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('kt3dcine')">
         <span class="card-badge">Flagship</span>
         <div class="card-image card-image-svg">
-          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="ktg3bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0a1830"/><stop offset="1" stop-color="#162b4a"/></linearGradient>
-              <linearGradient id="ktg3silver" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#8aa4c0" stop-opacity="0"/><stop offset=".5" stop-color="#c2c0c0" stop-opacity=".55"/><stop offset="1" stop-color="#8aa4c0" stop-opacity="0"/></linearGradient>
-              <pattern id="ktg3grid" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#c8932a" stroke-width=".3" stroke-opacity=".18"/></pattern>
-            </defs>
-            <rect width="200" height="150" fill="url(#ktg3bg)"/>
-            <rect width="200" height="150" fill="url(#ktg3grid)"/>
-            <!-- Film strip body -->
-            <rect x="22" y="42" width="156" height="58" fill="#08152a" stroke="#c8932a" stroke-width="1.2"/>
-            <line x1="22" y1="52" x2="178" y2="52" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
-            <line x1="22" y1="90" x2="178" y2="90" stroke="#c8932a" stroke-width=".4" opacity=".45"/>
-            <!-- Sprocket holes (top + bottom, 10 per row) -->
-            <g fill="#c8932a" opacity=".85">
-              <rect x="28" y="44" width="5" height="4"/><rect x="42" y="44" width="5" height="4"/>
-              <rect x="56" y="44" width="5" height="4"/><rect x="70" y="44" width="5" height="4"/>
-              <rect x="84" y="44" width="5" height="4"/><rect x="98" y="44" width="5" height="4"/>
-              <rect x="112" y="44" width="5" height="4"/><rect x="126" y="44" width="5" height="4"/>
-              <rect x="140" y="44" width="5" height="4"/><rect x="154" y="44" width="5" height="4"/>
-              <rect x="168" y="44" width="5" height="4"/>
-              <rect x="28" y="94" width="5" height="4"/><rect x="42" y="94" width="5" height="4"/>
-              <rect x="56" y="94" width="5" height="4"/><rect x="70" y="94" width="5" height="4"/>
-              <rect x="84" y="94" width="5" height="4"/><rect x="98" y="94" width="5" height="4"/>
-              <rect x="112" y="94" width="5" height="4"/><rect x="126" y="94" width="5" height="4"/>
-              <rect x="140" y="94" width="5" height="4"/><rect x="154" y="94" width="5" height="4"/>
-              <rect x="168" y="94" width="5" height="4"/>
+          <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+            <!-- Double frame: navy outer + gold inner (flagship emphasis) -->
+            <rect x="10" y="10" width="180" height="130" fill="none" stroke="#0a1830" stroke-width=".8"/>
+            <rect x="14" y="14" width="172" height="122" fill="none" stroke="#c8932a" stroke-width=".55" opacity=".85"/>
+            <rect x="20" y="20" width="160" height="110" fill="none" stroke="#c8932a" stroke-width=".3" opacity=".5"/>
+            <g stroke="#c8932a" stroke-width="1.1" fill="none">
+              <path d="M10 26 L10 10 L26 10"/>
+              <path d="M190 26 L190 10 L174 10"/>
+              <path d="M10 124 L10 140 L26 140"/>
+              <path d="M190 124 L190 140 L174 140"/>
             </g>
-            <!-- Frame divider -->
-            <line x1="100" y1="56" x2="100" y2="86" stroke="#c8932a" stroke-width=".4" opacity=".5" stroke-dasharray="2 2"/>
-            <!-- 2D → 3D transformation typography -->
-            <text x="62" y="79" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="15" font-weight="800" letter-spacing="3">2D</text>
-            <line x1="80" y1="72" x2="120" y2="72" stroke="#c8932a" stroke-width=".5" opacity=".4"/>
-            <polyline points="115,69 120,72 115,75" fill="none" stroke="#c8932a" stroke-width=".8" opacity=".7"/>
-            <text x="138" y="79" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="15" font-weight="800" letter-spacing="3">3D</text>
-            <!-- Corner tick marks -->
-            <path d="M6 6h6M6 6v6 M194 6h-6M194 6v6 M6 144h6M6 144v-6 M194 144h-6M194 144v-6" fill="none" stroke="#c8932a" stroke-width=".6" opacity=".5"/>
-            <line x1="10" y1="14" x2="22" y2="14" stroke="#c8932a" stroke-width=".6" opacity=".7"/>
-            <text x="10" y="23" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">KT / 3DCINE</text>
-            <text x="190" y="18" text-anchor="end" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="2" opacity=".5">ERGSN &middot; K-TECH</text>
-            <line x1="14" y1="122" x2="186" y2="122" stroke="url(#ktg3silver)" stroke-width=".8"/>
-            <text x="100" y="136" text-anchor="middle" fill="#ffffff" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" letter-spacing="3" font-weight="700" opacity=".65">FEATURE FILM &middot; 3D REMASTER</text>
+            <!-- Top seal -->
+            <line x1="42" y1="34" x2="70" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <text x="100" y="37" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3">K-TECH &middot; ERGSN</text>
+            <line x1="130" y1="34" x2="158" y2="34" stroke="#c8932a" stroke-width=".4" opacity=".7"/>
+            <!-- Five-point star (flagship mark) -->
+            <path d="M100 42 L101.2 45.5 L105 45.5 L102 48 L103 51.5 L100 49.5 L97 51.5 L98 48 L95 45.5 L98.8 45.5 Z" fill="#c8932a"/>
+            <!-- Central monogram: CINE over 3D -->
+            <text x="100" y="82" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="5">CINE</text>
+            <line x1="86" y1="88" x2="114" y2="88" stroke="#c8932a" stroke-width=".7"/>
+            <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="8">3D</text>
+            <text x="100" y="124" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="4.5" letter-spacing="3" font-weight="700" opacity=".6">FEATURE FILM &middot; 3D REMASTER</text>
+            <text x="100" y="131" text-anchor="middle" fill="#0a1830" font-family="'Syncopate',Arial,sans-serif" font-size="3.8" letter-spacing="2.5" font-weight="700" opacity=".4">N&deg; KT-3DCINE &middot; FLAGSHIP &middot; MMXXVI</text>
           </svg>
         </div>
         <p class="card-tag">Feature &middot; Theatrical &middot; Catalog</p>
@@ -3499,6 +3473,13 @@ function openModal(id) {
       <div class="c-cell"><span class="c-l">Price Range (FOB Busan)</span><span class="c-v">$${c.priceLow.toLocaleString()}–$${c.priceHigh.toLocaleString()} <span class="c-sub">/unit</span></span></div>
       <div class="c-cell"><span class="c-l">Sample Policy</span><span class="c-v">Available · DDP, buyer pays freight</span></div>
     </div>` : '';
+  let mediaHtml = '';
+  if (p.img) {
+    mediaHtml = `<div class="modal-image-row"><img src="${p.img}" class="modal-main" alt="ERGSN ${p.model}" loading="lazy"></div>`;
+  } else {
+    const cardSvg = document.querySelector(`.product-card[data-model="${id}"] .card-image-svg svg`);
+    if (cardSvg) mediaHtml = `<div class="modal-image-row modal-svg-row">${cardSvg.outerHTML}</div>`;
+  }
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-hd">
       <div class="modal-hd-text">
@@ -3509,7 +3490,7 @@ function openModal(id) {
       <button class="modal-close" onclick="closeModal()" aria-label="Close">\u2715</button>
     </div>
     ${commercial}
-    ${p.img ? `<div class="modal-image-row"><img src="${p.img}" class="modal-main" alt="ERGSN ${p.model} shredder" loading="lazy"></div>` : ''}
+    ${mediaHtml}
     <div class="modal-bd">
       <div><p class="modal-sec-title">Technical Specifications</p><table class="spec-tbl"><tbody>${specs}</tbody></table></div>
       <div><p class="modal-sec-title">Key Features &amp; Benefits</p><ul class="feat-list">${feats}</ul></div>
