@@ -132,9 +132,9 @@
   .toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: calc(100vw - 40px); }
   .toast { background: var(--navy-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 16px; color: var(--white); font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,.5); animation: toastIn .25s ease-out; pointer-events: auto; max-width: 320px; }
   @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(52,210,152,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
-  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
-  @media print{.ergsn-back-fab{display:none}}
+  .ergsn-back-bottom{display:block;margin:3rem 0 0;padding-top:2rem;border-top:1px dashed var(--border,#2a2a2a);font-family:var(--fb,system-ui,sans-serif);font-size:12px;font-weight:600;color:var(--tx-lt,#8b8b8b);letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
+  .ergsn-back-bottom:hover{color:var(--gold,#34d298)}
+  @media print{.ergsn-back-bottom{display:none}}
 </style>
 </head>
 <body>
@@ -435,7 +435,8 @@
 
 <footer>
   <div class="container">
-    <p>&copy; 2013 ERGSN CO., LTD. · 서울특별시 중구 서애로5길 12-21 수송빌딩 503호 · <a href="privacy.html">개인정보 처리방침</a> · <a href="terms.html">이용약관</a> · <a href="/ergsn/" style="color:var(--gold)">글로벌 사이트 (EN) →</a></p>
+    <a href="/ergsn/" class="ergsn-back-bottom" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
+    <p style="margin-top:1.4rem">&copy; 2013 ERGSN CO., LTD. · 서울특별시 중구 서애로5길 12-21 수송빌딩 503호 · <a href="privacy.html">개인정보 처리방침</a> · <a href="terms.html">이용약관</a> · <a href="/ergsn/" style="color:var(--gold)">글로벌 사이트 (EN) →</a></p>
   </div>
 </footer>
 
@@ -517,6 +518,5 @@ function submitPartnerForm(e) {
   });
 }
 </script>
-<a href="/ergsn/" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>

@@ -64,9 +64,9 @@
   .template-card a { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--gold); }
   .empty { text-align: center; padding: 2rem; color: var(--tx-lt); font-size: 13px; }
   .fine { font-size: 12px; color: var(--tx-lt); line-height: 1.6; margin-top: 1.4rem; padding: 14px 18px; background: #0d0d0d; border-radius: 10px; border-left: 3px solid var(--gold); }
-  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(200,147,42,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
-  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
-  @media print{.ergsn-back-fab{display:none}}
+  .ergsn-back-bottom{display:block;margin:3rem 0 0;padding-top:2rem;border-top:1px dashed #2a2a2a;font-family:var(--fb,system-ui,sans-serif);font-size:12px;font-weight:600;color:var(--tx-lt,#8b8b8b);letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
+  .ergsn-back-bottom:hover{color:var(--gold,#c8932a)}
+  @media print{.ergsn-back-bottom{display:none}}
 </style>
 </head>
 <body>
@@ -161,6 +161,7 @@
 
   <p class="fine"><strong>Disclaimer:</strong> HS codes and duty rates shown are directional guidance based on harmonized-system chapter classifications and publicly-available tariff schedules as of 2026-Q1. Always verify against your destination country's official customs tariff before shipping, and engage your customs broker for binding rulings on borderline classifications. ERGSN's trade desk can assist verified partners with classification review on request.</p>
 
+  <a href="index.html" class="ergsn-back-bottom" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </div>
 
 <script>
@@ -334,6 +335,5 @@ function runCertLookup(){
 }
 </script>
 
-<a href="index.html" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>

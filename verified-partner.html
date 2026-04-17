@@ -57,9 +57,9 @@
   .rule-card.good h3::before { content: "\2713 "; color: #15d78a; }
   .cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 2rem; padding: 14px 26px; background: var(--gold); color: #0a0a0a; font-family: var(--fb); font-weight: 700; border-radius: 10px; font-size: 14px; }
   .cta:hover { opacity: .9; text-decoration: none; }
-  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(200,147,42,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
-  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
-  @media print{.ergsn-back-fab{display:none}}
+  .ergsn-back-bottom{display:block;margin:3rem 0 0;padding-top:2rem;border-top:1px dashed #2a2a2a;font-family:var(--fb,system-ui,sans-serif);font-size:12px;font-weight:600;color:var(--tx-lt,#8b8b8b);letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
+  .ergsn-back-bottom:hover{color:var(--gold,#c8932a)}
+  @media print{.ergsn-back-bottom{display:none}}
 </style>
 </head>
 <body>
@@ -160,8 +160,9 @@
     <a href="partners-kr.html#apply" class="cta">한국 제조사 신청 &rarr;</a>
     <a href="mailto:ceodon@gmail.com?subject=Verified%20Partner%20Program" class="cta" style="background:transparent;color:var(--gold);border:1px solid var(--gold);margin-left:10px">Email ERGSN trade team</a>
   </div>
+
+  <a href="index.html" class="ergsn-back-bottom" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </div>
 
-<a href="index.html" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>
