@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trade Mission Live · Q3 2026 · ERGSN</title>
 <meta name="description" content="ERGSN Trade Mission Live — quarterly 90-minute broadcast featuring 5 verified Korean makers presenting directly to 50+ global procurement buyers. Inaugural edition July 15, 2026 KST.">
@@ -201,10 +202,11 @@
 
 <div class="toast" id="missionToast">✓ Received. ERGSN trade desk will reply within 1 business day.</div>
 
+<script src="scripts/config.js"></script>
 <script>
   // Submissions route through the existing FormSubmit endpoint used by the main RFQ form.
-  const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
-  const RFQ_CC = 'ceodon69@gmail.com';
+  const RFQ_ENDPOINT = (window.ERGSN_CONFIG && window.ERGSN_CONFIG.RFQ_ENDPOINT) || 'https://formsubmit.co/ajax/ceodon@gmail.com';
+  const RFQ_CC       = (window.ERGSN_CONFIG && window.ERGSN_CONFIG.RFQ_CC)       || 'ceodon69@gmail.com';
   function showToast(){ const t=document.getElementById('missionToast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3600); }
   function submitMission(e, role){
     e.preventDefault();

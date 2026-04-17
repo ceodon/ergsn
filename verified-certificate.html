@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ERGSN Verified Partner Certificate</title>
 <meta name="robots" content="noindex,nofollow">
@@ -172,14 +173,17 @@
 
 <script>
   (function populate(){
+    // decodeURIComponent throws on malformed percent-encoding — wrap every
+    // call so one bad param doesn't halt the rest of the rendering.
+    const safeDecode = s => { try { return decodeURIComponent(s); } catch(_) { return s; } };
     const q = new URLSearchParams(location.search);
     const name = q.get('company');
     const num  = q.get('number');
     const date = q.get('date') || new Date().toISOString().slice(0,10);
-    if (name) document.getElementById('companyName').textContent = decodeURIComponent(name);
-    if (num)  document.getElementById('certNumber').textContent  = decodeURIComponent(num);
+    if (name) document.getElementById('companyName').textContent = safeDecode(name);
+    if (num)  document.getElementById('certNumber').textContent  = safeDecode(num);
     document.getElementById('verifiedSince').textContent = date;
-    document.title = (name ? decodeURIComponent(name) + ' — ' : '') + 'ERGSN Verified Partner Certificate';
+    document.title = (name ? safeDecode(name) + ' — ' : '') + 'ERGSN Verified Partner Certificate';
   })();
 </script>
 

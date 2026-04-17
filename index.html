@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERGSN CO., LTD. — Korea's Trusted Trade Gateway</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -81,8 +82,12 @@
   ]
 }
 </script>
-<!-- Privacy-friendly analytics (Plausible — cookieless, GDPR-compliant) -->
-<script defer data-domain="ceodon.github.io/ergsn" src="https://plausible.io/js/script.outbound-links.js"></script>
+<!-- Privacy-friendly analytics (Plausible — cookieless, GDPR-compliant).
+     Note: SRI intentionally omitted — Plausible publishes an unversioned rolling
+     script, so a pinned integrity hash would break with every provider update.
+     Primary defense for this origin is the CSP script-src allow-list above,
+     which restricts external script loads to plausible.io only. -->
+<script defer data-domain="ceodon.github.io/ergsn" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 <style>
 /* ── TOKENS ───────────────────────────────── */
 :root {
@@ -2050,8 +2055,8 @@ button:focus:not(:focus-visible) { outline: none; }
             <li><a href="#tools"><span class="ds-name">Book a Demo</span><span class="ds-desc">30-min Zoom · compliance checker · landed cost</span></a></li>
             <li><a href="trade-mission.html"><span class="ds-name">Trade Mission Live</span><span class="ds-desc">Quarterly broadcast · 5 makers × 50 buyers</span></a></li>
             <li><a href="tracker.html"><span class="ds-name">RFQ Tracker</span><span class="ds-desc">Check status of submitted RFQ</span></a></li>
-            <li><a href="https://t.me/ceodon" target="_blank" rel="noopener"><span class="ds-name">Telegram</span><span class="ds-desc">Chat directly with ERGSN trade team</span></a></li>
-            <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener"><span class="ds-name">WhatsApp</span><span class="ds-desc">Chat directly with ERGSN trade team</span></a></li>
+            <li><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer"><span class="ds-name">Telegram</span><span class="ds-desc">Chat directly with ERGSN trade team</span></a></li>
+            <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer"><span class="ds-name">WhatsApp</span><span class="ds-desc">Chat directly with ERGSN trade team</span></a></li>
             <li><a href="partners-kr.html"><span class="ds-name"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold);vertical-align:1px">KR</span>파트너 문의</span><span class="ds-desc">한국 제조사 입점 신청</span></a></li>
           </ul>
         </li>
@@ -2120,8 +2125,8 @@ button:focus:not(:focus-visible) { outline: none; }
       <li><a href="#tools" onclick="closeMenu()">Book a Demo</a></li>
       <li><a href="trade-mission.html" onclick="closeMenu()">Trade Mission Live</a></li>
       <li><a href="tracker.html" onclick="closeMenu()">RFQ Tracker</a></li>
-      <li><a href="https://t.me/ceodon" target="_blank" rel="noopener" onclick="closeMenu()">Telegram</a></li>
-      <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener" onclick="closeMenu()">WhatsApp</a></li>
+      <li><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer" onclick="closeMenu()">Telegram</a></li>
+      <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer" onclick="closeMenu()">WhatsApp</a></li>
       <li><a href="partners-kr.html" onclick="closeMenu()"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold)">KR</span>한국 파트너 문의</a></li>
     </ul>
   </details>
@@ -3461,8 +3466,8 @@ button:focus:not(:focus-visible) { outline: none; }
           <li><a href="#tools">Book a Demo</a></li>
           <li><a href="trade-mission.html">Trade Mission Live</a></li>
           <li><a href="tracker.html">RFQ Tracker</a></li>
-          <li><a href="https://t.me/ceodon" target="_blank" rel="noopener">Telegram</a></li>
-          <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+          <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
           <li><a href="partners-kr.html" style="color:var(--gold)"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;vertical-align:1px">KR</span>파트너 문의</a></li>
         </ul>
       </div>
@@ -4193,7 +4198,16 @@ function qaSave(l) { try { localStorage.setItem('ergsn_qa', JSON.stringify(l)); 
 function initQAWall() {
   const combined = [...qaStore(), ...QA_SEED];
   const el = document.getElementById('qaList'); if (!el) return;
-  el.innerHTML = combined.slice(0, 20).map(q => `<div class="qa-item"><p class="qa-q">${q.q}</p>${q.a?`<p class="qa-a">${q.a}</p>`:`<p class="qa-a" style="font-style:italic;opacity:.6">ERGSN team will answer shortly…</p>`}<p class="qa-meta">— ${q.name||'Anonymous'} · ${q.country||'Global'} · ${q.t||'just now'}</p></div>`).join('');
+  // Q&A entries originate from user-editable localStorage — escape every
+  // interpolation to neutralise stored-XSS vectors.
+  el.innerHTML = combined.slice(0, 20).map(q => {
+    const safeQ = escapeHTML(q.q);
+    const safeA = q.a ? `<p class="qa-a">${escapeHTML(q.a)}</p>` : `<p class="qa-a" style="font-style:italic;opacity:.6">ERGSN team will answer shortly&hellip;</p>`;
+    const safeName = escapeHTML(q.name || 'Anonymous');
+    const safeCountry = escapeHTML(q.country || 'Global');
+    const safeT = escapeHTML(q.t || 'just now');
+    return `<div class="qa-item"><p class="qa-q">${safeQ}</p>${safeA}<p class="qa-meta">&mdash; ${safeName} &middot; ${safeCountry} &middot; ${safeT}</p></div>`;
+  }).join('');
 }
 function submitQA(e) {
   e.preventDefault();
@@ -4207,6 +4221,20 @@ function submitQA(e) {
   try { sendTG(`❓ *Q&A Wall submission*\n\n*From:* ${name} (${country})\n*Q:* ${q}`); } catch(_) {}
   document.getElementById('qaQ').value = '';
   initQAWall();
+}
+
+/* ── HTML escape (for innerHTML template interpolation) ───
+   textContent is still the safest path — use escapeHTML only where
+   building HTML strings with dynamic content is unavoidable.
+   Covers &, <, >, ", ', / to neutralise tag/attribute breakouts. */
+function escapeHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/\//g, '&#x2F;');
 }
 
 /* ── Toast system ─────────────────────── */
@@ -4241,26 +4269,65 @@ function loadUserWanted() {
 function saveUserWanted(list) {
   try { localStorage.setItem('ergsn_wanted', JSON.stringify(list)); } catch(_) {}
 }
-function wantedCardHTML(item, isMine) {
-  const safe = s => String(s || '').replace(/[<>]/g, '');
-  return `<div class="wanted-card${isMine ? ' wanted-card-mine' : ''}">`
-    + (isMine ? '<span class="wanted-mine-flag">Your post</span>' : '')
-    + `<div class="wanted-card-row"><span class="wanted-country">${safe(item.country)}</span><span class="wanted-dot">·</span><span>${safe(item.industry)}</span></div>`
-    + `<p class="wanted-cat">${safe(item.cat)}</p>`
-    + `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:8px;flex-wrap:wrap">`
-    + `<span class="wanted-band">${safe(item.band)}</span>`
-    + `<span class="wanted-age">${safe(item.age)}</span>`
-    + `</div>`
-    + (isMine ? '' : `<button type="button" class="wanted-match-btn" onclick="offerMatch('${safe(item.cat).replace(/'/g,"\\'")}')">I can supply this</button>`)
-    + `</div>`;
+function wantedCardNode(item, isMine) {
+  // Built entirely with DOM APIs so every dynamic value lands in textContent —
+  // no attribute/tag break-out is possible even if a user stores crafted input.
+  const card = document.createElement('div');
+  card.className = 'wanted-card' + (isMine ? ' wanted-card-mine' : '');
+  if (isMine) {
+    const flag = document.createElement('span');
+    flag.className = 'wanted-mine-flag';
+    flag.textContent = 'Your post';
+    card.appendChild(flag);
+  }
+  const row = document.createElement('div');
+  row.className = 'wanted-card-row';
+  const country = document.createElement('span');
+  country.className = 'wanted-country';
+  country.textContent = item.country || '';
+  const dot = document.createElement('span');
+  dot.className = 'wanted-dot';
+  dot.textContent = '\u00b7';
+  const industry = document.createElement('span');
+  industry.textContent = item.industry || '';
+  row.append(country, dot, industry);
+  card.appendChild(row);
+
+  const cat = document.createElement('p');
+  cat.className = 'wanted-cat';
+  cat.textContent = item.cat || '';
+  card.appendChild(cat);
+
+  const footer = document.createElement('div');
+  footer.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:8px;flex-wrap:wrap';
+  const band = document.createElement('span');
+  band.className = 'wanted-band';
+  band.textContent = item.band || '';
+  const age = document.createElement('span');
+  age.className = 'wanted-age';
+  age.textContent = item.age || '';
+  footer.append(band, age);
+  card.appendChild(footer);
+
+  if (!isMine) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wanted-match-btn';
+    btn.textContent = 'I can supply this';
+    // addEventListener binds the raw value — no string interpolation into HTML.
+    btn.addEventListener('click', () => offerMatch(item.cat || ''));
+    card.appendChild(btn);
+  }
+  return card;
 }
 function renderWantedBoard() {
   const grid = document.getElementById('wantedGrid');
   if (!grid) return;
+  grid.innerHTML = '';
   const mine = loadUserWanted();
   const seed = WANTED_SEED.slice();
-  const html = mine.map(m => wantedCardHTML(m, true)).concat(seed.map(s => wantedCardHTML(s, false))).join('');
-  grid.innerHTML = html;
+  mine.forEach(m => grid.appendChild(wantedCardNode(m, true)));
+  seed.forEach(s => grid.appendChild(wantedCardNode(s, false)));
 }
 function openWantedForm() {
   const ov = document.getElementById('wantedOverlay');
