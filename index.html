@@ -1420,6 +1420,7 @@ section { scroll-margin-top: var(--nav-h); }
   max-width: 85%; padding: 10px 14px;
   font-size: 13px; line-height: 1.55; border-radius: 14px;
   animation: chatPop .25s ease;
+  white-space: pre-line;
 }
 @keyframes chatPop { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 .chat-msg.bot {
@@ -3167,10 +3168,10 @@ button:focus:not(:focus-visible) { outline: none; }
 <button id="chatToggle" type="button" aria-label="Product advisor" onclick="toggleChat()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h.01M12 9h.01M16 9h.01"/></svg>
 </button>
-<div id="chatPanel" role="dialog" aria-modal="false" aria-label="ERGSN Product Advisor" aria-hidden="true">
+<div id="chatPanel" role="dialog" aria-modal="false" aria-label="ERGSN Trade Advisor" aria-hidden="true">
   <div class="chat-hd">
     <span class="chat-hd-dot"></span>
-    <div><p class="chat-hd-title">ERGSN Product Advisor</p><p class="chat-hd-sub">Find the right shredder</p></div>
+    <div><p class="chat-hd-title">ERGSN Trade Advisor</p><p class="chat-hd-sub">K-Security · K-Tech · K-Energy · K-Bio</p></div>
     <button class="chat-close" onclick="toggleChat()" aria-label="Close chat">&times;</button>
   </div>
   <div class="chat-body" id="chatBody"></div>
@@ -4707,9 +4708,8 @@ function handleQuoteChat() {
 
 const CHAT_TREE = {
   start: {
-    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway — every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security — DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Energy — HYGEN Generator (KE-Option A / B / C / D)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing partners for 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nHow may I assist you today?",
+    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway — every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n\n• K-Security — DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n\n• K-Energy — HYGEN Generator (KE-Option A / B / C / D)\n\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing partners for 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nHow may I assist you today?",
     opts: [
-      { label: 'Find the right shredder for me', next: 'find_office_size' },
       { label: 'Browse K-Security (DL Series)', next: 'browse_models' },
       { label: 'Browse K-Tech 3D services', next: 'browse_ktech' },
       { label: 'Browse K-Energy (HYGEN Generator)', next: 'browse_kenergy' },
@@ -4736,7 +4736,8 @@ const CHAT_TREE = {
       { label: 'DL-16X', action: 'browse_dl16x' },
       { label: 'DL-10XD', action: 'browse_dl10xd' },
       { label: 'DL-12XD', action: 'browse_dl12xd' },
-      { label: 'DL-16XD (Flagship)', action: 'browse_dl16xd' }
+      { label: 'DL-16XD (Flagship)', action: 'browse_dl16xd' },
+      { label: 'Help me pick by office size', next: 'find_office_size' }
     ]
   },
   browse_ktech: {
@@ -4777,21 +4778,21 @@ const CHAT_TREE = {
     msg: "ERGSN CO., LTD. is a Seoul-based trade gateway founded in 2013. Rather than a single-product seller, we are a curator: every manufacturer in our network passes our 4-step verification (Vendor Audit \u2192 Quality Verification \u2192 Compliance Check \u2192 Long-term Partnership) before their products are offered to global buyers.\n\nOur first verified partner is ERGSN CO., LTD. itself \u2014 manufacturing the DL Series shredders that have been GSA Schedule listed and procured by U.S. defense agencies for over a decade through Capital Shredder Corp. (Rockville, MD).\n\nWould you like to know more?",
     opts: [
       { label: 'See the verification process', next: 'verify_detail' },
-      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Browse catalog', next: 'start' },
       { label: 'Trade terms', next: 'trade_info' }
     ]
   },
   verify_detail: {
     msg: "Our 4-Step Verification:\n\n1. Vendor Audit \u2014 on-site facility inspection, financials, 3-year operational history\n2. Quality Verification \u2014 independent product testing against DIN/ISO/ANSI standards\n3. Compliance Check \u2014 export documentation, HS codes, target-market regulations (HIPAA, GSA, CE)\n4. Long-term Partnership \u2014 formal supply agreement, dedicated account management, ongoing quality monitoring\n\nThis is why our buyers know that anything they purchase through ERGSN has already been thoroughly vetted.",
     opts: [
-      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Browse catalog', next: 'start' },
       { label: 'Request a quote', next: 'quote_direct' }
     ]
   },
   trade_info: {
     msg: "Standard trade terms:\n\n\u2022 Incoterms: CIF to any major port worldwide (FOB, CFR, EXW also available)\n\u2022 Payment: T/T 50% advance, 50% before shipment (L/C negotiable)\n\u2022 Lead time: 4\u20136 weeks from advance payment\n\u2022 HS Code: 8472.90\n\u2022 Packaging: Individual crating for ocean freight\n\nMay I help with anything else?",
     opts: [
-      { label: 'Find the right shredder', next: 'find_office_size' },
+      { label: 'Browse catalog', next: 'start' },
       { label: 'Request a quote directly', next: 'quote_direct' }
     ]
   },
@@ -4926,7 +4927,7 @@ function offerReturnFollowUp(ret) {
   } else if (ret.type === 'section') {
     chatBotMsg(`Welcome back! How can I help you next?`, () => {
       chatOpts([
-        { label: 'Find the right shredder', action: () => chatStep('find_office_size') },
+        { label: 'Browse catalog', action: () => chatStep('start') },
         { label: 'Request a quote', action: () => chatStep('quote_direct') },
         { label: 'About verification process', action: () => chatStep('verify_detail') },
         { label: 'Trade terms', action: () => chatStep('trade_info') }
