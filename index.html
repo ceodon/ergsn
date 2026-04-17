@@ -3265,6 +3265,8 @@ function applyLang(lang) {
   const sel = document.getElementById('langSel'); if (sel) sel.value = lang;
   const mobSel = document.getElementById('langSelMobile'); if (mobSel) mobSel.value = lang;
   try { localStorage.setItem('ergsn_lang', lang); } catch(_) {}
+  // Allow the hybrid-policy intro to re-show once in the new language.
+  if (typeof chatContext !== 'undefined') chatContext.introShown = false;
   return true;
 }
 function setLang(lang) {
@@ -4199,13 +4201,19 @@ function maybePromptQuote() {
 }
 
 // ── Multilingual bot phrases ──
+// Hybrid policy: short UI labels are localized; the long technical answers
+// (KB responses, model specs, Incoterms) stay in English for precision.
+// `intro` is shown once per session as the opening bot message when the
+// active language is not English — it explains the hybrid approach.
 const CHAT_L = {
-  en:{greet:"How can I help?",followup:"You might also want to know:",fallback:"I can help with:",human:"Talk to a Human",quote:"Set Up Quote",specs:"View Full Specs",techNote:""},
-  es:{greet:"¿Cómo puedo ayudarle?",followup:"También podría interesarle:",fallback:"Puedo ayudarle con:",human:"Hablar con una Persona",quote:"Solicitar Cotización",specs:"Ver Especificaciones",techNote:"\n\n(Detalles técnicos en inglés para precisión)"},
-  ar:{greet:"كيف يمكنني مساعدتك؟",followup:"قد يهمك أيضاً:",fallback:"يمكنني المساعدة في:",human:"التحدث مع شخص",quote:"طلب عرض سعر",specs:"عرض المواصفات",techNote:"\n\n(التفاصيل التقنية بالإنجليزية للدقة)"},
-  fr:{greet:"Comment puis-je vous aider ?",followup:"Vous pourriez aussi vouloir savoir :",fallback:"Je peux vous aider avec :",human:"Parler à un humain",quote:"Demander un Devis",specs:"Voir les Spécifications",techNote:"\n\n(Détails techniques en anglais pour plus de précision)"},
-  ja:{greet:"どのようなご用件でしょうか？",followup:"こちらもご参考ください：",fallback:"以下のご質問にお答えできます：",human:"担当者に相談",quote:"見積もり依頼",specs:"詳細仕様を見る",techNote:"\n\n(技術詳細は正確性のため英語で記載)"},
-  tr:{greet:"Size nasıl yardımcı olabilirim?",followup:"Şunları da öğrenmek isteyebilirsiniz:",fallback:"Şu konularda yardımcı olabilirim:",human:"Bir Kişiyle Konuşun",quote:"Teklif Talep Et",specs:"Teknik Özellikleri Gör",techNote:"\n\n(Teknik detaylar doğruluk için İngilizce)"}
+  en:{greet:"How can I help?",followup:"You might also want to know:",fallback:"I can help with:",human:"Talk to a Human",quote:"Set Up Quote",specs:"View Full Specs",techNote:"",intro:""},
+  es:{greet:"¿Cómo puedo ayudarle?",followup:"También podría interesarle:",fallback:"Puedo ayudarle con:",human:"Hablar con una Persona",quote:"Solicitar Cotización",specs:"Ver Especificaciones",techNote:"\n\n(Detalles técnicos en inglés para precisión)",intro:"Respondo en español cuando es posible. Las especificaciones técnicas (certificaciones, Incoterms, dimensiones) se mantienen en inglés para garantizar la precisión."},
+  ar:{greet:"كيف يمكنني مساعدتك؟",followup:"قد يهمك أيضاً:",fallback:"يمكنني المساعدة في:",human:"التحدث مع شخص",quote:"طلب عرض سعر",specs:"عرض المواصفات",techNote:"\n\n(التفاصيل التقنية بالإنجليزية للدقة)",intro:"أُجيبك بالعربية قدر الإمكان. المواصفات التقنية (الشهادات وشروط Incoterms والأبعاد) تبقى بالإنجليزية لضمان الدقة."},
+  fr:{greet:"Comment puis-je vous aider ?",followup:"Vous pourriez aussi vouloir savoir :",fallback:"Je peux vous aider avec :",human:"Parler à un humain",quote:"Demander un Devis",specs:"Voir les Spécifications",techNote:"\n\n(Détails techniques en anglais pour plus de précision)",intro:"Je réponds en français quand c'est possible. Les spécifications techniques (certifications, Incoterms, dimensions) sont en anglais pour garantir l'exactitude."},
+  ja:{greet:"どのようなご用件でしょうか？",followup:"こちらもご参考ください：",fallback:"以下のご質問にお答えできます：",human:"担当者に相談",quote:"見積もり依頼",specs:"詳細仕様を見る",techNote:"\n\n(技術詳細は正確性のため英語で記載)",intro:"可能な範囲で日本語でお答えします。技術仕様（認証、インコタームズ、寸法）は正確性のため英語表記となります。"},
+  tr:{greet:"Size nasıl yardımcı olabilirim?",followup:"Şunları da öğrenmek isteyebilirsiniz:",fallback:"Şu konularda yardımcı olabilirim:",human:"Bir Kişiyle Konuşun",quote:"Teklif Talep Et",specs:"Teknik Özellikleri Gör",techNote:"\n\n(Teknik detaylar doğruluk için İngilizce)",intro:"Mümkün olduğunca Türkçe yanıt veriyorum. Teknik özellikler (sertifikalar, Incoterms, boyutlar) doğruluk için İngilizce verilir."},
+  "zh-Hans":{greet:"请问有什么可以帮您？",followup:"您可能还想了解：",fallback:"我可以为您解答：",human:"与真人对话",quote:"获取报价",specs:"查看完整规格",techNote:"\n\n(技术细节以英文呈现，以确保准确性)",intro:"我会尽可能以中文回答。技术规格（认证、贸易术语、尺寸）以英文呈现，以确保准确性。"},
+  "zh-Hant":{greet:"請問有什麼可以幫您？",followup:"您可能還想了解：",fallback:"我可以為您解答：",human:"與真人對話",quote:"取得報價",specs:"查看完整規格",techNote:"\n\n(技術細節以英文呈現，以確保準確性)",intro:"我會盡可能以中文回答。技術規格（認證、貿易條件、尺寸）以英文呈現，以確保準確性。"}
 };
 function cl(key) { const lang = document.documentElement.lang || 'en'; return (CHAT_L[lang] && CHAT_L[lang][key]) || CHAT_L.en[key] || ''; }
 
@@ -4929,7 +4937,17 @@ function offerReturnFollowUp(ret) {
 function startChat(){
   chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null;
   chatState.qual = { volume:null, timeline:null, experience:null, payment:null, tier:null };
-  chatStep('start');
+  // Hybrid-language intro: when the active UI language is not English, prepend
+  // a one-time note explaining why technical content remains in English.
+  // Suppress on restartChat() within the same session via chatContext.introShown.
+  const lang = document.documentElement.lang || 'en';
+  const intro = (CHAT_L[lang] && CHAT_L[lang].intro) || '';
+  if (intro && !chatContext.introShown) {
+    chatContext.introShown = true;
+    chatBotMsg(intro, () => chatStep('start'));
+  } else {
+    chatStep('start');
+  }
 }
 
 let chatBotMsgActive = 0;
