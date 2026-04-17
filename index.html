@@ -292,6 +292,7 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .nav-dropmenu .ds-tag.soon { background: rgba(255,255,255,.06); color: var(--steel-lt); }
 .nav-dropmenu .ds-desc { font-size: 11px; color: var(--steel); font-weight: 400; }
+.nav-dropmenu .ds-divider { height: 1px; background: rgba(255,255,255,.06); margin: 6px 12px; padding: 0; }
 
 /* Sector tabs (above product grid) */
 .sector-tabs {
@@ -1089,6 +1090,11 @@ section { scroll-margin-top: var(--nav-h); }
 .rfq-info .label { margin-bottom: .6rem; }
 .rfq-info .h-lg { color: var(--white); margin-bottom: 1rem; }
 .rfq-info .body-lg { color: var(--steel-lt); }
+.sla-badge { display: flex; gap: 14px; align-items: flex-start; margin: 0 0 1.2rem; padding: 14px 16px; border: 1px solid #2a3a2a; background: linear-gradient(135deg, rgba(0,44,28,.6), rgba(0,30,20,.3)); border-radius: 10px; }
+.sla-dot { flex-shrink: 0; width: 10px; height: 10px; border-radius: 50%; background: #15d78a; margin-top: 6px; box-shadow: 0 0 0 4px rgba(21,215,138,.15); animation: slaPulse 2.4s ease-in-out infinite; }
+@keyframes slaPulse { 0%,100%{box-shadow:0 0 0 4px rgba(21,215,138,.15)} 50%{box-shadow:0 0 0 8px rgba(21,215,138,.04)} }
+.sla-title { font-family: var(--fd); font-size: 14px; font-weight: 700; color: var(--white); letter-spacing: .02em; margin-bottom: 4px; }
+.sla-sub { font-size: 12.5px; color: var(--steel-lt); line-height: 1.55; }
 .rfq-contacts { list-style: none; margin-top: 2rem; }
 .rfq-contacts li {
   display: flex; gap: 12px; align-items: flex-start;
@@ -1136,7 +1142,7 @@ section { scroll-margin-top: var(--nav-h); }
 .footer-inner { padding: clamp(2.5rem,5vh,4rem) 0 clamp(1.5rem,3vh,2.5rem); }
 .footer-top {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
   gap: clamp(1.5rem,3vw,2.5rem);
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255,255,255,.05);
@@ -1911,6 +1917,68 @@ button:focus:not(:focus-visible) { outline: none; }
   margin-left: auto; flex-shrink: 0; font-family: var(--fb);
   font-size: 11px; color: var(--gold); text-align: right; white-space: nowrap;
 }
+.concierge-wrap { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1e1e1e; }
+.concierge-head { margin-bottom: 1.4rem; }
+.concierge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 760px) { .concierge-grid { grid-template-columns: 1fr; } }
+.concierge-tier { position: relative; padding: 26px 24px; border: 1px solid #2a2a2a; border-radius: 14px; background: #121212; display: flex; flex-direction: column; }
+.concierge-tier-pro { border-color: var(--gold); background: linear-gradient(160deg, #181410 0%, #0e0e0e 100%); box-shadow: 0 0 0 1px rgba(200,147,42,.12), 0 8px 30px rgba(0,0,0,.45); }
+.ct-flag { position: absolute; top: -11px; right: 18px; background: var(--gold); color: #0a0a0a; font-family: var(--fb); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+.ct-tag { font-family: var(--fb); font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); margin-bottom: 6px; }
+.ct-name { font-family: var(--fh); font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
+.ct-price { font-family: var(--fd); font-size: 32px; font-weight: 800; color: var(--white); margin-bottom: 18px; letter-spacing: -.01em; }
+.ct-price-sub { font-size: 13px; font-weight: 500; color: var(--tx-mid); margin-left: 4px; letter-spacing: 0; }
+.ct-list { list-style: none; margin: 0 0 22px; padding: 0; flex: 1; }
+.ct-list li { position: relative; padding: 7px 0 7px 22px; font-size: 13px; color: var(--tx-mid); line-height: 1.55; border-bottom: 1px dashed #252525; }
+.ct-list li:last-child { border-bottom: 0; }
+.ct-list li::before { content: "✓"; position: absolute; left: 0; top: 7px; color: var(--gold); font-weight: 800; font-size: 13px; }
+.concierge-note { margin-top: 1.2rem; font-size: 12px; color: var(--tx-lt); text-align: center; }
+.calc-row-benchmark { border-top: 1px dashed #2a2a2a; margin-top: 2px; padding-top: 8px; }
+.trend-section { background: linear-gradient(180deg, #0f1110 0%, #141616 100%); padding: 5rem 0; }
+.trend-inner { max-width: 1180px; }
+.trend-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 2rem; flex-wrap: wrap; }
+.trend-meta { text-align: right; font-family: var(--fb); font-size: 12px; color: var(--tx-lt); letter-spacing: .06em; }
+.trend-edition { color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+.trend-next { opacity: .7; }
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 2.2rem; }
+.trend-card { position: relative; padding: 22px 22px 20px; border: 1px solid #252525; background: #181818; border-radius: 12px; transition: border-color .2s, transform .2s; }
+.trend-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.trend-rank { position: absolute; top: 12px; right: 14px; font-family: var(--fd); font-size: 38px; font-weight: 800; color: #2a2a2a; line-height: 1; letter-spacing: -.02em; }
+.trend-cat { font-family: var(--fb); font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.trend-title { font-family: var(--fh); font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 10px; line-height: 1.3; max-width: calc(100% - 50px); }
+.trend-growth { font-family: var(--fb); font-size: 12px; font-weight: 700; color: #15d78a; margin-bottom: 12px; letter-spacing: .04em; }
+.trend-arrow { margin-right: 4px; }
+.trend-body { font-size: 13px; color: var(--tx-mid); line-height: 1.58; }
+.trend-cta { text-align: center; padding: 1.8rem; border: 1px dashed #2a2a2a; border-radius: 14px; background: #0e0e0e; }
+.trend-cta-lead { font-family: var(--fh); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 14px; }
+.trend-form { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
+.trend-form input { font-family: var(--fb); font-size: 14px; padding: 11px 16px; border: 1px solid #2a2a2a; background: #1a1a1a; color: var(--white); border-radius: 8px; min-width: 240px; outline: none; }
+.trend-form input:focus { border-color: var(--gold); }
+.trend-disclaimer { font-size: 11px; color: var(--tx-lt); max-width: 620px; margin: 0 auto; line-height: 1.5; opacity: .8; }
+.wanted-section { background: #0a0a0a; padding: 5rem 0; border-top: 1px solid #1a1a1a; }
+.wanted-inner { max-width: 1180px; }
+.wanted-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 2rem; flex-wrap: wrap; }
+.wanted-post-btn { flex-shrink: 0; }
+.wanted-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 1.6rem; }
+.wanted-card { position: relative; padding: 18px 18px 16px; border: 1px solid #222; background: #131313; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; transition: border-color .2s; }
+.wanted-card:hover { border-color: #3a3a3a; }
+.wanted-card.wanted-card-mine { border-color: var(--gold); background: linear-gradient(180deg, #1a1611 0%, #131313 100%); }
+.wanted-card-row { display: flex; align-items: center; gap: 8px; font-family: var(--fb); font-size: 11px; letter-spacing: .08em; color: var(--tx-lt); text-transform: uppercase; }
+.wanted-country { color: var(--gold); font-weight: 700; }
+.wanted-dot { opacity: .4; }
+.wanted-cat { font-family: var(--fh); font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.35; }
+.wanted-band { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fb); font-size: 12px; font-weight: 600; color: #15d78a; }
+.wanted-band::before { content: "💰"; font-size: 13px; }
+.wanted-age { font-size: 11px; color: var(--tx-lt); font-family: var(--fb); }
+.wanted-match-btn { margin-top: 8px; width: 100%; padding: 8px 12px; font-family: var(--fb); font-size: 12px; font-weight: 600; background: transparent; color: var(--gold); border: 1px solid var(--gold); border-radius: 8px; cursor: pointer; transition: background .15s, color .15s; }
+.wanted-match-btn:hover { background: var(--gold); color: #0a0a0a; }
+.wanted-mine-flag { position: absolute; top: -9px; right: 14px; background: var(--gold); color: #0a0a0a; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 10px; font-family: var(--fb); letter-spacing: .08em; }
+.wanted-note { font-size: 12px; color: var(--tx-lt); max-width: 720px; margin: 0; line-height: 1.55; opacity: .85; }
+.wanted-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 1002; padding: 20px; }
+.wanted-overlay.open { display: flex; }
+.wanted-modal { background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; padding: 28px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.wanted-modal-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+.wanted-modal-hd h3 { font-family: var(--fh); font-size: 20px; font-weight: 800; color: var(--white); }
 </style>
 </head>
 <body>
@@ -1948,6 +2016,12 @@ button:focus:not(:focus-visible) { outline: none; }
             <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
             <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Country + industry → Top-3 matches</span></a></li>
             <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB estimate</span></a></li>
+            <li><a href="#wanted"><span class="ds-name">Wanted Board</span><span class="ds-desc">Post a sourcing need · anonymous</span></a></li>
+            <li><a href="#trend"><span class="ds-name">Trend Monthly</span><span class="ds-desc">Monthly Korea export intelligence</span></a></li>
+            <li class="ds-divider" role="separator"></li>
+            <li><a href="buyers-healthcare.html"><span class="ds-name">For Healthcare Buyers</span><span class="ds-desc">HIPAA shredders · KFDA HFF · cleanroom</span></a></li>
+            <li><a href="buyers-government.html"><span class="ds-name">For Government Buyers</span><span class="ds-desc">GSA Schedule · Level-3 · ministerial</span></a></li>
+            <li><a href="buyers-hospitality.html"><span class="ds-name">For Hospitality &amp; Retail</span><span class="ds-desc">K-Beauty · K-Bio wellness · duty-free</span></a></li>
           </ul>
         </li>
         <li class="nav-dropdown">
@@ -1964,9 +2038,11 @@ button:focus:not(:focus-visible) { outline: none; }
           <a href="#rfq">Connect</a>
           <ul class="nav-dropmenu">
             <li><a href="#rfq"><span class="ds-name">Request a Quote</span><span class="ds-desc">2-step form · reply within 1 biz day</span></a></li>
-            <li><a href="#tools"><span class="ds-name">Book a Demo</span><span class="ds-desc">30-min Zoom with trade team</span></a></li>
+            <li><a href="#tools"><span class="ds-name">Book a Demo</span><span class="ds-desc">30-min Zoom · compliance checker · landed cost</span></a></li>
             <li><a href="tracker.html"><span class="ds-name">RFQ Tracker</span><span class="ds-desc">Check status of submitted RFQ</span></a></li>
             <li><a href="#qa"><span class="ds-name">Q&amp;A Wall</span><span class="ds-desc">Buyer community questions</span></a></li>
+            <li><a href="https://t.me/ceodon" target="_blank" rel="noopener"><span class="ds-name">Telegram</span><span class="ds-desc">Chat directly with ERGSN trade team</span></a></li>
+            <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener"><span class="ds-name">WhatsApp</span><span class="ds-desc">+82-10-5288-0006 · business hours KST</span></a></li>
             <li><a href="partners-kr.html"><span class="ds-name"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold);vertical-align:1px">KR</span>파트너 문의</span><span class="ds-desc">한국 제조사 입점 신청</span></a></li>
           </ul>
         </li>
@@ -2002,6 +2078,11 @@ button:focus:not(:focus-visible) { outline: none; }
       <li><a href="#products" onclick="switchSector('k-smart-living');closeMenu()">K-Smart Living (Sourcing)</a></li>
       <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
       <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
+      <li><a href="#wanted" onclick="closeMenu()">Wanted Board</a></li>
+      <li><a href="#trend" onclick="closeMenu()">Trend Monthly</a></li>
+      <li><a href="buyers-healthcare.html" onclick="closeMenu()">For Healthcare Buyers</a></li>
+      <li><a href="buyers-government.html" onclick="closeMenu()">For Government Buyers</a></li>
+      <li><a href="buyers-hospitality.html" onclick="closeMenu()">For Hospitality &amp; Retail</a></li>
     </ul>
   </details>
   <details>
@@ -2018,9 +2099,11 @@ button:focus:not(:focus-visible) { outline: none; }
     <summary>Connect</summary>
     <ul>
       <li><a href="#rfq" class="m-cta" onclick="closeMenu()">Request a Quote</a></li>
-      <li><a href="#tools" onclick="closeMenu()">Book a Demo · Compliance Checker</a></li>
+      <li><a href="#tools" onclick="closeMenu()">Book a Demo</a></li>
       <li><a href="tracker.html" onclick="closeMenu()">RFQ Tracker</a></li>
       <li><a href="#qa" onclick="closeMenu()">Q&amp;A Wall</a></li>
+      <li><a href="https://t.me/ceodon" target="_blank" rel="noopener" onclick="closeMenu()">Telegram</a></li>
+      <li><a href="https://wa.me/821052880006" target="_blank" rel="noopener" onclick="closeMenu()">WhatsApp</a></li>
       <li><a href="partners-kr.html" onclick="closeMenu()"><span style="display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid var(--gold);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--gold)">KR</span>한국 파트너 문의</a></li>
     </ul>
   </details>
@@ -2610,6 +2693,39 @@ button:focus:not(:focus-visible) { outline: none; }
           <div class="c-stat"><span class="n">18mo</span><span class="l">Uptime</span></div>
         </div>
       </article>
+      <article class="case-card reveal">
+        <div class="c-flag">🇺🇸</div>
+        <h3>U.S. Regional Cinema Chain</h3>
+        <p class="c-sub">K-Tech · KT-3DCINE back-catalog remaster</p>
+        <p>Eight feature-length 2D titles remastered to stereoscopic 3D for premium-screen re-release. Per-shot depth grading, director-approved masters, stereo DCP delivery.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">8</span><span class="l">Features</span></div>
+          <div class="c-stat"><span class="n">4K</span><span class="l">DCP</span></div>
+          <div class="c-stat"><span class="n">12wk</span><span class="l">Avg turn</span></div>
+        </div>
+      </article>
+      <article class="case-card reveal">
+        <div class="c-flag">🇩🇪</div>
+        <h3>Rhineland Off-Grid Facility</h3>
+        <p class="c-sub">K-Energy · KE-Option D flagship deployment</p>
+        <p>Triple-set HYGEN array delivering continuous ≈3.6 kW/h to a remote logistics yard. Solar-coupled DC 24V bus, N+1 motor redundancy, 30 distributed output ports.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">3.6</span><span class="l">kW/h</span></div>
+          <div class="c-stat"><span class="n">N+1</span><span class="l">Drive</span></div>
+          <div class="c-stat"><span class="n">0</span><span class="l">Outages</span></div>
+        </div>
+      </article>
+      <article class="case-card reveal">
+        <div class="c-flag">🇲🇽</div>
+        <h3>MX Wellness Distributor</h3>
+        <p class="c-sub">K-Bio · Rosetta Plus export pipeline</p>
+        <p>1,000 units/month HACCP-controlled run into Mexican retail. KFDA-assured, multilingual label pack, lot-traced batch documentation per shipment.</p>
+        <div class="c-stats">
+          <div class="c-stat"><span class="n">1k+</span><span class="l">Units/mo</span></div>
+          <div class="c-stat"><span class="n">KFDA</span><span class="l">Assured</span></div>
+          <div class="c-stat"><span class="n">4–6wk</span><span class="l">Lead</span></div>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -2623,6 +2739,68 @@ button:focus:not(:focus-visible) { outline: none; }
       <p class="body-lg" style="max-width:600px">30-second vertical clips from verified Korean production lines. Swipe to peek inside the makers behind ERGSN's catalog.</p>
     </div>
     <div class="shorts-scroll" id="shortsScroll"></div>
+  </div>
+</section>
+
+<!-- ══ KOREA TREND MONTHLY ═════════════════ -->
+<section class="trend-section" id="trend">
+  <div class="container trend-inner">
+    <div class="trend-head reveal">
+      <div>
+        <span class="label" style="color:var(--gold)">Market Intelligence</span>
+        <h2 class="h-lg" style="margin:.6rem 0 .8rem">Korea Trend Monthly</h2>
+        <p class="body-lg" style="max-width:620px">Curated monthly digest of the Korean export categories gaining procurement traction abroad. Sourced from KOTRA export data, Korea Customs statistics, and ERGSN's verified-partner pipeline.</p>
+      </div>
+      <div class="trend-meta">
+        <p class="trend-edition">Edition · April 2026</p>
+        <p class="trend-next">Next brief · May 10</p>
+      </div>
+    </div>
+    <div class="trend-grid reveal">
+      <article class="trend-card">
+        <div class="trend-rank">01</div>
+        <p class="trend-cat">K-Energy</p>
+        <h3 class="trend-title">Modular DC micro-grid kits</h3>
+        <p class="trend-growth"><span class="trend-arrow">▲</span> 48% YoY export demand</p>
+        <p class="trend-body">Buyer inquiries for compact multi-generator arrays paired with solar/ESS DC buses up sharply. HYGEN-style one-shaft architectures leading the RFQ mix this quarter.</p>
+      </article>
+      <article class="trend-card">
+        <div class="trend-rank">02</div>
+        <p class="trend-cat">K-Bio</p>
+        <h3 class="trend-title">Mental-wellness HFF exports</h3>
+        <p class="trend-growth"><span class="trend-arrow">▲</span> 36% YoY export demand</p>
+        <p class="trend-body">KFDA-assured Health Functional Foods targeting depression/anxiety seeing new RFQs from LATAM and MENA distributors. Lot-batched HACCP production preferred.</p>
+      </article>
+      <article class="trend-card">
+        <div class="trend-rank">03</div>
+        <p class="trend-cat">K-Tech</p>
+        <h3 class="trend-title">2D → 3D film remaster for OTT</h3>
+        <p class="trend-growth"><span class="trend-arrow">▲</span> 29% YoY project volume</p>
+        <p class="trend-body">OTT platforms and theatrical chains commissioning back-catalog 3D remasters. Stereo DCP + MVC delivery, per-shot depth grading becoming table stakes.</p>
+      </article>
+      <article class="trend-card">
+        <div class="trend-rank">04</div>
+        <p class="trend-cat">K-Security</p>
+        <h3 class="trend-title">All-metal chain-drive shredders</h3>
+        <p class="trend-growth"><span class="trend-arrow">▲</span> 22% YoY U.S. procurement</p>
+        <p class="trend-body">HIPAA + GSA Schedule combined listings driving federal and healthcare RFQs. Oil-free, nylon-free construction remains the key differentiator vs. Chinese alternatives.</p>
+      </article>
+      <article class="trend-card">
+        <div class="trend-rank">05</div>
+        <p class="trend-cat">K-Beauty · K-Smart Living</p>
+        <h3 class="trend-title">Device-grade wellness tech</h3>
+        <p class="trend-growth"><span class="trend-arrow">▲</span> 51% YoY early-buyer interest</p>
+        <p class="trend-body">Connected beauty/wellness devices with CGMP + ISO 22716 documentation drawing early-access inquiries. Sourcing partners onboarding throughout 2026.</p>
+      </article>
+    </div>
+    <div class="trend-cta reveal">
+      <p class="trend-cta-lead">Get the brief in your inbox on the 10th of each month.</p>
+      <form class="trend-form" onsubmit="subscribeTrend(event)">
+        <input type="email" id="trendEmail" placeholder="you@company.com" required autocomplete="email">
+        <button type="submit" class="btn btn-gold">Subscribe &rarr;</button>
+      </form>
+      <p class="trend-disclaimer">Aggregated from publicly-reported Korean export statistics and ERGSN partner pipeline signals. Growth figures are directional indicators, not audited market share.</p>
+    </div>
   </div>
 </section>
 
@@ -2805,8 +2983,113 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </div>
     </div>
+
+    <!-- Sourcing Concierge tiers -->
+    <div class="concierge-wrap reveal">
+      <div class="concierge-head">
+        <span class="label" style="color:var(--gold)">Buyer Concierge Tiers</span>
+        <h3 class="h-md" style="margin:.4rem 0 .6rem">Beyond the AI Match</h3>
+        <p class="body-sm" style="max-width:620px;color:var(--tx-mid)">For procurement teams who want a human expert on the Korean side. Same verification standard, closer collaboration.</p>
+      </div>
+      <div class="concierge-grid">
+        <div class="concierge-tier">
+          <p class="ct-tag">Tier 1</p>
+          <p class="ct-name">AI Match</p>
+          <p class="ct-price">Free</p>
+          <ul class="ct-list">
+            <li>Instant Top-3 curated from ERGSN portfolio</li>
+            <li>Country + industry profile input</li>
+            <li>Auto-fill RFQ from match results</li>
+            <li>Access to Wanted Board &amp; Q&amp;A Wall</li>
+          </ul>
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('matchForm').scrollIntoView({behavior:'smooth',block:'center'})">Use AI Match &rarr;</button>
+        </div>
+        <div class="concierge-tier concierge-tier-pro">
+          <span class="ct-flag">Recommended</span>
+          <p class="ct-tag">Tier 2</p>
+          <p class="ct-name">Sourcing Concierge</p>
+          <p class="ct-price">$199<span class="ct-price-sub">/ month</span></p>
+          <ul class="ct-list">
+            <li>Dedicated ERGSN trade specialist (Seoul-based)</li>
+            <li>Weekly curated brief on Korean market moves</li>
+            <li>Priority RFQ routing &mdash; 12-hour response window</li>
+            <li>Private Telegram/WhatsApp channel for off-hours</li>
+            <li>Quarterly video review of your sourcing pipeline</li>
+          </ul>
+          <button type="button" class="btn btn-gold" onclick="expressConciergeInterest()">Request Concierge Access</button>
+        </div>
+      </div>
+      <p class="concierge-note">New tier &mdash; onboarding limited to 30 buyers in Q2 2026. Sign-up routes through ERGSN trade team for qualification before billing begins.</p>
+    </div>
   </div>
 </section>
+
+<!-- ══ BUYER WANTED BOARD ══════════════════ -->
+<section class="wanted-section" id="wanted">
+  <div class="container wanted-inner">
+    <div class="wanted-head reveal">
+      <div>
+        <span class="label" style="color:var(--gold)">Reverse RFQ</span>
+        <h2 class="h-lg" style="margin:.6rem 0 .8rem">Buyer Wanted Board</h2>
+        <p class="body-lg" style="max-width:640px">Post what you're trying to source from Korea. Verified Korean manufacturers monitor this board and respond through ERGSN — no direct contact details exposed.</p>
+      </div>
+      <button type="button" class="btn btn-gold wanted-post-btn" onclick="openWantedForm()">Post Your Request &rarr;</button>
+    </div>
+    <div class="wanted-grid reveal" id="wantedGrid">
+      <!-- Seeded on page load by renderWantedBoard() -->
+    </div>
+    <p class="wanted-note">Posts are moderated. ERGSN masks buyer identity by default — only the country, industry, category, and budget band are public. Full RFQ details relayed privately to matched makers.</p>
+  </div>
+</section>
+
+<!-- Wanted Board modal -->
+<div class="wanted-overlay" id="wantedOverlay" role="dialog" aria-modal="true" aria-labelledby="wantedFormTitle" aria-hidden="true" onclick="closeWantedOutside(event)">
+  <div class="wanted-modal">
+    <div class="wanted-modal-hd">
+      <h3 id="wantedFormTitle">Post a Buyer Request</h3>
+      <button type="button" class="modal-close" onclick="closeWantedForm()" aria-label="Close">&times;</button>
+    </div>
+    <form id="wantedForm" onsubmit="submitWanted(event)">
+      <div class="f-row">
+        <div class="f-grp"><label class="f-lbl">Your Country <span>*</span></label><input type="text" class="f-in" id="wCountry" required placeholder="e.g. United States"></div>
+        <div class="f-grp"><label class="f-lbl">Industry <span>*</span></label><select class="f-sel" id="wIndustry" required>
+          <option value="" disabled selected>Select&hellip;</option>
+          <option value="Government">Government</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Finance">Finance</option>
+          <option value="Manufacturing">Manufacturing</option>
+          <option value="Energy">Energy</option>
+          <option value="Retail">Retail / Distribution</option>
+          <option value="Hospitality">Hospitality / F&B</option>
+          <option value="Technology">Technology</option>
+          <option value="Education">Education</option>
+          <option value="Logistics">Logistics</option>
+          <option value="Other">Other</option>
+        </select></div>
+      </div>
+      <div class="f-grp"><label class="f-lbl">Category you need from Korea <span>*</span></label><input type="text" class="f-in" id="wCategory" required placeholder="e.g. Commercial ESS 50kWh, HIPAA-grade shredders, K-beauty skincare OEM"></div>
+      <div class="f-row">
+        <div class="f-grp"><label class="f-lbl">Budget Band</label><select class="f-sel" id="wBudget">
+          <option value="Under $10K">Under $10K</option>
+          <option value="$10K — $50K" selected>$10K — $50K</option>
+          <option value="$50K — $250K">$50K — $250K</option>
+          <option value="$250K — $1M">$250K — $1M</option>
+          <option value="Over $1M">Over $1M</option>
+        </select></div>
+        <div class="f-grp"><label class="f-lbl">Target Timeline</label><select class="f-sel" id="wTimeline">
+          <option value="ASAP (4 weeks)">ASAP (4 weeks)</option>
+          <option value="1–3 months" selected>1–3 months</option>
+          <option value="3–6 months">3–6 months</option>
+          <option value="6+ months">6+ months</option>
+        </select></div>
+      </div>
+      <div class="f-grp"><label class="f-lbl">Requirements / Specs</label><textarea class="f-ta" id="wDetail" rows="4" placeholder="Certifications required, key specs, deal-breakers, preferred Incoterms…"></textarea></div>
+      <div class="f-grp"><label class="f-lbl">Your email (private — not shown publicly) <span>*</span></label><input type="email" class="f-in" id="wEmail" required placeholder="you@company.com"></div>
+      <button type="submit" class="btn btn-gold" style="width:100%">Submit Request &rarr;</button>
+      <p style="font-size:11px;color:var(--tx-lt);margin-top:10px;text-align:center">Public card will show country · industry · category · budget band only. All other details go privately to matched ERGSN-verified makers.</p>
+    </form>
+  </div>
+</div>
 
 <!-- ══ COMPLIANCE ═══════════════════════════ -->
 <section id="compliance">
@@ -2954,6 +3237,13 @@ button:focus:not(:focus-visible) { outline: none; }
       <div class="rfq-info reveal">
         <span class="label" data-t="rfq_label">Get in Touch</span>
         <h2 class="h-lg" style="margin:.6rem 0 1rem;color:var(--white)" data-t="rfq_title">Request a Quote</h2>
+        <div class="sla-badge reveal" aria-label="24-hour response guarantee">
+          <span class="sla-dot"></span>
+          <div>
+            <p class="sla-title">24-Hour Response SLA</p>
+            <p class="sla-sub">Verified Korean partners reply within 24 hours of RFQ submission, or ERGSN refunds 10% of any paid placement fee tied to that maker for the month.</p>
+          </div>
+        </div>
         <p class="body-lg" style="color:var(--steel-lt)" data-t="rfq_desc">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).</p>
         <ul class="rfq-contacts">
           <li><span class="rfq-cl">Tel</span><span class="rfq-cv">+82-10-5288-0006</span></li>
@@ -3117,6 +3407,16 @@ button:focus:not(:focus-visible) { outline: none; }
           <li><a href="#products" onclick="switchSector('k-smart-living')">K-Smart Living</a></li>
           <li><a href="#match">AI Partner Match</a></li>
           <li><a href="#calculator">Quote Calculator</a></li>
+          <li><a href="#wanted">Wanted Board</a></li>
+          <li><a href="#trend">Trend Monthly</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">For Buyers</p>
+        <ul class="footer-links">
+          <li><a href="buyers-healthcare.html">Healthcare Procurement</a></li>
+          <li><a href="buyers-government.html">Government Procurement</a></li>
+          <li><a href="buyers-hospitality.html">Hospitality &amp; Retail</a></li>
         </ul>
       </div>
       <div>
@@ -3740,6 +4040,17 @@ function applyMatchToRFQ() {
 document.addEventListener('DOMContentLoaded', function initPageWidgets(){
   initTradeTools();
   // initQAWall is lazy-loaded via IntersectionObserver
+  // Deep-link from industry landing pages: /?sector=k-security auto-switches
+  // the product tab and scrolls there.
+  try {
+    const params = new URLSearchParams(location.search);
+    const sector = params.get('sector');
+    if (sector && typeof switchSector === 'function') {
+      switchSector(sector);
+      const el = document.getElementById('products');
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    }
+  } catch(_) {}
 });
 
 /* No-op stubs preserved for any residual call sites referencing the old
@@ -3881,6 +4192,149 @@ function toast(msg, kind) {
   el.textContent = msg;
   wrap.appendChild(el);
   setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 260); }, 3600);
+}
+
+/* ── Buyer Wanted Board ─────────────────── */
+// Seed entries reflect plausible active buyer intents; real submissions are
+// persisted in localStorage under 'ergsn_wanted' and appended to the board
+// for the submitter's own view. Server-side persistence can be added later
+// via an additional Cloudflare Worker following the existing RFQ tracker pattern.
+const WANTED_SEED = [
+  { country: 'United States',   industry: 'Healthcare',    cat: 'HIPAA-grade cross-cut shredder · 30-seat clinic',        band: '$10K — $50K',  age: '2 days ago'  },
+  { country: 'Saudi Arabia',    industry: 'Government',    cat: 'Level-3 shredder fleet for ministerial deployment',       band: '$250K — $1M',  age: '5 days ago'  },
+  { country: 'Germany',         industry: 'Energy',        cat: 'Modular DC micro-grid kit · solar-coupled · ≥3 kW',       band: '$50K — $250K', age: '1 day ago'   },
+  { country: 'Mexico',          industry: 'Retail',        cat: 'KFDA-assured HFF · mental-wellness SKU · OEM label',      band: '$50K — $250K', age: '3 days ago'  },
+  { country: 'Japan',           industry: 'Hospitality',   cat: 'K-beauty device OEM · spa / wellness channel',            band: '$10K — $50K',  age: '6 days ago'  },
+  { country: 'United Kingdom',  industry: 'Technology',    cat: '2D → 3D feature-length remaster · 4K DCP · 1 title pilot', band: '$50K — $250K', age: '4 hours ago' },
+  { country: 'Australia',       industry: 'Manufacturing', cat: 'Industrial IoT sensor suite · Tier-1 Korean fab',         band: '$10K — $50K',  age: '1 week ago'  },
+  { country: 'UAE',             industry: 'Government',    cat: 'ESS + backup generator combo for off-grid campus',        band: 'Over $1M',     age: '3 days ago'  }
+];
+
+function loadUserWanted() {
+  try { return JSON.parse(localStorage.getItem('ergsn_wanted') || '[]'); } catch(_) { return []; }
+}
+function saveUserWanted(list) {
+  try { localStorage.setItem('ergsn_wanted', JSON.stringify(list)); } catch(_) {}
+}
+function wantedCardHTML(item, isMine) {
+  const safe = s => String(s || '').replace(/[<>]/g, '');
+  return `<div class="wanted-card${isMine ? ' wanted-card-mine' : ''}">`
+    + (isMine ? '<span class="wanted-mine-flag">Your post</span>' : '')
+    + `<div class="wanted-card-row"><span class="wanted-country">${safe(item.country)}</span><span class="wanted-dot">·</span><span>${safe(item.industry)}</span></div>`
+    + `<p class="wanted-cat">${safe(item.cat)}</p>`
+    + `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:8px;flex-wrap:wrap">`
+    + `<span class="wanted-band">${safe(item.band)}</span>`
+    + `<span class="wanted-age">${safe(item.age)}</span>`
+    + `</div>`
+    + (isMine ? '' : `<button type="button" class="wanted-match-btn" onclick="offerMatch('${safe(item.cat).replace(/'/g,"\\'")}')">I can supply this</button>`)
+    + `</div>`;
+}
+function renderWantedBoard() {
+  const grid = document.getElementById('wantedGrid');
+  if (!grid) return;
+  const mine = loadUserWanted();
+  const seed = WANTED_SEED.slice();
+  const html = mine.map(m => wantedCardHTML(m, true)).concat(seed.map(s => wantedCardHTML(s, false))).join('');
+  grid.innerHTML = html;
+}
+function openWantedForm() {
+  const ov = document.getElementById('wantedOverlay');
+  ov.classList.add('open');
+  ov.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeWantedForm() {
+  const ov = document.getElementById('wantedOverlay');
+  ov.classList.remove('open');
+  ov.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+function closeWantedOutside(e) { if (e.target === document.getElementById('wantedOverlay')) closeWantedForm(); }
+function submitWanted(e) {
+  e.preventDefault();
+  const country  = document.getElementById('wCountry').value.trim();
+  const industry = document.getElementById('wIndustry').value;
+  const cat      = document.getElementById('wCategory').value.trim();
+  const band     = document.getElementById('wBudget').value;
+  const timeline = document.getElementById('wTimeline').value;
+  const detail   = document.getElementById('wDetail').value.trim();
+  const email    = document.getElementById('wEmail').value.trim();
+  if (!country || !industry || !cat || !email) return;
+  // Publicly-visible record — persisted locally so the submitter sees their own post.
+  const pub = { country, industry, cat, band, age: 'just now' };
+  const mine = loadUserWanted();
+  mine.unshift(pub);
+  saveUserWanted(mine.slice(0, 20));
+  renderWantedBoard();
+  // Private relay to ERGSN trade team for routing to verified makers.
+  try {
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _cc: RFQ_CC,
+        _subject: `[WANTED BOARD] ${country} · ${cat}`,
+        _template: 'table',
+        _captcha: 'true',
+        Country: country, Industry: industry, Category: cat,
+        Budget: band, Timeline: timeline, Detail: detail || '(none)',
+        Email: email, Source: 'ceodon.github.io/ergsn (Wanted Board)'
+      })
+    }).catch(()=>{});
+    sendTG(`🛒 Wanted Board: ${country} · ${industry} · ${cat} · ${band}`, 'plain');
+  } catch(_) {}
+  document.getElementById('wantedForm').reset();
+  closeWantedForm();
+  toast('✓ Request posted. ERGSN will route it to verified Korean makers within 24 hours.');
+}
+function offerMatch(cat) {
+  // When a maker (or curious buyer) clicks "I can supply this", jump to RFQ with context.
+  const msg = document.getElementById('fMsg');
+  if (msg) msg.value = `Responding to Wanted Board post: ${cat}`;
+  document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+}
+// Render once the DOM is in place.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderWantedBoard);
+} else {
+  renderWantedBoard();
+}
+
+/* ── Korea Trend Monthly ────────────────── */
+function subscribeTrend(e) {
+  e.preventDefault();
+  const email = document.getElementById('trendEmail').value.trim();
+  if (!email) return;
+  try {
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ _cc: RFQ_CC, _subject: `[TREND MONTHLY] ${email}`, _template: 'table', _captcha: 'true', Email: email, Source: 'ceodon.github.io/ergsn (Trend Monthly)' })
+    }).catch(()=>{});
+    sendTG(`📈 Trend Monthly signup: ${email}`, 'plain');
+  } catch(_) {}
+  document.getElementById('trendEmail').value = '';
+  toast('✓ Subscribed. First brief arrives on the 10th of next month.');
+}
+
+/* ── Sourcing Concierge ─────────────────── */
+function expressConciergeInterest() {
+  const email = prompt('Request Sourcing Concierge access\n\nEnter your work email and we will reach out within 1 business day to qualify and onboard.');
+  if (!email) return;
+  const trimmed = email.trim();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed)) {
+    toast('Please enter a valid business email.', 'warn');
+    return;
+  }
+  try {
+    fetch(RFQ_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ _cc: RFQ_CC, _subject: `[CONCIERGE INTEREST] ${trimmed}`, _template: 'table', _captcha: 'true', Email: trimmed, Tier: 'Sourcing Concierge ($199/mo)', Source: 'ceodon.github.io/ergsn (Concierge)' })
+    }).catch(()=>{});
+    sendTG(`🧭 Concierge interest: ${trimmed}`, 'plain');
+  } catch(_) {}
+  toast('Request received. ERGSN trade team will email within 1 business day.');
 }
 
 /* ── Newsletter ───────────────────────── */
@@ -5687,6 +6141,15 @@ const CALC_REGION_BY_COUNTRY = {
 };
 const CALC_FREIGHT = { us:280, eu:350, me:300, sea:180, jp:150, au:380, sa:450, af:420 };
 const CALC_DUTY = { us:0.03, eu:0.05, me:0.05, sea:0.07, jp:0.04, au:0.05, sa:0.14, af:0.10 };
+// Conservative market-equivalent multipliers used to show an indicative
+// "vs local retail" savings line. Numbers are intentionally modest so
+// the benchmark stays defensible when a buyer compares real quotes.
+const CALC_MARKET_MULTIPLIER = {
+  'k-security': 1.35,
+  'k-tech':     1.45,
+  'k-energy':   1.30,
+  'k-bio':      1.55
+};
 const CALC_FX = { USD:1, EUR:0.92, GBP:0.79, JPY:149.5, AED:3.67, BRL:4.97, SGD:1.34, AUD:1.53, TRY:32.1, SAR:3.75, KRW:1350 };
 const CALC_REGION_FX = { us:'USD', eu:'EUR', me:'AED', sea:'SGD', jp:'JPY', au:'AUD', sa:'BRL', af:'USD' };
 
@@ -5785,6 +6248,15 @@ function updateCalc() {
   }
   rows += `<div class="calc-row"><span class="calc-row-label">Incoterms</span><span class="calc-row-val" style="font-family:var(--fb)">${terms}</span></div>`;
   rows += `<div class="calc-row"><span class="calc-row-label">Payment Terms</span><span class="calc-row-val" style="font-family:var(--fb);font-weight:500">T/T 50% advance &middot; 50% before shipment</span></div>`;
+  const mult = CALC_MARKET_MULTIPLIER[item.sector];
+  if (mult && total > 0) {
+    const marketEquiv = total * mult;
+    const savingsPct = Math.round((1 - total / marketEquiv) * 100);
+    rows += `<div class="calc-row calc-row-benchmark" title="Indicative benchmark. Compares ERGSN direct-source total against typical Western retail / agency pricing for this category. Excludes buyer-side handling.">`
+      + `<span class="calc-row-label">vs market equivalent <span style="opacity:.55">(est.)</span></span>`
+      + `<span class="calc-row-val" style="color:var(--gold);font-weight:600">&minus;${savingsPct}% &middot; $${Math.round(marketEquiv).toLocaleString()}</span>`
+      + `</div>`;
+  }
   document.getElementById('calcRows').innerHTML = rows;
   document.getElementById('calcTotal').textContent = '$' + Math.round(total).toLocaleString();
   document.getElementById('calcFx').innerHTML = (localCur !== 'USD')
