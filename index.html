@@ -1937,12 +1937,12 @@ button:focus:not(:focus-visible) { outline: none; }
           <ul class="nav-dropmenu">
             <li><a href="#products" onclick="switchSector('k-security');return true"><span class="ds-name">K-Security <span class="ds-tag">Active</span></span><span class="ds-desc">DL Series shredders · in stock</span></a></li>
             <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag">Active</span></span><span class="ds-desc">2D → 3D stereoscopic conversion</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-energy');return true"><span class="ds-name">K-Energy <span class="ds-tag">Active</span></span><span class="ds-desc">HYGEN Generator · one-shaft multi-gen</span></a></li>
             <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag">Active</span></span><span class="ds-desc">Rosetta Plus · HACCP · KFDA</span></a></li>
             <li><a href="#products" onclick="switchSector('k-beauty');return true"><span class="ds-name">K-Beauty <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Skincare · cosmetics · devices</span></a></li>
             <li><a href="#products" onclick="switchSector('k-culture-goods');return true"><span class="ds-name">K-Culture Goods <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">K-pop merch · crafts · fashion</span></a></li>
             <li><a href="#products" onclick="switchSector('k-franchise');return true"><span class="ds-name">K-Franchise <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">F&amp;B · retail · service concepts</span></a></li>
             <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-energy');return true"><span class="ds-name">K-Energy <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Solar · ESS · clean-tech</span></a></li>
             <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Country + industry → Top-3 matches</span></a></li>
             <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB estimate</span></a></li>
           </ul>
@@ -1991,12 +1991,12 @@ button:focus:not(:focus-visible) { outline: none; }
     <ul>
       <li><a href="#products" onclick="switchSector('k-security');closeMenu()">K-Security (Active)</a></li>
       <li><a href="#products" onclick="switchSector('k-tech');closeMenu()">K-Tech (2D → 3D)</a></li>
+      <li><a href="#products" onclick="switchSector('k-energy');closeMenu()">K-Energy (HYGEN Generator)</a></li>
       <li><a href="#products" onclick="switchSector('k-bio');closeMenu()">K-Bio (Rosetta Plus)</a></li>
       <li><a href="#products" onclick="switchSector('k-beauty');closeMenu()">K-Beauty (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-culture-goods');closeMenu()">K-Culture Goods (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-franchise');closeMenu()">K-Franchise (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-smart-living');closeMenu()">K-Smart Living (Sourcing)</a></li>
-      <li><a href="#products" onclick="switchSector('k-energy');closeMenu()">K-Energy (Sourcing)</a></li>
       <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
       <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
     </ul>
@@ -2093,6 +2093,9 @@ button:focus:not(:focus-visible) { outline: none; }
       <button class="sector-tab" data-sector="k-tech" onclick="switchSector('k-tech')">
         K-Tech <span class="st-tag">Active</span>
       </button>
+      <button class="sector-tab" data-sector="k-energy" onclick="switchSector('k-energy')">
+        K-Energy <span class="st-tag">Active</span>
+      </button>
       <button class="sector-tab" data-sector="k-bio" onclick="switchSector('k-bio')">
         K-Bio <span class="st-tag">Active</span>
       </button>
@@ -2107,9 +2110,6 @@ button:focus:not(:focus-visible) { outline: none; }
       </button>
       <button class="sector-tab" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
         K-Smart Living <span class="st-tag">Soon</span>
-      </button>
-      <button class="sector-tab" data-sector="k-energy" onclick="switchSector('k-energy')">
-        K-Energy <span class="st-tag">Soon</span>
       </button>
     </div>
 
@@ -2378,6 +2378,92 @@ button:focus:not(:focus-visible) { outline: none; }
         <div class="card-foot">
           <span class="card-cta" data-t="card_cta">View Full Specs</span>
           <button class="compare-btn" type="button" aria-label="Add KT-3DCINE to compare" onclick="event.stopPropagation();toggleCompare('kt3dcine',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- K-Energy product grid: HYGEN Generator — one-shaft multi-generator sets -->
+    <div class="product-grid" id="kenergyGrid" style="display:none">
+
+      <!-- Card 1: KE-Option A — Compact Starter (5 generators · 1 set) -->
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="keoa" onclick="openModal('keoa')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('keoa')">
+        <div class="card-image"><img src="images/products/option-a.png" alt="HYGEN Generator KE-Option A — compact starter set" loading="lazy"></div>
+        <p class="card-tag">Compact Starter &middot; 1 Set</p>
+        <p class="card-model">KE-Option A</p>
+        <p class="card-part">Part No: KEOA (HYGEN-1S5G)</p>
+        <p class="card-mfg">Verified Korean K-Energy Partner <span class="card-verified">&#10003; Verified Partner</span></p>
+        <p class="card-desc">HYGEN Generator entry set &mdash; 5 generators on one rotation shaft, driven by a single 400W DC motor at 1 rpm. Continuous ~1.0 kW/h output.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Generators</p><p class="spec-val">5 per set</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">&asymp; 1.0 kW/h</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">DC24V / 400W</p></div>
+          <div><p class="spec-lbl">Ports</p><p class="spec-val">10 output</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KE-Option A to compare" onclick="event.stopPropagation();toggleCompare('keoa',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <!-- Card 2: KE-Option B — Standard Single Set (6 generators · 1 set) -->
+      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="keob" onclick="openModal('keob')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('keob')">
+        <div class="card-image"><img src="images/products/option-b.png" alt="HYGEN Generator KE-Option B — standard single set" loading="lazy"></div>
+        <p class="card-tag">Standard Single Set</p>
+        <p class="card-model">KE-Option B</p>
+        <p class="card-part">Part No: KEOB (HYGEN-1S6G)</p>
+        <p class="card-mfg">Verified Korean K-Energy Partner <span class="card-verified">&#10003; Verified Partner</span></p>
+        <p class="card-desc">Standard 1-set HYGEN configuration &mdash; 6 generators on one rotation shaft. Balanced output for light commercial loads.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Generators</p><p class="spec-val">6 per set</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">&asymp; 1.2 kW/h</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">DC24V / 400W</p></div>
+          <div><p class="spec-lbl">Ports</p><p class="spec-val">10 output</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KE-Option B to compare" onclick="event.stopPropagation();toggleCompare('keob',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <!-- Card 3: KE-Option C — Dual-Set Combo (12 generators · 2 sets) -->
+      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="keoc" onclick="openModal('keoc')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('keoc')">
+        <div class="card-image"><img src="images/products/option-c.png" alt="HYGEN Generator KE-Option C — solar-tied dual-set combo" loading="lazy"></div>
+        <p class="card-tag">Dual-Set Combo</p>
+        <p class="card-model">KE-Option C</p>
+        <p class="card-part">Part No: KEOC (HYGEN-2S12G)</p>
+        <p class="card-mfg">Verified Korean K-Energy Partner <span class="card-verified">&#10003; Verified Partner</span></p>
+        <p class="card-desc">Dual HYGEN set combo &mdash; 2 parallel sets (12 generators total) for sustained commercial loads and micro-grid integration.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Generators</p><p class="spec-val">12 (2 sets)</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">&asymp; 2.4 kW/h</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">2 &times; DC24V / 400W</p></div>
+          <div><p class="spec-lbl">Ports</p><p class="spec-val">20 output</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KE-Option C to compare" onclick="event.stopPropagation();toggleCompare('keoc',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
+        </div>
+      </div>
+
+      <!-- Card 4: KE-Option D — Triple-Set Flagship (18 generators · 3 sets) -->
+      <div class="product-card reveal" style="--i:3" tabindex="0" data-model="keod" onclick="openModal('keod')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('keod')">
+        <span class="card-badge">Flagship</span>
+        <div class="card-image"><img src="images/products/option-d.png" alt="HYGEN Generator KE-Option D — portable flagship unit" loading="lazy"></div>
+        <p class="card-tag">Triple-Set Flagship</p>
+        <p class="card-model">KE-Option D</p>
+        <p class="card-part">Part No: KEOD (HYGEN-3S18G)</p>
+        <p class="card-mfg">Verified Korean K-Energy Partner <span class="card-verified">&#10003; Verified Partner</span></p>
+        <p class="card-desc">Flagship triple-set HYGEN array &mdash; 3 parallel sets (18 generators) for distributed generation, off-grid campuses, and ESS-tied deployments.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Generators</p><p class="spec-val">18 (3 sets)</p></div>
+          <div><p class="spec-lbl">Output</p><p class="spec-val">&asymp; 3.6 kW/h</p></div>
+          <div><p class="spec-lbl">Motor</p><p class="spec-val">3 &times; DC24V / 400W</p></div>
+          <div><p class="spec-lbl">Ports</p><p class="spec-val">30 output</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta" data-t="card_cta">View Full Specs</span>
+          <button class="compare-btn" type="button" aria-label="Add KE-Option D to compare" onclick="event.stopPropagation();toggleCompare('keod',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>Compare</button>
         </div>
       </div>
 
@@ -2747,8 +2833,9 @@ button:focus:not(:focus-visible) { outline: none; }
         <label>Product Family</label>
         <select class="f-sel" id="calcSector" onchange="onCalcSectorChange()">
           <option value="k-security">K-Security &mdash; Paper Shredders (DL Series)</option>
-          <option value="k-bio">K-Bio &mdash; Health Functional Food (Rosetta Plus)</option>
           <option value="k-tech">K-Tech &mdash; 3D Content Services</option>
+          <option value="k-energy">K-Energy &mdash; HYGEN Generator Sets</option>
+          <option value="k-bio">K-Bio &mdash; Health Functional Food (Rosetta Plus)</option>
         </select>
         <label>Model</label>
         <select class="f-sel" id="calcModel" onchange="updateCalc()"></select>
@@ -2905,6 +2992,10 @@ button:focus:not(:focus-visible) { outline: none; }
               <label class="model-cb"><input type="checkbox" id="mKT3DVID"><span class="model-cb-lbl">KT-3DVID</span></label>
               <label class="model-cb"><input type="checkbox" id="mKT3DCINE"><span class="model-cb-lbl">KT-3DCINE</span></label>
               <label class="model-cb"><input type="checkbox" id="mROSETTAPLUS"><span class="model-cb-lbl">Rosetta Plus</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKEOA"><span class="model-cb-lbl">KE-Option A</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKEOB"><span class="model-cb-lbl">KE-Option B</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKEOC"><span class="model-cb-lbl">KE-Option C</span></label>
+              <label class="model-cb"><input type="checkbox" id="mKEOD"><span class="model-cb-lbl">KE-Option D</span></label>
             </div>
           </div>
           <div class="f-row">
@@ -3015,12 +3106,12 @@ button:focus:not(:focus-visible) { outline: none; }
         <ul class="footer-links">
           <li><a href="#products" onclick="switchSector('k-security')">K-Security</a></li>
           <li><a href="#products" onclick="switchSector('k-tech')">K-Tech</a></li>
+          <li><a href="#products" onclick="switchSector('k-energy')">K-Energy</a></li>
           <li><a href="#products" onclick="switchSector('k-bio')">K-Bio</a></li>
           <li><a href="#products" onclick="switchSector('k-beauty')">K-Beauty</a></li>
           <li><a href="#products" onclick="switchSector('k-culture-goods')">K-Culture Goods</a></li>
           <li><a href="#products" onclick="switchSector('k-franchise')">K-Franchise</a></li>
           <li><a href="#products" onclick="switchSector('k-smart-living')">K-Smart Living</a></li>
-          <li><a href="#products" onclick="switchSector('k-energy')">K-Energy</a></li>
           <li><a href="#match">AI Partner Match</a></li>
           <li><a href="#calculator">Quote Calculator</a></li>
         </ul>
@@ -3256,6 +3347,34 @@ const P = {
     specs:[['Service Type','Feature-Length 2D-to-3D Film Remaster'],['Use Cases','Theatrical 3D re-release, OTT/streaming, catalog monetisation'],['Input Formats','DPX, EXR, ProRes 4444 XQ, DCP source'],['Output Formats','Stereo DCP, MVC, Side-by-Side, Frame-Packed'],['Max Resolution','4K DCP / UHD (3840\u00d72160)'],['Color Depth','12-bit DPX, 10-bit ProRes'],['Frame Rate','23.976 / 24 / 48 fps'],['Depth Grading','Per-shot, director / DoP reviewed'],['QC','Full-reel stereoscopic review before final master'],['Turnaround','8\u201316 weeks (feature-length)'],['Delivery','DCP, master files via Aspera / secure drive']],
     features:['Remaster existing 2D feature films into theatrical-grade stereoscopic 3D','Per-shot depth grading with director / DoP review cycles','Proprietary ERGSN 2D-to-3D engine \u2014 developed through continuous R&D','Addresses strong U.S. market preference for converting standard films to 3D','Unlock catalog value \u2014 convert back-catalog titles for theatrical re-release or OTT','Below-industry-average cost for feature-length conversion','Stereo DCP delivery for theatrical 3D projection','Suitable for studios, OTT platforms, and rights-holders with back catalogs'],
     desc:'KT-3DCINE is ERGSN\'s flagship 2D-to-3D feature film remastering service. The U.S. film market continues to release 3D titles steadily, with a strong emphasis on converting standard films into 3D rather than producing original 3D content \u2014 but conversion costs remain more than 3\u00d7 that of regular 2D production, a significant barrier to broader adoption. Using ERGSN\'s proprietary conversion technology refined through continuous R&D, KT-3DCINE delivers theatrical-grade stereoscopic remasters at market-competitive pricing. Studios and rights-holders can unlock back-catalog 2D titles for theatrical 3D re-release, OTT streaming, and international distribution with per-shot depth grading and stereo DCP delivery.'
+  },
+  keoa: {
+    model:'KE-Option A', sub:'HYGEN Generator \u2014 Compact Starter Set (5 generators \u00b7 1 set)', part:'KEOA (HYGEN-1S5G)',
+    img:'images/products/option-a.png',
+    specs:[['Product','HYGEN Generator \u2014 single-shaft multi-generator set'],['Configuration','5 generators on 1 rotation shaft (1 set)'],['Per-Generator Output','150 \u2013 200 W'],['Set Output (continuous)','\u2265 1.0 kW/h'],['Drive Motor','DC 24V / 17A / 400W'],['Motor Speed','1 rpm (low-speed, high-torque)'],['Output Ports','10 ports'],['Unit Dimensions','80 \u00d7 30 \u00d7 30 cm'],['Unit Weight','\u2248 60 kg'],['Mounting','Single-shaft parallel array; generator count adjustable'],['Target Use','Light commercial / residential backup / micro-load']],
+    features:['Korean HYGEN one-shaft architecture \u2014 multiple generators driven by a single low-rpm motor','5 generators per set; each generator delivers 150 \u2013 200 W','Compact single-unit footprint (80 \u00d7 30 \u00d7 30 cm, \u2248 60 kg)','Low-rpm (1 rpm) drive motor for reduced mechanical wear and quiet operation','Modular \u2014 generator count on the shaft can be adjusted to match site load','DC 24V motor input (17A / 400W) \u2014 compatible with solar / ESS DC buses','10 output ports per unit for parallel distribution','Entry tier \u2014 ideal for first-time HYGEN adopters and pilot deployments'],
+    desc:'KE-Option A is the entry configuration of the HYGEN Generator family. A single DC 24V / 400W motor rotates one shaft at 1 rpm, driving 5 generators in parallel (150 \u2013 200 W each) for continuous set output of \u2265 1.0 kW/h. The unit measures 80 \u00d7 30 \u00d7 30 cm at \u2248 60 kg with 10 output ports. HYGEN\'s core advantage is the shared-shaft architecture: a single low-speed motor powers multiple generators at once, and the generator count is adjustable to match the site load profile. Option A targets pilot deployments, light commercial premises, residential backup, and off-grid micro-loads where a compact single-set footprint is required.'
+  },
+  keob: {
+    model:'KE-Option B', sub:'HYGEN Generator \u2014 Standard Single Set (6 generators \u00b7 1 set)', part:'KEOB (HYGEN-1S6G)',
+    img:'images/products/option-b.png',
+    specs:[['Product','HYGEN Generator \u2014 single-shaft multi-generator set'],['Configuration','6 generators on 1 rotation shaft (1 set)'],['Per-Generator Output','150 \u2013 200 W'],['Set Output (continuous)','\u2248 1.2 kW/h'],['Drive Motor','DC 24V / 17A / 400W'],['Motor Speed','1 rpm (low-speed, high-torque)'],['Output Ports','10 ports'],['Unit Dimensions','80 \u00d7 30 \u00d7 30 cm'],['Unit Weight','\u2248 60 kg'],['Mounting','Single-shaft parallel array; generator count adjustable'],['Target Use','Standard commercial, small-business, workshop micro-grid']],
+    features:['Standard HYGEN single-set configuration \u2014 6 generators on one rotation shaft','Each generator delivers 150 \u2013 200 W; set output \u2248 1.2 kW/h continuous','Matches the same compact unit footprint (80 \u00d7 30 \u00d7 30 cm, \u2248 60 kg) as Option A','Low-rpm (1 rpm) drive motor \u2014 extended service life, quiet operation','10 output ports per unit for parallel distribution','Adjustable generator count on the shared shaft for site-specific tuning','Direct DC 24V integration with solar / ESS DC architectures','Best-fit baseline for small-business and workshop micro-grid loads'],
+    desc:'KE-Option B is the standard single-set HYGEN Generator configuration. The same 80 \u00d7 30 \u00d7 30 cm / \u2248 60 kg chassis as Option A is populated with 6 generators on the shared shaft, driven by the identical DC 24V / 400W motor at 1 rpm. Set output rises to \u2248 1.2 kW/h continuous, with 10 output ports per unit. Option B is the recommended baseline when buyers want the full single-set load band without stepping up to a multi-set combo \u2014 appropriate for standard commercial premises, workshops, and small-business micro-grid tie-ins.'
+  },
+  keoc: {
+    model:'KE-Option C', sub:'HYGEN Generator \u2014 Dual-Set Combo (12 generators \u00b7 2 sets)', part:'KEOC (HYGEN-2S12G)',
+    img:'images/products/option-c.png',
+    specs:[['Product','HYGEN Generator \u2014 dual-set multi-generator array'],['Configuration','2 parallel sets \u00b7 12 generators total (6 per set)'],['Per-Generator Output','150 \u2013 200 W'],['Total Output (continuous)','\u2248 2.4 kW/h'],['Drive Motor','2 \u00d7 DC 24V / 17A / 400W'],['Motor Speed','1 rpm per shaft'],['Output Ports','20 ports (10 per set)'],['Array Dimensions','2 \u00d7 (80 \u00d7 30 \u00d7 30 cm)'],['Array Weight','\u2248 120 kg'],['Mounting','Side-by-side parallel sets; generator count per set adjustable'],['Target Use','Sustained commercial load, micro-grid, small ESS tie-in']],
+    features:['Dual HYGEN set combo \u2014 two standard sets wired in parallel','12 generators total (6 per set) delivering \u2248 2.4 kW/h continuous','Same per-unit chassis (80 \u00d7 30 \u00d7 30 cm) doubled into a compact dual rack','Two independent DC 24V / 400W drive motors at 1 rpm \u2014 redundant drive path','20 total output ports for distributed load across multiple feeders','Each set\u2019s generator count is independently adjustable to site profile','Directly compatible with solar + ESS hybrids on the DC bus','Suited to sustained commercial loads and small micro-grid deployments'],
+    desc:'KE-Option C packages two standard HYGEN sets (Option B units) side-by-side to deliver a continuous \u2248 2.4 kW/h at the busbar. Each set retains its own DC 24V / 400W motor and independent 1-rpm shaft with 6 generators \u2014 a redundant drive architecture that keeps at least half the array online during service. Combined port count rises to 20, and the per-set generator count can be tuned independently to match asymmetric load patterns. Option C is sized for sustained commercial load, small micro-grid tie-ins, and early-stage ESS-coupled deployments.'
+  },
+  keod: {
+    model:'KE-Option D', sub:'HYGEN Generator \u2014 Triple-Set Flagship (18 generators \u00b7 3 sets)', part:'KEOD (HYGEN-3S18G)',
+    img:'images/products/option-d.png',
+    specs:[['Product','HYGEN Generator \u2014 triple-set multi-generator array (flagship)'],['Configuration','3 parallel sets \u00b7 18 generators total (6 per set)'],['Per-Generator Output','150 \u2013 200 W'],['Total Output (continuous)','\u2248 3.6 kW/h'],['Drive Motor','3 \u00d7 DC 24V / 17A / 400W'],['Motor Speed','1 rpm per shaft'],['Output Ports','30 ports (10 per set)'],['Array Dimensions','3 \u00d7 (80 \u00d7 30 \u00d7 30 cm)'],['Array Weight','\u2248 180 kg'],['Mounting','Triple parallel rack; each set independently serviceable'],['Target Use','Distributed generation, off-grid campus, ESS-tied facility']],
+    features:['Flagship triple-set HYGEN array \u2014 three standard sets in a parallel rack','18 generators total (6 per set) for continuous \u2248 3.6 kW/h output','Three independent DC 24V / 400W motors at 1 rpm \u2014 full N+1 drive redundancy','30 total output ports across three feeders for zoned distribution','Each set\u2019s generator count is independently tunable to load demand','Optimised for ESS coupling, off-grid campus sites, and distributed generation','Same compact per-unit chassis (80 \u00d7 30 \u00d7 30 cm) \u2014 linear scaling of footprint','Highest continuous output in the HYGEN family within a single delivered array'],
+    desc:'KE-Option D is the flagship HYGEN configuration \u2014 three standard sets racked in parallel to deliver a continuous \u2248 3.6 kW/h. Each set retains its own DC 24V / 400W drive motor, independent 1-rpm shaft, and 6 on-shaft generators, giving the array full N+1 drive redundancy and 30 distributed output ports. Each set\u2019s generator count remains independently adjustable, so the array can be tuned asymmetrically for facility zones. Option D is sized for distributed generation on commercial and light-industrial campuses, off-grid facility backup, and ESS-tied deployments where continuous multi-kilowatt output is required in a compact, serviceable footprint.'
   }
 };
 
@@ -3438,12 +3557,13 @@ const SECTORS = {
     desc: 'IoT appliances, wellness devices, and premium K-lifestyle goods curated for global retail.'
   },
   'k-energy': {
-    active: false,
-    tag: 'K-Energy',
-    title: 'Renewable & Sustainable Tech',
+    active: true,
+    gridId: 'kenergyGrid',
+    tag: 'K-Energy · HYGEN Generator',
+    title: 'One-Shaft Multi-Generator Sets',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>',
     title2: 'K-Energy Sector',
-    desc: 'Solar modules, battery storage, EV-adjacent components from verified Korean clean-tech partners.'
+    desc: 'Korean HYGEN Generator — multiple generators driven by a single low-rpm DC motor on one shared shaft. Four configurations: KE-Option A / B / C / D.'
   }
 };
 function switchSector(id) {
@@ -3525,8 +3645,10 @@ const MATCH_CATALOG = [
   { id:'franchise-retail', name:'K-Franchise: Retail & Service Concepts', sector:'K-Franchise', tags:['retail','hospitality','healthcare'], scale:['m','l','xl'], desc:'Master-franchise opportunities across beauty, K-mart retail, and service concepts with territory exclusivity. Joining 2026.', coming:true },
   { id:'smart-iot', name:'K-Smart Living: Connected Appliances', sector:'K-Smart Living', tags:['retail','hospitality'], scale:['m','l','xl'], desc:'Premium K-lifestyle IoT appliances curated for global retail. Joining 2026.', coming:true },
   { id:'smart-wellness', name:'K-Smart Living: Wellness Devices', sector:'K-Smart Living', tags:['retail','healthcare','hospitality'], scale:['s','m'], desc:'Korean wellness & beauty-tech devices with certified export compliance. Joining 2026.', coming:true },
-  { id:'energy-solar', name:'K-Energy: Solar Modules', sector:'K-Energy', tags:['energy','government','manufacturing'], scale:['l','xl'], desc:'Verified Korean solar panel manufacturers & BOS components. Joining 2026.', coming:true },
-  { id:'energy-battery', name:'K-Energy: Battery Storage', sector:'K-Energy', tags:['energy','logistics','manufacturing','tech'], scale:['l','xl'], desc:'Commercial-grade ESS & EV-adjacent cells from top Korean cell makers. Joining 2026.', coming:true }
+  { id:'keoa', name:'K-Energy: KE-Option A · HYGEN 5-Gen Starter', sector:'K-Energy', tags:['energy','retail','hospitality','manufacturing'], scale:['s','m'], desc:'HYGEN entry set — 5 generators on one shaft, \u22481.0 kW/h continuous. Available now.' },
+  { id:'keob', name:'K-Energy: KE-Option B · HYGEN 6-Gen Standard', sector:'K-Energy', tags:['energy','manufacturing','logistics','retail'], scale:['m','l'], desc:'HYGEN standard single set — 6 generators, \u22481.2 kW/h continuous. Available now.' },
+  { id:'keoc', name:'K-Energy: KE-Option C · HYGEN Dual-Set Combo', sector:'K-Energy', tags:['energy','manufacturing','government','logistics'], scale:['l','xl'], desc:'HYGEN dual-set combo — 12 generators across 2 sets, \u22482.4 kW/h continuous. Available now.' },
+  { id:'keod', name:'K-Energy: KE-Option D · HYGEN Triple-Set Flagship', sector:'K-Energy', tags:['energy','government','manufacturing','tech'], scale:['l','xl'], desc:'HYGEN flagship triple-set array — 18 generators across 3 sets, \u22483.6 kW/h. Available now.' }
 ];
 const REGION_HINTS = {
   'united states':['healthcare','finance','government'], 'usa':['healthcare','finance','government'], 'us':['healthcare','finance','government'],
@@ -3586,7 +3708,7 @@ function runMatch(e) {
 }
 function applyMatchToRFQ() {
   const m = window._lastMatch; if (!m) { location.hash = '#rfq'; return; }
-  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE','rosettaplus':'mROSETTAPLUS' };
+  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE','rosettaplus':'mROSETTAPLUS','keoa':'mKEOA','keob':'mKEOB','keoc':'mKEOC','keod':'mKEOD' };
   document.querySelectorAll('#rfqFields .model-cb input').forEach(cb => cb.checked = false);
   m.ranked.forEach(r => { const id = modelMap[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
   const cSel = document.getElementById('fCountry');
@@ -3972,8 +4094,9 @@ function handleMore() {
       chatOpts([
         { label: 'Browse K-Security (DL Series)', action: () => chatStep('browse_models') },
         { label: 'Browse K-Tech 3D services', action: () => chatStep('browse_ktech') },
+        { label: 'Browse K-Energy (HYGEN Generator)', action: () => chatStep('browse_kenergy') },
         { label: 'K-Bio · Rosetta Plus', action: () => chatStep('browse_kbio') },
-        { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living / Energy)', action: () => chatStep('browse_sourcing') },
+        { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living)', action: () => chatStep('browse_sourcing') },
         { label: cl('quote') + ' →', action: () => chatStep('quote_direct') }
       ]);
     });
@@ -4089,12 +4212,14 @@ function cl(key) { const lang = document.documentElement.lang || 'en'; return (C
 const SHREDDER_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
 const KTECH_IDS = ['kt3dad','kt3dvid','kt3dcine'];
 const KBIO_IDS = ['rosettaplus'];
-const MODEL_IDS = [...SHREDDER_IDS, ...KTECH_IDS, ...KBIO_IDS];
+const KENERGY_IDS = ['keoa','keob','keoc','keod'];
+const MODEL_IDS = [...SHREDDER_IDS, ...KTECH_IDS, ...KBIO_IDS, ...KENERGY_IDS];
 
 function sectorOf(id) {
   if (SHREDDER_IDS.includes(id)) return 'k-security';
   if (KTECH_IDS.includes(id)) return 'k-tech';
   if (KBIO_IDS.includes(id)) return 'k-bio';
+  if (KENERGY_IDS.includes(id)) return 'k-energy';
   return null;
 }
 
@@ -4109,7 +4234,11 @@ function findModelInText(text) {
     kt3dad: /(kt3dad|3dad|3dadvert|3dcommerc|3dcm|3dad(s|vertis))/,
     kt3dcine: /(kt3dcine|3dcine|cinema|feature\s?film|remaster|theatrical)/,
     kt3dvid: /(kt3dvid|3dvid|3dvideo|2dto3d|2d→3d|stereoscop|3dconvert|3dconvers|stereoconv)/,
-    rosettaplus: /(rosetta|rosettaplus|hff|healthfunctional|kfda|haccp|glycosaminoglycan|cholecalcif)/
+    rosettaplus: /(rosetta|rosettaplus|hff|healthfunctional|kfda|haccp|glycosaminoglycan|cholecalcif)/,
+    keoa: /(keoa|keoptiona|ke-optiona|hygen1s5g|hygen-?a|optiona)/,
+    keob: /(keob|keoptionb|ke-optionb|hygen1s6g|hygen-?b|optionb)/,
+    keoc: /(keoc|keoptionc|ke-optionc|hygen2s12g|hygen-?c|optionc)/,
+    keod: /(keod|keoptiond|ke-optiond|hygen3s18g|hygen-?d|optiond)/
   };
   for (const [id,pat] of Object.entries(aliases)) {
     if (typeof pat === 'string' ? t.includes(pat) : pat.test(t)) return id;
@@ -4132,7 +4261,7 @@ function fmtCompare(a,b) {
 }
 
 const KB = [
-  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's B2B trade gateway connecting verified Korean manufacturers to global buyers. Active catalog:\n\n• K-Security — DL Series industrial shredders (6 models, GSA Schedule, HIPAA · Level 3 / P-4)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD advertising · KT-3DVID video · KT-3DCINE feature film)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing in 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living · K-Energy.\n\nAsk me about specs, MOQ, lead times, Incoterms, certifications, Partner Match, Spotlight concepts, Quote Calculator, RFQ Tracker — or anything else. How can I help?" },
+  { intent:'greeting', kw:['hello','hi','hey','good morning','good afternoon','howdy'], resp:"Hello! I'm the ERGSN Trade Advisor. ERGSN is Korea's B2B trade gateway connecting verified Korean manufacturers to global buyers. Active catalog:\n\n• K-Security — DL Series industrial shredders (6 models, GSA Schedule, HIPAA · Level 3 / P-4)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD advertising · KT-3DVID video · KT-3DCINE feature film)\n• K-Energy — HYGEN Generator (4 configurations: KE-Option A / B / C / D)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing in 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nAsk me about specs, MOQ, lead times, Incoterms, certifications, Partner Match, Spotlight concepts, Quote Calculator, RFQ Tracker — or anything else. How can I help?" },
   { intent:'thanks', kw:['thank','thanks','great','awesome','perfect','appreciate'], resp:"You're welcome! Feel free to ask anything else, or click below to request a quote." },
   { intent:'bye', kw:['bye','goodbye','see you','talk later'], resp:"Thank you for visiting ERGSN! Don't hesitate to reach out anytime. Have a great day!" },
   { intent:'price', kw:['price','cost','how much','pricing','budget','expensive','cheap','dollar','usd'], resp:"We provide competitive CIF pricing tailored to each order (quantity, destination, terms). Prices are quoted per inquiry to ensure accuracy.\n\nWould you like me to set up a quote request?" },
@@ -4148,7 +4277,7 @@ const KB = [
   { intent:'warranty', kw:['warranty','guarantee','repair','defect','broken','issue','problem'], resp:"ERGSN provides manufacturer warranty on all DL Series models. Warranty terms are specified on the Proforma Invoice per order.\n\nAll-metal chain drive construction means significantly fewer mechanical failures compared to plastic-gear alternatives. Our machines are designed for 10+ years of reliable operation." },
   { intent:'company', kw:['ergsn','company','about','who','history','founded','korea','seoul','manufacturer','identity','platform','gateway','mission'], followUp:['platform','sectors','verification'], resp:"ERGSN CO., LTD. — Korea's Trusted Trade Gateway\n• Founded: 2013, Seoul, Korea (13+ years of trade history)\n• Identity: Trade PLATFORM (not a manufacturer) — we implant Korean hi-tech and cultural trends into global business\n• Flagship track record: Long-term supply partner of Capital Shredder Corp. (Rockville, MD). DL Series shredders are GSA Schedule listed and U.S. defense procured\n• Sectors: K-Security (active) · K-Tech (active) · K-Bio (active) · K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living · K-Energy (joining 2026)\n• Certifications: HIPAA · GSA · DIN 66399\n• Terms: CIF worldwide · T/T payment" },
   { intent:'platform', kw:['what do you do','what is ergsn','platform','redefine','role','mission','position','not a manufacturer','trade platform'], followUp:['sectors','verification','ai_match'], resp:"ERGSN is a TRADE PLATFORM — not a manufacturer. Our role is to implant Korea's high-technology and cultural trends directly into global business operations.\n\nHow it works:\n1. We identify top Korean producers across hi-tech and lifestyle sectors\n2. We personally vet, audit, and partner with them over years\n3. We deliver their best products to global procurement teams — with Korean engineering rigor and export compliance built-in\n\nOur flagship DL Series shredders (K-Security) prove the model — 13+ years of trade, GSA Schedule, U.S. defense procured. Now scaling the same verification standard to K-Tech, K-Bio, K-Beauty, K-Culture Goods, K-Franchise, K-Smart Living, and K-Energy." },
-  { intent:'sectors', kw:['sectors','sector','category','categories','k-security','security','k-tech','ktech','k-bio','kbio','k-beauty','kbeauty','k-culture','culture goods','k-franchise','franchise','k-smart living','smart living','k-energy','future energy','energy','what products','product lines','coming soon','2026'], followUp:['platform','verification','ai_match'], resp:"ERGSN multi-sector catalog:\n\n🟢 K-Security (ACTIVE) — DL Series shredders (6 models). Level 3/P-4, all-metal, GSA Schedule, HIPAA compliant.\n\n🟢 K-Tech (ACTIVE) — 2D → 3D stereoscopic conversion: advertising, video, theatrical-grade film remaster.\n\n🟢 K-Bio (ACTIVE) — Rosetta Plus Health Functional Food (HACCP · KFDA). Already exporting to MX, YE, IN.\n\n⏳ K-Beauty (sourcing) — Premium skincare, cosmetics, beauty devices from audited Korean brands.\n\n⏳ K-Culture Goods (sourcing) — Licensed K-pop/K-drama merchandise, traditional crafts, designer fashion.\n\n⏳ K-Franchise (sourcing) — Verified Korean F&B, café, retail and service franchise concepts with master-franchise opportunities.\n\n⏳ K-Smart Living (sourcing) — Connected appliances, wellness & beauty-tech devices, premium K-lifestyle goods.\n\n⏳ K-Energy (sourcing) — Solar modules, battery storage (ESS), EV-adjacent components from verified Korean clean-tech partners.\n\nAll Sourcing sectors apply the same partner-verification standard that built our DL Series track record." },
+  { intent:'sectors', kw:['sectors','sector','category','categories','k-security','security','k-tech','ktech','k-bio','kbio','k-beauty','kbeauty','k-culture','culture goods','k-franchise','franchise','k-smart living','smart living','k-energy','future energy','energy','what products','product lines','coming soon','2026'], followUp:['platform','verification','ai_match'], resp:"ERGSN multi-sector catalog:\n\n🟢 K-Security (ACTIVE) — DL Series shredders (6 models). Level 3/P-4, all-metal, GSA Schedule, HIPAA compliant.\n\n🟢 K-Tech (ACTIVE) — 2D → 3D stereoscopic conversion: advertising, video, theatrical-grade film remaster.\n\n🟢 K-Energy (ACTIVE) — HYGEN Generator. One DC 24V / 400W motor drives multiple generators on a shared shaft. Four configurations (KE-Option A / B / C / D) from 1.0 kW/h to 3.6 kW/h continuous.\n\n🟢 K-Bio (ACTIVE) — Rosetta Plus Health Functional Food (HACCP · KFDA). Already exporting to MX, YE, IN.\n\n⏳ K-Beauty (sourcing) — Premium skincare, cosmetics, beauty devices from audited Korean brands.\n\n⏳ K-Culture Goods (sourcing) — Licensed K-pop/K-drama merchandise, traditional crafts, designer fashion.\n\n⏳ K-Franchise (sourcing) — Verified Korean F&B, café, retail and service franchise concepts with master-franchise opportunities.\n\n⏳ K-Smart Living (sourcing) — Connected appliances, wellness & beauty-tech devices, premium K-lifestyle goods.\n\nAll Sourcing sectors apply the same partner-verification standard that built our DL Series track record." },
   { intent:'verification', kw:['verification','verify','vet','audit','partner','qualification','process','how do you choose','standard','how verify'], followUp:['platform','sectors','company'], resp:"ERGSN's 4-step partner verification process (before any Korean producer joins our network):\n\n1. Discovery — identify candidate manufacturers through Korean industrial networks\n2. Engineering Audit — inspect production, quality systems, materials (e.g. all-metal chain drive standard)\n3. Compliance & Export Review — verify certifications, export history, trade documentation\n4. Long-term Partnership — multi-year collaboration and performance tracking before full catalog listing\n\nThis is the same rigor that shaped our DL Series — and it now extends to K-Tech, K-Bio, K-Beauty, K-Culture Goods, K-Franchise, K-Smart Living, and K-Energy." },
   { intent:'ai_match', kw:['ai match','partner match','match making','matchmaking','ai curation','recommendation tool','who is right','suggest supplier','fit for me'], followUp:['sectors','quote','calculator'], resp:"AI Partner Match-making is ERGSN's curation tool. Tell it:\n• Your country\n• Your primary industry (government, finance, healthcare, tech, manufacturing, energy, retail, etc.)\n• (Optional) annual procurement volume\n\nIt returns a ranked Top 3 of ERGSN portfolio items with a fit score — pulling from active DL Series, K-Tech, K-Bio products and upcoming K-Beauty / K-Culture Goods / K-Franchise / K-Smart Living / K-Energy items.\n\nClick 'Request Quote for These' and your selections auto-fill into the RFQ form, which sends to ERGSN via email + Telegram." },
   { intent:'calculator', kw:['calculator','estimate','quote calculator','instant quote','price estimate','calc'], followUp:['quote','incoterms','shipping'], resp:"The Quote Calculator gives you an instant CIF/FOB estimate. Pick model, quantity, destination — it shows indicative pricing in your local currency (with live FX).\n\nThis is an estimate for planning. For a binding quote, use 'Request a Quote' (RFQ form) — we'll issue a formal Proforma Invoice." },
@@ -4166,13 +4295,13 @@ const KB = [
   { intent:'k_culture_goods', kw:['k-culture','kculture','culture goods','kpop','k-pop','kpop merch','k-pop merchandise','licensed merchandise','hanbok','ceramic','ceramics','fashion accessory','fashion accessories','k-drama','kdrama','fandom','collector','official license'], resp:"K-Culture Goods (Sourcing — joining 2026)\nOfficially-licensed K-pop and K-drama merchandise, traditional Korean crafts, and designer fashion accessories.\n\n• K-pop / K-drama licensed merchandise (from rights-holding Korean IP consortiums)\n• Traditional crafts: hanbok, ceramics, heritage accessories\n• Designer fashion — contemporary Korean streetwear & luxury accessories\n• Channels: fandom retail · global DTC · duty-free · collector platforms\n\nEarly sourcing inquiries welcome via Spotlight." },
   { intent:'k_franchise', kw:['franchise','master franchise','cafe franchise','cafe','bakery','qsr','f&b','fnb','food and beverage','retail franchise','service franchise','brand licensing','territory','master-franchise','k-franchise','kfranchise'], resp:"K-Franchise (Sourcing — joining 2026)\nVerified Korean F&B, café, retail, and service franchise systems.\n\n• Turnkey brand licensing with operations playbooks\n• Master-franchise territory-exclusive structures available\n• Supply chain, training, and concept handover included\n• Covers: café · bakery · QSR · beauty retail · lifestyle retail · service concepts\n\nApplicable for groups seeking single-territory or multi-country master rights. Pilot enquiries accepted via Spotlight or direct RFQ." },
   { intent:'k_smart_living', kw:['k-smart','ksmart','smart living','connected appliance','iot appliance','wellness device','smart home','k-lifestyle','klifestyle','lifestyle good'], resp:"K-Smart Living (Sourcing — joining 2026)\nConnected Korean appliances, wellness devices, and premium lifestyle goods curated for global retail.\n\n• Categories: IoT appliances · wellness & beauty-tech · premium lifestyle goods\n• Co-branded / OEM arrangements supported\n• Suitable for global retail, hospitality and curated e-commerce\n\nSpotlight currently includes K-Beauty Smart Mirror (concept stage) as a representative K-Smart Living preview item." },
-  { intent:'k_energy', kw:['solar','ess','battery storage','renewable','clean-tech','clean tech','energy storage','iec 62619','iec','ev cell','bos','photovoltaic','pv module','grid-tied','k-energy','kenergy','future energy'], followUp:['sectors','verification','quote'], resp:"K-Energy (Sourcing — joining 2026)\nVerified Korean solar modules, battery storage (ESS), and EV-adjacent components.\n\n• Solar panels & BOS components from Tier-1 Korean cell makers\n• Commercial-grade ESS — modular, stackable, grid-tied\n• IEC 62619 + country-specific grid certifications required for partner onboarding\n• Target volumes: commercial & utility-scale\n\nSpotlight currently includes a 50 kWh modular Commercial ESS (pilot stage) as a K-Energy preview item." },
+  { intent:'k_energy', kw:['hygen','generator','one shaft','single shaft','shared shaft','multi-generator','dc 24v','dc24v','1 rpm','low rpm','400w','ke-option','keoption','keoa','keob','keoc','keod','k-energy','kenergy','future energy','solar','ess','battery storage','renewable','clean-tech','clean tech','energy storage','iec 62619','iec','ev cell','bos','photovoltaic','pv module','grid-tied'], followUp:['sectors','verification','quote'], resp:"K-Energy · HYGEN Generator (ACTIVE)\nKorean HYGEN architecture — a single DC 24V / 400W motor rotates one shared shaft at 1 rpm, driving multiple generators in parallel. Each generator outputs 150–200 W; the number of generators per shaft is adjustable.\n\nFour configurations:\n• KE-Option A — 5 generators · 1 set · ≈1.0 kW/h (compact starter, 80×30×30 cm, ≈60 kg)\n• KE-Option B — 6 generators · 1 set · ≈1.2 kW/h (standard single set)\n• KE-Option C — 12 generators · 2 sets · ≈2.4 kW/h (dual-set combo)\n• KE-Option D — 18 generators · 3 sets · ≈3.6 kW/h (flagship, N+1 drive redundancy)\n\nAll units share the same compact chassis (80×30×30 cm, ≈60 kg per set) and DC 24V bus — suitable for solar / ESS integration, off-grid micro-grids, and distributed backup." },
   { intent:'capacity', kw:['office','people','employees','volume','capacity','daily','many','sheets per day'], resp:null, handler:'handleCapacity' },
   { intent:'spec', kw:['spec','specification','detail','feature','info about','tell me about'], resp:null, handler:'handleSpec' },
   { intent:'compare', kw:['compare','vs','versus','difference','better','or'], resp:null, handler:'handleCompareText' },
   { intent:'recommend', kw:['recommend','suggest','which','best','right','need','looking for','suitable'], resp:null, handler:'handleRecommendText' },
   { intent:'quote', kw:['quote','rfq','inquiry','order','buy','purchase','get a quote'], resp:null, handler:'handleQuoteChat' },
-  { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd','kt-3dad','kt3dad','kt-3dvid','kt3dvid','kt-3dcine','kt3dcine','rosetta','rosetta plus','rosettaplus'], resp:null, handler:'handleSpec' }
+  { intent:'model_query', kw:['dl-10x','dl-12x','dl-16x','dl10x','dl12x','dl16x','10xd','12xd','16xd','kt-3dad','kt3dad','kt-3dvid','kt3dvid','kt-3dcine','kt3dcine','rosetta','rosetta plus','rosettaplus','ke-option a','ke-option b','ke-option c','ke-option d','keoa','keob','keoc','keod','hygen','hygen generator'], resp:null, handler:'handleSpec' }
 ];
 
 // Synonym expansion for broader matching
@@ -4219,9 +4348,10 @@ async function callClaudeAPI(text) {
 ACTIVE sectors (products ready to quote):
 - K-Security: DL Series industrial shredders (DL-10X, DL-12X, DL-16X, DL-10XD, DL-12XD, DL-16XD). All models Level 3 / P-4 cross-cut, all-metal chain drive, oil-free, HIPAA · GSA Schedule. DL-16XD flagship: up to 90 sheets/pass at 31 FPM, 3.25 Hp, 115V/30A NEMA L5-30P.
 - K-Tech: proprietary 2D → 3D stereoscopic conversion services — KT-3DAD (3D advertising production, 3–6 wk), KT-3DVID (2D→3D video conversion, 2–4 wk for ≤90 min), KT-3DCINE (feature-film 3D remaster, 8–16 wk). Output up to 4K UHD, Side-by-Side / Over-Under / MVC / Frame-Packed / Stereo DCP.
+- K-Energy: HYGEN Generator — a single DC 24V / 400W motor rotates one shared shaft at 1 rpm, driving multiple generators (150–200 W each) in parallel. Four configurations: KE-Option A (5 gen · 1 set · ≈1.0 kW/h), KE-Option B (6 gen · 1 set · ≈1.2 kW/h), KE-Option C (12 gen · 2 sets · ≈2.4 kW/h), KE-Option D (18 gen · 3 sets · ≈3.6 kW/h flagship). Unit chassis 80×30×30 cm / ≈60 kg, 10 output ports per set.
 - K-Bio: Rosetta Plus HFF — HACCP-certified, KFDA-assured Health Functional Food, representative function of improving depression, psychosis and panic disorder. Capacity 1,000+ units/month. Already exporting to Mexico, Yemen, India.
 
-SOURCING in 2026 (partner-matching in progress — direct to RFQ for early inquiries): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness) · K-Energy (solar, ESS, EV-adjacent, IEC 62619).
+SOURCING in 2026 (partner-matching in progress — direct to RFQ for early inquiries): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness).
 
 Trade: CIF any major port, T/T 50%/50%, 4–6 wk lead time for DL Series. Never quote exact prices — redirect to RFQ form. Be concise (under 150 words). Support EN/ES/AR/FR/JA/TR/zh-Hans/zh-Hant.`;
     const resp = await fetch(CLAUDE_API_ENDPOINT, {
@@ -4432,9 +4562,9 @@ function handleCompareText(text) {
     return;
   }
   // Non-shredder sector comparison is not spec-for-spec compatible
-  const nonShredder = [...KTECH_IDS, ...KBIO_IDS].filter(id => t.includes(id) || t.includes(P[id].model.toLowerCase()));
+  const nonShredder = [...KTECH_IDS, ...KBIO_IDS, ...KENERGY_IDS].filter(id => t.includes(id) || t.includes(P[id].model.toLowerCase()));
   if (nonShredder.length >= 1) {
-    chatBotMsg("Spec-to-spec comparison is currently available within the DL Series (K-Security). K-Tech services (KT-3DAD / KT-3DVID / KT-3DCINE) and K-Bio Rosetta Plus use different spec dimensions — ask me about any of them individually and I'll walk through the details.");
+    chatBotMsg("Spec-to-spec comparison is currently available within the DL Series (K-Security) and across KE-Option A/B/C/D (K-Energy HYGEN). K-Tech services (KT-3DAD / KT-3DVID / KT-3DCINE) and K-Bio Rosetta Plus use different spec dimensions — ask me about any of them individually and I'll walk through the details.");
     return;
   }
   chatBotMsg("Which two DL Series models would you like to compare? For example: \"Compare DL-12X vs DL-16XD\"");
@@ -4446,7 +4576,7 @@ function handleCapacity(text) {
   const nonShredderHint = findModelInText(text);
   if (nonShredderHint && !SHREDDER_IDS.includes(nonShredderHint)) { handleSpec(nonShredderHint); return; }
   if (/(3d|stereoscop|rosetta|hff|kfda|k-tech|k-bio|k-beauty|k-culture|k-franchise|k-smart|k-energy|solar|ess)/i.test(lower)) {
-    chatBotMsg("The capacity-based recommendation engine is tuned for DL Series shredders. For K-Tech 3D services, K-Bio (Rosetta Plus), or upcoming sectors, ask me directly and I'll walk through the relevant specs.");
+    chatBotMsg("The capacity-based recommendation engine is tuned for DL Series shredders. For K-Tech 3D services, K-Energy HYGEN Generator (KE-Option A/B/C/D), K-Bio (Rosetta Plus), or upcoming sectors, ask me directly and I'll walk through the relevant specs.");
     return;
   }
   const num = parseInt(text.match(/(\d+)/)?.[1] || '0');
@@ -4481,13 +4611,14 @@ function handleQuoteChat() {
 
 const CHAT_TREE = {
   start: {
-    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway — every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security — DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing partners for 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living · K-Energy.\n\nHow may I assist you today?",
+    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway — every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security — DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech — 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Energy — HYGEN Generator (KE-Option A / B / C / D)\n• K-Bio — Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n\nSourcing partners for 2026: K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nHow may I assist you today?",
     opts: [
       { label: 'Find the right shredder for me', next: 'find_office_size' },
       { label: 'Browse K-Security (DL Series)', next: 'browse_models' },
       { label: 'Browse K-Tech 3D services', next: 'browse_ktech' },
+      { label: 'Browse K-Energy (HYGEN Generator)', next: 'browse_kenergy' },
       { label: 'Ask about K-Bio (Rosetta Plus)', next: 'browse_kbio' },
-      { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living / Energy)', next: 'browse_sourcing' },
+      { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living)', next: 'browse_sourcing' },
       { label: 'About ERGSN & verification', next: 'about_company' },
       { label: 'Trade terms (CIF, payment, shipping)', next: 'trade_info' },
       { label: 'Request a quote directly', next: 'quote_direct' }
@@ -4528,8 +4659,18 @@ const CHAT_TREE = {
       { label: 'Back to main menu', next: 'start' }
     ]
   },
+  browse_kenergy: {
+    msg: "K-Energy · HYGEN Generator (ACTIVE). One DC 24V / 400W motor drives multiple generators at 1 rpm on a shared rotation shaft — each generator delivers 150–200 W, and the number of generators per shaft is adjustable. Four configurations:\n\n• KE-Option A — 5 generators · 1 set · ≈1.0 kW/h\n• KE-Option B — 6 generators · 1 set · ≈1.2 kW/h (standard)\n• KE-Option C — 12 generators · 2 sets · ≈2.4 kW/h (dual)\n• KE-Option D — 18 generators · 3 sets · ≈3.6 kW/h (flagship)\n\nWhich option would you like to learn about?",
+    opts: [
+      { label: 'KE-Option A — 5-Gen Starter', action: 'browse_keoa' },
+      { label: 'KE-Option B — 6-Gen Standard', action: 'browse_keob' },
+      { label: 'KE-Option C — Dual-Set Combo', action: 'browse_keoc' },
+      { label: 'KE-Option D — Triple-Set Flagship', action: 'browse_keod' },
+      { label: 'Back to main menu', next: 'start' }
+    ]
+  },
   browse_sourcing: {
-    msg: "Sectors we're sourcing in 2026 — pilot enquiries and early-access buyers welcome now via Spotlight:\n\n• K-Beauty — skincare · cosmetics · beauty devices (CGMP · ISO 22716 priority)\n• K-Culture Goods — licensed K-pop / K-drama merchandise · traditional crafts · fashion\n• K-Franchise — turnkey F&B / café / retail / service concepts with master-franchise\n• K-Smart Living — connected appliances · wellness · lifestyle goods\n• K-Energy — solar modules · ESS · EV-adjacent (IEC 62619)\n\nWhat would you like to do?",
+    msg: "Sectors we're sourcing in 2026 — pilot enquiries and early-access buyers welcome now via Spotlight:\n\n• K-Beauty — skincare · cosmetics · beauty devices (CGMP · ISO 22716 priority)\n• K-Culture Goods — licensed K-pop / K-drama merchandise · traditional crafts · fashion\n• K-Franchise — turnkey F&B / café / retail / service concepts with master-franchise\n• K-Smart Living — connected appliances · wellness · lifestyle goods\n\nWhat would you like to do?",
     opts: [
       { label: 'Submit a sourcing inquiry', next: 'quote_direct' },
       { label: 'Browse active products instead', next: 'start' },
@@ -4570,6 +4711,10 @@ const CHAT_TREE = {
       { label: 'KT-3DAD \u2014 3D Advertising (K-Tech)', action: 'quote_kt3dad' },
       { label: 'KT-3DVID \u2014 2D\u21923D Video (K-Tech)', action: 'quote_kt3dvid' },
       { label: 'KT-3DCINE \u2014 Feature Film 3D (K-Tech)', action: 'quote_kt3dcine' },
+      { label: 'KE-Option A \u2014 HYGEN 5-Gen (K-Energy)', action: 'quote_keoa' },
+      { label: 'KE-Option B \u2014 HYGEN 6-Gen (K-Energy)', action: 'quote_keob' },
+      { label: 'KE-Option C \u2014 HYGEN Dual-Set (K-Energy)', action: 'quote_keoc' },
+      { label: 'KE-Option D \u2014 HYGEN Triple-Set (K-Energy)', action: 'quote_keod' },
       { label: 'Rosetta Plus (K-Bio)', action: 'quote_rosettaplus' },
       { label: 'Not sure yet \u2014 help me choose', next: 'find_office_size' }
     ]
@@ -5373,6 +5518,15 @@ const CALC_CATALOG = {
       ['kt3dvid',  'KT-3DVID — 2D\u21923D Video (per minute)',      800],
       ['kt3dcine', 'KT-3DCINE — Film Remaster (per feature)',    120000]
     ]
+  },
+  'k-energy': {
+    label: 'K-Energy', physical: true, qtyUnit: 'sets', rfqCheckboxPrefix: 'm',
+    models: [
+      ['keoa', 'KE-Option A — HYGEN 5-Gen Starter (1 set)',   3200],
+      ['keob', 'KE-Option B — HYGEN 6-Gen Standard (1 set)',  3600],
+      ['keoc', 'KE-Option C — HYGEN Dual-Set Combo (2 sets)', 7200],
+      ['keod', 'KE-Option D — HYGEN Triple-Set Flagship (3 sets)', 10800]
+    ]
   }
 };
 
@@ -5506,7 +5660,8 @@ function calcToQuote() {
     dl10x:'mDL10X', dl12x:'mDL12X', dl16x:'mDL16X',
     dl10xd:'mDL10XD', dl12xd:'mDL12XD', dl16xd:'mDL16XD',
     kt3dad:'mKT3DAD', kt3dvid:'mKT3DVID', kt3dcine:'mKT3DCINE',
-    rosettaplus:'mROSETTAPLUS'
+    rosettaplus:'mROSETTAPLUS',
+    keoa:'mKEOA', keob:'mKEOB', keoc:'mKEOC', keod:'mKEOD'
   };
   const cb = document.getElementById(rfqIdMap[item.id]);
   if (cb) cb.checked = true;
@@ -5592,7 +5747,8 @@ const MODEL_LABELS = {
   mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
   mDL10XD: 'DL-10XD', mDL12XD: 'DL-12XD', mDL16XD: 'DL-16XD',
   mKT3DAD: 'KT-3DAD', mKT3DVID: 'KT-3DVID', mKT3DCINE: 'KT-3DCINE',
-  mROSETTAPLUS: 'Rosetta Plus'
+  mROSETTAPLUS: 'Rosetta Plus',
+  mKEOA: 'KE-Option A', mKEOB: 'KE-Option B', mKEOC: 'KE-Option C', mKEOD: 'KE-Option D'
 };
 
 const PRODUCT_IMAGE_BASE = 'https://ceodon.github.io/ergsn/images/products/';
@@ -5604,7 +5760,11 @@ const PRODUCT_IMAGE_FILES = {
   'DL-10XD': 'dl-10xd.jpg',
   'DL-12XD': 'dl-12xd.jpg',
   'DL-16XD': 'dl-16xd.jpg',
-  'Rosetta Plus': 'rosseta-plus.jpg'
+  'Rosetta Plus': 'rosseta-plus.jpg',
+  'KE-Option A': 'option-a.png',
+  'KE-Option B': 'option-b.png',
+  'KE-Option C': 'option-c.png',
+  'KE-Option D': 'option-d.png'
 };
 function imageUrlsFor(modelNames) {
   return modelNames
