@@ -1445,6 +1445,8 @@ section { scroll-margin-top: var(--nav-h); }
   cursor: pointer; transition: background .15s, color .15s;
 }
 .chat-opt:hover { background: var(--gold); color: #0f1110; }
+.chat-opt-back { background: transparent; color: var(--tx-mid); border-color: #3a3a3a; opacity: .75; }
+.chat-opt-back:hover { background: #232524; color: var(--tx-hi); border-color: var(--tx-mid); opacity: 1; }
 .chat-typing {
   display: flex; gap: 4px; align-self: flex-start; padding: 10px 14px;
   background: #232524; border-radius: 14px; border-bottom-left-radius: 4px;
@@ -4003,7 +4005,7 @@ function closeMenu() {
 const CLAUDE_API_ENDPOINT = null;
 
 // ── Context memory + user profile ──
-let chatContext = { lastModel: null, history: [], topics: [], turnCount: 0, quotePrompted: false, awaitingReturn: null };
+let chatContext = { lastModel: null, history: [], topics: [], turnCount: 0, quotePrompted: false, awaitingReturn: null, currentStep: null, navStack: [] };
 let userProfile = { sector: null, size: null, needs: [] };
 function ctxPush(role, text) {
   chatContext.history.push({ role, text });
@@ -4752,8 +4754,7 @@ const CHAT_TREE = {
     msg: "K-Bio · Rosetta Plus (ACTIVE). KFDA-assured Health Functional Food with representative function of improving depression, psychosis and panic disorder. HACCP production; 1,000+ units/month capacity; currently exporting to Mexico, Yemen and India. What would you like to see?",
     opts: [
       { label: 'View Rosetta Plus full spec sheet', action: 'browse_rosettaplus' },
-      { label: 'Request a Rosetta Plus quote', action: 'quote_rosettaplus' },
-      { label: 'Back to main menu', next: 'start' }
+      { label: 'Request a Rosetta Plus quote', action: 'quote_rosettaplus' }
     ]
   },
   browse_kenergy: {
@@ -4762,15 +4763,13 @@ const CHAT_TREE = {
       { label: 'KE-Option A — 5-Gen Starter', action: 'browse_keoa' },
       { label: 'KE-Option B — 6-Gen Standard', action: 'browse_keob' },
       { label: 'KE-Option C — Dual-Set Combo', action: 'browse_keoc' },
-      { label: 'KE-Option D — Triple-Set Flagship', action: 'browse_keod' },
-      { label: 'Back to main menu', next: 'start' }
+      { label: 'KE-Option D — Triple-Set Flagship', action: 'browse_keod' }
     ]
   },
   browse_sourcing: {
     msg: "Sectors we're sourcing in 2026 — pilot enquiries and early-access buyers welcome now via Spotlight:\n\n• K-Beauty — skincare · cosmetics · beauty devices (CGMP · ISO 22716 priority)\n• K-Culture Goods — licensed K-pop / K-drama merchandise · traditional crafts · fashion\n• K-Franchise — turnkey F&B / café / retail / service concepts with master-franchise\n• K-Smart Living — connected appliances · wellness · lifestyle goods\n\nWhat would you like to do?",
     opts: [
       { label: 'Submit a sourcing inquiry', next: 'quote_direct' },
-      { label: 'Browse active products instead', next: 'start' },
       { label: 'Trade terms', next: 'trade_info' }
     ]
   },
@@ -4778,21 +4777,18 @@ const CHAT_TREE = {
     msg: "ERGSN CO., LTD. is a Seoul-based trade gateway founded in 2013. Rather than a single-product seller, we are a curator: every manufacturer in our network passes our 4-step verification (Vendor Audit \u2192 Quality Verification \u2192 Compliance Check \u2192 Long-term Partnership) before their products are offered to global buyers.\n\nOur first verified partner is ERGSN CO., LTD. itself \u2014 manufacturing the DL Series shredders that have been GSA Schedule listed and procured by U.S. defense agencies for over a decade through Capital Shredder Corp. (Rockville, MD).\n\nWould you like to know more?",
     opts: [
       { label: 'See the verification process', next: 'verify_detail' },
-      { label: 'Browse catalog', next: 'start' },
       { label: 'Trade terms', next: 'trade_info' }
     ]
   },
   verify_detail: {
     msg: "Our 4-Step Verification:\n\n1. Vendor Audit \u2014 on-site facility inspection, financials, 3-year operational history\n2. Quality Verification \u2014 independent product testing against DIN/ISO/ANSI standards\n3. Compliance Check \u2014 export documentation, HS codes, target-market regulations (HIPAA, GSA, CE)\n4. Long-term Partnership \u2014 formal supply agreement, dedicated account management, ongoing quality monitoring\n\nThis is why our buyers know that anything they purchase through ERGSN has already been thoroughly vetted.",
     opts: [
-      { label: 'Browse catalog', next: 'start' },
       { label: 'Request a quote', next: 'quote_direct' }
     ]
   },
   trade_info: {
     msg: "Standard trade terms:\n\n\u2022 Incoterms: CIF to any major port worldwide (FOB, CFR, EXW also available)\n\u2022 Payment: T/T 50% advance, 50% before shipment (L/C negotiable)\n\u2022 Lead time: 4\u20136 weeks from advance payment\n\u2022 HS Code: 8472.90\n\u2022 Packaging: Individual crating for ocean freight\n\nMay I help with anything else?",
     opts: [
-      { label: 'Browse catalog', next: 'start' },
       { label: 'Request a quote directly', next: 'quote_direct' }
     ]
   },
@@ -4938,6 +4934,9 @@ function offerReturnFollowUp(ret) {
 function startChat(){
   chatState.model=null; chatState.incoterm=null; chatState.country=null; chatState.port=null;
   chatState.qual = { volume:null, timeline:null, experience:null, payment:null, tier:null };
+  // Reset navigation history when the welcome screen is shown from scratch.
+  chatContext.navStack = [];
+  chatContext.currentStep = null;
   // Hybrid-language intro: when the active UI language is not English, prepend
   // a one-time note explaining why technical content remains in English.
   // Suppress on restartChat() within the same session via chatContext.introShown.
@@ -5237,7 +5236,18 @@ function getChatNode(key) {
     opts: (overlay.opts && overlay.opts.length) ? overlay.opts : base.opts
   };
 }
-function chatStep(key){
+function chatStep(key, opts){
+  opts = opts || {};
+  // Track breadcrumbs so a universal "\u2190 Back" button can pop back one level.
+  // Forward moves push the page we're leaving; an isBack call skips that push.
+  if (!opts.isBack && chatContext.currentStep && chatContext.currentStep !== key) {
+    const top = chatContext.navStack[chatContext.navStack.length - 1];
+    if (top !== chatContext.currentStep) chatContext.navStack.push(chatContext.currentStep);
+  }
+  // Reaching the welcome screen again clears the trail — no one expects
+  // "Back" from home to pop to an older home visit.
+  if (key === 'start') chatContext.navStack = [];
+  chatContext.currentStep = key;
   const node = getChatNode(key);
   const body = document.getElementById('chatBody');
   const typing = document.createElement('div');
@@ -5291,10 +5301,30 @@ function chatStep(key){
         };
         optDiv.appendChild(btn);
       });
+      // Auto-inject "\u2190 Back" to pop the breadcrumb when the user is
+      // deeper than the welcome screen.
+      if (chatContext.navStack.length) {
+        const backBtn = document.createElement('button');
+        backBtn.className = 'chat-opt chat-opt-back';
+        backBtn.textContent = '\u2190 Back';
+        backBtn.onclick = () => { optDiv.remove(); chatBack(); };
+        optDiv.appendChild(backBtn);
+      }
       body.appendChild(optDiv);
     }
     body.scrollTop = body.scrollHeight;
   }, 800);
+}
+function chatBack(){
+  if (!chatContext.navStack.length) return;
+  const prev = chatContext.navStack.pop();
+  const body = document.getElementById('chatBody');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-msg user';
+  userMsg.textContent = '\u2190 Back';
+  body.appendChild(userMsg);
+  body.scrollTop = body.scrollHeight;
+  chatStep(prev, { isBack: true });
 }
 function restartChat(){
   document.getElementById('chatBody').innerHTML = '';
