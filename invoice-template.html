@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Commercial Invoice Template · ERGSN</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  @page { size: A4 portrait; margin: 15mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #20201b; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #111; padding: 30px 20px; }
+  .tools { position: fixed; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 5; }
+  .tb { font-size: 13px; font-weight: 700; background: #c8932a; color: #111; padding: 10px 18px; border-radius: 8px; border: 0; cursor: pointer; font-family: inherit; }
+  .tb.ghost { background: transparent; color: #c8932a; border: 1px solid #c8932a; }
+  .doc { width: 210mm; margin: 0 auto; background: #fff; padding: 18mm 18mm 22mm; position: relative; box-shadow: 0 20px 80px rgba(0,0,0,.5); }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 22pt; color: #0a1830; margin: 0 0 2mm; letter-spacing: .01em; }
+  .sub { font-size: 9pt; color: #555; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6mm; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0a1830; padding-bottom: 5mm; margin-bottom: 6mm; }
+  .brand { font-family: 'DM Serif Display', serif; font-size: 22pt; font-weight: 800; color: #0a1830; letter-spacing: .14em; }
+  .brand .e { color: #c8932a; }
+  .brand-sub { font-size: 8.5pt; color: #666; letter-spacing: .24em; text-transform: uppercase; }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-bottom: 6mm; }
+  .block { border: 1px solid #d8d8d0; padding: 4mm 5mm; border-radius: 2mm; min-height: 32mm; }
+  .block h3 { font-size: 8.5pt; color: #c8932a; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 2mm; font-weight: 700; font-family: inherit; }
+  .field { display: grid; grid-template-columns: 28mm 1fr; font-size: 10pt; padding: 1mm 0; }
+  .field .l { color: #666; font-size: 9pt; }
+  .field input { border: 0; border-bottom: .5px dotted #999; padding: 1px 2px; font: inherit; width: 100%; outline: none; background: transparent; color: #111; }
+  .field input:focus { border-bottom-color: #c8932a; background: #fef8e6; }
+  table.lines { width: 100%; border-collapse: collapse; margin-bottom: 6mm; font-size: 9.5pt; }
+  table.lines th { background: #0a1830; color: #fff; text-align: left; padding: 3mm; font-size: 8.5pt; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  table.lines td { padding: 2.5mm 3mm; border-bottom: .5px solid #d8d8d0; vertical-align: top; }
+  table.lines input { width: 100%; border: 0; padding: 1mm; font: inherit; outline: none; }
+  table.lines input:focus { background: #fef8e6; }
+  table.lines input.num { text-align: right; }
+  table.lines tr:nth-child(even) td { background: #fafaf7; }
+  .totals { margin-left: auto; width: 80mm; border: 1px solid #d8d8d0; padding: 4mm 5mm; border-radius: 2mm; }
+  .totals .row { display: flex; justify-content: space-between; padding: 1mm 0; font-size: 10pt; }
+  .totals .row.total { border-top: 2px solid #0a1830; margin-top: 2mm; padding-top: 3mm; font-size: 13pt; font-weight: 700; color: #0a1830; }
+  .totals input { border: 0; border-bottom: .5px dotted #999; text-align: right; font: inherit; width: 50mm; outline: none; }
+  .notes { font-size: 9pt; color: #555; margin-top: 8mm; padding-top: 4mm; border-top: 1px solid #d8d8d0; }
+  .sigs { margin-top: 10mm; display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
+  .sig-box { text-align: center; }
+  .sig-line { border-bottom: .8px solid #0a1830; height: 14mm; }
+  .sig-cap { font-size: 9pt; color: #666; letter-spacing: .08em; margin-top: 2mm; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .doc { box-shadow: none; margin: 0; padding: 0; }
+    .tools { display: none; }
+    input { background: transparent !important; border-color: #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="tools">
+  <button class="tb" onclick="window.print()">Save as PDF (Print)</button>
+  <a class="tb ghost" href="export-docs.html">&larr; Back</a>
+</div>
+
+<div class="doc">
+  <div class="head">
+    <div>
+      <p class="brand"><span class="e">E</span>RGSN</p>
+      <p class="brand-sub">Korea &middot; Trade Gateway &middot; Since 2013</p>
+    </div>
+    <div style="text-align:right">
+      <h1>Commercial Invoice</h1>
+      <p class="sub">For export declaration &amp; customs clearance</p>
+    </div>
+  </div>
+
+  <div class="meta-grid">
+    <div class="block">
+      <h3>Exporter / Seller</h3>
+      <div class="field"><span class="l">Company</span><input type="text" placeholder="ERGSN CO., LTD."></div>
+      <div class="field"><span class="l">Address</span><input type="text" placeholder="#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Korea"></div>
+      <div class="field"><span class="l">Tel</span><input type="text" placeholder="+82-10-5288-0006"></div>
+      <div class="field"><span class="l">Business reg.</span><input type="text" placeholder="KR biz registration no."></div>
+    </div>
+    <div class="block">
+      <h3>Consignee / Buyer</h3>
+      <div class="field"><span class="l">Company</span><input type="text" placeholder="Buyer name"></div>
+      <div class="field"><span class="l">Address</span><input type="text" placeholder="Destination address"></div>
+      <div class="field"><span class="l">Country</span><input type="text" placeholder="e.g. United States"></div>
+      <div class="field"><span class="l">Attn</span><input type="text" placeholder="Contact person"></div>
+    </div>
+    <div class="block">
+      <h3>Invoice details</h3>
+      <div class="field"><span class="l">Invoice no.</span><input type="text" placeholder="ERGSN-INV-0000"></div>
+      <div class="field"><span class="l">Date</span><input type="text" placeholder="2026-04-18"></div>
+      <div class="field"><span class="l">PO ref.</span><input type="text" placeholder="Buyer's PO / contract ref"></div>
+      <div class="field"><span class="l">Currency</span><input type="text" placeholder="USD"></div>
+    </div>
+    <div class="block">
+      <h3>Shipment</h3>
+      <div class="field"><span class="l">Port of loading</span><input type="text" placeholder="Busan, KR"></div>
+      <div class="field"><span class="l">Port of discharge</span><input type="text" placeholder="Destination port"></div>
+      <div class="field"><span class="l">Incoterms 2020</span><input type="text" placeholder="CIF / FOB / EXW / DDP"></div>
+      <div class="field"><span class="l">Payment</span><input type="text" placeholder="T/T 50% advance, 50% before shipment"></div>
+    </div>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr>
+        <th style="width:20mm">HS code</th>
+        <th>Description of goods</th>
+        <th style="width:14mm;text-align:right">Qty</th>
+        <th style="width:20mm;text-align:right">Unit price</th>
+        <th style="width:22mm;text-align:right">Amount</th>
+      </tr>
+    </thead>
+    <tbody id="lineBody">
+      <tr><td><input type="text" placeholder="8472.90"></td><td><input type="text" placeholder="DL-16XD Industrial Shredder · Level 3 / P-4"></td><td><input type="text" class="num" placeholder="10"></td><td><input type="text" class="num" placeholder="7,800"></td><td><input type="text" class="num" placeholder="78,000"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <div class="row"><span>Subtotal</span><input type="text" placeholder="78,000.00"></div>
+    <div class="row"><span>Ocean freight</span><input type="text" placeholder="2,400.00"></div>
+    <div class="row"><span>Marine insurance</span><input type="text" placeholder="624.00"></div>
+    <div class="row"><span>Other charges</span><input type="text" placeholder="0.00"></div>
+    <div class="row total"><span>Total (USD)</span><input type="text" placeholder="81,024.00"></div>
+  </div>
+
+  <div class="notes">
+    <strong>Remarks &amp; declarations:</strong> We certify that the particulars above are true and correct. Country of origin: Republic of Korea. Goods are declared for export under the referenced HS codes. This invoice is issued pursuant to Incoterms 2020.
+  </div>
+
+  <div class="sigs">
+    <div class="sig-box">
+      <div class="sig-line"></div>
+      <p class="sig-cap">Authorised signature (Exporter)</p>
+    </div>
+    <div class="sig-box">
+      <div class="sig-line"></div>
+      <p class="sig-cap">Company stamp (Exporter)</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

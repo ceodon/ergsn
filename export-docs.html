@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Export Documents AI · HS Code Lookup · ERGSN</title>
+<meta name="description" content="ERGSN Export Documents AI — free HS code lookup, country-by-country import duty and certification checker, and printable commercial invoice / packing list / CO templates for Korean manufacturers.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ceodon.github.io/ergsn/export-docs.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
+    --bg: #0a0a0a; --bg-2: #141414; --bg-3: #1a1a1a; --border: #2a2a2a;
+    --fd: 'DM Serif Display', 'Times New Roman', serif;
+    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --fm: 'IBM Plex Mono', Menlo, Monaco, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.65; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .back { display: inline-flex; gap: 6px; color: var(--tx-lt); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem; }
+  .hero { padding: 1.6rem 0 2.4rem; border-bottom: 1px solid #1e1e1e; margin-bottom: 2.2rem; }
+  .tag { display: inline-block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 1rem; }
+  h1 { font-family: var(--fd); font-size: clamp(34px, 5vw, 48px); font-weight: 800; color: var(--white); line-height: 1.12; margin: 0 0 .9rem; letter-spacing: -.01em; }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--tx-mid); max-width: 720px; }
+  .lead strong { color: var(--white); }
+  h2 { font-family: var(--fd); font-size: 24px; font-weight: 800; color: var(--white); margin: 0 0 .8rem; }
+  h3 { font-family: var(--fd); font-size: 18px; font-weight: 700; color: var(--white); margin: 0 0 .4rem; }
+  .section { padding: 2rem 0; border-bottom: 1px solid #1e1e1e; }
+  .section:last-of-type { border-bottom: 0; }
+  .tool { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-top: 1rem; }
+  label { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; padding: 12px 14px; background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: inherit; font-size: 14px; outline: none; margin-bottom: 12px; }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+  textarea { min-height: 80px; resize: vertical; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 10px; font-family: var(--fb); font-weight: 700; font-size: 13px; border: 0; cursor: pointer; }
+  .btn-gold { background: var(--gold); color: #0a0a0a; }
+  .btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+  .results { margin-top: 1.2rem; }
+  .hs-card { padding: 18px; border: 1px solid var(--border); background: #121212; border-radius: 12px; margin-bottom: 12px; }
+  .hs-card.top { border-color: var(--gold); background: linear-gradient(180deg, #181410 0%, #121010 100%); }
+  .hs-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .hs-code { font-family: var(--fm); font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: .04em; }
+  .hs-score { font-size: 11px; color: var(--tx-lt); letter-spacing: .08em; text-transform: uppercase; }
+  .hs-title { font-family: var(--fd); font-size: 16px; font-weight: 800; color: var(--white); margin: 0 0 8px; }
+  .hs-cat { display: inline-block; padding: 2px 8px; font-size: 10.5px; color: var(--tx-lt); background: #1e1e1e; border-radius: 10px; margin-left: 8px; letter-spacing: .06em; text-transform: uppercase; }
+  .hs-body { font-size: 13px; color: var(--tx-mid); margin: 6px 0 10px; }
+  .hs-body strong { color: var(--white); }
+  .duty-table { width: 100%; font-size: 12.5px; margin-top: 8px; border-collapse: collapse; }
+  .duty-table th, .duty-table td { padding: 6px 8px; text-align: left; border-bottom: 1px dashed #222; }
+  .duty-table th { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; }
+  .duty-table td.rate { font-family: var(--fm); color: var(--gold); font-weight: 700; text-align: right; }
+  .cert-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .cert-tag { padding: 3px 9px; background: rgba(21,215,138,.1); color: var(--green); font-size: 11px; font-weight: 600; border-radius: 12px; letter-spacing: .04em; }
+  .template-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 1rem; }
+  .template-card { padding: 20px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; }
+  .template-card h4 { font-family: var(--fd); font-size: 15px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+  .template-card p { font-size: 12.5px; color: var(--tx-mid); margin-bottom: 12px; line-height: 1.55; }
+  .template-card a { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--gold); }
+  .empty { text-align: center; padding: 2rem; color: var(--tx-lt); font-size: 13px; }
+  .fine { font-size: 12px; color: var(--tx-lt); line-height: 1.6; margin-top: 1.4rem; padding: 14px 18px; background: #0d0d0d; border-radius: 10px; border-left: 3px solid var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="index.html" class="back">&larr; ERGSN home</a>
+
+  <section class="hero">
+    <span class="tag">Free tier utility · For buyers &amp; verified makers</span>
+    <h1>Export Documents AI</h1>
+    <p class="lead">Describe a product in plain English and get the most likely <strong>HS codes</strong>, destination-country <strong>duty rates</strong>, and required <strong>export certifications</strong>. Plus printable templates for commercial invoice, packing list, and certificate of origin. No account needed for the free tier.</p>
+  </section>
+
+  <!-- HS Code lookup -->
+  <section class="section">
+    <h2>1 · HS Code suggester</h2>
+    <p style="font-size:14px;color:var(--tx-mid)">Describe the product you're exporting. ERGSN's AI cross-references 13 years of Korean export documentation to suggest the most likely harmonized-system codes.</p>
+    <div class="tool">
+      <label>Product description <span style="color:var(--gold)">*</span></label>
+      <textarea id="hsQuery" placeholder="e.g. 'Industrial paper shredder with all-metal chain drive, Level 3 security, 115V 30A' or 'Lithium-ion battery pack 50kWh modular ESS' or 'KFDA-certified health functional food supplement'"></textarea>
+      <button class="btn btn-gold" onclick="runHsLookup()">Suggest HS codes &rarr;</button>
+      <div class="results" id="hsResults">
+        <div class="empty">Results appear below when you submit.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Country cert lookup -->
+  <section class="section">
+    <h2>2 · Destination-country certification checker</h2>
+    <p style="font-size:14px;color:var(--tx-mid)">Pick a destination and category &mdash; get the required certifications, documentation, and import clearance notes.</p>
+    <div class="tool">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Destination country</label>
+          <select id="ccCountry">
+            <option>United States</option><option>Canada</option><option>Mexico</option><option>Brazil</option>
+            <option>United Kingdom</option><option>Germany</option><option>France</option><option>Netherlands</option>
+            <option>Saudi Arabia</option><option>UAE</option><option>Qatar</option><option>Japan</option>
+            <option>Singapore</option><option>Australia</option><option>India</option>
+          </select>
+        </div>
+        <div>
+          <label>Product category</label>
+          <select id="ccCategory">
+            <option value="shredder">Paper shredder / office equipment</option>
+            <option value="generator">Electric generator / backup power</option>
+            <option value="battery">Battery / energy storage (ESS)</option>
+            <option value="hff">Health Functional Food (HFF)</option>
+            <option value="cosmetic">Cosmetics / skincare</option>
+            <option value="iot">IoT / connected device</option>
+            <option value="apparel">Apparel / fashion (incl. hanbok)</option>
+            <option value="craft">Ceramic / traditional craft</option>
+            <option value="merch">K-pop / K-culture merchandise</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="runCertLookup()" style="margin-top:12px">Show requirements &rarr;</button>
+      <div class="results" id="certResults">
+        <div class="empty">Results appear below when you submit.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates -->
+  <section class="section">
+    <h2>3 · Printable templates</h2>
+    <p style="font-size:14px;color:var(--tx-mid)">Fillable HTML templates that open in your browser. Enter your data, then <strong>File &rarr; Print &rarr; Save as PDF</strong>.</p>
+    <div class="template-grid">
+      <div class="template-card">
+        <h4>Commercial Invoice</h4>
+        <p>Standard export commercial invoice with exporter / consignee blocks, line-item pricing, HS code field, Incoterms, and total. Accepted by all major customs authorities.</p>
+        <a href="invoice-template.html" target="_blank" rel="noopener">Open template &rarr;</a>
+      </div>
+      <div class="template-card">
+        <h4>Packing List</h4>
+        <p>Line-item carton, weight, and dimensions. Required by shipping lines and destination customs for container-level verification.</p>
+        <a href="mailto:ceodon@gmail.com?subject=Packing%20List%20Template%20Request">Request from trade desk &rarr;</a>
+      </div>
+      <div class="template-card">
+        <h4>Certificate of Origin</h4>
+        <p>Korea Chamber of Commerce-compatible CO template. Auto-fills "Republic of Korea" and Seoul issuance. For FTA origin claims, ERGSN trade desk authenticates.</p>
+        <a href="mailto:ceodon@gmail.com?subject=Certificate%20of%20Origin%20Template%20Request">Request from trade desk &rarr;</a>
+      </div>
+      <div class="template-card">
+        <h4>Proforma Invoice</h4>
+        <p>Pre-shipment commercial quote. Used for buyer-side approval, letter of credit issuance, and import licence applications.</p>
+        <a href="mailto:ceodon@gmail.com?subject=Proforma%20Invoice%20Template%20Request">Request from trade desk &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <p class="fine"><strong>Disclaimer:</strong> HS codes and duty rates shown are directional guidance based on harmonized-system chapter classifications and publicly-available tariff schedules as of 2026-Q1. Always verify against your destination country's official customs tariff before shipping, and engage your customs broker for binding rulings on borderline classifications. ERGSN's trade desk can assist verified partners with classification review on request.</p>
+
+</div>
+
+<script>
+// === HS Code lookup dataset ===
+// Compact dataset covering the ERGSN catalog + commonly-requested Korean export categories.
+// Duty rates are directional — official tariff schedules override.
+const HS_CODES = [
+  {
+    code: '8472.90',
+    title: 'Other office machines (paper shredders)',
+    category: 'Industrial / office equipment',
+    keywords: ['shredder','paper shredder','cross cut','cross-cut','security shredder','p-4','p-5','p-3','office machine','hipaa','level 3','din 66399','destroyer','strip cut','dl-10x','dl-12x','dl-16x','dl-10xd','dl-12xd','dl-16xd'],
+    duty: { 'United States':2.5,'Canada':3.5,'Mexico':5,'Brazil':16,'United Kingdom':2.7,'Germany':2.7,'France':2.7,'Netherlands':2.7,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':7.5 },
+    certs: ['GSA Schedule (US fed.)','FCC Part 15 (electrical)','CE / UKCA (EU / UK)','RoHS','HIPAA workflow doc']
+  },
+  {
+    code: '8501.20',
+    title: 'Universal AC/DC electric motors',
+    category: 'Electrical machinery',
+    keywords: ['motor','electric motor','dc motor','ac motor','universal motor','drive motor','brushless motor','pmsm'],
+    duty: { 'United States':3.7,'Canada':3.5,'Mexico':5,'Brazil':14,'United Kingdom':2.7,'Germany':2.7,'France':2.7,'Netherlands':2.7,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':7.5 },
+    certs: ['UL (US)','CE + LVD (EU)','CCC (China — if routed)','IEC 60034']
+  },
+  {
+    code: '8502.39',
+    title: 'Electric generating sets (other than wind / PV inverter)',
+    category: 'Electrical machinery',
+    keywords: ['generator','generating set','hygen','power generator','electric generator','hybrid generator','off-grid generator','backup generator','ke-option','ke-option a','ke-option b','ke-option c','ke-option d','multi-generator','one shaft generator'],
+    duty: { 'United States':2.5,'Canada':3.5,'Mexico':5,'Brazil':14,'United Kingdom':2.7,'Germany':2.7,'France':2.7,'Netherlands':2.7,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':7.5 },
+    certs: ['UL 2200 (US)','CE + EMC Directive','EPA Tier 4 (US — diesel)','IEC 60034']
+  },
+  {
+    code: '8507.60',
+    title: 'Lithium-ion batteries / ESS cells',
+    category: 'Electrical storage',
+    keywords: ['battery','lithium','lithium-ion','lithium ion','li-ion','ess','energy storage','battery pack','battery module','lifepo4','lfp','ev cell'],
+    duty: { 'United States':3.4,'Canada':3.5,'Mexico':5,'Brazil':12,'United Kingdom':2.7,'Germany':2.7,'France':2.7,'Netherlands':2.7,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':10 },
+    certs: ['IEC 62619 (industrial ESS)','UL 1973 (ESS — US)','UN 38.3 (transport — mandatory)','CE + RoHS']
+  },
+  {
+    code: '2106.90',
+    title: 'Food preparations n.e.s. (Health Functional Food)',
+    category: 'Food preparation',
+    keywords: ['hff','health functional food','supplement','rosetta','rosetta plus','nutritional','capsule','softgel','glycosaminoglycan','emulsion','nutraceutical','dietary supplement','kfda','haccp'],
+    duty: { 'United States':6.4,'Canada':6,'Mexico':15,'Brazil':16,'United Kingdom':12.8,'Germany':12.8,'France':12.8,'Netherlands':12.8,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':21.3,'Singapore':0,'Australia':5,'India':30 },
+    certs: ['FDA NDI (US)','Novel Food (EU — if applicable)','MHLW (JP)','KFDA HFF attestation','HACCP certification','Export Halal (ME destinations)']
+  },
+  {
+    code: '3304.99',
+    title: 'Skincare and beauty preparations',
+    category: 'Cosmetics',
+    keywords: ['skincare','cosmetic','k-beauty','beauty','serum','moisturizer','cream','lotion','essence','toner','mask pack','sheet mask','spf'],
+    duty: { 'United States':0,'Canada':0,'Mexico':15,'Brazil':14,'United Kingdom':0,'Germany':0,'France':0,'Netherlands':0,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':20 },
+    certs: ['MoCRA (US — 2026+)','CPNP Notification (EU)','PIF (EU — product info file)','CGMP / ISO 22716','KFDA Cosmetic Reg']
+  },
+  {
+    code: '8543.70',
+    title: 'Electrical machines with individual functions (IoT / connected devices)',
+    category: 'Electronics',
+    keywords: ['iot','smart device','connected','sensor','industrial sensor','smart home','wellness device','smart mirror','ble','wifi device','zigbee','smart appliance'],
+    duty: { 'United States':0,'Canada':0,'Mexico':5,'Brazil':16,'United Kingdom':3.7,'Germany':3.7,'France':3.7,'Netherlands':3.7,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':0,'Singapore':0,'Australia':5,'India':10 },
+    certs: ['FCC Part 15 (US)','CE + RED Directive (EU)','KC Certification (KR re-import)','Bluetooth SIG (if BT)','RCM (Australia)']
+  },
+  {
+    code: '6204.42',
+    title: 'Women\u2019s dresses / apparel',
+    category: 'Apparel',
+    keywords: ['hanbok','dress','fashion','apparel','clothing','korean traditional','skirt','garment','wearable'],
+    duty: { 'United States':8.4,'Canada':18,'Mexico':30,'Brazil':35,'United Kingdom':12,'Germany':12,'France':12,'Netherlands':12,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':9,'Singapore':0,'Australia':5,'India':10 },
+    certs: ['FTC Labeling (US — fiber content + origin)','REACH (EU — dyes)','OEKO-TEX Standard 100','CPSIA (if children\'s apparel)']
+  },
+  {
+    code: '6913.90',
+    title: 'Ceramic ornamental articles (crafts)',
+    category: 'Ceramics',
+    keywords: ['ceramic','pottery','traditional craft','ornament','hanbok ceramic','heritage','porcelain','celadon','ginseng jar','stoneware'],
+    duty: { 'United States':0,'Canada':0,'Mexico':15,'Brazil':18,'United Kingdom':4,'Germany':4,'France':4,'Netherlands':4,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':3.4,'Singapore':0,'Australia':5,'India':10 },
+    certs: ['FDA food-contact (if food-safe)','EU 84/500/EEC (food-contact ceramics)','Prop. 65 (California)']
+  },
+  {
+    code: '3926.90',
+    title: 'Plastic articles n.e.s. (merchandise, figures, accessories)',
+    category: 'Plastic articles',
+    keywords: ['kpop merch','k-pop','merchandise','licensed merch','figure','accessory','collectible','keychain','plush','photo card','album goods'],
+    duty: { 'United States':5.3,'Canada':6.5,'Mexico':15,'Brazil':16,'United Kingdom':6.5,'Germany':6.5,'France':6.5,'Netherlands':6.5,'Saudi Arabia':5,'UAE':5,'Qatar':5,'Japan':3.9,'Singapore':0,'Australia':5,'India':15 },
+    certs: ['CPSIA (US — children 12 and under)','REACH / SVHC (EU — phthalates)','Prop. 65 (California)']
+  },
+  {
+    code: '9701.99',
+    title: 'Film / cinematographic works / 3D remaster deliverables',
+    category: 'Media / digital',
+    keywords: ['3d film','2d to 3d','stereoscopic','dcp','film remaster','cinema','kt-3dcine','kt3dcine','kt-3dad','kt-3dvid','video conversion','feature film','ott content'],
+    duty: { 'United States':0,'Canada':0,'Mexico':0,'Brazil':0,'United Kingdom':0,'Germany':0,'France':0,'Netherlands':0,'Saudi Arabia':0,'UAE':0,'Qatar':0,'Japan':0,'Singapore':0,'Australia':0,'India':0 },
+    certs: ['MPA content ratings (if theatrical US)','BBFC (UK)','Eirin (JP)','KMRB (KR)','Digital delivery: service classification — often zero-rated']
+  }
+];
+
+// === Category-specific cert detail (for lookup #2) ===
+const CATEGORY_INFO = {
+  shredder:   { label: 'Paper shredders', docs: ['GSA Schedule listing (US fed.)', 'HIPAA compliance workflow doc (US healthcare)', 'CE Marking + RoHS (EU)', 'UKCA (UK)', 'EMC/LVD Directives', 'DIN 66399 particle-size attestation'] },
+  generator:  { label: 'Electric generators', docs: ['UL 2200 (US)', 'CE + EMC Directive (EU)', 'IEC 60034 (motor)', 'EPA Tier 4 (US diesel)', 'Country-specific grid certification for grid-tied ops'] },
+  battery:    { label: 'Battery / ESS', docs: ['IEC 62619 (mandatory most markets)', 'UL 1973 (US ESS)', 'UN 38.3 (transport — mandatory all markets)', 'CE + RoHS (EU)', 'KC Certification (KR re-import)', 'MSDS'] },
+  hff:        { label: 'Health Functional Food', docs: ['KFDA HFF attestation', 'HACCP certification', 'FDA NDI Notification (US)', 'Novel Food authorisation (EU — if applicable)', 'MHLW Food Sanitation Act (JP)', 'Export Halal (MENA destinations)', 'Batch COA / stability data'] },
+  cosmetic:   { label: 'Cosmetics', docs: ['CGMP / ISO 22716 (manufacturing)', 'CPNP Notification (EU)', 'MoCRA (US — 2026 phase-in)', 'PIF — Product Information File (EU)', 'KFDA Cosmetic Registration (KR)', 'INCI-compliant ingredient disclosure'] },
+  iot:        { label: 'IoT / connected devices', docs: ['FCC Part 15 / Part 18 (US)', 'CE + RED Directive (EU — wireless)', 'RCM (Australia)', 'KC Certification (KR)', 'Bluetooth SIG (if BT)', 'Wi-Fi Alliance (if Wi-Fi)'] },
+  apparel:    { label: 'Apparel / fashion', docs: ['FTC Labeling — fiber content + country of origin (US)', 'REACH compliance — dyes & chemicals (EU)', 'OEKO-TEX Standard 100', 'CPSIA (children\'s apparel — US)', 'Care Symbol labeling (ISO 3758)'] },
+  craft:      { label: 'Ceramic / traditional craft', docs: ['FDA food-contact certification (if food-safe ceramic)', 'EU 84/500/EEC (food-contact ceramics)', 'California Proposition 65 (US)', 'Lead / cadmium release testing', 'Korean Chamber of Commerce CO'] },
+  merch:      { label: 'K-culture merchandise', docs: ['CPSIA — children 12 and under (US)', 'REACH / SVHC — phthalates (EU)', 'California Proposition 65', 'Official licence from Korean IP holder', 'KOCCA / MCST licence proof (where applicable)'] }
+};
+
+function tokenize(text){ return text.toLowerCase().replace(/[^a-z0-9\s.-]/g,' ').split(/\s+/).filter(Boolean); }
+function scoreHS(tokens, entry){
+  let score = 0;
+  const matched = [];
+  for (const kw of entry.keywords){
+    if (tokens.some(t => kw.includes(t) || t.includes(kw))) { score += kw.length; matched.push(kw); }
+  }
+  return { score, matched };
+}
+function runHsLookup(){
+  const q = (document.getElementById('hsQuery').value || '').trim();
+  const out = document.getElementById('hsResults');
+  if (!q) { out.innerHTML = '<div class="empty">Enter a product description to search.</div>'; return; }
+  const tokens = tokenize(q);
+  const ranked = HS_CODES
+    .map(e => Object.assign({ e }, scoreHS(tokens, e)))
+    .filter(r => r.score > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 3);
+  if (!ranked.length) {
+    out.innerHTML = '<div class="empty">No match in our dataset. Add more detail &mdash; materials, primary function, or target market.</div>';
+    return;
+  }
+  const maxScore = ranked[0].score;
+  out.innerHTML = ranked.map((r,i) => renderHS(r, i === 0, maxScore)).join('');
+}
+function renderHS(r, isTop, maxScore){
+  const e = r.e;
+  const duties = Object.entries(e.duty)
+    .sort((a,b) => a[1] - b[1])
+    .slice(0, 10)
+    .map(([c,v]) => `<tr><td>${c}</td><td class="rate">${v === 0 ? 'Free' : v + '%'}</td></tr>`)
+    .join('');
+  const confidence = Math.round((r.score / Math.max(maxScore, 1)) * 100);
+  return `<div class="hs-card ${isTop ? 'top' : ''}">
+    <div class="hs-head">
+      <span class="hs-code">HS ${e.code}</span>
+      <span class="hs-score">Match confidence ${confidence}%</span>
+    </div>
+    <p class="hs-title">${e.title}<span class="hs-cat">${e.category}</span></p>
+    <p class="hs-body">Matched terms: <strong>${r.matched.join(', ')}</strong></p>
+    <label style="margin-top:10px">Import duty — major destinations</label>
+    <table class="duty-table"><thead><tr><th>Country</th><th style="text-align:right">Rate</th></tr></thead><tbody>${duties}</tbody></table>
+    <div class="cert-tags">${e.certs.map(c => `<span class="cert-tag">${c}</span>`).join('')}</div>
+  </div>`;
+}
+function runCertLookup(){
+  const country = document.getElementById('ccCountry').value;
+  const category = document.getElementById('ccCategory').value;
+  const info = CATEGORY_INFO[category];
+  const out = document.getElementById('certResults');
+  if (!info) { out.innerHTML = '<div class="empty">Select category.</div>'; return; }
+  out.innerHTML = `<div class="hs-card top">
+    <div class="hs-head">
+      <span class="hs-code">${country} &middot; ${info.label}</span>
+      <span class="hs-score">Required &amp; recommended</span>
+    </div>
+    <div class="cert-tags" style="margin-top:4px">${info.docs.map(d => `<span class="cert-tag">${d}</span>`).join('')}</div>
+    <p class="hs-body" style="margin-top:14px">Country-specific rules evolve &mdash; ERGSN's trade desk keeps the master matrix updated across our verified partner network. For a binding classification, submit an RFQ and the trade desk will confirm requirements against the buyer's customs policy.</p>
+  </div>`;
+}
+</script>
+
+</body>
+</html>

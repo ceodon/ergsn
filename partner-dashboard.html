@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Partner Analytics Dashboard · Preview · ERGSN</title>
+<meta name="description" content="Preview of the ERGSN Partner Analytics Dashboard available to Verified+ tier Korean manufacturers. Tracks product views, RFQ volume, country-level buyer interest, and benchmark ranking.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ceodon.github.io/ergsn/partner-dashboard.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #c8932a; --green: #15d78a; --red: #e06a6a; --navy: #0a1830;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
+    --bg: #0a0a0a; --bg-2: #141414; --bg-3: #1a1a1a; --border: #2a2a2a;
+    --fd: 'DM Serif Display', 'Times New Roman', serif;
+    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.6; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  .preview-banner { background: linear-gradient(90deg, #181209 0%, #12110d 100%); border: 1px solid var(--gold); border-radius: 10px; padding: 12px 18px; margin-bottom: 1.6rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+  .preview-banner strong { color: var(--gold); font-weight: 700; }
+  .preview-banner a { margin-left: auto; padding: 8px 14px; background: var(--gold); color: #0a0a0a; border-radius: 8px; font-weight: 700; font-size: 12px; }
+  .preview-banner a:hover { text-decoration: none; opacity: .9; }
+  .back { display: inline-flex; gap: 6px; color: var(--tx-lt); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem; }
+  h1 { font-family: var(--fd); font-size: clamp(28px, 4vw, 40px); font-weight: 800; color: var(--white); line-height: 1.15; margin: 0 0 .3rem; }
+  .sub { color: var(--tx-lt); font-size: 14px; margin-bottom: 2rem; }
+  .sub strong { color: var(--gold); font-weight: 600; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 1.6rem; }
+  .kpi-card { padding: 20px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; }
+  .kpi-label { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; margin-bottom: 10px; }
+  .kpi-val { font-family: var(--fd); font-size: 30px; font-weight: 800; color: var(--white); line-height: 1; letter-spacing: -.01em; }
+  .kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+  .kpi-delta.up { color: var(--green); }
+  .kpi-delta.down { color: var(--red); }
+  .kpi-delta.flat { color: var(--tx-lt); }
+  .panel-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 1.6rem; }
+  @media (max-width: 860px) { .panel-grid { grid-template-columns: 1fr; } }
+  .panel { padding: 22px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; gap: 10px; flex-wrap: wrap; }
+  .panel-title { font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--white); }
+  .panel-hint { font-size: 11px; color: var(--tx-lt); letter-spacing: .08em; text-transform: uppercase; }
+  .chart { display: flex; align-items: flex-end; gap: 5px; height: 160px; padding: 10px 0; border-bottom: 1px solid #252525; }
+  .chart-bar { flex: 1; background: linear-gradient(180deg, var(--gold) 0%, #8a6818 100%); min-height: 4px; border-radius: 3px 3px 0 0; position: relative; transition: background .15s; }
+  .chart-bar:hover { background: var(--green); }
+  .chart-bar::after { content: attr(data-v); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--tx-lt); opacity: 0; transition: opacity .15s; white-space: nowrap; }
+  .chart-bar:hover::after { opacity: 1; }
+  .chart-x { display: flex; justify-content: space-between; font-size: 10px; color: var(--tx-lt); margin-top: 8px; padding: 0 2px; }
+  .country-list { list-style: none; padding: 0; margin: 0; }
+  .country-list li { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #252525; font-size: 14px; }
+  .country-list li:last-child { border-bottom: 0; }
+  .country-flag { font-size: 20px; flex-shrink: 0; }
+  .country-name { flex: 1; color: var(--tx-hi); }
+  .country-count { font-family: var(--fd); font-weight: 800; color: var(--gold); font-size: 16px; }
+  .bench-row { display: grid; grid-template-columns: 150px 1fr 80px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed #252525; font-size: 13px; }
+  .bench-row:last-child { border-bottom: 0; }
+  .bench-label { color: var(--tx-mid); }
+  .bench-bar-wrap { background: #1f1f1f; border-radius: 20px; height: 8px; overflow: hidden; position: relative; }
+  .bench-bar { height: 100%; background: linear-gradient(90deg, var(--green), var(--gold)); border-radius: 20px; transition: width .5s; }
+  .bench-value { font-family: var(--fd); font-weight: 700; color: var(--white); text-align: right; }
+  .rfq-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rfq-table th, .rfq-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #252525; }
+  .rfq-table th { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; }
+  .rfq-table td { color: var(--tx-hi); }
+  .rfq-status { display: inline-block; padding: 3px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; }
+  .rfq-status.pending { background: rgba(200,147,42,.15); color: var(--gold); }
+  .rfq-status.quoted  { background: rgba(21,215,138,.15); color: var(--green); }
+  .rfq-status.won     { background: rgba(21,215,138,.25); color: var(--green); }
+  .cta-row { margin-top: 1.4rem; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 10px; font-family: var(--fb); font-weight: 700; font-size: 13px; }
+  .btn-gold { background: var(--gold); color: #0a0a0a; }
+  .btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+  .btn:hover { text-decoration: none; opacity: .9; }
+  .footer-note { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px dashed var(--border); font-size: 11.5px; color: var(--tx-lt); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="index.html" class="back">&larr; ERGSN home</a>
+
+  <div class="preview-banner">
+    <strong>Preview dashboard</strong>
+    <span>— showing sample data for demonstration. Available live to Verified (₩290k/mo) and above tiers.</span>
+    <a href="partners-kr.html#pricing">See pricing &rarr;</a>
+  </div>
+
+  <h1>Partner Analytics — Sample Co. KR</h1>
+  <p class="sub"><strong>DL-12XD · K-Security · Verified since 2024-11</strong> &middot; period: last 30 days</p>
+
+  <!-- KPI row -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <p class="kpi-label">Product views</p>
+      <p class="kpi-val">14,823</p>
+      <p class="kpi-delta up">&#9650; 18.4% vs prev 30d</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">RFQs received</p>
+      <p class="kpi-val">47</p>
+      <p class="kpi-delta up">&#9650; 9 vs prev 30d</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">RFQ → quote conversion</p>
+      <p class="kpi-val">3.2%</p>
+      <p class="kpi-delta flat">&ndash; 0.1pp vs prev 30d</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">Buyer countries reached</p>
+      <p class="kpi-val">18</p>
+      <p class="kpi-delta up">&#9650; 3 new this month</p>
+    </div>
+  </div>
+
+  <!-- Views chart + Top countries -->
+  <div class="panel-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">Daily product views (30d)</p>
+        <span class="panel-hint">hover bars</span>
+      </div>
+      <div class="chart" id="viewsChart"></div>
+      <div class="chart-x">
+        <span>Mar 19</span><span>Mar 29</span><span>Apr 8</span><span>Apr 18</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">Top buyer countries</p>
+        <span class="panel-hint">by RFQ count</span>
+      </div>
+      <ul class="country-list">
+        <li><span class="country-flag">🇺🇸</span><span class="country-name">United States</span><span class="country-count">14</span></li>
+        <li><span class="country-flag">🇸🇦</span><span class="country-name">Saudi Arabia</span><span class="country-count">9</span></li>
+        <li><span class="country-flag">🇩🇪</span><span class="country-name">Germany</span><span class="country-count">6</span></li>
+        <li><span class="country-flag">🇯🇵</span><span class="country-name">Japan</span><span class="country-count">5</span></li>
+        <li><span class="country-flag">🇲🇽</span><span class="country-name">Mexico</span><span class="country-count">4</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sector benchmark + Recent RFQs -->
+  <div class="panel-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">Sector benchmark &mdash; K-Security</p>
+        <span class="panel-hint">vs sector median</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">Views per listing</span>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:76%"></div></div>
+        <span class="bench-value">Top 24%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">RFQ response time</span>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:88%"></div></div>
+        <span class="bench-value">Top 12%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">Quote acceptance rate</span>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:62%"></div></div>
+        <span class="bench-value">Top 38%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">AI Match inclusion rate</span>
+        <div class="bench-bar-wrap"><div class="bench-bar" style="width:91%"></div></div>
+        <span class="bench-value">Top 9%</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">Recent RFQs</p>
+        <span class="panel-hint">last 7 days</span>
+      </div>
+      <table class="rfq-table">
+        <thead><tr><th>From</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>🇺🇸 US · healthcare</td><td>Apr 17</td><td><span class="rfq-status quoted">Quoted</span></td></tr>
+          <tr><td>🇸🇦 SA · government</td><td>Apr 16</td><td><span class="rfq-status pending">Pending</span></td></tr>
+          <tr><td>🇩🇪 DE · finance</td><td>Apr 15</td><td><span class="rfq-status won">Won</span></td></tr>
+          <tr><td>🇯🇵 JP · healthcare</td><td>Apr 13</td><td><span class="rfq-status quoted">Quoted</span></td></tr>
+          <tr><td>🇨🇦 CA · education</td><td>Apr 12</td><td><span class="rfq-status pending">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Full listing performance -->
+  <div class="panel">
+    <div class="panel-head">
+      <p class="panel-title">Listing performance · DL-12XD</p>
+      <span class="panel-hint">lifetime</span>
+    </div>
+    <div class="kpi-grid" style="margin-bottom:0">
+      <div class="kpi-card" style="background:#171717">
+        <p class="kpi-label">Total impressions</p>
+        <p class="kpi-val">204k</p>
+      </div>
+      <div class="kpi-card" style="background:#171717">
+        <p class="kpi-label">Unique visitors</p>
+        <p class="kpi-val">38.2k</p>
+      </div>
+      <div class="kpi-card" style="background:#171717">
+        <p class="kpi-label">RFQ → win rate</p>
+        <p class="kpi-val">22%</p>
+      </div>
+      <div class="kpi-card" style="background:#171717">
+        <p class="kpi-label">Avg order value</p>
+        <p class="kpi-val">$28k</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-row">
+    <a href="partners-kr.html#pricing" class="btn btn-gold">Upgrade to unlock live data &rarr;</a>
+    <a href="partners-kr.html#apply" class="btn btn-ghost">Apply as a Verified Partner</a>
+  </div>
+
+  <p class="footer-note"><strong>About this dashboard</strong> &mdash; Verified Partners see their live listing performance, RFQ pipeline, and benchmarking against their sector median. Featured (₩1.5M/mo) partners additionally see buyer-country cohort data and priority-match exposure logs. Numbers shown on this page are sample data for illustration.</p>
+</div>
+
+<script>
+  // Render a plausible 30-day daily views series.
+  (function render(){
+    const chart = document.getElementById('viewsChart');
+    if (!chart) return;
+    // Pseudo-random but deterministic dataset.
+    const seed = [420, 510, 460, 540, 610, 390, 480, 550, 620, 580, 490, 470, 600, 680, 560, 530, 610, 720, 690, 640, 580, 550, 620, 710, 780, 720, 690, 640, 580, 610];
+    const max = Math.max.apply(null, seed);
+    const html = seed.map(v => {
+      const h = Math.max(4, Math.round((v / max) * 100));
+      return `<div class="chart-bar" style="height:${h}%" data-v="${v} views"></div>`;
+    }).join('');
+    chart.innerHTML = html;
+  })();
+</script>
+
+</body>
+</html>

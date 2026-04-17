@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trade Mission Live · Q3 2026 · ERGSN</title>
+<meta name="description" content="ERGSN Trade Mission Live — quarterly 90-minute broadcast featuring 5 verified Korean makers presenting directly to 50+ global procurement buyers. Inaugural edition July 15, 2026 KST.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ceodon.github.io/ergsn/trade-mission.html">
+<meta property="og:title" content="ERGSN Trade Mission Live · Q3 2026">
+<meta property="og:description" content="5 verified Korean makers · 50+ global buyers · one 90-minute broadcast.">
+<meta property="og:type" content="event">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
+    --bg: #0a0a0a; --bg-2: #141414; --border: #2a2a2a;
+    --fd: 'DM Serif Display', 'Times New Roman', serif;
+    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.65; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  .back { display: inline-flex; gap: 6px; color: var(--tx-lt); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem; }
+  .hero { text-align: center; padding: 2rem 0 3rem; border-bottom: 1px solid #1e1e1e; margin-bottom: 2.6rem; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(200,147,42,.12); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border-radius: 20px; margin-bottom: 1.4rem; }
+  .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+  h1 { font-family: var(--fd); font-size: clamp(40px, 6vw, 64px); font-weight: 800; color: var(--white); line-height: 1.08; margin: 0 0 1rem; letter-spacing: -.02em; }
+  .lead { font-size: 17px; line-height: 1.75; color: var(--tx-mid); max-width: 720px; margin: 0 auto 1.6rem; }
+  .when { display: inline-flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 20px 28px; border: 1px solid var(--border); background: linear-gradient(160deg, #121212 0%, #0e0e0e 100%); border-radius: 14px; margin-top: 1rem; }
+  .when .c { text-align: center; min-width: 120px; }
+  .when .l { font-size: 10.5px; letter-spacing: .14em; color: var(--tx-lt); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .when .v { font-family: var(--fd); font-size: 20px; font-weight: 800; color: var(--white); }
+  .when .v.small { font-size: 14px; font-weight: 700; color: var(--gold); }
+  h2 { font-family: var(--fd); font-size: 26px; font-weight: 800; color: var(--white); margin: 0 0 1rem; }
+  h3 { font-family: var(--fd); font-size: 18px; font-weight: 700; color: var(--white); margin: 0 0 .4rem; }
+  p { margin: 0 0 1rem; }
+  .section { padding: 2.2rem 0; border-bottom: 1px solid #1e1e1e; }
+  .section:last-of-type { border-bottom: 0; }
+  .agenda { list-style: none; padding: 0; margin: 1rem 0; }
+  .agenda li { display: grid; grid-template-columns: 100px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px dashed #252525; }
+  .agenda li:last-child { border-bottom: 0; }
+  .agenda .t { font-family: var(--fd); font-size: 15px; font-weight: 800; color: var(--gold); letter-spacing: .02em; }
+  .agenda .d strong { color: var(--white); }
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1rem; }
+  @media (max-width: 760px) { .why-grid { grid-template-columns: 1fr; } }
+  .why-card { padding: 22px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; }
+  .why-card h3 { color: var(--gold); }
+  .why-card ul { padding-left: 20px; margin: .6rem 0 0; }
+  .why-card li { margin-bottom: 6px; font-size: 14px; color: var(--tx-mid); }
+  .form-wrap { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 26px; margin-top: 1rem; }
+  .form-wrap.maker { border-color: var(--gold); }
+  .form-wrap.buyer { border-color: var(--green); }
+  .form-wrap label { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; margin-bottom: 6px; }
+  .form-wrap input, .form-wrap select, .form-wrap textarea { width: 100%; padding: 11px 14px; background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: inherit; font-size: 14px; outline: none; margin-bottom: 12px; }
+  .form-wrap input:focus, .form-wrap select:focus, .form-wrap textarea:focus { border-color: var(--gold); }
+  .form-wrap textarea { min-height: 80px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+  .form-wrap button { width: 100%; padding: 13px; background: var(--gold); color: #0a0a0a; font-family: var(--fb); font-weight: 700; border: 0; border-radius: 10px; cursor: pointer; font-size: 14px; margin-top: 4px; }
+  .form-wrap.buyer button { background: var(--green); }
+  .form-wrap button:disabled { opacity: .6; cursor: wait; }
+  .archive { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 1rem; }
+  .archive-card { padding: 18px; border: 1px dashed var(--border); background: #101010; border-radius: 12px; opacity: .75; }
+  .archive-card .ed { font-family: var(--fd); font-size: 14px; font-weight: 800; color: var(--tx-lt); letter-spacing: .08em; }
+  .archive-card .info { font-size: 12px; color: var(--tx-lt); margin-top: 8px; }
+  .status-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+  .status-pill.upcoming { background: rgba(21,215,138,.15); color: var(--green); }
+  .status-pill.scheduled { background: rgba(200,147,42,.15); color: var(--gold); }
+  .toast { position: fixed; top: 20px; right: 20px; background: #1a1a1a; border: 1px solid var(--green); border-left: 3px solid var(--green); color: var(--white); padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateX(120%); transition: transform .3s; z-index: 1000; max-width: 320px; }
+  .toast.show { transform: translateX(0); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="index.html" class="back">&larr; ERGSN home</a>
+
+  <section class="hero">
+    <span class="tag">Upcoming · Edition 01</span>
+    <h1>ERGSN Trade Mission Live</h1>
+    <p class="lead">A 90-minute quarterly broadcast where 5 verified Korean makers present directly to 50+ pre-qualified global procurement buyers. Live Q&amp;A, NDA-covered deep dives, same-day RFQ routing.</p>
+    <div class="when">
+      <div class="c"><p class="l">Inaugural edition</p><p class="v">July 15, 2026</p></div>
+      <div class="c"><p class="l">Start (KST)</p><p class="v">14:00 – 15:30</p></div>
+      <div class="c"><p class="l">Format</p><p class="v small">Live · invite-only Zoom</p></div>
+      <div class="c"><p class="l">Makers</p><p class="v">5 verified × 18 min</p></div>
+      <div class="c"><p class="l">Buyers</p><p class="v">50+ qualified</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>What happens in 90 minutes</h2>
+    <ul class="agenda">
+      <li><span class="t">00:00</span><span class="d"><strong>Opening brief.</strong> ERGSN trade desk reports the quarter's top three Korean export signals and the buyer industries driving demand.</span></li>
+      <li><span class="t">00:10</span><span class="d"><strong>Maker 1 &middot; 18 min.</strong> Product demo, specs, certifications, live Q&amp;A with buyers.</span></li>
+      <li><span class="t">00:28</span><span class="d"><strong>Maker 2 &middot; 18 min.</strong> Same format, different verified partner.</span></li>
+      <li><span class="t">00:46</span><span class="d"><strong>Maker 3 &middot; 18 min.</strong></span></li>
+      <li><span class="t">01:04</span><span class="d"><strong>Maker 4 &middot; 18 min.</strong></span></li>
+      <li><span class="t">01:22</span><span class="d"><strong>Maker 5 &middot; 18 min.</strong> Final slot, often reserved for the quarter's fastest-rising partner.</span></li>
+      <li><span class="t">01:30</span><span class="d"><strong>Close &amp; RFQ routing.</strong> Any buyer can flag interest during the broadcast; ERGSN follows up within 24 hours with RFQs routed to relevant makers.</span></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Why attend</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>Buyers (free &middot; invite-only)</h3>
+        <ul>
+          <li>See 5 verified Korean makers in 90 minutes &mdash; months of due diligence in one session.</li>
+          <li>Ask specs, certifications, and MOQ questions live; makers answer on-camera.</li>
+          <li>Private RFQ channel opens for attendees only &mdash; priority routing for 48 hours after the event.</li>
+          <li>Free attendance; qualification is by RFQ history, AI Match profile, or ERGSN partner reference.</li>
+        </ul>
+      </div>
+      <div class="why-card">
+        <h3>Makers (Featured tier benefit)</h3>
+        <ul>
+          <li>18-minute live slot in front of pre-qualified global procurement buyers.</li>
+          <li>Slot is bundled with Featured tier (₩1.5M/mo) &middot; standalone slot available at ₩5,000,000 per edition.</li>
+          <li>Recording delivered to your Partner Dashboard for reuse in corporate sales materials.</li>
+          <li>Same-day RFQ pipeline from buyers who flagged interest during your presentation.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Past editions</h2>
+    <div class="archive">
+      <div class="archive-card">
+        <p class="ed">Edition 01</p>
+        <p><span class="status-pill upcoming">Upcoming</span></p>
+        <p class="info">July 15, 2026 &middot; registration open</p>
+      </div>
+      <div class="archive-card">
+        <p class="ed">Edition 02</p>
+        <p><span class="status-pill scheduled">Scheduled</span></p>
+        <p class="info">October 2026 &middot; Q4 edition</p>
+      </div>
+      <div class="archive-card">
+        <p class="ed">Edition 03</p>
+        <p><span class="status-pill scheduled">Scheduled</span></p>
+        <p class="info">January 2027 &middot; Q1 edition</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Register</h2>
+    <div class="why-grid" style="margin-top:1rem">
+
+      <div class="form-wrap buyer">
+        <h3 style="color:var(--green);margin-bottom:1rem">🎟 Buyer — request attendance</h3>
+        <p style="font-size:13px;color:var(--tx-mid);margin-bottom:1rem">Free &middot; invitation-only. ERGSN sends the Zoom link 48 hours before the event after qualification.</p>
+        <form onsubmit="submitMission(event,'buyer')">
+          <div class="form-row">
+            <div><label>Name <span style="color:var(--gold)">*</span></label><input type="text" id="bName" required></div>
+            <div><label>Company <span style="color:var(--gold)">*</span></label><input type="text" id="bCo" required></div>
+          </div>
+          <div class="form-row">
+            <div><label>Country <span style="color:var(--gold)">*</span></label><input type="text" id="bCountry" required></div>
+            <div><label>Primary industry</label><select id="bIndustry">
+              <option>Government</option><option>Healthcare</option><option>Finance</option><option>Manufacturing</option><option>Energy</option><option>Retail / Distribution</option><option>Hospitality / F&amp;B</option><option>Technology</option><option>Logistics</option><option>Other</option>
+            </select></div>
+          </div>
+          <label>Work email <span style="color:var(--gold)">*</span></label><input type="email" id="bEmail" required>
+          <label>Sourcing categories of interest</label><textarea id="bInterest" placeholder="e.g. HIPAA shredders, solar-coupled generators, K-beauty OEM…"></textarea>
+          <button type="submit">Request invitation</button>
+        </form>
+      </div>
+
+      <div class="form-wrap maker">
+        <h3 style="color:var(--gold);margin-bottom:1rem">🎤 Maker — apply for a slot</h3>
+        <p style="font-size:13px;color:var(--tx-mid);margin-bottom:1rem">Verified Partner tier required. Featured partners receive slot priority; standalone slots ₩5M per edition.</p>
+        <form onsubmit="submitMission(event,'maker')">
+          <div class="form-row">
+            <div><label>Company (KR) <span style="color:var(--gold)">*</span></label><input type="text" id="mCo" required></div>
+            <div><label>Business reg. no.</label><input type="text" id="mBrn" placeholder="e.g. 123-45-67890"></div>
+          </div>
+          <div class="form-row">
+            <div><label>Contact person <span style="color:var(--gold)">*</span></label><input type="text" id="mName" required></div>
+            <div><label>Email <span style="color:var(--gold)">*</span></label><input type="email" id="mEmail" required></div>
+          </div>
+          <label>Sector</label><select id="mSector">
+            <option>K-Security</option><option>K-Tech</option><option>K-Energy</option><option>K-Bio</option><option>K-Beauty</option><option>K-Culture Goods</option><option>K-Franchise</option><option>K-Smart Living</option>
+          </select>
+          <label>Product / headline you'd present</label><textarea id="mPitch" placeholder="One-sentence hook plus key specs / certifications."></textarea>
+          <button type="submit">Apply for Edition 01 slot</button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="missionToast">✓ Received. ERGSN trade desk will reply within 1 business day.</div>
+
+<script>
+  // Submissions route through the existing FormSubmit endpoint used by the main RFQ form.
+  const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
+  const RFQ_CC = 'ceodon69@gmail.com';
+  function showToast(){ const t=document.getElementById('missionToast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3600); }
+  function submitMission(e, role){
+    e.preventDefault();
+    const g = id => (document.getElementById(id) || {}).value || '';
+    const body = role === 'buyer' ? {
+      _cc: RFQ_CC,
+      _subject: `[TRADE MISSION BUYER] ${g('bCountry')} · ${g('bCo')}`,
+      _template: 'table', _captcha: 'true',
+      Name: g('bName'), Company: g('bCo'), Country: g('bCountry'),
+      Industry: g('bIndustry'), Email: g('bEmail'), Interest: g('bInterest'),
+      Source: 'ceodon.github.io/ergsn (Trade Mission Buyer)'
+    } : {
+      _cc: RFQ_CC,
+      _subject: `[TRADE MISSION MAKER] ${g('mCo')}`,
+      _template: 'table', _captcha: 'true',
+      Company: g('mCo'), BRN: g('mBrn'), Contact: g('mName'),
+      Email: g('mEmail'), Sector: g('mSector'), Pitch: g('mPitch'),
+      Source: 'ceodon.github.io/ergsn (Trade Mission Maker)'
+    };
+    if (role === 'buyer' && !(body.Name && body.Company && body.Country && body.Email)) return;
+    if (role === 'maker' && !(body.Company && body.Contact && body.Email)) return;
+    fetch(RFQ_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(body) }).catch(()=>{});
+    e.target.reset();
+    showToast();
+  }
+</script>
+
+</body>
+</html>
