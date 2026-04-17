@@ -5312,7 +5312,10 @@ function chatStep(key, opts){
       }
       body.appendChild(optDiv);
     }
-    body.scrollTop = body.scrollHeight;
+    // Initial welcome should land at the top so the greeting is read from
+    // the first line. Everywhere else, pin to the newest message.
+    const isInitialWelcome = key === 'start' && !body.querySelector('.chat-msg.user');
+    body.scrollTop = isInitialWelcome ? 0 : body.scrollHeight;
   }, 800);
 }
 function chatBack(){
