@@ -35,11 +35,14 @@
   .vh-list li::before { content: "✓"; position: absolute; left: 0; top: 10px; color: var(--gold,#c8932a); font-weight: 800; }
   .vh-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 1.8rem; padding: 14px 26px; background: var(--gold,#c8932a); color: #0a0a0a; font-family: var(--fb,sans-serif); font-weight: 700; text-decoration: none; border-radius: 10px; font-size: 14px; }
   .vh-cta:hover { opacity: .9; }
+  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(200,147,42,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
+  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
+  @media print{.ergsn-back-fab{display:none}}
 </style>
 </head>
 <body>
 <div class="vh-wrap">
-  <a href="index.html" class="vh-back">&larr; ERGSN home</a>
+  <a href="index.html" class="vh-back">&larr; Back to ERGSN</a>
   <p class="vh-tag">For Healthcare Buyers</p>
   <h1 class="vh-title">HIPAA-grade Korean sourcing for healthcare procurement</h1>
   <p class="vh-lead">ERGSN is the verified trade gateway that connects healthcare procurement teams to Korean manufacturers meeting HIPAA, GSA Schedule, HACCP, and KFDA standards. Every partner passes a 4-step verification before their products reach global buyers — the same rigor proven over 13+ years of U.S. federal supply.</p>
@@ -86,5 +89,6 @@
 
   <a href="index.html#rfq" class="vh-cta">Request healthcare sourcing quote &rarr;</a>
 </div>
+<a href="index.html" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>

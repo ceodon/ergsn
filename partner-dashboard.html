@@ -76,12 +76,15 @@
   .btn-ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
   .btn:hover { text-decoration: none; opacity: .9; }
   .footer-note { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px dashed var(--border); font-size: 11.5px; color: var(--tx-lt); line-height: 1.6; }
+  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(200,147,42,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
+  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
+  @media print{.ergsn-back-fab{display:none}}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <a href="index.html" class="back">&larr; ERGSN home</a>
+  <a href="index.html" class="back">&larr; Back to ERGSN</a>
 
   <div class="preview-banner">
     <strong>Preview dashboard</strong>
@@ -239,5 +242,6 @@
   })();
 </script>
 
+<a href="index.html" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>

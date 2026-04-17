@@ -74,12 +74,15 @@
   .status-pill.scheduled { background: rgba(200,147,42,.15); color: var(--gold); }
   .toast { position: fixed; top: 20px; right: 20px; background: #1a1a1a; border: 1px solid var(--green); border-left: 3px solid var(--green); color: var(--white); padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateX(120%); transition: transform .3s; z-index: 1000; max-width: 320px; }
   .toast.show { transform: translateX(0); }
+  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(200,147,42,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
+  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
+  @media print{.ergsn-back-fab{display:none}}
 </style>
 </head>
 <body>
 
 <div class="wrap">
-  <a href="index.html" class="back">&larr; ERGSN home</a>
+  <a href="index.html" class="back">&larr; Back to ERGSN</a>
 
   <section class="hero">
     <span class="tag">Upcoming · Edition 01</span>
@@ -234,5 +237,6 @@
   }
 </script>
 
+<a href="index.html" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>

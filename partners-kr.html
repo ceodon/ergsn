@@ -132,6 +132,9 @@
   .toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 1500; display: flex; flex-direction: column; gap: 8px; pointer-events: none; max-width: calc(100vw - 40px); }
   .toast { background: var(--navy-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 16px; color: var(--white); font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,.5); animation: toastIn .25s ease-out; pointer-events: auto; max-width: 320px; }
   @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .ergsn-back-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:rgba(52,210,152,.95);color:#0a0a0a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:transform .15s,box-shadow .15s}
+  .ergsn-back-fab:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,0,0,.5);text-decoration:none!important;color:#0a0a0a!important}
+  @media print{.ergsn-back-fab{display:none}}
 </style>
 </head>
 <body>
@@ -140,8 +143,8 @@
 
 <header>
   <div class="container inner">
+    <a href="/ergsn/" class="back-link">← Back to ERGSN</a>
     <a href="/ergsn/" class="logo"><span class="e">E</span>RGSN</a>
-    <a href="/ergsn/" class="back-link">← 글로벌 사이트로 (EN)</a>
   </div>
 </header>
 
@@ -514,5 +517,6 @@ function submitPartnerForm(e) {
   });
 }
 </script>
+<a href="/ergsn/" class="ergsn-back-fab" aria-label="Back to ERGSN home">&larr; Back to ERGSN</a>
 </body>
 </html>
