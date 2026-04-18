@@ -294,11 +294,14 @@
   }
 
   function buildMobileMenu() {
+    /* All four sections render collapsed by default — matches index.html
+       exactly (its mobile-menu <details> blocks carry no `open` attr).
+       The previous default of auto-opening Shop meant users always had
+       to close Shop first before expanding another section. */
     var sections = MENU.map(function (col) {
       var lis = col.items.map(buildMobileItem).join('');
-      var open = col.title === 'Shop' ? ' open' : '';
       return (
-        '<details' + open + '>' +
+        '<details>' +
           '<summary>' + escapeHTML(col.title) + '</summary>' +
           '<ul>' + lis + '</ul>' +
         '</details>'
