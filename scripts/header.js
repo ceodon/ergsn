@@ -116,9 +116,12 @@
        because some standalone pages set body { margin: 0 } inline. */
     'body{padding-top:56px !important}',
     '#ehNav .eh-inner{max-width:1240px;margin:0 auto;height:100%;padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2vw,24px)}',
-    /* Logo — matches .nav-logo / .logo-mark styling from index.html */
+    /* Logo — byte-for-byte identical to index.html's .logo-mark: system
+       font, silver gradient fill, green gradient on the initial "E".
+       No fallback color (matches index.html) so browsers rendering
+       `-webkit-text-fill-color: transparent` show the gradient through. */
     '#ehNav .eh-logo{display:flex;align-items:center;gap:0;text-decoration:none;flex-shrink:0}',
-    '#ehNav .eh-logo-mark{font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;line-height:1;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:#fff}',
+    '#ehNav .eh-logo-mark{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;line-height:1;position:relative;padding-bottom:0;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
     '#ehNav .eh-logo-mark .eh-e{background:linear-gradient(84deg,#00bf79 42%,#00ffa1 81%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
     /* Right side */
     '#ehNav .eh-right{display:flex;align-items:center;gap:clamp(12px,2vw,20px)}',
@@ -178,14 +181,27 @@
     '#ehMobileMenu .eh-kr-chip{display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid #34d298;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#34d298}',
     '#ehMobileMenu .eh-lang{margin:16px 0 !important;font-family:inherit !important;font-size:12px !important;font-weight:600 !important;color:#fff !important;background:rgba(255,255,255,.08) !important;background-image:none !important;border:1px solid rgba(255,255,255,.15) !important;border-radius:20px !important;padding:5px 12px !important;outline:none !important;width:auto !important;height:auto !important;min-height:0 !important;box-sizing:border-box !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;cursor:pointer !important}',
     '#ehMobileMenu .eh-lang option{background:#171717 !important;color:#fff !important}',
-    /* Responsive swap — matches index.html breakpoint */
-    '@media (max-width:680px){#ehNav .eh-nav-links{display:none}#ehNav .eh-ham{display:flex}#ehNav .eh-lang{display:none}}',
-    /* Back-to-top FAB — mirrors #toTop styling from index.html */
-    '#ehToTop{position:fixed;right:clamp(16px,3vw,32px);bottom:calc(clamp(16px,3vw,32px) + 64px);width:48px;height:48px;background:#171717;color:#34d298;border:1px solid #292929;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility .25s,background .15s,color .15s;z-index:800}',
+    /* Responsive swap — matches index.html breakpoint.
+       On mobile the four nav dropdowns collapse into the hamburger menu,
+       but the language <select> stays visible in the top bar (index.html
+       uses `order: -1` on .nav-right .lang-sel to slot it before the
+       hamburger). Source order in our markup is already [lang, ham] so
+       no `order` override is needed. */
+    '@media (max-width:680px){#ehNav .eh-nav-links{display:none}#ehNav .eh-ham{display:flex}}',
+    /* Back-to-top FAB — mirrors index.html's policy exactly: by default
+       only the chat FAB shows; once the page scrolls past ~400 px the
+       Top FAB appears in the spot the chat FAB was in and the chat FAB
+       rises above it via `--ergsn-chat-lift`. */
+    '#ehToTop{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);width:48px;height:48px;background:#171717;color:#34d298;border:1px solid #292929;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility .25s,background .15s,color .15s;z-index:800}',
     '#ehToTop.eh-visible{opacity:1;visibility:visible;transform:translateY(0)}',
     '#ehToTop:hover{background:#34d298;color:#0f1110}',
     '#ehToTop svg{width:20px;height:20px}',
     '@media (max-width:600px){#ehToTop{width:44px;height:44px}}',
+    /* Chat FAB position override — lifts by `--ergsn-chat-lift` (set by
+       the scroll listener in this file) so it sits above the Top FAB
+       once it appears. !important beats the scoped rule injected by
+       scripts/chat.js. */
+    '#chatToggle{bottom:calc(clamp(16px,3vw,32px) + var(--ergsn-chat-lift, 0px)) !important;transition:bottom .3s ease, transform .2s, box-shadow .2s !important}',
     /* Chat FAB (#chatToggle) is injected by scripts/chat.js instead —
        that module owns the full Trade Advisor so the bottom-right
        behaves identically to index.html (in-place open, not redirect). */
@@ -340,9 +356,16 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       var ticking = false;
+      var docRoot = document.documentElement;
       function updateToTop() {
         var y = window.scrollY || document.documentElement.scrollTop;
-        toTop.classList.toggle('eh-visible', y > 400);
+        var show = y > 400;
+        toTop.classList.toggle('eh-visible', show);
+        /* When the Top FAB is visible, push the chat FAB above it by
+           48 px (FAB height) + 12 px gap = 60 px, matching index.html's
+           updateBottomStack(). When hidden, chat sits flush at the
+           bottom. */
+        docRoot.style.setProperty('--ergsn-chat-lift', show ? '60px' : '0px');
         ticking = false;
       }
       window.addEventListener('scroll', function () {
