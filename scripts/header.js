@@ -26,6 +26,22 @@
   window.__ergsnHeaderInjected = true;
   if (document.getElementById('nav')) return;
 
+  /* Pull in the other shared modules on standalone pages so a page only
+     has to load scripts/header.js to get the full chrome set (header +
+     footer + chatbot + Top FAB). Each companion script self-injects and
+     bails out if the page already owns its target DOM, so loading them
+     on index.html would be a no-op — but we still gate with the #nav
+     check above. */
+  function loadCompanion(src) {
+    if (document.querySelector('script[src="' + src + '"]')) return;
+    var s = document.createElement('script');
+    s.defer = true;
+    s.src = src;
+    document.head.appendChild(s);
+  }
+  loadCompanion('scripts/footer.js');
+  loadCompanion('scripts/chat.js');
+
   /* Menu structure mirrors index.html's dropdowns one-for-one. The `a` field
      is the top-level dropdown heading (href is the landing anchor on
      index.html); items are the rows inside each dropdown. Items with a
@@ -170,12 +186,9 @@
     '#ehToTop:hover{background:#34d298;color:#0f1110}',
     '#ehToTop svg{width:20px;height:20px}',
     '@media (max-width:600px){#ehToTop{width:44px;height:44px}}',
-    /* Chat FAB — mirrors #chatToggle styling from index.html. Clicking
-       navigates to index.html?chat=open so the full Trade Advisor opens
-       on the homepage (the chat state machine lives only in index.html). */
-    '#ehChatFab{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);width:52px;height:52px;background:#34d298;color:#0f1110;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(52,210,152,.4);cursor:pointer;z-index:800;transition:transform .2s,box-shadow .2s;text-decoration:none}',
-    '#ehChatFab:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(52,210,152,.55)}',
-    '#ehChatFab svg{width:24px;height:24px}',
+    /* Chat FAB (#chatToggle) is injected by scripts/chat.js instead —
+       that module owns the full Trade Advisor so the bottom-right
+       behaves identically to index.html (in-place open, not redirect). */
     /* Retire the duplicate bottom-right "Back to ERGSN" link on every
        standalone page — the Top FAB + header logo now handle that
        affordance, and the text link would collide with the Chat FAB. */
@@ -191,7 +204,7 @@
        top-right of those pages, so keep this retired. */
     '.ergsn-back-top{display:none !important}',
     /* Hide in print so spec sheets / invoices stay clean */
-    '@media print{#ehNav,#ehMobileMenu,#ehToTop,#ehChatFab,.ergsn-back-top{display:none !important}body{padding-top:0 !important}}'
+    '@media print{#ehNav,#ehMobileMenu,#ehToTop,.ergsn-back-top{display:none !important}body{padding-top:0 !important}}'
   ].join('');
 
   function escapeHTML(s) {
@@ -301,19 +314,6 @@
     '</button>'
   );
 
-  /* Chat FAB renders as an <a> — clicking goes to index.html?chat=open,
-     where initLang's sibling bootstrap auto-opens the Trade Advisor
-     panel. This gives every page the bottom-right chat affordance
-     without duplicating the full chat state machine per page. */
-  var CHAT_FAB_MARKUP = (
-    '<a id="ehChatFab" href="index.html?chat=open#home" aria-label="Open ERGSN Trade Advisor">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-        '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' +
-        '<path d="M8 9h.01M12 9h.01M16 9h.01"/>' +
-      '</svg>' +
-    '</a>'
-  );
-
   function inject() {
     if (!document.body) return;
 
@@ -329,11 +329,9 @@
       document.body.insertBefore(nodes[i], document.body.firstChild);
     }
 
-    /* Append the bottom-right FAB stack: chat (closer to bottom) + top
-       (stacked above). Appending at body end ensures z-index and scroll
-       listeners behave predictably. */
+    /* Append only the Top FAB — Chat FAB comes from scripts/chat.js */
     var fabWrap = document.createElement('div');
-    fabWrap.innerHTML = TO_TOP_MARKUP + CHAT_FAB_MARKUP;
+    fabWrap.innerHTML = TO_TOP_MARKUP;
     while (fabWrap.firstChild) document.body.appendChild(fabWrap.firstChild);
 
     var toTop = document.getElementById('ehToTop');
