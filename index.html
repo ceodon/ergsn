@@ -264,7 +264,7 @@ section { scroll-margin-top: var(--nav-h); }
 .nav-dropmenu {
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
   background: var(--navy-2); border: 1px solid var(--border); border-radius: 10px;
-  min-width: 240px; padding: 8px;
+  min-width: 200px; max-width: 220px; padding: 6px;
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity .18s, visibility .18s, transform .18s;
   margin-top: 0;
@@ -272,6 +272,11 @@ section { scroll-margin-top: var(--nav-h); }
   list-style: none;
   z-index: 950;
 }
+/* Leftmost dropdown (Shop) — anchor to the left of its trigger so the
+   200px panel doesn't spill off the viewport's left edge. */
+.nav-dropdown:first-child .nav-dropmenu { left: 0; transform: translateX(0); }
+.nav-dropdown:first-child:hover .nav-dropmenu,
+.nav-dropdown:first-child:focus-within .nav-dropmenu { transform: translateX(0) translateY(0); }
 .nav-dropmenu::before {
   content: ''; position: absolute;
   top: -14px; left: 0; right: 0; height: 14px;
@@ -285,7 +290,7 @@ section { scroll-margin-top: var(--nav-h); }
 .nav-dropmenu li { display: block; }
 .nav-dropmenu a {
   display: flex; flex-direction: column; gap: 2px;
-  padding: 10px 12px; border-radius: 6px;
+  padding: 8px 10px; border-radius: 6px;
   color: var(--white); transition: background .15s;
 }
 .nav-dropmenu a:hover { background: rgba(52,210,152,.1); color: var(--white); }

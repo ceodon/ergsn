@@ -15,11 +15,15 @@
     '#ergsnFooter{background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#cfcfcf}',
     '#ergsnFooter *{box-sizing:border-box}',
     '#ergsnFooter .ef-inner{max-width:1240px;margin:0 auto;padding:clamp(2.5rem,5vh,4rem) clamp(16px,4vw,48px) clamp(1.5rem,3vh,2.5rem)}',
+    /* Responsive grid — mirrors index.html's footer exactly.
+       Desktop: 5 cols (1.6fr + 4×1fr). At ≤960px drop to 3 cols with
+       brand spanning the full row; at ≤680px drop to 2 cols, brand
+       still spans. No 420px single-column rule — index.html keeps
+       2 cols all the way down so content reads balanced on mobile
+       instead of a left-aligned stack. */
     '#ergsnFooter .ef-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:clamp(1.5rem,3vw,2.5rem);padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:1.5rem}',
-    '@media (max-width:900px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr 1fr}}',
-    '@media (max-width:600px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr}}',
-    '@media (max-width:420px){#ergsnFooter .ef-top{grid-template-columns:1fr}}',
-    '#ergsnFooter .ef-brand{}',
+    '@media (max-width:960px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
+    '@media (max-width:680px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
     '#ergsnFooter .ef-logo-row{display:flex;align-items:center;margin-bottom:1rem}',
     '#ergsnFooter .ef-logo{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;position:relative;padding-bottom:5px;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:#fff}',
     '#ergsnFooter .ef-logo .ef-e{background:linear-gradient(84deg,#00bf79 42%,#00ffa1 81%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
