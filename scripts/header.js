@@ -195,20 +195,27 @@
        hamburger). Source order in our markup is already [lang, ham] so
        no `order` override is needed. */
     '@media (max-width:680px){#ehNav .eh-nav-links{display:none}#ehNav .eh-ham{display:flex}}',
+    /* `--ergsn-bottom-cta-h` mirrors index.html's `--bottom-cta-h` — 0 on
+       desktop, 60 px on mobile so the bottom-right FAB stack clears the
+       iOS Safari browser chrome the same way the homepage does. */
+    ':root{--ergsn-bottom-cta-h:0px}',
+    '@media (max-width:760px){:root{--ergsn-bottom-cta-h:60px}}',
     /* Back-to-top FAB — mirrors index.html's policy exactly: by default
        only the chat FAB shows; once the page scrolls past ~400 px the
        Top FAB appears in the spot the chat FAB was in and the chat FAB
        rises above it via `--ergsn-chat-lift`. */
-    '#ehToTop{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);width:48px;height:48px;background:#171717;color:#34d298;border:1px solid #292929;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility .25s,background .15s,color .15s;z-index:800}',
+    '#ehToTop{position:fixed;right:clamp(16px,3vw,32px);bottom:calc(clamp(16px,3vw,32px) + var(--ergsn-bottom-cta-h, 0px));width:48px;height:48px;background:#171717;color:#34d298;border:1px solid #292929;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility .25s,background .15s,color .15s;z-index:800}',
     '#ehToTop.eh-visible{opacity:1;visibility:visible;transform:translateY(0)}',
     '#ehToTop:hover{background:#34d298;color:#0f1110}',
     '#ehToTop svg{width:20px;height:20px}',
     '@media (max-width:600px){#ehToTop{width:44px;height:44px}}',
     /* Chat FAB position override — lifts by `--ergsn-chat-lift` (set by
        the scroll listener in this file) so it sits above the Top FAB
-       once it appears. !important beats the scoped rule injected by
-       scripts/chat.js. */
-    '#chatToggle{bottom:calc(clamp(16px,3vw,32px) + var(--ergsn-chat-lift, 0px)) !important;transition:bottom .3s ease, transform .2s, box-shadow .2s !important}',
+       once it appears. Also adds the same mobile `--ergsn-bottom-cta-h`
+       offset so both FABs sit at matching heights. !important beats
+       the scoped rule injected by scripts/chat.js. */
+    '#chatToggle{bottom:calc(clamp(16px,3vw,32px) + var(--ergsn-bottom-cta-h, 0px) + var(--ergsn-chat-lift, 0px)) !important;transition:bottom .3s ease, transform .2s, box-shadow .2s !important}',
+    '#chatPanel{bottom:calc(84px + var(--ergsn-bottom-cta-h, 0px) + var(--ergsn-chat-lift, 0px)) !important}',
     /* Chat FAB (#chatToggle) is injected by scripts/chat.js instead —
        that module owns the full Trade Advisor so the bottom-right
        behaves identically to index.html (in-place open, not redirect). */
