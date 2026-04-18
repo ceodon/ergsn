@@ -154,9 +154,15 @@
        pages that use broad `input, select, textarea { width:100% }` rules
        (export-docs.html did this, ballooning the select to full-row width
        and breaking the whole nav layout). */
-    '#ehNav .eh-lang{font-family:inherit !important;font-size:12px !important;font-weight:600 !important;letter-spacing:normal !important;color:#fff !important;background:rgba(255,255,255,.08) !important;background-image:none !important;border:1px solid rgba(255,255,255,.15) !important;border-radius:20px !important;padding:5px 12px !important;margin:0 !important;width:auto !important;height:auto !important;min-height:0 !important;box-sizing:border-box !important;outline:none !important;cursor:pointer !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;transition:border-color .15s !important}',
+    /* background-image: linear-gradient(transparent,transparent) is the
+       reliable cross-browser trick to suppress the native dropdown
+       chevron on mobile Safari/Chrome — `appearance: none` alone leaves
+       the chevron visible on some iOS/Android builds. ::-ms-expand
+       covers IE/old Edge. */
+    '#ehNav .eh-lang{font-family:inherit !important;font-size:12px !important;font-weight:600 !important;letter-spacing:normal !important;color:#fff !important;background-color:rgba(255,255,255,.08) !important;background-image:linear-gradient(transparent,transparent) !important;border:1px solid rgba(255,255,255,.15) !important;border-radius:20px !important;padding:5px 12px !important;margin:0 !important;width:auto !important;height:auto !important;min-height:0 !important;box-sizing:border-box !important;outline:none !important;cursor:pointer !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;transition:border-color .15s !important}',
     '#ehNav .eh-lang:hover,#ehNav .eh-lang:focus{border-color:#34d298 !important}',
     '#ehNav .eh-lang option{background:#171717 !important;color:#fff !important}',
+    '#ehNav .eh-lang::-ms-expand{display:none !important}',
     /* Hamburger (desktop hidden, mobile shown) */
     '#ehNav .eh-ham{display:none;flex-direction:column;gap:5px;padding:6px;background:transparent;border:0;cursor:pointer}',
     '#ehNav .eh-ham span{width:22px;height:2px;background:#fff;border-radius:1px;transition:all .2s;display:block}',
@@ -179,8 +185,9 @@
     '#ehMobileMenu details ul{padding:0 0 10px 4px}',
     '#ehMobileMenu details ul li a{padding:10px 0;font-size:14px}',
     '#ehMobileMenu .eh-kr-chip{display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid #34d298;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#34d298}',
-    '#ehMobileMenu .eh-lang{margin:16px 0 !important;font-family:inherit !important;font-size:12px !important;font-weight:600 !important;color:#fff !important;background:rgba(255,255,255,.08) !important;background-image:none !important;border:1px solid rgba(255,255,255,.15) !important;border-radius:20px !important;padding:5px 12px !important;outline:none !important;width:auto !important;height:auto !important;min-height:0 !important;box-sizing:border-box !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;cursor:pointer !important}',
+    '#ehMobileMenu .eh-lang{margin:16px 0 !important;font-family:inherit !important;font-size:12px !important;font-weight:600 !important;color:#fff !important;background-color:rgba(255,255,255,.08) !important;background-image:linear-gradient(transparent,transparent) !important;border:1px solid rgba(255,255,255,.15) !important;border-radius:20px !important;padding:5px 12px !important;outline:none !important;width:auto !important;height:auto !important;min-height:0 !important;box-sizing:border-box !important;-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;cursor:pointer !important}',
     '#ehMobileMenu .eh-lang option{background:#171717 !important;color:#fff !important}',
+    '#ehMobileMenu .eh-lang::-ms-expand{display:none !important}',
     /* Responsive swap — matches index.html breakpoint.
        On mobile the four nav dropdowns collapse into the hamburger menu,
        but the language <select> stays visible in the top bar (index.html
