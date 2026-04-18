@@ -4742,6 +4742,22 @@ function lazyInit() {
 }
 document.addEventListener('DOMContentLoaded', lazyInit);
 
+/* ── Auto-open chat for ?chat=open (chat FAB on standalone pages) ─── */
+/* Standalone pages carry the injected chat FAB but can't run the full
+   Trade Advisor state machine — clicking that FAB sends the user here
+   with ?chat=open, and this hook opens the panel once the page is
+   idle. */
+document.addEventListener('DOMContentLoaded', function openChatFromQuery() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('chat') !== 'open') return;
+    /* Let other DOMContentLoaded handlers (e.g. chat init, initLang) settle first */
+    setTimeout(function () {
+      if (typeof toggleChat === 'function' && !chatOpen) toggleChat();
+    }, 250);
+  } catch (_) {}
+});
+
 /* ── Tier 3: 3D spin toggle ─────────── */
 function toggleSpin(btn) {
   const img = btn.parentElement.querySelector('.modal-main');

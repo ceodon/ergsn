@@ -157,8 +157,34 @@
     '#ehMobileMenu .eh-lang{margin:16px 0;font:inherit;font-size:13px;color:#cfcfcf;background:#141414;border:1px solid #292929;border-radius:7px;padding:8px 12px;outline:none;width:160px}',
     /* Responsive swap — matches index.html breakpoint */
     '@media (max-width:680px){#ehNav .eh-nav-links{display:none}#ehNav .eh-ham{display:flex}#ehNav .eh-lang{display:none}}',
+    /* Back-to-top FAB — mirrors #toTop styling from index.html */
+    '#ehToTop{position:fixed;right:clamp(16px,3vw,32px);bottom:calc(clamp(16px,3vw,32px) + 64px);width:48px;height:48px;background:#171717;color:#34d298;border:1px solid #292929;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility .25s,background .15s,color .15s;z-index:800}',
+    '#ehToTop.eh-visible{opacity:1;visibility:visible;transform:translateY(0)}',
+    '#ehToTop:hover{background:#34d298;color:#0f1110}',
+    '#ehToTop svg{width:20px;height:20px}',
+    '@media (max-width:600px){#ehToTop{width:44px;height:44px}}',
+    /* Chat FAB — mirrors #chatToggle styling from index.html. Clicking
+       navigates to index.html?chat=open so the full Trade Advisor opens
+       on the homepage (the chat state machine lives only in index.html). */
+    '#ehChatFab{position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);width:52px;height:52px;background:#34d298;color:#0f1110;border:0;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(52,210,152,.4);cursor:pointer;z-index:800;transition:transform .2s,box-shadow .2s;text-decoration:none}',
+    '#ehChatFab:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(52,210,152,.55)}',
+    '#ehChatFab svg{width:24px;height:24px}',
+    /* Retire the duplicate bottom-right "Back to ERGSN" link on every
+       standalone page — the Top FAB + header logo now handle that
+       affordance, and the text link would collide with the Chat FAB. */
+    '.ergsn-back-bottom{display:none !important}',
+    /* Move the inline top-left back link to the right of the content
+       area. Matches the user-validated layout: logo at top-left (inside
+       the injected header), breadcrumb-style back link at top-right of
+       the page body. */
+    '.back,.vh-back{display:block !important;width:fit-content !important;margin-left:auto !important;margin-right:0 !important;text-align:right !important}',
+    /* `.ergsn-back-top` is a fixed-position floating back button on
+       invoice-template / verified-certificate. The header logo already
+       covers "back to home", and the .tools action cluster occupies the
+       top-right of those pages, so keep this retired. */
+    '.ergsn-back-top{display:none !important}',
     /* Hide in print so spec sheets / invoices stay clean */
-    '@media print{#ehNav,#ehMobileMenu{display:none !important}body{padding-top:0 !important}}'
+    '@media print{#ehNav,#ehMobileMenu,#ehToTop,#ehChatFab,.ergsn-back-top{display:none !important}body{padding-top:0 !important}}'
   ].join('');
 
   function escapeHTML(s) {
@@ -262,6 +288,25 @@
     );
   }
 
+  var TO_TOP_MARKUP = (
+    '<button id="ehToTop" type="button" aria-label="Back to top">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>' +
+    '</button>'
+  );
+
+  /* Chat FAB renders as an <a> — clicking goes to index.html?chat=open,
+     where initLang's sibling bootstrap auto-opens the Trade Advisor
+     panel. This gives every page the bottom-right chat affordance
+     without duplicating the full chat state machine per page. */
+  var CHAT_FAB_MARKUP = (
+    '<a id="ehChatFab" href="index.html?chat=open#home" aria-label="Open ERGSN Trade Advisor">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>' +
+        '<path d="M8 9h.01M12 9h.01M16 9h.01"/>' +
+      '</svg>' +
+    '</a>'
+  );
+
   function inject() {
     if (!document.body) return;
 
@@ -275,6 +320,30 @@
     // Insert at body start, preserving order
     for (var i = nodes.length - 1; i >= 0; i--) {
       document.body.insertBefore(nodes[i], document.body.firstChild);
+    }
+
+    /* Append the bottom-right FAB stack: chat (closer to bottom) + top
+       (stacked above). Appending at body end ensures z-index and scroll
+       listeners behave predictably. */
+    var fabWrap = document.createElement('div');
+    fabWrap.innerHTML = TO_TOP_MARKUP + CHAT_FAB_MARKUP;
+    while (fabWrap.firstChild) document.body.appendChild(fabWrap.firstChild);
+
+    var toTop = document.getElementById('ehToTop');
+    if (toTop) {
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      var ticking = false;
+      function updateToTop() {
+        var y = window.scrollY || document.documentElement.scrollTop;
+        toTop.classList.toggle('eh-visible', y > 400);
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { window.requestAnimationFrame(updateToTop); ticking = true; }
+      }, { passive: true });
+      updateToTop();
     }
 
     var ham = document.querySelector('#ehNav .eh-ham');
