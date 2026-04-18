@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERGSN Product Catalog Entry",
+  "description": "Single row of data/products.json — one physical product or service offering. Run `npm run build:products` after editing.",
+  "type": "object",
+  "required": ["id", "sector", "model", "part", "sub", "desc", "specs", "features"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Stable lowercase slug, used as DOM id and referenced by chat + compare. Never change after publish."
+    },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "k-security",
+        "k-tech",
+        "k-energy",
+        "k-bio",
+        "k-beauty",
+        "k-culture-goods",
+        "k-franchise",
+        "k-smart-living"
+      ],
+      "description": "Sector the product is listed under. Controls which grid renders the card."
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Set to false to hide from live site without deleting the entry (useful for drafts)."
+    },
+    "model": { "type": "string", "description": "Display model name, e.g. 'DL-16XD'." },
+    "part": { "type": "string", "description": "Part number, e.g. 'DL16XD (RS-8200A)'." },
+    "sub": { "type": "string", "description": "One-line subtitle shown on the card and in the modal header." },
+    "desc": { "type": "string", "description": "Paragraph-length description shown in the modal body. Markdown not supported — use straight text." },
+    "img": {
+      "type": "string",
+      "description": "Path to main product image relative to site root. Either .jpg or .webp fallback; .webp auto-detected if sibling file exists.",
+      "examples": ["images/products/dl-10x.jpg"]
+    },
+    "specs": {
+      "type": "array",
+      "description": "Array of [label, value] tuples for the Technical Specifications table.",
+      "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string" } }
+    },
+    "features": {
+      "type": "array",
+      "description": "Bullet list of Key Features & Benefits.",
+      "items": { "type": "string" }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Industry tags for AI Partner Match scoring. One or more of: finance, healthcare, tech, education, hospitality, government, manufacturing, logistics, retail, energy.",
+      "items": { "type": "string" }
+    },
+    "scale": {
+      "type": "array",
+      "description": "Volume scale buckets — used by matching. Any subset of: s (small), m (medium), l (large), xl (extra large).",
+      "items": { "type": "string", "enum": ["s", "m", "l", "xl"] }
+    },
+    "moq": { "type": "integer", "description": "Minimum order quantity (units)." },
+    "leadMin": { "type": "integer", "description": "Lead time min in weeks." },
+    "leadMax": { "type": "integer", "description": "Lead time max in weeks." },
+    "priceLow": { "type": "number", "description": "Price range low (USD / unit, FOB)." },
+    "priceHigh": { "type": "number", "description": "Price range high (USD / unit, FOB)." },
+    "maker": { "type": "string", "description": "Korean maker legal name (displayed as 'Manufactured by ...')." },
+    "cardTag": { "type": "string", "description": "Short tag shown above the model name on the product card, e.g. 'Entry Mid-Sized Office'." },
+    "matchDesc": { "type": "string", "description": "One-line description used by the AI Partner Match result card." },
+    "coming": { "type": "boolean", "description": "Tag as 'coming soon' — shown in Match but not in main grid until true." }
+  }
+}

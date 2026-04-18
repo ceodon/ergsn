@@ -1,0 +1,35 @@
+{
+  "$schema": "./products.schema.json",
+  "_doc": "Source-of-truth for new ERGSN catalog entries. Run `npm run build:products` after editing. Products listed here are APPENDED to the existing inline catalog — never overwritten. Field reference: see data/products.schema.json.",
+  "products": [
+    {
+      "id": "sample-ktech-demo",
+      "sector": "k-tech",
+      "active": false,
+      "model": "SAMPLE · Demo Product",
+      "part": "SAMPLE (DEMO-0001)",
+      "sub": "Template row — remove this when you ship your first real product",
+      "desc": "A sample entry illustrating every field the build pipeline consumes. `active: false` hides the entry from the live grid; flip to true to publish. Specs / features / tags are arrays; img path is relative to site root.",
+      "img": "images/products/sample.jpg",
+      "specs": [
+        ["Category", "Template / Placeholder"],
+        ["Origin", "Republic of Korea"],
+        ["Lead Time", "Sample — not for production"]
+      ],
+      "features": [
+        "Placeholder bullet 1 — demonstrates the features array",
+        "Placeholder bullet 2 — replace with real value propositions"
+      ],
+      "tags": ["tech"],
+      "scale": ["s", "m"],
+      "moq": 1,
+      "leadMin": 4,
+      "leadMax": 6,
+      "priceLow": 100,
+      "priceHigh": 500,
+      "maker": "ERGSN (placeholder)",
+      "cardTag": "Template",
+      "matchDesc": "Placeholder row — shown by AI Partner Match when active=true."
+    }
+  ]
+}

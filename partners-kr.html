@@ -403,12 +403,47 @@
           <label>기존 수출 이력 (있는 경우)</label>
           <input type="text" id="kExport" placeholder="예: 미국 직수출 3년 · 일본 상사 경유 · 수출 경험 없음">
         </div>
+
+        <div class="form-grp" style="margin-top:1.6rem;padding-top:1.2rem;border-top:1px dashed var(--border)">
+          <p style="font-family:var(--fb);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 .6rem">Verified Partner — 제품 등록 (선택)</p>
+          <p style="font-size:12.5px;color:var(--tx-lt);line-height:1.65;margin:0 0 1rem">아래 정보를 함께 주시면 <strong style="color:var(--white)">Verified Partner (₩290,000/연)</strong> 티어로 바로 승격되며, ERGSN 카탈로그에 제품이 자동 등록됩니다. 생략해도 무방하며, 추후 이메일로 별도 제출하셔도 됩니다.</p>
+        </div>
+        <div class="form-row">
+          <div><label>대표 제품 모델명</label><input type="text" id="kProdModel" placeholder="예: DL-16XD / HYGEN KE-Option A"></div>
+          <div><label>Part 번호</label><input type="text" id="kProdPart" placeholder="예: DL16XD (RS-8200A)"></div>
+        </div>
+        <div class="form-grp">
+          <label>한 줄 요약 (부제)</label>
+          <input type="text" id="kProdSub" placeholder="예: Level 3 / P-4 Cross Cut — High Volume Flagship">
+        </div>
+        <div class="form-grp">
+          <label>주요 사양 (한 줄당 "라벨: 값" 형식, 6-14 줄)</label>
+          <textarea id="kProdSpecs" rows="6" placeholder="Cut Type: Level 3 / P-4&#10;Sheet Capacity: Up to 90 sheets&#10;Motor: 3.25 Hp&#10;Voltage: 115V / 30 Amp&#10;Compliance: HIPAA · GSA Schedule"></textarea>
+        </div>
+        <div class="form-grp">
+          <label>핵심 특징 (한 줄당 하나씩, 6-10 개)</label>
+          <textarea id="kProdFeatures" rows="5" placeholder="All-Metal Chain Drive — no nylon or plastic gears&#10;Oil-Free Operation — lower long-term cost&#10;Up to 90 sheets per pass at 31 FPM&#10;Individually crated for ocean freight"></textarea>
+        </div>
+        <div class="form-grp">
+          <label>제품 설명 (3-5 문장)</label>
+          <textarea id="kProdDesc" rows="3" placeholder="바이어 대상 제품 모달에 표시될 문단 설명."></textarea>
+        </div>
+        <div class="form-row">
+          <div><label>최소 주문수량 (MOQ)</label><input type="number" id="kProdMoq" placeholder="예: 5"></div>
+          <div><label>리드타임 (주)</label><input type="text" id="kProdLead" placeholder="예: 6-8"></div>
+        </div>
+        <div class="form-grp">
+          <label>제품 이미지 3장 (정면 · 사용 · 컨텍스트) — 클라우드 공유 링크</label>
+          <input type="url" id="kProdImgs" placeholder="Google Drive / Dropbox / WeTransfer 공유 링크를 붙여넣어 주세요">
+          <p style="font-size:11px;color:var(--tx-lt);margin-top:4px;line-height:1.5">대용량 파일 업로드가 불가능한 폼이라 링크로 받습니다. WebP 800px로 자동 최적화 후 게시됩니다.</p>
+        </div>
+
         <div class="form-grp">
           <label>전하고 싶은 말씀 (선택)</label>
           <textarea id="kMsg" placeholder="ERGSN과 함께 하고 싶은 이유, 특별한 강점, 고민되는 부분 등 자유롭게 작성해 주세요."></textarea>
         </div>
         <button type="submit" id="kSubmit">파트너 신청 제출</button>
-        <p class="form-note">제출하시면 ERGSN의 <a href="privacy.html" target="_blank" rel="noopener noreferrer">개인정보 처리방침</a>에 동의하시는 것으로 간주됩니다.</p>
+        <p class="form-note">제출하시면 ERGSN의 <a href="privacy.html" target="_blank" rel="noopener noreferrer">개인정보 처리방침</a>에 동의하시는 것으로 간주됩니다. 제품 정보를 함께 제출하신 경우, Verified Partner 인증 완료 후 ERGSN 카탈로그에 자동 등록됩니다 (영업일 기준 1-3일).</p>
       </form>
       <div class="success" id="kSuccess">
         <div class="icon">✓</div>
@@ -450,6 +485,18 @@ function submitPartnerForm(e) {
     주력제품: v('kProducts'),
     보유인증: v('kCerts') || '-',
     수출이력: v('kExport') || '-',
+    /* Verified Partner 제품 등록 필드 (모두 선택). 제출되면 Verified 티어
+       승격 + 카탈로그 등록 큐에 포함되어 ERGSN 트레이드 데스크에서
+       data/products.json 에 편입 후 `npm run build:products` 를 돌립니다. */
+    제품_모델명: v('kProdModel') || '-',
+    제품_Part: v('kProdPart') || '-',
+    제품_부제: v('kProdSub') || '-',
+    제품_사양: v('kProdSpecs') || '-',
+    제품_특징: v('kProdFeatures') || '-',
+    제품_설명: v('kProdDesc') || '-',
+    제품_MOQ: v('kProdMoq') || '-',
+    제품_리드타임: v('kProdLead') || '-',
+    제품_이미지링크: v('kProdImgs') || '-',
     메시지: v('kMsg') || '-'
   };
   const btn = document.getElementById('kSubmit');
@@ -463,8 +510,9 @@ function submitPartnerForm(e) {
     ...fields,
     Source: 'ceodon.github.io/ergsn/partners-kr'
   };
+  const hasProduct = fields.제품_모델명 !== '-';
   const tgText = [
-    '🏭 *한국 파트너 신청*', '',
+    '🏭 *한국 파트너 신청*' + (hasProduct ? ' · *제품 등록 포함*' : ''), '',
     `*회사:* ${fields.회사명}`,
     `*대표:* ${fields.대표자}`,
     `*연락:* ${fields.이메일} / ${fields.연락처}`,
@@ -474,6 +522,14 @@ function submitPartnerForm(e) {
     `*주력제품:* ${fields.주력제품}`,
     `*인증:* ${fields.보유인증}`,
     `*수출이력:* ${fields.수출이력}`,
+    ...(hasProduct ? [
+      '',
+      '🎯 *Verified Partner 제품 등록*',
+      `*모델:* ${fields.제품_모델명} (${fields.제품_Part})`,
+      `*부제:* ${fields.제품_부제}`,
+      `*MOQ / Lead:* ${fields.제품_MOQ} · ${fields.제품_리드타임}주`,
+      `*이미지:* ${fields.제품_이미지링크}`
+    ] : []),
     '',
     `*메시지:* ${fields.메시지}`, '',
     '_partners-kr · ceodon.github.io/ergsn_'
