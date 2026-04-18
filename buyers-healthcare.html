@@ -23,6 +23,15 @@
   .vh-lead { font-size: 17px; line-height: 1.6; color: #cfcfcf; max-width: 720px; margin-bottom: 2.2rem; }
   .vh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 2rem 0; }
   .vh-card { padding: 22px; border: 1px solid #242424; background: #141414; border-radius: 12px; }
+  .vh-media {
+    margin: -22px -22px 16px; height: 160px;
+    background: #fff; border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vh-media picture, .vh-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .vh-media.vh-media-svg { background: linear-gradient(135deg, #0a1830 0%, #132244 100%); padding: 12px; }
+  .vh-media svg { width: auto; max-width: 75%; height: 100%; display: block; margin: 0 auto; }
   .vh-card h3 { font-family: var(--fh,serif); font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 10px; }
   .vh-card p { font-size: 13.5px; line-height: 1.6; color: #b8b8b8; margin-bottom: 12px; }
   .vh-card a { font-family: var(--fb,sans-serif); font-size: 12px; font-weight: 600; color: var(--gold,#c8932a); text-decoration: none; letter-spacing: .04em; }
@@ -50,16 +59,19 @@
   <h2 class="vh-title" style="font-size:22px;margin-top:2.5rem">What we source for healthcare</h2>
   <div class="vh-grid">
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/dl-12xd.webp" type="image/webp"><img src="images/products/dl-12xd.jpg" alt="ERGSN DL-12XD HIPAA-grade cross-cut shredder" loading="lazy" decoding="async"></picture></div>
       <h3>DL Series Shredders</h3>
       <p>Level 3 / P-4 cross-cut shredders for PHI document destruction. All-metal chain drive, oil-free, HIPAA-compliant. DL-12X to DL-16XD for clinic-to-hospital scale.</p>
       <a href="index.html?sector=k-security#products">View catalog &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus KFDA-assured Health Functional Food" loading="lazy" decoding="async"></picture></div>
       <h3>Rosetta Plus HFF</h3>
       <p>KFDA-assured Health Functional Food. Representative function: improvement of depression, psychosis, and panic disorder. HACCP production, 1,000+ units/month.</p>
       <a href="index.html?sector=k-bio#products">View spec sheet &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media"><img src="images/products/option-a.png" alt="HYGEN KE-Option A clinic-scale multi-generator set" loading="lazy" decoding="async"></div>
       <h3>HYGEN Generator Sets</h3>
       <p>Continuous DC backup power for clinic backup, cold-chain storage, and off-grid facilities. KE-Option A/B/C/D configurations from 1.0 to 3.6 kW/h.</p>
       <a href="index.html?sector=k-energy#products">Explore configurations &rarr;</a>
@@ -81,6 +93,7 @@
   <div class="vh-sec">
     <h2>Verified healthcare deployment</h2>
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/dl-12xd.webp" type="image/webp"><img src="images/products/dl-12xd.jpg" alt="DL-12XD cross-cut shredder — Tokyo Healthcare Group 24-clinic deployment" loading="lazy" decoding="async"></picture></div>
       <h3>🇯🇵 Tokyo Healthcare Group — 24 clinics</h3>
       <p>DL-12XD fleet deployed across a 24-clinic network. Oil-free, all-metal construction selected for cleanroom adjacency. Zero service callouts in 18 months of continuous operation.</p>
       <a href="index.html#cases">Full case studies &rarr;</a>

@@ -1709,6 +1709,18 @@ button:focus:not(:focus-visible) { outline: none; }
 .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(1.2rem,2vw,1.8rem); margin-top: 2rem; }
 .case-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem; }
 .case-card .c-flag { font-size: 28px; line-height: 1; margin-bottom: .6rem; }
+.case-card .c-hd { display: flex; align-items: flex-start; gap: 14px; margin-bottom: .3rem; }
+.case-card .c-hd .c-flag { margin-bottom: 0; flex-shrink: 0; }
+.case-card .c-hd-text { flex: 1; min-width: 0; }
+.case-card .c-thumb {
+  flex-shrink: 0; width: 80px; height: 80px;
+  border-radius: 10px; overflow: hidden;
+  background: #fff; border: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+}
+.case-card .c-thumb img, .case-card .c-thumb picture { width: 100%; height: 100%; object-fit: contain; display: block; }
+.case-card .c-thumb svg { width: 100%; height: 100%; display: block; }
+.case-card .c-thumb.c-thumb-svg { background: #0f1830; padding: 4px; }
 .case-card h3 { font-family: var(--fh); font-weight: 800; font-size: 1.05rem; color: var(--white); margin: 0 0 .3rem; }
 .case-card .c-sub { font-size: 11px; color: var(--gold); font-family: var(--fb); letter-spacing: .08em; text-transform: uppercase; margin-bottom: .8rem; }
 .case-card p { font-size: 13px; color: var(--tx-mid); line-height: 1.55; margin: 0 0 .8rem; }
@@ -2016,6 +2028,17 @@ button:focus:not(:focus-visible) { outline: none; }
 .trend-card { position: relative; padding: 22px 22px 20px; border: 1px solid #252525; background: #181818; border-radius: 12px; transition: border-color .2s, transform .2s; }
 .trend-card:hover { border-color: var(--gold); transform: translateY(-2px); }
 .trend-rank { position: absolute; top: 12px; right: 14px; font-family: var(--fd); font-size: 38px; font-weight: 800; color: #2a2a2a; line-height: 1; letter-spacing: -.02em; }
+.trend-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; max-width: calc(100% - 50px); }
+.trend-thumb {
+  flex-shrink: 0; width: 56px; height: 56px;
+  border-radius: 8px; overflow: hidden;
+  background: #fff; border: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+}
+.trend-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.trend-thumb.trend-thumb-svg { background: #0f1830; padding: 3px; }
+.trend-thumb svg { width: 100%; height: 100%; display: block; }
+.trend-top .trend-cat { margin-bottom: 0; }
 .trend-cat { font-family: var(--fb); font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
 .trend-title { font-family: var(--fh); font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 10px; line-height: 1.3; max-width: calc(100% - 50px); }
 .trend-growth { font-family: var(--fb); font-size: 12px; font-weight: 700; color: #15d78a; margin-bottom: 12px; letter-spacing: .04em; }
@@ -2038,7 +2061,16 @@ button:focus:not(:focus-visible) { outline: none; }
 .wanted-card-row { display: flex; align-items: center; gap: 8px; font-family: var(--fb); font-size: 11px; letter-spacing: .08em; color: var(--tx-lt); text-transform: uppercase; }
 .wanted-country { color: var(--gold); font-weight: 700; }
 .wanted-dot { opacity: .4; }
-.wanted-cat { font-family: var(--fh); font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.35; }
+.wanted-body { display: flex; align-items: flex-start; gap: 12px; }
+.wanted-picto {
+  flex-shrink: 0; width: 40px; height: 40px;
+  border-radius: 8px; background: rgba(52,210,152,.08);
+  border: 1px solid rgba(52,210,152,.22);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.wanted-picto svg { width: 22px; height: 22px; display: block; }
+.wanted-cat { font-family: var(--fh); font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.35; flex: 1; min-width: 0; margin: 0; }
 .wanted-band { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fb); font-size: 12px; font-weight: 600; color: #15d78a; }
 .wanted-band::before { content: "💰"; font-size: 13px; }
 .wanted-age { font-size: 11px; color: var(--tx-lt); font-family: var(--fb); }
@@ -2757,9 +2789,16 @@ button:focus:not(:focus-visible) { outline: none; }
     </div>
     <div class="cases-grid">
       <article class="case-card reveal">
-        <div class="c-flag">🇺🇸</div>
-        <h3>Capital Shredder Corp.</h3>
-        <p class="c-sub">Rockville, MD · Long-term partnership</p>
+        <div class="c-hd">
+          <div class="c-flag">🇺🇸</div>
+          <div class="c-hd-text">
+            <h3>Capital Shredder Corp.</h3>
+            <p class="c-sub">Rockville, MD · Long-term partnership</p>
+          </div>
+          <div class="c-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/dl-10x.webp" type="image/webp"><img src="images/products/dl-10x.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+        </div>
         <p>Multiple DL Series purchase orders delivered CIF Baltimore on schedule. Zero failed inspections. Ongoing re-orders for U.S. federal procurement.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">100%</span><span class="l">On-time</span></div>
@@ -2768,9 +2807,16 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </article>
       <article class="case-card reveal">
-        <div class="c-flag">🇸🇦</div>
-        <h3>GCC Government Ministry</h3>
-        <p class="c-sub">K-Security · 48-unit deployment</p>
+        <div class="c-hd">
+          <div class="c-flag">🇸🇦</div>
+          <div class="c-hd-text">
+            <h3>GCC Government Ministry</h3>
+            <p class="c-sub">K-Security · 48-unit deployment</p>
+          </div>
+          <div class="c-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/dl-16xd.webp" type="image/webp"><img src="images/products/dl-16xd.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+        </div>
         <p>DL-16XD department-grade shredders deployed across 12 ministerial offices. HIPAA/Level-3 compliance for classified document handling.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">48</span><span class="l">Units</span></div>
@@ -2779,9 +2825,16 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </article>
       <article class="case-card reveal">
-        <div class="c-flag">🇯🇵</div>
-        <h3>Tokyo Healthcare Group</h3>
-        <p class="c-sub">HIPAA-equivalent · PHI destruction</p>
+        <div class="c-hd">
+          <div class="c-flag">🇯🇵</div>
+          <div class="c-hd-text">
+            <h3>Tokyo Healthcare Group</h3>
+            <p class="c-sub">HIPAA-equivalent · PHI destruction</p>
+          </div>
+          <div class="c-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/dl-12xd.webp" type="image/webp"><img src="images/products/dl-12xd.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+        </div>
         <p>DL-12XD fleet for 24-clinic network. Oil-free, all-metal construction selected for cleanroom adjacency. Zero service callouts in 18 months.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">24</span><span class="l">Clinics</span></div>
@@ -2790,9 +2843,23 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </article>
       <article class="case-card reveal">
-        <div class="c-flag">🇺🇸</div>
-        <h3>U.S. Regional Cinema Chain</h3>
-        <p class="c-sub">K-Tech · KT-3DCINE back-catalog remaster</p>
+        <div class="c-hd">
+          <div class="c-flag">🇺🇸</div>
+          <div class="c-hd-text">
+            <h3>U.S. Regional Cinema Chain</h3>
+            <p class="c-sub">K-Tech · KT-3DCINE back-catalog remaster</p>
+          </div>
+          <div class="c-thumb c-thumb-svg" aria-hidden="true">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <rect x="3" y="3" width="74" height="74" rx="3" fill="#0a1830" stroke="#c8932a" stroke-width=".6"/>
+              <rect x="7" y="7" width="66" height="66" rx="2" fill="none" stroke="#c8932a" stroke-width=".35" opacity=".6"/>
+              <text x="40" y="36" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="13" font-weight="800" letter-spacing="2">CINE</text>
+              <line x1="26" y1="42" x2="54" y2="42" stroke="#c8932a" stroke-width=".5"/>
+              <text x="40" y="56" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="11" font-weight="800" letter-spacing="4">3D</text>
+              <text x="40" y="68" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="3" font-weight="700" letter-spacing="1" opacity=".6">KT-3DCINE</text>
+            </svg>
+          </div>
+        </div>
         <p>Eight feature-length 2D titles remastered to stereoscopic 3D for premium-screen re-release. Per-shot depth grading, director-approved masters, stereo DCP delivery.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">8</span><span class="l">Features</span></div>
@@ -2801,9 +2868,16 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </article>
       <article class="case-card reveal">
-        <div class="c-flag">🇩🇪</div>
-        <h3>Rhineland Off-Grid Facility</h3>
-        <p class="c-sub">K-Energy · KE-Option D flagship deployment</p>
+        <div class="c-hd">
+          <div class="c-flag">🇩🇪</div>
+          <div class="c-hd-text">
+            <h3>Rhineland Off-Grid Facility</h3>
+            <p class="c-sub">K-Energy · KE-Option D flagship deployment</p>
+          </div>
+          <div class="c-thumb" aria-hidden="true">
+            <img src="images/products/option-d.png" alt="" loading="lazy" decoding="async">
+          </div>
+        </div>
         <p>Triple-set HYGEN array delivering continuous ≈3.6 kW/h to a remote logistics yard. Solar-coupled DC 24V bus, N+1 motor redundancy, 30 distributed output ports.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">3.6</span><span class="l">kW/h</span></div>
@@ -2812,9 +2886,16 @@ button:focus:not(:focus-visible) { outline: none; }
         </div>
       </article>
       <article class="case-card reveal">
-        <div class="c-flag">🇲🇽</div>
-        <h3>MX Wellness Distributor</h3>
-        <p class="c-sub">K-Bio · Rosetta Plus export pipeline</p>
+        <div class="c-hd">
+          <div class="c-flag">🇲🇽</div>
+          <div class="c-hd-text">
+            <h3>MX Wellness Distributor</h3>
+            <p class="c-sub">K-Bio · Rosetta Plus export pipeline</p>
+          </div>
+          <div class="c-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+        </div>
         <p>1,000 units/month HACCP-controlled run into Mexican retail. KFDA-assured, multilingual label pack, lot-traced batch documentation per shipment.</p>
         <div class="c-stats">
           <div class="c-stat"><span class="n">1k+</span><span class="l">Units/mo</span></div>
@@ -2855,35 +2936,70 @@ button:focus:not(:focus-visible) { outline: none; }
     <div class="trend-grid reveal">
       <article class="trend-card">
         <div class="trend-rank">01</div>
-        <p class="trend-cat">K-Energy</p>
+        <div class="trend-top">
+          <div class="trend-thumb" aria-hidden="true">
+            <img src="images/products/option-c.png" alt="" loading="lazy" decoding="async">
+          </div>
+          <p class="trend-cat">K-Energy</p>
+        </div>
         <h3 class="trend-title">Modular DC micro-grid kits</h3>
         <p class="trend-growth"><span class="trend-arrow">▲</span> 48% YoY export demand</p>
         <p class="trend-body">Buyer inquiries for compact multi-generator arrays paired with solar/ESS DC buses up sharply. HYGEN-style one-shaft architectures leading the RFQ mix this quarter.</p>
       </article>
       <article class="trend-card">
         <div class="trend-rank">02</div>
-        <p class="trend-cat">K-Bio</p>
+        <div class="trend-top">
+          <div class="trend-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+          <p class="trend-cat">K-Bio</p>
+        </div>
         <h3 class="trend-title">Mental-wellness HFF exports</h3>
         <p class="trend-growth"><span class="trend-arrow">▲</span> 36% YoY export demand</p>
         <p class="trend-body">KFDA-assured Health Functional Foods targeting depression/anxiety seeing new RFQs from LATAM and MENA distributors. Lot-batched HACCP production preferred.</p>
       </article>
       <article class="trend-card">
         <div class="trend-rank">03</div>
-        <p class="trend-cat">K-Tech</p>
+        <div class="trend-top">
+          <div class="trend-thumb trend-thumb-svg" aria-hidden="true">
+            <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <rect x="2" y="2" width="52" height="52" rx="3" fill="#0a1830" stroke="#c8932a" stroke-width=".5"/>
+              <text x="28" y="28" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="11" font-weight="800" letter-spacing="2">CINE</text>
+              <line x1="18" y1="32" x2="38" y2="32" stroke="#c8932a" stroke-width=".4"/>
+              <text x="28" y="44" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="3">3D</text>
+            </svg>
+          </div>
+          <p class="trend-cat">K-Tech</p>
+        </div>
         <h3 class="trend-title">2D → 3D film remaster for OTT</h3>
         <p class="trend-growth"><span class="trend-arrow">▲</span> 29% YoY project volume</p>
         <p class="trend-body">OTT platforms and theatrical chains commissioning back-catalog 3D remasters. Stereo DCP + MVC delivery, per-shot depth grading becoming table stakes.</p>
       </article>
       <article class="trend-card">
         <div class="trend-rank">04</div>
-        <p class="trend-cat">K-Security</p>
+        <div class="trend-top">
+          <div class="trend-thumb" aria-hidden="true">
+            <picture><source srcset="images/products/dl-16xd.webp" type="image/webp"><img src="images/products/dl-16xd.jpg" alt="" loading="lazy" decoding="async"></picture>
+          </div>
+          <p class="trend-cat">K-Security</p>
+        </div>
         <h3 class="trend-title">All-metal chain-drive shredders</h3>
         <p class="trend-growth"><span class="trend-arrow">▲</span> 22% YoY U.S. procurement</p>
         <p class="trend-body">HIPAA + GSA Schedule combined listings driving federal and healthcare RFQs. Oil-free, nylon-free construction remains the key differentiator vs. Chinese alternatives.</p>
       </article>
       <article class="trend-card">
         <div class="trend-rank">05</div>
-        <p class="trend-cat">K-Beauty · K-Smart Living</p>
+        <div class="trend-top">
+          <div class="trend-thumb trend-thumb-svg" aria-hidden="true">
+            <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+              <rect x="2" y="2" width="52" height="52" rx="3" fill="#0a1830" stroke="#c8932a" stroke-width=".5"/>
+              <path d="M18 22 Q28 14 38 22 M18 28 Q28 20 38 28 M18 34 Q28 26 38 34" stroke="#c8932a" stroke-width=".8" fill="none" opacity=".8"/>
+              <circle cx="28" cy="40" r="3" fill="none" stroke="#c8932a" stroke-width=".7"/>
+              <text x="28" y="50" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="3.2" font-weight="700" letter-spacing="1.5" opacity=".7">COMING 2026</text>
+            </svg>
+          </div>
+          <p class="trend-cat">K-Beauty · K-Smart Living</p>
+        </div>
         <h3 class="trend-title">Device-grade wellness tech</h3>
         <p class="trend-growth"><span class="trend-arrow">▲</span> 51% YoY early-buyer interest</p>
         <p class="trend-body">Connected beauty/wellness devices with CGMP + ISO 22716 documentation drawing early-access inquiries. Sourcing partners onboarding throughout 2026.</p>
@@ -4377,6 +4493,41 @@ function loadUserWanted() {
 function saveUserWanted(list) {
   try { localStorage.setItem('ergsn_wanted', JSON.stringify(list)); } catch(_) {}
 }
+/* Category picto for Wanted Board — whitelist of neutral industry icons.
+   Keyed by lowercase industry string; unknown industries fall back to a
+   generic box. Rendered via SVG <path d="..."> so nothing user-typed
+   ever ends up in an attribute or markup string. */
+const WANTED_PICTO = {
+  healthcare:    'M12 3v18M3 12h18',
+  government:    'M4 21V10l8-6 8 6v11M4 21h16M9 21v-7h6v7',
+  energy:        'M13 2L4 14h7l-1 8 9-12h-7l1-8z',
+  retail:        'M4 7h16l-1 12H5L4 7zm3 0V5a5 5 0 0 1 10 0v2',
+  hospitality:   'M4 21V10a8 8 0 0 1 16 0v11M4 21h16M11 4V2h2v2',
+  technology:    'M6 6h12v12H6zM2 9h4M2 12h4M2 15h4M18 9h4M18 12h4M18 15h4M9 2v4M12 2v4M15 2v4M9 18v4M12 18v4M15 18v4',
+  manufacturing: 'M3 20V10l6 4V10l6 4V10l6 4v6H3zM6 20v-3M10 20v-3M14 20v-3M18 20v-3',
+  logistics:     'M3 16V6h12v10M15 10h5l1 3v3H3M7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+  education:     'M2 8l10-5 10 5-10 5-10-5zM6 10v6c0 2 3 3 6 3s6-1 6-3v-6',
+  finance:       'M3 21h18M5 21V10M10 21V10M15 21V10M19 21V10M3 10l9-7 9 7',
+  _default:      'M4 4h16v16H4zM9 9h6v6H9z'
+};
+function wantedPictoSvg(industry) {
+  const key = String(industry || '').toLowerCase().trim();
+  const d = Object.prototype.hasOwnProperty.call(WANTED_PICTO, key) ? WANTED_PICTO[key] : WANTED_PICTO._default;
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '1.5');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS(NS, 'path');
+  path.setAttribute('d', d);
+  svg.appendChild(path);
+  return svg;
+}
+
 function wantedCardNode(item, isMine) {
   // Built entirely with DOM APIs so every dynamic value lands in textContent —
   // no attribute/tag break-out is possible even if a user stores crafted input.
@@ -4401,10 +4552,16 @@ function wantedCardNode(item, isMine) {
   row.append(country, dot, industry);
   card.appendChild(row);
 
+  const body = document.createElement('div');
+  body.className = 'wanted-body';
+  const picto = document.createElement('div');
+  picto.className = 'wanted-picto';
+  picto.appendChild(wantedPictoSvg(item.industry));
   const cat = document.createElement('p');
   cat.className = 'wanted-cat';
   cat.textContent = item.cat || '';
-  card.appendChild(cat);
+  body.append(picto, cat);
+  card.appendChild(body);
 
   const footer = document.createElement('div');
   footer.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-top:auto;gap:8px;flex-wrap:wrap';

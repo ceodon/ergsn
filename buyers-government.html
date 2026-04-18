@@ -23,6 +23,15 @@
   .vh-lead { font-size: 17px; line-height: 1.6; color: #cfcfcf; max-width: 720px; margin-bottom: 2.2rem; }
   .vh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 2rem 0; }
   .vh-card { padding: 22px; border: 1px solid #242424; background: #141414; border-radius: 12px; }
+  .vh-media {
+    margin: -22px -22px 16px; height: 160px;
+    background: #fff; border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vh-media picture, .vh-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .vh-media.vh-media-svg { background: linear-gradient(135deg, #0a1830 0%, #132244 100%); padding: 12px; }
+  .vh-media svg { width: auto; max-width: 75%; height: 100%; display: block; margin: 0 auto; }
   .vh-card h3 { font-family: var(--fh,serif); font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 10px; }
   .vh-card p { font-size: 13.5px; line-height: 1.6; color: #b8b8b8; margin-bottom: 12px; }
   .vh-card a { font-family: var(--fb,sans-serif); font-size: 12px; font-weight: 600; color: var(--gold,#c8932a); text-decoration: none; letter-spacing: .04em; }
@@ -50,16 +59,28 @@
   <h2 class="vh-title" style="font-size:22px;margin-top:2.5rem">Procurement-ready Korean catalog</h2>
   <div class="vh-grid">
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/dl-16xd.webp" type="image/webp"><img src="images/products/dl-16xd.jpg" alt="ERGSN DL-16XD department-grade cross-cut shredder" loading="lazy" decoding="async"></picture></div>
       <h3>DL-16XD Flagship Shredder</h3>
       <p>Department-grade Level 3 / P-4 cross-cut shredder. 90 sheets/pass, 3.25 Hp, 115V/30A NEMA L5-30P. HIPAA + GSA Schedule listed. 48-unit GCC ministerial deployment reference.</p>
       <a href="index.html?sector=k-security#products">Full DL Series catalog &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media"><img src="images/products/option-d.png" alt="HYGEN KE-Option D triple-set off-grid generator array" loading="lazy" decoding="async"></div>
       <h3>HYGEN Generator for off-grid sites</h3>
       <p>Continuous DC backup power for border posts, remote radar, and embassy sites. Triple-set flagship delivers ≈3.6 kW/h with N+1 drive redundancy. Solar-coupled DC 24V bus.</p>
       <a href="index.html?sector=k-energy#products">Generator configurations &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media vh-media-svg">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="KT-3D stereoscopic conversion service mark">
+          <rect x="6" y="6" width="188" height="108" rx="4" fill="none" stroke="#c8932a" stroke-width=".7" opacity=".85"/>
+          <rect x="12" y="12" width="176" height="96" rx="3" fill="none" stroke="#c8932a" stroke-width=".4" opacity=".55"/>
+          <text x="100" y="38" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="3">K-TECH · ERGSN</text>
+          <text x="100" y="72" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="22" font-weight="800" letter-spacing="6">3D</text>
+          <line x1="75" y1="80" x2="125" y2="80" stroke="#c8932a" stroke-width=".6"/>
+          <text x="100" y="98" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="3">STEREOSCOPIC CONVERSION</text>
+        </svg>
+      </div>
       <h3>3D Production for Government Comms</h3>
       <p>KT-3DAD advertising + KT-3DVID training video → stereoscopic 3D conversion for briefings, training, and public communications campaigns. Up to 4K UHD.</p>
       <a href="index.html?sector=k-tech#products">K-Tech services &rarr;</a>
@@ -81,6 +102,7 @@
   <div class="vh-sec">
     <h2>Proven ministerial deployment</h2>
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/dl-16xd.webp" type="image/webp"><img src="images/products/dl-16xd.jpg" alt="DL-16XD — GCC Government Ministry 48-unit ministerial deployment" loading="lazy" decoding="async"></picture></div>
       <h3>🇸🇦 GCC Government Ministry — 48 units</h3>
       <p>DL-16XD department-grade shredders deployed across 12 ministerial offices. HIPAA/Level-3 compliance for classified document handling. CIF Jeddah, 6-week lead.</p>
       <a href="index.html#cases">Full case studies &rarr;</a>

@@ -23,6 +23,15 @@
   .vh-lead { font-size: 17px; line-height: 1.6; color: #cfcfcf; max-width: 720px; margin-bottom: 2.2rem; }
   .vh-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 2rem 0; }
   .vh-card { padding: 22px; border: 1px solid #242424; background: #141414; border-radius: 12px; }
+  .vh-media {
+    margin: -22px -22px 16px; height: 160px;
+    background: #fff; border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vh-media picture, .vh-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .vh-media.vh-media-svg { background: linear-gradient(135deg, #0a1830 0%, #132244 100%); padding: 12px; }
+  .vh-media svg { width: auto; max-width: 75%; height: 100%; display: block; margin: 0 auto; }
   .vh-card h3 { font-family: var(--fh,serif); font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 10px; }
   .vh-card p { font-size: 13.5px; line-height: 1.6; color: #b8b8b8; margin-bottom: 12px; }
   .vh-card a { font-family: var(--fb,sans-serif); font-size: 12px; font-weight: 600; color: var(--gold,#c8932a); text-decoration: none; letter-spacing: .04em; }
@@ -51,21 +60,58 @@
   <h2 class="vh-title" style="font-size:22px;margin-top:2.5rem">Hospitality-ready Korean catalog</h2>
   <div class="vh-grid">
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus KFDA-assured Health Functional Food for wellness retail" loading="lazy" decoding="async"></picture></div>
       <h3>Rosetta Plus HFF</h3>
       <p>KFDA-assured Health Functional Food for wellness retail &mdash; spa hotels, premium gym chains, airport duty-free. Export-ready to MX, YE, IN. HACCP lot-batched.</p>
       <a href="index.html?sector=k-bio#products">View spec sheet &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media vh-media-svg">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="K-Beauty sourcing concept">
+          <rect x="6" y="6" width="188" height="108" rx="4" fill="none" stroke="#c8932a" stroke-width=".7" opacity=".85"/>
+          <text x="100" y="32" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="3">K-BEAUTY · ERGSN</text>
+          <g transform="translate(100 70)" stroke="#c8932a" fill="none" stroke-width="1.1">
+            <path d="M-12 -14 L12 -14 L10 14 L-10 14 Z"/>
+            <path d="M-9 -10 L9 -10"/>
+            <circle cx="0" cy="2" r="3" stroke-width=".8"/>
+            <path d="M-14 -18 L14 -18 M-14 -18 C-14 -22 14 -22 14 -18" stroke-width=".8"/>
+          </g>
+          <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3" opacity=".75">CGMP · ISO 22716 · 2026</text>
+        </svg>
+      </div>
       <h3>K-Beauty Skincare &amp; Devices <span class="vh-soon">Sourcing</span></h3>
       <p>Premium Korean skincare, color cosmetics, and beauty devices from CGMP/ISO 22716 audited brands. White-label &amp; OEM arrangements. Duty-free and hotel spa channels supported.</p>
       <a href="index.html#products">Register interest &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media vh-media-svg">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="K-Culture Goods sourcing concept">
+          <rect x="6" y="6" width="188" height="108" rx="4" fill="none" stroke="#c8932a" stroke-width=".7" opacity=".85"/>
+          <text x="100" y="32" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="2.5">K-CULTURE · ERGSN</text>
+          <g transform="translate(100 68)" stroke="#c8932a" fill="none" stroke-width="1">
+            <path d="M0 -18 L4 -6 L16 -6 L6 2 L10 14 L0 6 L-10 14 L-6 2 L-16 -6 L-4 -6 Z"/>
+          </g>
+          <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3" opacity=".75">LICENSED · HERITAGE · 2026</text>
+        </svg>
+      </div>
       <h3>K-Culture Goods <span class="vh-soon">Sourcing</span></h3>
       <p>Licensed K-pop / K-drama merchandise, hanbok and ceramic heritage crafts, designer fashion accessories &mdash; for hotel boutiques, gift shops, duty-free, and collector retail.</p>
       <a href="index.html#products">Register interest &rarr;</a>
     </div>
     <div class="vh-card">
+      <div class="vh-media vh-media-svg">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="K-Franchise sourcing concept">
+          <rect x="6" y="6" width="188" height="108" rx="4" fill="none" stroke="#c8932a" stroke-width=".7" opacity=".85"/>
+          <text x="100" y="32" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="6" font-weight="700" letter-spacing="3">K-FRANCHISE · ERGSN</text>
+          <g transform="translate(100 68)" stroke="#c8932a" fill="none" stroke-width="1">
+            <path d="M-22 8 L-20 -6 L20 -6 L22 8 Z"/>
+            <path d="M-22 8 L-22 14 L22 14 L22 8"/>
+            <path d="M-10 14 L-10 18 M10 14 L10 18" stroke-width=".9"/>
+            <path d="M-14 -6 L-14 -12 L14 -12 L14 -6" stroke-width=".9" opacity=".8"/>
+          </g>
+          <text x="100" y="104" text-anchor="middle" fill="#c8932a" font-family="'Syncopate',Arial,sans-serif" font-size="5.5" font-weight="700" letter-spacing="3" opacity=".75">TURNKEY · MASTER LICENSE · 2026</text>
+        </svg>
+      </div>
       <h3>K-Franchise Concepts <span class="vh-soon">Sourcing</span></h3>
       <p>Turnkey Korean F&amp;B, café, bakery and retail franchise systems for hospitality groups. Master-franchise territory rights available; supply chain and training included.</p>
       <a href="index.html#products">Register interest &rarr;</a>
@@ -87,6 +133,7 @@
   <div class="vh-sec">
     <h2>Active export reference</h2>
     <div class="vh-card">
+      <div class="vh-media"><picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus — MX Wellness Distributor export pipeline" loading="lazy" decoding="async"></picture></div>
       <h3>🇲🇽 MX Wellness Distributor &mdash; Rosetta Plus pipeline</h3>
       <p>1,000 units/month HACCP-controlled run into Mexican retail. KFDA-assured, multilingual label pack, lot-traced batch documentation per shipment. 4&ndash;6 week lead time.</p>
       <a href="index.html#cases">Full case studies &rarr;</a>
