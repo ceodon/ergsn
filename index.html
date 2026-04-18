@@ -315,15 +315,33 @@ section { scroll-margin-top: var(--nav-h); }
   transition: background .15s, border-color .15s, color .15s;
 }
 .sector-tab:hover { color: var(--white); border-color: var(--steel); }
-.sector-tab.active {
+/* Active-status sectors: green outline even when the tab isn't the current selection */
+.sector-tab.is-active-sector {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold) inset;
+}
+.sector-tab.is-active-sector:hover {
+  border-color: var(--gold-light);
+  color: var(--white);
+  background: rgba(52,210,152,.08);
+}
+.sector-tab.is-active-sector .st-tag {
+  background: rgba(52,210,152,.2); color: var(--gold);
+}
+/* Currently-selected tab always wins (filled green) */
+.sector-tab.active,
+.sector-tab.is-active-sector.active {
   background: var(--gold); color: #0f1110; border-color: var(--gold);
+  box-shadow: none;
 }
 .sector-tab .st-tag {
   font-size: 8px; padding: 2px 6px; border-radius: 6px;
   background: rgba(255,255,255,.15); letter-spacing: .04em;
   text-transform: uppercase; font-weight: 700;
 }
-.sector-tab.active .st-tag { background: rgba(15,17,16,.25); }
+.sector-tab.active .st-tag,
+.sector-tab.is-active-sector.active .st-tag { background: rgba(15,17,16,.25); color: #0f1110; }
 
 /* Coming Soon placeholder */
 .sector-placeholder {
@@ -1701,103 +1719,152 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── PDF print mode ────────────────── */
 @media print {
-  /* A4 spec sheet — target 1 page; overflow to at most 2 pages */
-  html, body { height: auto !important; min-height: 0 !important; max-height: none !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  @page { size: A4 portrait; margin: 8mm; }
+
+  /* Ensure no stray heights, no weird viewport math */
+  html, body {
+    height: auto !important; min-height: 0 !important; max-height: none !important;
+    overflow: visible !important; margin: 0 !important; padding: 0 !important;
+    background: #fff !important; color: #000 !important;
+  }
+
   body.printing-spec { background: #fff !important; color: #000 !important; }
-  body.printing-spec > *:not(#modalOverlay) { display: none !important; }
-  body.printing-spec #compareOverlay,
-  body.printing-spec #chatToggle, body.printing-spec #chatPanel,
-  body.printing-spec #sideNav, body.printing-spec #toTop,
-  body.printing-spec #bottomCta, body.printing-spec #compareTray,
-  body.printing-spec #scrollProgress, body.printing-spec #toastWrap,
-  body.printing-spec .consent, body.printing-spec #nav,
-  body.printing-spec footer, body.printing-spec header { display: none !important; }
-  body.printing-spec *, body.printing-spec *::before, body.printing-spec *::after {
+
+  /* Hide everything — then explicitly show only the modal overlay. Covers any
+     edge case where a non-direct-child tries to bleed through (fixed FABs,
+     portals, etc.). */
+  body.printing-spec > * { display: none !important; }
+  body.printing-spec > #modalOverlay { display: block !important; }
+
+  body.printing-spec #modalOverlay {
+    position: static !important; inset: auto !important;
+    padding: 0 !important; margin: 0 !important;
+    width: 100% !important; max-width: 100% !important;
+    height: auto !important; min-height: 0 !important; max-height: none !important;
+    overflow: visible !important;
+    background: #fff !important; backdrop-filter: none !important;
+  }
+
+  /* Hard ceiling on the modal — 2 A4 pages worth of content max.
+     (A4 = 297mm; minus 8mm × 2 margins = 281mm/page; × 2 pages = 562mm.) */
+  body.printing-spec .modal {
+    position: static !important;
+    box-shadow: none !important; border: none !important; border-radius: 0 !important;
+    margin: 0 !important; padding: 0 !important;
+    background: #fff !important; color: #000 !important;
+    width: 100% !important; max-width: 100% !important;
+    height: auto !important; min-height: 0 !important;
+    max-height: 562mm !important; overflow: hidden !important;
+    font-size: 8.5pt !important; line-height: 1.25 !important;
+    animation: none !important;
+  }
+
+  /* Reset styling inside the modal — no dark backgrounds, no transforms */
+  body.printing-spec .modal *,
+  body.printing-spec .modal *::before,
+  body.printing-spec .modal *::after {
     color: #000 !important; background: transparent !important;
     box-shadow: none !important; text-shadow: none !important;
     animation: none !important; transition: none !important;
     filter: none !important; backdrop-filter: none !important;
     transform: none !important;
   }
-  body.printing-spec #modalOverlay {
-    position: static !important; display: block !important;
-    inset: auto !important; padding: 0 !important; margin: 0 !important;
-    height: auto !important; min-height: 0 !important; max-height: none !important;
-    overflow: visible !important; background: #fff !important;
-  }
-  body.printing-spec .modal {
-    position: static !important; box-shadow: none !important; border: none !important;
-    border-radius: 0 !important; max-width: 100% !important; width: 100% !important;
-    max-height: none !important; height: auto !important;
-    padding: 0 !important; margin: 0 !important;
-    overflow: visible !important; background: #fff !important;
-    font-size: 9.5pt !important; line-height: 1.3 !important;
-  }
-  body.printing-spec .modal-close, body.printing-spec .modal-ft, body.printing-spec .spin-btn,
+
+  body.printing-spec .modal-close,
+  body.printing-spec .modal-ft,
+  body.printing-spec .spin-btn,
   body.printing-spec .commercial-strip { display: none !important; }
-  body.printing-spec .modal-desc-row {
-    margin: 3mm 0 0 !important; padding: 2.5mm 0 0 !important;
-    border-top: 1px solid #888 !important;
-    page-break-inside: auto !important; break-inside: auto !important;
-  }
-  body.printing-spec .modal-desc {
-    font-size: 8pt !important; line-height: 1.4 !important;
-    color: #222 !important; margin: 1.5mm 0 0 !important; text-align: justify !important;
-    orphans: 3 !important; widows: 3 !important;
-  }
+
+  /* Header ~18mm */
   body.printing-spec .modal-hd {
-    padding: 0 0 2.5mm 0 !important; margin: 0 0 2.5mm !important;
-    border-bottom: 1px solid #333 !important;
+    display: block !important;
+    padding: 0 0 2mm !important; margin: 0 0 2mm !important;
+    border-bottom: 0.4mm solid #000 !important;
     page-break-after: avoid !important; break-after: avoid !important;
   }
-  body.printing-spec .modal-model { font-size: 20pt !important; line-height: 1 !important; margin: 0 !important; }
-  body.printing-spec .modal-sub { font-size: 9.5pt !important; margin: 1.5mm 0 0 !important; }
-  body.printing-spec .modal-part { font-size: 7.5pt !important; color: #555 !important; margin: 1mm 0 0 !important; }
+  body.printing-spec .modal-model { font-size: 17pt !important; line-height: 1 !important; margin: 0 !important; letter-spacing: .02em !important; }
+  body.printing-spec .modal-sub   { font-size: 9pt !important; margin: 1mm 0 0 !important; color: #333 !important; }
+  body.printing-spec .modal-part  { font-size: 7pt !important; color: #666 !important; margin: 0.8mm 0 0 !important; letter-spacing: .06em !important; }
+
+  /* Image row: 38mm max, guaranteed to never push content below the fold */
   body.printing-spec .modal-image-row {
-    margin: 0 0 2.5mm 0 !important; padding: 0 !important;
-    text-align: center !important; min-height: 0 !important; height: auto !important;
-    max-height: 50mm !important; overflow: hidden !important;
-    background: #fff !important; border: none !important;
-    display: block !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    margin: 0 0 2mm !important; padding: 0 !important;
+    min-height: 0 !important; height: auto !important;
+    max-height: 38mm !important; overflow: hidden !important;
+    background: #fff !important; border: 0.3mm solid #ddd !important;
     page-break-inside: avoid !important; break-inside: avoid !important;
   }
   body.printing-spec .modal-image-row img {
-    max-height: 48mm !important; width: auto !important; max-width: 65% !important;
+    max-height: 36mm !important; max-width: 70% !important;
+    width: auto !important; height: auto !important;
     object-fit: contain !important; margin: 0 auto !important; display: block !important;
   }
-  body.printing-spec .modal-image-row.modal-svg-row { background: #fff !important; max-height: 46mm !important; }
+  body.printing-spec .modal-image-row.modal-svg-row {
+    background: #fff !important; max-height: 38mm !important; border: 0.3mm solid #ddd !important;
+  }
   body.printing-spec .modal-image-row.modal-svg-row svg {
-    height: 42mm !important; width: auto !important; max-width: 62mm !important;
-    margin: 0 auto !important; display: inline-block !important;
+    height: 34mm !important; width: auto !important; max-width: 70% !important;
+    margin: 0 auto !important; display: block !important;
   }
+
+  /* Specs + Features: 2-column grid, tight gap */
   body.printing-spec .modal-bd {
-    display: grid !important; grid-template-columns: 1.1fr 1fr !important;
-    gap: 4mm !important; margin: 0 !important; padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1.05fr 1fr !important;
+    gap: 3mm !important;
+    margin: 0 !important; padding: 0 !important;
   }
-  body.printing-spec .modal-bd > div { page-break-inside: auto !important; break-inside: auto !important; }
+  body.printing-spec .modal-bd > div {
+    page-break-inside: auto !important; break-inside: auto !important;
+    min-width: 0 !important;
+  }
   body.printing-spec .modal-sec-title {
-    font-size: 8.5pt !important; font-weight: 800 !important;
-    text-transform: uppercase !important; letter-spacing: 0.05em !important;
-    margin: 0 0 1.5mm !important; padding: 0 0 1mm !important;
-    border-bottom: 1px solid #888 !important; color: #000 !important;
+    font-size: 8pt !important; font-weight: 800 !important;
+    text-transform: uppercase !important; letter-spacing: .04em !important;
+    margin: 0 0 1mm !important; padding: 0 0 0.6mm !important;
+    border-bottom: 0.3mm solid #000 !important; color: #000 !important;
     page-break-after: avoid !important; break-after: avoid !important;
   }
-  body.printing-spec .spec-tbl { width: 100% !important; border-collapse: collapse !important; font-size: 8pt !important; }
-  body.printing-spec .spec-tbl tr { page-break-inside: avoid !important; break-inside: avoid !important; }
-  body.printing-spec .spec-tbl td {
-    padding: 0.8mm 1.5mm !important; border-bottom: 1px solid #ddd !important;
-    vertical-align: top !important; line-height: 1.25 !important;
+  body.printing-spec .spec-tbl {
+    width: 100% !important; border-collapse: collapse !important;
+    font-size: 7.5pt !important; line-height: 1.2 !important;
   }
-  body.printing-spec .spec-tbl td:first-child { color: #444 !important; width: 45% !important; }
-  body.printing-spec .feat-list {
-    margin: 0 !important; padding: 0 0 0 3.5mm !important;
-    font-size: 8pt !important; list-style: disc !important;
-  }
-  body.printing-spec .feat-list li {
-    margin: 0 0 1mm !important; line-height: 1.25 !important;
+  body.printing-spec .spec-tbl tr {
+    border: 0 !important;
     page-break-inside: avoid !important; break-inside: avoid !important;
   }
-  @page { size: A4; margin: 8mm; }
+  body.printing-spec .spec-tbl td {
+    padding: 0.5mm 1mm !important;
+    border-bottom: 0.25mm solid #ccc !important;
+    vertical-align: top !important; line-height: 1.2 !important;
+  }
+  body.printing-spec .spec-tbl td:first-child { color: #333 !important; width: 44% !important; font-weight: 500 !important; }
+  body.printing-spec .feat-list {
+    margin: 0 !important; padding: 0 0 0 3.5mm !important;
+    font-size: 7.5pt !important; list-style: disc !important; line-height: 1.25 !important;
+  }
+  body.printing-spec .feat-list li {
+    margin: 0 0 0.7mm !important; padding: 0 !important;
+    border: 0 !important; color: #000 !important;
+    display: list-item !important;
+    page-break-inside: avoid !important; break-inside: avoid !important;
+  }
+  /* Kill the on-screen checkmark pseudo — the <ul> disc marker is enough in print */
+  body.printing-spec .feat-list li::before { content: none !important; display: none !important; }
+
+  /* Description: runs below the 2-column grid */
+  body.printing-spec .modal-desc-row {
+    margin: 2mm 0 0 !important; padding: 1.5mm 0 0 !important;
+    border-top: 0.3mm solid #888 !important;
+    page-break-inside: auto !important; break-inside: auto !important;
+  }
+  body.printing-spec .modal-desc {
+    font-size: 7.5pt !important; line-height: 1.35 !important;
+    color: #222 !important; margin: 1mm 0 0 !important;
+    text-align: justify !important;
+    orphans: 3 !important; widows: 3 !important;
+  }
 }
 
 /* ── Consent banner ────────────────────── */
@@ -2196,16 +2263,19 @@ button:focus:not(:focus-visible) { outline: none; }
 
     <!-- Sector Tabs -->
     <div class="sector-tabs reveal" role="tablist">
-      <button class="sector-tab active" data-sector="k-security" onclick="switchSector('k-security')">
+      <button class="sector-tab active" data-sector="featured" onclick="switchSector('featured')">
+        Featured <span class="st-tag">Mixed</span>
+      </button>
+      <button class="sector-tab is-active-sector" data-sector="k-security" onclick="switchSector('k-security')">
         K-Security <span class="st-tag">Active</span>
       </button>
-      <button class="sector-tab" data-sector="k-tech" onclick="switchSector('k-tech')">
+      <button class="sector-tab is-active-sector" data-sector="k-tech" onclick="switchSector('k-tech')">
         K-Tech <span class="st-tag">Active</span>
       </button>
-      <button class="sector-tab" data-sector="k-energy" onclick="switchSector('k-energy')">
+      <button class="sector-tab is-active-sector" data-sector="k-energy" onclick="switchSector('k-energy')">
         K-Energy <span class="st-tag">Active</span>
       </button>
-      <button class="sector-tab" data-sector="k-bio" onclick="switchSector('k-bio')">
+      <button class="sector-tab is-active-sector" data-sector="k-bio" onclick="switchSector('k-bio')">
         K-Bio <span class="st-tag">Active</span>
       </button>
       <button class="sector-tab" data-sector="k-beauty" onclick="switchSector('k-beauty')">
@@ -2224,12 +2294,15 @@ button:focus:not(:focus-visible) { outline: none; }
 
     <!-- Active sector header -->
     <div id="sectorHeader" class="reveal" style="margin-bottom:1.5rem">
-      <span class="label" data-t="prod_tag">DL Series</span>
-      <h3 class="h-md" style="margin:.4rem 0" data-t="prod_title">Cross-Cut Shredders</h3>
-      <p class="body-sm" style="max-width:500px;color:var(--tx-mid)" data-t="prod_desc">Level 3 / P-4 security. All-metal construction. Built for long-term commercial use.</p>
+      <span class="label" data-t="prod_tag">All Active Sectors</span>
+      <h3 class="h-md" style="margin:.4rem 0" data-t="prod_title">One Featured Product Per Active Sector</h3>
+      <p class="body-sm" style="max-width:580px;color:var(--tx-mid)" data-t="prod_desc">A rotating sample — one random product from each of our four live sectors (K-Security, K-Tech, K-Energy, K-Bio). Pick a specific sector tab above to see the full lineup.</p>
     </div>
 
-    <div class="product-grid" id="productGrid">
+    <!-- Featured grid: 1 random product per active sector, populated at load -->
+    <div class="product-grid" id="featuredGrid" aria-live="polite"></div>
+
+    <div class="product-grid" id="productGrid" style="display:none">
 
       <div class="product-card reveal" style="--i:0" tabindex="0" data-model="dl10x" onclick="openModal('dl10x')" onkeydown="if(event.key==='Enter'&&event.target===this)openModal('dl10x')">
         <div class="card-image"><picture><source srcset="images/products/dl-10x.webp" type="image/webp"><img src="images/products/dl-10x.jpg" alt="ERGSN DL-10X crosscut paper shredder" loading="lazy"></picture></div>
@@ -3834,6 +3907,13 @@ function closeModalOutside(e) { if (e.target === document.getElementById('modalO
 
 /* ── Sector Navigation ───────────────────── */
 const SECTORS = {
+  'featured': {
+    active: true,
+    gridId: 'featuredGrid',
+    tag: 'All Active Sectors',
+    title: 'One Featured Product Per Active Sector',
+    desc: 'A rotating sample — one random product from each of our four live sectors (K-Security, K-Tech, K-Energy, K-Bio). Pick a specific sector tab above to see the full lineup.'
+  },
   'k-security': {
     active: true,
     gridId: 'productGrid',
@@ -3901,6 +3981,32 @@ const SECTORS = {
     desc: 'Korean HYGEN Generator — multiple generators driven by a single low-rpm DC motor on one shared shaft. Four configurations: KE-Option A / B / C / D.'
   }
 };
+/* Populate the "Featured" grid with one random product per active sector.
+   Clones cards from each active sector's source grid so onclick/compare
+   handlers keep working without any per-card rewiring. */
+function populateFeaturedGrid() {
+  const target = document.getElementById('featuredGrid');
+  if (!target) return;
+  const sourceSectors = Object.entries(SECTORS)
+    .filter(([id, s]) => id !== 'featured' && s.active && s.gridId)
+    .map(([, s]) => s.gridId);
+  const picks = [];
+  sourceSectors.forEach(gridId => {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    const cards = grid.querySelectorAll(':scope > .product-card');
+    if (!cards.length) return;
+    picks.push(cards[Math.floor(Math.random() * cards.length)]);
+  });
+  target.innerHTML = '';
+  picks.forEach((card, i) => {
+    const clone = card.cloneNode(true);
+    clone.style.setProperty('--i', i);
+    clone.classList.add('in'); /* avoid hidden-until-observed state on the clone */
+    target.appendChild(clone);
+  });
+}
+
 function switchSector(id) {
   const s = SECTORS[id]; if (!s) return;
   document.querySelectorAll('.sector-tab').forEach(b => b.classList.toggle('active', b.dataset.sector === id));
@@ -3915,6 +4021,7 @@ function switchSector(id) {
   grids.forEach(g => { g.style.display = (s.active && s.gridId === g.id) ? '' : 'none'; });
   if (s.active) {
     if (ph) ph.style.display = 'none';
+    if (id === 'featured') populateFeaturedGrid(); /* reroll on each visit */
   } else {
     if (ph) {
       ph.style.display = '';
@@ -3924,6 +4031,7 @@ function switchSector(id) {
     }
   }
 }
+document.addEventListener('DOMContentLoaded', populateFeaturedGrid);
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (document.getElementById('compareOverlay').classList.contains('open')) closeCompareModal();
@@ -5942,16 +6050,17 @@ const compareState = [];
 
 function toggleCompare(id, btn) {
   const idx = compareState.indexOf(id);
+  const allBtns = document.querySelectorAll(`.product-card[data-model="${id}"] .compare-btn`);
   if (idx > -1) {
     compareState.splice(idx, 1);
-    btn.classList.remove('active');
+    allBtns.forEach(b => b.classList.remove('active'));
   } else {
     if (compareState.length >= COMPARE_MAX) {
       alert(`You can compare up to ${COMPARE_MAX} models at a time.`);
       return;
     }
     compareState.push(id);
-    btn.classList.add('active');
+    allBtns.forEach(b => b.classList.add('active'));
   }
   renderCompareTray();
   updateBottomStack();
@@ -5960,8 +6069,9 @@ function toggleCompare(id, btn) {
 function removeCompare(id) {
   const idx = compareState.indexOf(id);
   if (idx > -1) compareState.splice(idx, 1);
-  const btn = document.querySelector(`.product-card[data-model="${id}"] .compare-btn`);
-  if (btn) btn.classList.remove('active');
+  /* Same card may exist in both its source grid and the cloned Featured grid */
+  document.querySelectorAll(`.product-card[data-model="${id}"] .compare-btn`)
+    .forEach(btn => btn.classList.remove('active'));
   renderCompareTray();
   updateBottomStack();
 }
