@@ -12,7 +12,12 @@
   if (document.getElementById('footer')) return;
 
   var CSS = [
-    '#ergsnFooter{background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#cfcfcf}',
+    /* `line-height: normal` on the footer root so host pages that set
+       `body { line-height: 1.65 }` (export-docs, tracker, trend-2026-04
+       etc.) don't inflate each link row the way index.html never does.
+       Individual blocks that need tighter/looser line-height (ef-about)
+       override explicitly. */
+    '#ergsnFooter{background:#0a0a0a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#cfcfcf;line-height:normal}',
     '#ergsnFooter *{box-sizing:border-box}',
     '#ergsnFooter .ef-inner{max-width:1240px;margin:0 auto;padding:clamp(2.5rem,5vh,4rem) clamp(16px,4vw,48px) clamp(1.5rem,3vh,2.5rem)}',
     /* Responsive grid — mirrors index.html's footer exactly.
@@ -29,9 +34,9 @@
     '#ergsnFooter .ef-logo .ef-e{background:linear-gradient(84deg,#00bf79 42%,#00ffa1 81%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
     '#ergsnFooter .ef-about{font-size:12px;color:#6b7685;line-height:1.75;margin:0}',
     '#ergsnFooter .ef-col-title{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#34d298;margin:0 0 1rem}',
-    '#ergsnFooter .ef-links{list-style:none;margin:0;padding:0}',
-    '#ergsnFooter .ef-links li{margin:0 0 7px}',
-    '#ergsnFooter .ef-links a{font-size:13px;color:#6b7685;transition:color .15s;text-decoration:none}',
+    '#ergsnFooter .ef-links{list-style:none;margin:0;padding:0;line-height:normal}',
+    '#ergsnFooter .ef-links li{margin:0 0 7px;line-height:normal}',
+    '#ergsnFooter .ef-links a{font-size:13px;color:#6b7685;transition:color .15s;text-decoration:none;line-height:normal;display:inline-block}',
     '#ergsnFooter .ef-links a:hover{color:#fff}',
     '#ergsnFooter .ef-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}',
     '#ergsnFooter .ef-copy{font-size:11px;color:#8a8b8d;margin:0}',
