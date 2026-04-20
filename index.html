@@ -126,7 +126,11 @@
 
 /* ── RESET ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+/* Anchor navigation (top menu · footer · in-page hashes) jumps instantly
+   to keep long-distance nav snappy. Intentional smooth scrolls still
+   work via JS scrollIntoView({ behavior:'smooth' }) for UX flows like
+   "Request Quote", side-dot nav, and Compare modal transitions. */
+html { font-size: 16px; }
 body { font-family: var(--fb); color: var(--tx-dark); background: var(--navy); overflow-x: hidden; }
 a { text-decoration: none; }
 img { display: block; max-width: 100%; }
@@ -2732,8 +2736,8 @@ button:focus:not(:focus-visible) { outline: none; }
         <img src="images/about-workplace.jpg" alt="Modern office workplace environment" loading="lazy" decoding="async">
       </picture>
       <figcaption class="about-visual-overlay">
-        <span class="label">The Future Workplace</span>
-        <p class="about-visual-caption" data-t="about_visual">Document security, engineered for the modern office.</p>
+        <span class="label">About ERGSN</span>
+        <p class="about-visual-caption" data-t="about_visual">ERGSN stands for Elevate &amp; Reach Global Sourcing Network. We are dedicated to elevating the standards of international trade by reaching global markets with Korea&rsquo;s most trusted and innovative industrial solutions.</p>
       </figcaption>
     </figure>
     <div class="about-grid">
