@@ -3965,7 +3965,11 @@ function requestQuote(ids) {
   resetRFQForm();
   const arr = Array.isArray(ids) ? ids : [ids];
   arr.forEach(id => {
-    const cb = document.getElementById('m' + id.toUpperCase());
+    /* Prefer the central RFQ_ID_MAP (covers products whose id contains hyphens or
+       doesn't match the legacy `'m' + id.toUpperCase()` shape, e.g. k-beauty).
+       Fall back to the legacy formula for any pre-map id not yet registered. */
+    const cbId = (typeof RFQ_ID_MAP !== 'undefined' && RFQ_ID_MAP[id]) || ('m' + id.toUpperCase());
+    const cb = document.getElementById(cbId);
     if (cb) cb.checked = true;
   });
   closeModal();
@@ -4123,23 +4127,53 @@ const SECTORS = {
     desc: 'Korean HYGEN Generator — multiple generators driven by a single low-rpm DC motor on one shared shaft. Four configurations: KE-Option A / B / C / D.'
   }
 };
-/* Populate the "Featured" grid with one random product per active sector.
-   Clones cards from each active sector's source grid so onclick/compare
-   handlers keep working without any per-card rewiring. */
+/* Populate the "Featured" grid with up to 8 random product cards.
+   Guarantees one pick per active sector first (so every sector is visible),
+   then fills remaining slots with random unused cards until 8 total.
+   Sector traversal order is itself shuffled so the left-to-right layout
+   rerolls per visit. Clones from source grids so onclick/compare handlers
+   keep working without per-card rewiring. */
 function populateFeaturedGrid() {
   const target = document.getElementById('featuredGrid');
   if (!target) return;
-  const sourceSectors = Object.entries(SECTORS)
-    .filter(([id, s]) => id !== 'featured' && s.active && s.gridId)
-    .map(([, s]) => s.gridId);
-  const picks = [];
-  sourceSectors.forEach(gridId => {
+  const TARGET_COUNT = 8;
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const sectorGridIds = shuffle(
+    Object.entries(SECTORS)
+      .filter(([id, s]) => id !== 'featured' && s.active && s.gridId)
+      .map(([, s]) => s.gridId)
+  );
+
+  /* Collect an independent pool of cards per sector, shuffled internally. */
+  const pools = {};
+  sectorGridIds.forEach(gridId => {
     const grid = document.getElementById(gridId);
     if (!grid) return;
-    const cards = grid.querySelectorAll(':scope > .product-card');
-    if (!cards.length) return;
-    picks.push(cards[Math.floor(Math.random() * cards.length)]);
+    const cards = Array.from(grid.querySelectorAll(':scope > .product-card'));
+    if (cards.length) pools[gridId] = shuffle(cards);
   });
+
+  const picks = [];
+  /* Pass 1 — one card per sector, in the shuffled sector order. */
+  sectorGridIds.forEach(gridId => {
+    const pool = pools[gridId];
+    if (pool && pool.length) picks.push(pool.shift());
+  });
+  /* Pass 2 — fill to 8 from remaining unused cards across all sectors,
+     globally shuffled so extras don't cluster by sector. */
+  const overflow = shuffle(Object.values(pools).flat());
+  while (picks.length < TARGET_COUNT && overflow.length) {
+    picks.push(overflow.shift());
+  }
+
   target.innerHTML = '';
   picks.forEach((card, i) => {
     const clone = card.cloneNode(true);
@@ -4293,9 +4327,8 @@ function runMatch(e) {
 }
 function applyMatchToRFQ() {
   const m = window._lastMatch; if (!m) { location.hash = '#rfq'; return; }
-  const modelMap = { 'dl10x':'mDL10X','dl12x':'mDL12X','dl16x':'mDL16X','dl10xd':'mDL10XD','dl12xd':'mDL12XD','dl16xd':'mDL16XD','kt3dad':'mKT3DAD','kt3dvid':'mKT3DVID','kt3dcine':'mKT3DCINE','rosettaplus':'mROSETTAPLUS','keoa':'mKEOA','keob':'mKEOB','keoc':'mKEOC','keod':'mKEOD','ddell-dewy-glow-cushion':'mKB01','ddell-line-lift-cushion':'mKB02','ddell-filter-primer-zeropore':'mKB03','ddell-setup-creame':'mKB04','ddell-glowup-cream':'mKB05','ddell-mask-defense':'mKB06','ddell-fixer-dewy-glow':'mKB07','ddell-egf-ampoule':'mKB08','demed-vitamin-c-ampoule':'mKB09','demed-collagen-ampoule-30ml':'mKB10','demed-collagen-ampoule-7ml':'mKB11','demed-hyaluronic-soothing-ampoule':'mKB12','demed-brightening-ampoule':'mKB13','demed-spicule-peptide-300':'mKB14','demed-extra-intense-moisture-cream-m8':'mKB15','demed-wonder-ceramid-toner':'mKB16' };
   document.querySelectorAll('#rfqFields .model-cb input').forEach(cb => cb.checked = false);
-  m.ranked.forEach(r => { const id = modelMap[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
+  m.ranked.forEach(r => { const id = RFQ_ID_MAP[r.id]; if (id) { const cb = document.getElementById(id); if (cb) cb.checked = true; } });
   const cSel = document.getElementById('fCountry');
   if (cSel && [...cSel.options].some(o => o.value === m.country)) {
     cSel.value = m.country;
@@ -6694,22 +6727,7 @@ function calcToQuote() {
   if (!item) return;
   if (typeof switchSector === 'function') { try { switchSector(item.sector); } catch(_) {} }
   resetRFQForm();
-  const rfqIdMap = {
-    dl10x:'mDL10X', dl12x:'mDL12X', dl16x:'mDL16X',
-    dl10xd:'mDL10XD', dl12xd:'mDL12XD', dl16xd:'mDL16XD',
-    kt3dad:'mKT3DAD', kt3dvid:'mKT3DVID', kt3dcine:'mKT3DCINE',
-    rosettaplus:'mROSETTAPLUS',
-    keoa:'mKEOA', keob:'mKEOB', keoc:'mKEOC', keod:'mKEOD',
-    'ddell-dewy-glow-cushion':'mKB01','ddell-line-lift-cushion':'mKB02',
-    'ddell-filter-primer-zeropore':'mKB03','ddell-setup-creame':'mKB04',
-    'ddell-glowup-cream':'mKB05','ddell-mask-defense':'mKB06',
-    'ddell-fixer-dewy-glow':'mKB07','ddell-egf-ampoule':'mKB08',
-    'demed-vitamin-c-ampoule':'mKB09','demed-collagen-ampoule-30ml':'mKB10',
-    'demed-collagen-ampoule-7ml':'mKB11','demed-hyaluronic-soothing-ampoule':'mKB12',
-    'demed-brightening-ampoule':'mKB13','demed-spicule-peptide-300':'mKB14',
-    'demed-extra-intense-moisture-cream-m8':'mKB15','demed-wonder-ceramid-toner':'mKB16'
-  };
-  const cb = document.getElementById(rfqIdMap[item.id]);
+  const cb = document.getElementById(RFQ_ID_MAP[item.id]);
   if (cb) cb.checked = true;
 
   const qty = document.getElementById('calcQty').value;
@@ -6789,6 +6807,24 @@ const RFQ_TRACKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
 const EVENTS_URL = '';
 const TG_BOT = '';
 const TG_CHAT = '';
+/* Single source of truth: product-id → RFQ checkbox-id.
+   Used by requestQuote() (card / modal / compare button),
+   applyMatchToRFQ() (AI Partner Match), and calcToQuote() (Quote Calculator). */
+const RFQ_ID_MAP = {
+  dl10x:'mDL10X', dl12x:'mDL12X', dl16x:'mDL16X',
+  dl10xd:'mDL10XD', dl12xd:'mDL12XD', dl16xd:'mDL16XD',
+  kt3dad:'mKT3DAD', kt3dvid:'mKT3DVID', kt3dcine:'mKT3DCINE',
+  rosettaplus:'mROSETTAPLUS',
+  keoa:'mKEOA', keob:'mKEOB', keoc:'mKEOC', keod:'mKEOD',
+  'ddell-dewy-glow-cushion':'mKB01', 'ddell-line-lift-cushion':'mKB02',
+  'ddell-filter-primer-zeropore':'mKB03', 'ddell-setup-creame':'mKB04',
+  'ddell-glowup-cream':'mKB05', 'ddell-mask-defense':'mKB06',
+  'ddell-fixer-dewy-glow':'mKB07', 'ddell-egf-ampoule':'mKB08',
+  'demed-vitamin-c-ampoule':'mKB09', 'demed-collagen-ampoule-30ml':'mKB10',
+  'demed-collagen-ampoule-7ml':'mKB11', 'demed-hyaluronic-soothing-ampoule':'mKB12',
+  'demed-brightening-ampoule':'mKB13', 'demed-spicule-peptide-300':'mKB14',
+  'demed-extra-intense-moisture-cream-m8':'mKB15', 'demed-wonder-ceramid-toner':'mKB16'
+};
 const MODEL_LABELS = {
   mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
   mDL10XD: 'DL-10XD', mDL12XD: 'DL-12XD', mDL16XD: 'DL-16XD',
