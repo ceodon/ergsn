@@ -9,3 +9,5 @@ package-lock.json
 images/raw/*
 !images/raw/.gitkeep
 images/raw/processed/
+# Third-party maker contact details — local-only, never publish without explicit approval
+data/maker-contacts.json

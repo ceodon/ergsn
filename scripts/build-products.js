@@ -108,7 +108,8 @@ function sectorGridId(key) {
     'k-security': 'productGrid',
     'k-tech':     'ktechGrid',
     'k-energy':   'kenergyGrid',
-    'k-bio':      'kbioGrid'
+    'k-bio':      'kbioGrid',
+    'k-beauty':   'kbeautyGrid'
     /* Non-active sectors don't have a grid yet — cards for them are held
        back until the sector goes active and gets a grid id. */
   })[key];
@@ -187,7 +188,8 @@ function main() {
     '    "k-security": "productGrid",',
     '    "k-tech":     "ktechGrid",',
     '    "k-energy":   "kenergyGrid",',
-    '    "k-bio":      "kbioGrid"',
+    '    "k-bio":      "kbioGrid",',
+    '    "k-beauty":   "kbeautyGrid"',
     '  };',
     '',
     '  /* Merge into the lexical `P` binding declared in index.html (const P at',

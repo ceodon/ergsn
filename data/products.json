@@ -30,6 +30,495 @@
       "maker": "ERGSN (placeholder)",
       "cardTag": "Template",
       "matchDesc": "Placeholder row — shown by AI Partner Match when active=true."
+    },
+
+    {
+      "id": "ddell-dewy-glow-cushion",
+      "sector": "k-beauty",
+      "model": "DEWY GLOW CUSHION PACT",
+      "part": "DDELL-CUSH-DG (PRD-955)",
+      "sub": "DD'ELL · Dewy-finish cushion foundation for hydrated glow",
+      "desc": "Long-wear dewy-finish cushion foundation from DD'ELL, manufactured by COSMEDIQUE Co., Ltd. Buildable coverage, hydrating formula suitable for normal-to-dry skin. OEM/ODM-ready — custom shades and packaging available at MOQ 1,000 per SKU.",
+      "img": "images/products/ddell-dewy-glow-cushion.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup — Cushion Pact"],
+        ["Finish", "Dewy / Luminous"],
+        ["Retail MSRP", "USD 36"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Dewy luminous finish — ideal for normal-to-dry skin",
+        "Hydrating formula with buildable coverage",
+        "OEM/ODM custom shade and packaging available",
+        "Korean-manufactured under COSMEDIQUE since 1985"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Cushion",
+      "matchDesc": "Dewy-finish cushion foundation · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-line-lift-cushion",
+      "sector": "k-beauty",
+      "model": "LINE LIFT CUSHION PACT",
+      "part": "DDELL-CUSH-LL (PRD-954)",
+      "sub": "DD'ELL · Lifting cushion with firming peptide complex",
+      "desc": "Firming line-lift cushion foundation from DD'ELL. Combines peptide complex with buildable coverage for a sculpted, age-defying finish. Manufactured by COSMEDIQUE Co., Ltd. under Korean cosmetic safety standards (CGMP).",
+      "img": "images/products/ddell-line-lift-cushion.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup — Cushion Pact"],
+        ["Finish", "Semi-matte / Lifting"],
+        ["Retail MSRP", "USD 36"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Peptide-enhanced lifting formula",
+        "Buildable coverage with semi-matte finish",
+        "CGMP-compliant Korean manufacturing",
+        "OEM/ODM private-label ready at MOQ 1,000"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Anti-Age",
+      "matchDesc": "Peptide line-lift cushion · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-filter-primer-zeropore",
+      "sector": "k-beauty",
+      "model": "FILTER PRIMER ZEROPORE",
+      "part": "DDELL-PRIM-ZP (PRD-964)",
+      "sub": "DD'ELL · Pore-blurring primer with smoothing silicone matrix",
+      "desc": "Makeup primer designed to blur pores and create a smooth canvas for foundation. Silicone-based matrix delivers immediate pore-filling effect. From DD'ELL, made by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/ddell-filter-primer-zeropore.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup — Primer / Base"],
+        ["Texture", "Silicone gel-cream"],
+        ["Retail MSRP", "USD 26"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Instant pore-blurring optical effect",
+        "Silicone matrix for smooth foundation application",
+        "Oil-control for long-wear makeup",
+        "OEM/ODM-ready at MOQ 1,000 per SKU"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Primer",
+      "matchDesc": "Pore-blurring makeup primer · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-setup-creame",
+      "sector": "k-beauty",
+      "model": "SETUP CREAME",
+      "part": "DDELL-CRM-SU (PRD-956)",
+      "sub": "DD'ELL · Hydrating makeup-base cream for lasting wear",
+      "desc": "Rich hydrating cream designed as a makeup base — locks moisture, improves foundation adhesion, and extends wear time. Manufactured by COSMEDIQUE Co., Ltd. under Korean CGMP standards.",
+      "img": "images/products/ddell-setup-creame.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup Base / Moisturizer"],
+        ["Texture", "Rich cream"],
+        ["Retail MSRP", "USD 28"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Deep hydration — improves foundation adhesion",
+        "Extends long-wear performance of makeup",
+        "Suitable for normal-to-dry skin",
+        "OEM/ODM customisation at MOQ 1,000"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Base",
+      "matchDesc": "Hydrating makeup-base cream · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-glowup-cream",
+      "sector": "k-beauty",
+      "model": "GLOWUP CREAM",
+      "part": "DDELL-CRM-GU (PRD-958)",
+      "sub": "DD'ELL · Radiance-boosting cream with luminous pigment complex",
+      "desc": "Daily-wear radiance cream from DD'ELL that delivers an immediate luminous finish. Blends skincare hydration with a subtle light-reflecting pigment complex for a healthy-glow look, on its own or under makeup.",
+      "img": "images/products/ddell-glowup-cream.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Skincare / Glow Cream"],
+        ["Texture", "Lightweight cream"],
+        ["Retail MSRP", "USD 28"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Light-reflecting radiance complex",
+        "Hydration + subtle luminous finish in one step",
+        "Works solo or as makeup primer",
+        "OEM/ODM-ready with private-label packaging"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Skincare",
+      "matchDesc": "Luminous radiance cream · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-mask-defense",
+      "sector": "k-beauty",
+      "model": "MAKEUP FIXER MASK DEFENSE",
+      "part": "DDELL-FIX-MD (PRD-961)",
+      "sub": "DD'ELL · Setting mist engineered for mask-on makeup wear",
+      "desc": "Setting mist specifically formulated to keep makeup intact under face masks. Quick-drying, non-sticky finish — prevents transfer and oxidation during extended wear. From DD'ELL, by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/ddell-mask-defense.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup Fixer / Setting Mist"],
+        ["Format", "Pump mist spray"],
+        ["Retail MSRP", "USD 16"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Mask-proof makeup lock technology",
+        "Non-sticky, quick-dry finish",
+        "Anti-transfer and anti-oxidation",
+        "OEM/ODM with private-label fragrance options"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Fixer",
+      "matchDesc": "Mask-proof setting mist · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-fixer-dewy-glow",
+      "sector": "k-beauty",
+      "model": "MAKEUP FIXER DEWY GLOW",
+      "part": "DDELL-FIX-DG (PRD-959)",
+      "sub": "DD'ELL · Setting mist that locks in a dewy, luminous finish",
+      "desc": "Setting mist from DD'ELL that finishes makeup with a dewy, hydrated glow. Fine-atomising pump delivers an even micro-mist with no alcohol drag. Made by COSMEDIQUE Co., Ltd. in Seoul.",
+      "img": "images/products/ddell-fixer-dewy-glow.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Makeup Fixer / Setting Mist"],
+        ["Finish", "Dewy / Luminous"],
+        ["Retail MSRP", "USD 16"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Locks in a dewy glow finish",
+        "Alcohol-free formulation — no tight-feel",
+        "Fine micro-mist atomiser",
+        "OEM/ODM options for volume and scent"
+      ],
+      "tags": ["retail", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · Fixer",
+      "matchDesc": "Dewy-glow setting mist · DD'ELL · MOQ 1,000"
+    },
+    {
+      "id": "ddell-egf-ampoule",
+      "sector": "k-beauty",
+      "model": "E.G.F AMPOULE",
+      "part": "DDELL-AMP-EGF (PRD-909)",
+      "sub": "DD'ELL · Epidermal Growth Factor ampoule for advanced skin repair",
+      "desc": "High-concentration EGF (Epidermal Growth Factor) ampoule from DD'ELL. Targets cellular turnover, skin barrier repair, and fine-line reduction. Manufactured by COSMEDIQUE Co., Ltd. — a biomedical cosmetic specialist.",
+      "img": "images/products/ddell-egf-ampoule.jpg",
+      "specs": [
+        ["Brand", "DD'ELL"],
+        ["Category", "Skincare / Advanced Ampoule"],
+        ["Key Actives", "Epidermal Growth Factor (EGF)"],
+        ["Retail MSRP", "USD 76"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "High-potency EGF for cellular renewal",
+        "Barrier repair and fine-line reduction",
+        "Dermatologically tested formulation",
+        "OEM/ODM available with MOQ 1,000"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DD'ELL · EGF",
+      "matchDesc": "EGF repair ampoule · DD'ELL · MOQ 1,000"
+    },
+
+    {
+      "id": "demed-vitamin-c-ampoule",
+      "sector": "k-beauty",
+      "model": "VITAMIN C AMPOULE",
+      "part": "DEMED-AMP-VC (PRD-81)",
+      "sub": "DEMED · Brightening ampoule with fast-absorbing Vitamin C",
+      "desc": "Dermatological Vitamin C brightening ampoule from DEMED (est. 1985). 7ml × 5 ampoules format; fast-absorbing formula targets dull tone, pigmentation, and uneven texture. Manufactured by COSMEDIQUE Co., Ltd. under 39+ years of Korean cosmetic R&D.",
+      "img": "images/products/demed-vitamin-c-ampoule.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Ampoule"],
+        ["Volume", "7 ml × 5 EA"],
+        ["Key Actives", "Vitamin C (Ascorbyl derivatives)"],
+        ["Retail MSRP", "USD 133.20"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Brightening — targets dullness and pigmentation",
+        "Fast-absorbing ampoule format for daily intensive care",
+        "Sealed single-use vials preserve ingredient stability",
+        "OEM/ODM available at MOQ 1,000 per SKU"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Ampoule",
+      "matchDesc": "Vitamin C brightening ampoule · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-collagen-ampoule-30ml",
+      "sector": "k-beauty",
+      "model": "COLLAGEN AMPOULE 30ML",
+      "part": "DEMED-AMP-COL30 (PRD-65)",
+      "sub": "DEMED · Firming collagen ampoule in 30 ml jumbo format",
+      "desc": "High-concentration collagen ampoule in a generous 30 ml pump bottle — suitable for daily face + neck application. From DEMED (1985), a dermatological cosmetic brand manufactured by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/demed-collagen-ampoule-30ml.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Ampoule"],
+        ["Volume", "30 ml"],
+        ["Key Actives", "Hydrolysed collagen peptides"],
+        ["Retail MSRP", "USD 57.72"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Firming and elasticity support via collagen peptides",
+        "Large 30 ml format — daily face + neck use",
+        "Lightweight, fast-absorbing texture",
+        "OEM/ODM-ready with custom packaging"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Collagen",
+      "matchDesc": "Collagen firming ampoule 30 ml · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-collagen-ampoule-7ml",
+      "sector": "k-beauty",
+      "model": "COLLAGEN AMPOULE 7ML × 5EA",
+      "part": "DEMED-AMP-COL5 (PRD-82)",
+      "sub": "DEMED · Collagen ampoule in single-use vial 5-pack",
+      "desc": "5-pack of single-use 7 ml collagen ampoules for intensive weekly treatment. Sealed vials preserve peptide integrity. Manufactured by COSMEDIQUE Co., Ltd. — premium dermatological cosmetics since 1985.",
+      "img": "images/products/demed-collagen-ampoule-7ml.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Ampoule"],
+        ["Volume", "7 ml × 5 EA"],
+        ["Key Actives", "Hydrolysed collagen peptides"],
+        ["Retail MSRP", "USD 133.20"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Intensive single-use 5-pack treatment",
+        "Sealed vials preserve peptide freshness",
+        "Firming and elasticity support",
+        "OEM/ODM with private-label vial branding"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Collagen",
+      "matchDesc": "Collagen ampoule 7 ml × 5 · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-hyaluronic-soothing-ampoule",
+      "sector": "k-beauty",
+      "model": "HYALURONIC SOOTHING AMPOULE",
+      "part": "DEMED-AMP-HYA (PRD-60)",
+      "sub": "DEMED · Multi-weight hyaluronic soothing ampoule, 7 ml × 5",
+      "desc": "Soothing ampoule featuring multi-molecular-weight hyaluronic acid for layered hydration. Calms sensitised skin while restoring moisture barrier. From DEMED by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/demed-hyaluronic-soothing-ampoule.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Ampoule"],
+        ["Volume", "7 ml × 5 EA"],
+        ["Key Actives", "Multi-weight Hyaluronic Acid"],
+        ["Retail MSRP", "USD 125.80"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Layered hydration with multi-weight HA",
+        "Soothing for sensitised and post-procedure skin",
+        "Moisture-barrier repair",
+        "OEM/ODM-ready at MOQ 1,000"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Hydration",
+      "matchDesc": "Hyaluronic soothing ampoule · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-brightening-ampoule",
+      "sector": "k-beauty",
+      "model": "BRIGHTENING AMPOULE",
+      "part": "DEMED-AMP-BRT (PRD-61)",
+      "sub": "DEMED · Intensive brightening ampoule, 7 ml × 5",
+      "desc": "Intensive brightening ampoule targeting uneven tone, melanin over-production, and post-inflammatory pigmentation. 5 single-use vials for concentrated weekly treatment. From DEMED, manufactured by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/demed-brightening-ampoule.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Ampoule"],
+        ["Volume", "7 ml × 5 EA"],
+        ["Key Actives", "Niacinamide + Vitamin C complex"],
+        ["Retail MSRP", "USD 133.20"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Targets melanin over-production and PIH",
+        "Intensive 5-pack weekly treatment",
+        "Sealed vials preserve active stability",
+        "OEM/ODM with custom active concentrations"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Brightening",
+      "matchDesc": "Brightening ampoule · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-spicule-peptide-300",
+      "sector": "k-beauty",
+      "model": "SPICULE PEPTIDE 300 SHOT",
+      "part": "DEMED-AMP-SP300 (PRD-59)",
+      "sub": "DEMED · Spicule-delivery peptide shot ampoule, 7 ml × 5",
+      "desc": "Advanced spicule-technology ampoule from DEMED. Marine spicules create micro-channels that drive peptide actives deeper into the skin — clinical-grade home-care targeting fine lines and texture. Made by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/demed-spicule-peptide-300.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Advanced Dermatological Ampoule"],
+        ["Volume", "7 ml × 5 EA"],
+        ["Technology", "Marine spicule delivery + peptides"],
+        ["Retail MSRP", "USD 125.80"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Marine spicule micro-channel delivery",
+        "Deep-penetration peptide complex",
+        "Clinical-grade home-care formulation",
+        "OEM/ODM technology licensing available"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Spicule",
+      "matchDesc": "Spicule peptide 300 shot · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-extra-intense-moisture-cream-m8",
+      "sector": "k-beauty",
+      "model": "EXTRA INTENSE MOISTURE CREAM 50G [M8]",
+      "part": "DEMED-CRM-M8 (PRD-71)",
+      "sub": "DEMED · Barrier-repair cream for very dry / compromised skin",
+      "desc": "Extra-rich moisture cream from DEMED's dermatological M-series. Targets very dry, dehydrated, or post-procedure skin with barrier-repair ceramides and occlusives. 50g jar. Manufactured by COSMEDIQUE Co., Ltd.",
+      "img": "images/products/demed-extra-intense-moisture-cream-m8.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Moisture Cream"],
+        ["Volume", "50 g"],
+        ["Series", "M-series [M8]"],
+        ["Retail MSRP", "USD 72.52"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Intensive barrier-repair formulation",
+        "Ceramide + occlusive complex for very dry skin",
+        "Suitable for post-procedure / compromised skin",
+        "OEM/ODM formulation tiers M1–M8 available"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · Barrier Cream",
+      "matchDesc": "Barrier-repair moisture cream · DEMED · MOQ 1,000"
+    },
+    {
+      "id": "demed-wonder-ceramid-toner",
+      "sector": "k-beauty",
+      "model": "WONDER CERAMID TONER",
+      "part": "DEMED-TNR-WC (PRD-92)",
+      "sub": "DEMED · New-release ceramide toner for barrier support",
+      "desc": "Recently-released ceramide-rich toner from DEMED. First-step hydration that primes the barrier for subsequent actives. Dermatologically formulated, manufactured by COSMEDIQUE Co., Ltd. under CGMP Korean standards.",
+      "img": "images/products/demed-wonder-ceramid-toner.jpg",
+      "specs": [
+        ["Brand", "DEMED (est. 1985)"],
+        ["Category", "Dermatological Toner"],
+        ["Key Actives", "Ceramide NP complex"],
+        ["Release", "2024 New Release"],
+        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+      ],
+      "features": [
+        "Ceramide-forward barrier support",
+        "First-step hydration layer",
+        "Primes skin for subsequent ampoules / creams",
+        "OEM/ODM-ready with custom fragrance / pH"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "moq": 1000,
+      "leadMin": 4,
+      "leadMax": 6,
+      "maker": "COSMEDIQUE Co., Ltd.",
+      "cardTag": "DEMED · New",
+      "matchDesc": "Ceramide barrier toner · DEMED · MOQ 1,000"
     }
   ]
 }
