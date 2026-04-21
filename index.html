@@ -308,6 +308,90 @@ section { scroll-margin-top: var(--nav-h); }
 .nav-dropmenu .ds-desc { font-size: 11px; color: var(--steel); font-weight: 400; }
 .nav-dropmenu .ds-divider { height: 1px; background: rgba(255,255,255,.06); margin: 6px 12px; padding: 0; }
 
+/* ── Shop Mega Menu (2-column) ─────────────────────────
+   Only applies to the Shop dropdown — other dropdowns (For Buyers, Trust,
+   Connect) keep the classic .nav-dropmenu <ul> pattern. */
+.nav-dropdown-mega { position: relative; }
+.nav-dropdown-mega > a::after { content: ' \25BE'; font-size: 9px; opacity: .6; }
+.nav-megamenu {
+  position: absolute; top: 100%; left: 0;
+  width: min(680px, calc(100vw - 32px));
+  background: var(--navy-2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1.25rem; gap: 1.25rem;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .18s, visibility .18s, transform .18s;
+  transform: translateY(4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,.5);
+  z-index: 950;
+  display: grid; grid-template-columns: 1.7fr 1fr;
+}
+.nav-megamenu::before {
+  content: ''; position: absolute;
+  top: -14px; left: 0; right: 0; height: 14px;
+}
+.nav-dropdown-mega:hover .nav-megamenu,
+.nav-dropdown-mega:focus-within .nav-megamenu {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+}
+.mm-col { min-width: 0; }
+.mm-section-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .14em;
+  color: var(--gold); text-transform: uppercase;
+  margin: 0 0 .8rem;
+}
+.mm-col-main > .mm-section-title:not(:first-child) { margin-top: 1rem; }
+.mm-sector { margin-bottom: .75rem; }
+.mm-sector:last-child { margin-bottom: 0; }
+.mm-sector-head {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--white); text-decoration: none; padding: 2px 0;
+  transition: color .15s;
+}
+.mm-sector-head:hover { color: var(--gold); background: transparent; }
+.mm-sector-name { font-size: 13.5px; font-weight: 600; }
+.mm-sector-tag {
+  font-size: 9px; padding: 2px 6px; border-radius: 8px;
+  background: rgba(52,210,152,.15); color: var(--gold);
+  letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+}
+.mm-sector-tag.soon { background: rgba(255,255,255,.06); color: var(--steel-lt); }
+.mm-sector-desc {
+  font-size: 11px; color: var(--steel); margin: 2px 0 4px; line-height: 1.45;
+}
+.mm-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.mm-chip {
+  display: inline-flex; padding: 3px 8px; border-radius: 10px;
+  background: #1d1d1d; border: 1px solid var(--border);
+  font-size: 11px; color: var(--tx-mid); text-decoration: none;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.mm-chip:hover { border-color: var(--gold); color: var(--white); background: rgba(52,210,152,.08); }
+.mm-divider { border: 0; border-top: 1px solid var(--border); margin: .9rem 0; }
+.mm-tool-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 6px 0; text-decoration: none; color: inherit;
+}
+.mm-tool-item:hover .mm-tool-name { color: var(--gold); }
+.mm-tool-icon { color: var(--gold); font-size: 12px; flex-shrink: 0; margin-top: 3px; }
+.mm-tool-name { display: block; font-size: 12.5px; font-weight: 600; color: var(--white); }
+.mm-tool-desc { display: block; font-size: 10.5px; color: var(--steel); margin-top: 1px; line-height: 1.4; }
+.mm-featured-card {
+  display: block; padding: .65rem;
+  background: linear-gradient(160deg, #141414 0%, #0f0f0f 100%);
+  border: 1px solid var(--border); border-radius: 8px; text-decoration: none;
+  transition: border-color .15s;
+}
+.mm-featured-card:hover { border-color: var(--gold); }
+.mm-featured-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden; border-radius: 6px;
+  margin-bottom: 8px; background: #0a0a0a;
+}
+.mm-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mm-featured-title { display: block; font-size: 12.5px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+.mm-featured-desc { display: block; font-size: 10.5px; color: var(--steel); line-height: 1.45; }
+/* Mega menu hides under mobile breakpoint — hamburger + mobile-menu take over. */
+@media (max-width: 680px) { .nav-megamenu { display: none !important; } }
+
 /* Sector tabs (above product grid) */
 .sector-tabs {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -1161,6 +1245,45 @@ section { scroll-margin-top: var(--nav-h); }
 .model-cb { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
 .model-cb input { width: 15px; height: 15px; accent-color: var(--gold); flex-shrink: 0; }
 .model-cb-lbl { font-family: var(--fb); font-size: 13px; font-weight: 600; color: var(--tx-mid); }
+/* ── RFQ sector accordion ─────────────────────────────
+   Groups the Models-of-Interest checkboxes under collapsible sector
+   sections (Stage 1 of the RFQ picker plan). The underlying <input
+   type="checkbox"> ids stay identical so submitRFQ/MODEL_LABELS keep
+   working without changes. */
+.rfq-hint { font-size: 11.5px; color: var(--steel); margin: 0 0 .7rem; line-height: 1.5; }
+.rfq-sectors { display: flex; flex-direction: column; gap: 8px; }
+.rfq-sector {
+  background: #141414; border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; transition: border-color .15s;
+}
+.rfq-sector.has-selection { border-color: var(--gold); }
+.rfq-sector > summary {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 12px 14px; cursor: pointer; list-style: none;
+  font-family: var(--fb);
+  -webkit-tap-highlight-color: transparent;
+}
+.rfq-sector > summary::-webkit-details-marker { display: none; }
+.rfq-sector > summary::before {
+  content: '\25B8'; color: var(--gold); font-size: 11px;
+  transition: transform .15s; flex-shrink: 0; width: 10px; display: inline-block;
+}
+.rfq-sector[open] > summary::before { transform: rotate(90deg); }
+.rs-name { font-size: 14px; font-weight: 700; color: var(--white); }
+.rs-tag {
+  font-size: 9px; padding: 2px 6px; border-radius: 8px;
+  background: rgba(52,210,152,.15); color: var(--gold);
+  letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+}
+.rs-tag.soon { background: rgba(255,255,255,.06); color: var(--steel-lt); }
+.rs-meta { font-size: 11.5px; color: var(--steel); margin-left: auto; font-weight: 500; }
+.rs-count { font-weight: 700; color: var(--steel); }
+.rs-count.has-selection { color: var(--gold); }
+.rs-body { padding: 0 14px 14px; border-top: 1px solid rgba(255,255,255,.04); padding-top: 12px; }
+.rs-sub { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; color: var(--steel); text-transform: uppercase; margin: 0 0 8px; }
+.rs-sub:not(:first-child) { margin-top: 14px; }
+.rs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+@media (max-width: 520px) { .rs-grid { grid-template-columns: 1fr; } }
 .f-note { font-size: 11px; color: var(--tx-lt); text-align: center; margin-top: .9rem; line-height: 1.5; }
 .form-success { display: none; text-align: center; padding: 3rem 1.5rem; }
 .success-icon { width: 60px; height: 60px; background: var(--off); border-radius: 50%; margin: 0 auto 1.25rem; display: flex; align-items: center; justify-content: center; font-size: 26px; }
@@ -2122,22 +2245,146 @@ button:focus:not(:focus-visible) { outline: none; }
     </a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li class="nav-dropdown">
+        <li class="nav-dropdown nav-dropdown-mega">
           <a href="#products">Shop</a>
-          <ul class="nav-dropmenu">
-            <li><a href="#products" onclick="switchSector('k-security');return true"><span class="ds-name">K-Security <span class="ds-tag">Active</span></span><span class="ds-desc">DL Series shredders · in stock</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-tech');return true"><span class="ds-name">K-Tech <span class="ds-tag">Active</span></span><span class="ds-desc">2D → 3D stereoscopic conversion</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-energy');return true"><span class="ds-name">K-Energy <span class="ds-tag">Active</span></span><span class="ds-desc">HYGEN Generator · one-shaft multi-gen</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-bio');return true"><span class="ds-name">K-Bio <span class="ds-tag">Active</span></span><span class="ds-desc">Rosetta Plus · HACCP · KFDA</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-beauty');return true"><span class="ds-name">K-Beauty <span class="ds-tag">Active</span></span><span class="ds-desc">DEMED · DD'ELL · 16 SKUs · MOQ 1,000</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-culture-goods');return true"><span class="ds-name">K-Culture Goods <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">K-pop merch · crafts · fashion</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-franchise');return true"><span class="ds-name">K-Franchise <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">F&amp;B · retail · service concepts</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-tourism-assets');return true"><span class="ds-name">K-Tourism Assets <span class="ds-tag">Active</span></span><span class="ds-desc">Yangpyeong hanok stays · share ownership</span></a></li>
-            <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Country + industry → Top-3 matches</span></a></li>
-            <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB estimate</span></a></li>
-            <li><a href="export-docs.html"><span class="ds-name">Export Documents AI</span><span class="ds-desc">HS code lookup · duty rates · templates</span></a></li>
-          </ul>
+          <div class="nav-megamenu" role="menu">
+            <div class="mm-col mm-col-main">
+              <p class="mm-section-title">Active Sectors</p>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-security');return true">
+                  <span class="mm-sector-name">K-Security</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">DL Series shredders · 6 models</p>
+                <div class="mm-chips">
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-security');return true">Standard Cut</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-security');return true">Deep Cut</a>
+                </div>
+              </div>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-tech');return true">
+                  <span class="mm-sector-name">K-Tech</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">2D → 3D services · 3 offerings</p>
+                <div class="mm-chips">
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-AD</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-VID</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-CINE</a>
+                </div>
+              </div>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-energy');return true">
+                  <span class="mm-sector-name">K-Energy</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">HYGEN Generator · 4 configurations</p>
+                <div class="mm-chips">
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt A</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt B</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt C</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt D</a>
+                </div>
+              </div>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-bio');return true">
+                  <span class="mm-sector-name">K-Bio</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">Rosetta Plus · HACCP · KFDA</p>
+              </div>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-beauty');return true">
+                  <span class="mm-sector-name">K-Beauty</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">16 SKUs · 2 makers · MOQ 1,000</p>
+                <div class="mm-chips">
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-beauty');return true">DD'ELL</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-beauty');return true">DEMED</a>
+                </div>
+              </div>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-tourism-assets');return true">
+                  <span class="mm-sector-name">K-Tourism Assets</span>
+                  <span class="mm-sector-tag">Active</span>
+                </a>
+                <p class="mm-sector-desc">Yangpyeong Hanok · 4 types · share ownership</p>
+                <div class="mm-chips">
+                  <a class="mm-chip" href="stays-sopunghun.html">Sopunghun</a>
+                  <a class="mm-chip" href="stays-soyojae.html">Soyojae</a>
+                  <a class="mm-chip" href="stays-gyeonwujae.html">Gyeonwujae</a>
+                  <a class="mm-chip" href="stays-punggyeonru.html">Punggyeonru</a>
+                </div>
+              </div>
+
+              <hr class="mm-divider">
+              <p class="mm-section-title">Sourcing · 2026</p>
+
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-culture-goods');return true">
+                  <span class="mm-sector-name">K-Culture Goods</span>
+                  <span class="mm-sector-tag soon">Sourcing</span>
+                </a>
+                <p class="mm-sector-desc">K-pop merch · crafts · fashion</p>
+              </div>
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-franchise');return true">
+                  <span class="mm-sector-name">K-Franchise</span>
+                  <span class="mm-sector-tag soon">Sourcing</span>
+                </a>
+                <p class="mm-sector-desc">F&amp;B · retail · service concepts</p>
+              </div>
+              <div class="mm-sector">
+                <a class="mm-sector-head" href="#products" onclick="switchSector('k-smart-living');return true">
+                  <span class="mm-sector-name">K-Smart Living</span>
+                  <span class="mm-sector-tag soon">Sourcing</span>
+                </a>
+                <p class="mm-sector-desc">Appliances · wellness · lifestyle</p>
+              </div>
+            </div>
+
+            <div class="mm-col mm-col-tools">
+              <p class="mm-section-title">Tools</p>
+              <a class="mm-tool-item" href="#match">
+                <span class="mm-tool-icon">&#9670;</span>
+                <span>
+                  <span class="mm-tool-name">AI Partner Match</span>
+                  <span class="mm-tool-desc">Country + industry → Top-3</span>
+                </span>
+              </a>
+              <a class="mm-tool-item" href="#calculator">
+                <span class="mm-tool-icon">&#9670;</span>
+                <span>
+                  <span class="mm-tool-name">Quote Calculator</span>
+                  <span class="mm-tool-desc">Instant CIF/FOB estimate</span>
+                </span>
+              </a>
+              <a class="mm-tool-item" href="export-docs.html">
+                <span class="mm-tool-icon">&#9670;</span>
+                <span>
+                  <span class="mm-tool-name">Export Documents AI</span>
+                  <span class="mm-tool-desc">HS codes · duty · templates</span>
+                </span>
+              </a>
+
+              <hr class="mm-divider">
+              <p class="mm-section-title">Featured</p>
+              <a class="mm-featured-card" href="#products" onclick="switchSector('k-bio');return true">
+                <div class="mm-featured-img">
+                  <picture><source srcset="images/products/rosseta-plus.webp" type="image/webp"><img src="images/products/rosseta-plus.jpg" alt="Rosetta Plus — KFDA-assured HFF" loading="lazy"></picture>
+                </div>
+                <span class="mm-featured-title">Rosetta Plus</span>
+                <span class="mm-featured-desc">HFF · HACCP · KFDA · exporting to MX · YE · IN</span>
+              </a>
+            </div>
+          </div>
         </li>
         <li class="nav-dropdown">
           <a href="#wanted">For Buyers</a>
@@ -3597,42 +3844,128 @@ button:focus:not(:focus-visible) { outline: none; }
           <div id="rfqStep2" style="display:none">
           <div class="f-grp">
             <label class="f-lbl"><span data-t="f_models">Models of Interest</span> <span>*</span></label>
-            <div class="model-grid">
-              <label class="model-cb"><input type="checkbox" id="mDL10X"><span class="model-cb-lbl">DL-10X</span></label>
-              <label class="model-cb"><input type="checkbox" id="mDL12X"><span class="model-cb-lbl">DL-12X</span></label>
-              <label class="model-cb"><input type="checkbox" id="mDL16X"><span class="model-cb-lbl">DL-16X</span></label>
-              <label class="model-cb"><input type="checkbox" id="mDL10XD"><span class="model-cb-lbl">DL-10XD</span></label>
-              <label class="model-cb"><input type="checkbox" id="mDL12XD"><span class="model-cb-lbl">DL-12XD</span></label>
-              <label class="model-cb"><input type="checkbox" id="mDL16XD"><span class="model-cb-lbl">DL-16XD</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DAD"><span class="model-cb-lbl">KT-3DAD</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DVID"><span class="model-cb-lbl">KT-3DVID</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKT3DCINE"><span class="model-cb-lbl">KT-3DCINE</span></label>
-              <label class="model-cb"><input type="checkbox" id="mROSETTAPLUS"><span class="model-cb-lbl">Rosetta Plus</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKEOA"><span class="model-cb-lbl">KE-Option A</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKEOB"><span class="model-cb-lbl">KE-Option B</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKEOC"><span class="model-cb-lbl">KE-Option C</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKEOD"><span class="model-cb-lbl">KE-Option D</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB01"><span class="model-cb-lbl">DD'ELL Dewy Cushion</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB02"><span class="model-cb-lbl">DD'ELL Line Lift</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB03"><span class="model-cb-lbl">DD'ELL Pore Primer</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB04"><span class="model-cb-lbl">DD'ELL Setup Cream</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB05"><span class="model-cb-lbl">DD'ELL Glow Cream</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB06"><span class="model-cb-lbl">DD'ELL Mask Fixer</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB07"><span class="model-cb-lbl">DD'ELL Dewy Fixer</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB08"><span class="model-cb-lbl">DD'ELL EGF Ampoule</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB09"><span class="model-cb-lbl">DEMED Vit-C Ampoule</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB10"><span class="model-cb-lbl">DEMED Collagen 30ml</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB11"><span class="model-cb-lbl">DEMED Collagen ×5</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB12"><span class="model-cb-lbl">DEMED HA Ampoule</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB13"><span class="model-cb-lbl">DEMED Brightening</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB14"><span class="model-cb-lbl">DEMED Spicule Peptide</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB15"><span class="model-cb-lbl">DEMED Barrier M8</span></label>
-              <label class="model-cb"><input type="checkbox" id="mKB16"><span class="model-cb-lbl">DEMED Ceramid Toner</span></label>
-              <label class="model-cb"><input type="checkbox" id="mHANOKSPH"><span class="model-cb-lbl">Hanok · Sopunghun (25p)</span></label>
-              <label class="model-cb"><input type="checkbox" id="mHANOKSYJ"><span class="model-cb-lbl">Hanok · Soyojae (30p)</span></label>
-              <label class="model-cb"><input type="checkbox" id="mHANOKGWJ"><span class="model-cb-lbl">Hanok · Gyeonwujae (25p pet)</span></label>
-              <label class="model-cb"><input type="checkbox" id="mHANOKPGR"><span class="model-cb-lbl">Hanok · Punggyeonru (30p pet)</span></label>
-              <label class="model-cb"><input type="checkbox" id="mGUJWA"><span class="model-cb-lbl">Annual Share (gujwa bunyang)</span></label>
+            <p class="rfq-hint">Expand a sector to pick specific models. Only one sector is open at a time; selections in collapsed sectors are kept and shown in the badge.</p>
+            <div class="rfq-sectors" id="rfqSectors">
+
+              <details class="rfq-sector" data-sector="k-security">
+                <summary>
+                  <span class="rs-name">K-Security</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">6 models · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <p class="rs-sub">Standard Cut · Level 3 / P-4</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mDL10X"><span class="model-cb-lbl">DL-10X</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mDL12X"><span class="model-cb-lbl">DL-12X</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mDL16X"><span class="model-cb-lbl">DL-16X</span></label>
+                  </div>
+                  <p class="rs-sub">Deep Cut · Level 4 / P-5</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mDL10XD"><span class="model-cb-lbl">DL-10XD</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mDL12XD"><span class="model-cb-lbl">DL-12XD</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mDL16XD"><span class="model-cb-lbl">DL-16XD</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <details class="rfq-sector" data-sector="k-tech">
+                <summary>
+                  <span class="rs-name">K-Tech</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">3 services · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mKT3DAD"><span class="model-cb-lbl">KT-3DAD · 3D Advertising</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKT3DVID"><span class="model-cb-lbl">KT-3DVID · Video Conversion</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKT3DCINE"><span class="model-cb-lbl">KT-3DCINE · Film Remaster</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <details class="rfq-sector" data-sector="k-energy">
+                <summary>
+                  <span class="rs-name">K-Energy</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">4 configurations · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mKEOA"><span class="model-cb-lbl">KE-Option A · 5-gen starter</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKEOB"><span class="model-cb-lbl">KE-Option B · 6-gen standard</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKEOC"><span class="model-cb-lbl">KE-Option C · dual-set</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKEOD"><span class="model-cb-lbl">KE-Option D · triple-set flagship</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <details class="rfq-sector" data-sector="k-bio">
+                <summary>
+                  <span class="rs-name">K-Bio</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">1 product · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mROSETTAPLUS"><span class="model-cb-lbl">Rosetta Plus · HFF · HACCP · KFDA</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <details class="rfq-sector" data-sector="k-beauty">
+                <summary>
+                  <span class="rs-name">K-Beauty</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">16 SKUs · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <p class="rs-sub">DD'ELL · hybrid makeup base line</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mKB01"><span class="model-cb-lbl">DD'ELL Dewy Cushion</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB02"><span class="model-cb-lbl">DD'ELL Line Lift</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB03"><span class="model-cb-lbl">DD'ELL Pore Primer</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB04"><span class="model-cb-lbl">DD'ELL Setup Cream</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB05"><span class="model-cb-lbl">DD'ELL Glow Cream</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB06"><span class="model-cb-lbl">DD'ELL Mask Fixer</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB07"><span class="model-cb-lbl">DD'ELL Dewy Fixer</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB08"><span class="model-cb-lbl">DD'ELL EGF Ampoule</span></label>
+                  </div>
+                  <p class="rs-sub">DEMED · ampoule &amp; serum line</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mKB09"><span class="model-cb-lbl">DEMED Vit-C Ampoule</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB10"><span class="model-cb-lbl">DEMED Collagen 30ml</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB11"><span class="model-cb-lbl">DEMED Collagen ×5</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB12"><span class="model-cb-lbl">DEMED HA Ampoule</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB13"><span class="model-cb-lbl">DEMED Brightening</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB14"><span class="model-cb-lbl">DEMED Spicule Peptide</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB15"><span class="model-cb-lbl">DEMED Barrier M8</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mKB16"><span class="model-cb-lbl">DEMED Ceramid Toner</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <details class="rfq-sector" data-sector="k-tourism-assets">
+                <summary>
+                  <span class="rs-name">K-Tourism Assets</span>
+                  <span class="rs-tag">Active</span>
+                  <span class="rs-meta">4 units + share · <span class="rs-count">0 selected</span></span>
+                </summary>
+                <div class="rs-body">
+                  <p class="rs-sub">Yangpyeong Soohyang · hanok units</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mHANOKSPH"><span class="model-cb-lbl">Sopunghun · 25p classic</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mHANOKSYJ"><span class="model-cb-lbl">Soyojae · 30p premium</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mHANOKGWJ"><span class="model-cb-lbl">Gyeonwujae · 25p pet-friendly</span></label>
+                    <label class="model-cb"><input type="checkbox" id="mHANOKPGR"><span class="model-cb-lbl">Punggyeonru · 30p premium pet</span></label>
+                  </div>
+                  <p class="rs-sub">Ownership program</p>
+                  <div class="rs-grid">
+                    <label class="model-cb"><input type="checkbox" id="mGUJWA"><span class="model-cb-lbl">Annual Share (gujwa bunyang)</span></label>
+                  </div>
+                </div>
+              </details>
+
             </div>
           </div>
           <div class="f-row">
@@ -4051,6 +4384,11 @@ function resetRFQForm() {
     fields.querySelectorAll('.f-in, .f-ta').forEach(el => el.value = '');
     // Uncheck all model checkboxes
     fields.querySelectorAll('.model-cb input').forEach(el => el.checked = false);
+    // Keep sector accordion badges in sync after reset
+    document.querySelectorAll('#rfqSectors .rfq-sector').forEach(sec => {
+      sec.open = false;
+      if (typeof updateRfqSectorCount === 'function') updateRfqSectorCount(sec);
+    });
     // Reset selects to placeholder
     ['fIncoterms','fCountry','fPort'].forEach(id => {
       const el = document.getElementById(id);
@@ -4468,6 +4806,7 @@ function applyMatchToRFQ() {
 
 document.addEventListener('DOMContentLoaded', function initPageWidgets(){
   initTradeTools();
+  initRfqSectorAccordion();
   // initQAWall is lazy-loaded via IntersectionObserver
   // Deep-link from industry landing pages: /?sector=k-security auto-switches
   // the product tab and scrolls there.
@@ -4482,14 +4821,59 @@ document.addEventListener('DOMContentLoaded', function initPageWidgets(){
     /* Deep-link from standalone product detail pages:
        /?rfq=hanok-sopunghun,gujwa-share scrolls to #rfq, opens step 2,
        and pre-ticks every listed item. Comma-separated ids map through
-       RFQ_ID_MAP, so anything in that registry works. */
+       RFQ_ID_MAP, so anything in that registry works. Also expands the
+       matching sector accordion so users land on pre-checked items. */
     const rfqParam = params.get('rfq');
     if (rfqParam && typeof requestQuote === 'function') {
       const ids = rfqParam.split(',').map(s => s.trim()).filter(Boolean);
-      if (ids.length) setTimeout(() => requestQuote(ids), 120);
+      if (ids.length) setTimeout(() => {
+        requestQuote(ids);
+        expandRfqSectorsForCheckedBoxes();
+      }, 120);
     }
   } catch(_) {}
 });
+
+/* ── RFQ sector accordion controller ─────────────────────────
+   - Enforces "one sector open at a time" (opening one closes others).
+   - Keeps each sector's "N selected" badge in sync with its checkboxes.
+   - Visual flag `.has-selection` on the sector lets the border glow
+     so collapsed sectors still signal the buyer has picks inside. */
+function initRfqSectorAccordion() {
+  const sectors = document.querySelectorAll('#rfqSectors .rfq-sector');
+  if (!sectors.length) return;
+  sectors.forEach(sec => {
+    sec.addEventListener('toggle', () => {
+      if (sec.open) sectors.forEach(o => { if (o !== sec) o.open = false; });
+    });
+    sec.addEventListener('change', (e) => {
+      if (e.target && e.target.matches && e.target.matches('input[type="checkbox"]')) {
+        updateRfqSectorCount(sec);
+      }
+    });
+    updateRfqSectorCount(sec);
+  });
+}
+function updateRfqSectorCount(sec) {
+  const boxes = sec.querySelectorAll('input[type="checkbox"]');
+  const n = Array.from(boxes).filter(cb => cb.checked).length;
+  const badge = sec.querySelector('.rs-count');
+  if (badge) {
+    badge.textContent = n === 0 ? '0 selected' : (n + ' selected');
+    badge.classList.toggle('has-selection', n > 0);
+  }
+  sec.classList.toggle('has-selection', n > 0);
+}
+/* After a URL-driven pre-fill (requestQuote), open the first sector
+   that has any checkbox ticked. Other sectors stay collapsed — their
+   badge shows the count so the buyer still knows what's picked. */
+function expandRfqSectorsForCheckedBoxes() {
+  const sectors = document.querySelectorAll('#rfqSectors .rfq-sector');
+  sectors.forEach(sec => updateRfqSectorCount(sec));
+  const firstWithPick = Array.from(sectors)
+    .find(sec => sec.querySelector('input[type="checkbox"]:checked'));
+  if (firstWithPick) firstWithPick.open = true;
+}
 
 /* No-op stubs preserved for any residual call sites referencing the old
    gamification layer (Spotlight/Mission Control/Live Events/Commit Bar all removed). */
