@@ -106,11 +106,12 @@ function sectorLabel(key) {
 
 function sectorGridId(key) {
   return ({
-    'k-security': 'productGrid',
-    'k-tech':     'ktechGrid',
-    'k-energy':   'kenergyGrid',
-    'k-bio':      'kbioGrid',
-    'k-beauty':   'kbeautyGrid'
+    'k-security':       'productGrid',
+    'k-tech':           'ktechGrid',
+    'k-energy':         'kenergyGrid',
+    'k-bio':            'kbioGrid',
+    'k-beauty':         'kbeautyGrid',
+    'k-tourism-assets': 'ktourismGrid'
     /* Non-active sectors don't have a grid yet — cards for them are held
        back until the sector goes active and gets a grid id. */
   })[key];
@@ -186,11 +187,12 @@ function main() {
     '  var MATCH_ADDITIONS = ' + JSON.stringify(matchRows, null, 2) + ';',
     '  var CARDS_BY_SECTOR = ' + JSON.stringify(cardsBySector, null, 2) + ';',
     '  var SECTOR_GRID = {',
-    '    "k-security": "productGrid",',
-    '    "k-tech":     "ktechGrid",',
-    '    "k-energy":   "kenergyGrid",',
-    '    "k-bio":      "kbioGrid",',
-    '    "k-beauty":   "kbeautyGrid"',
+    '    "k-security":       "productGrid",',
+    '    "k-tech":           "ktechGrid",',
+    '    "k-energy":         "kenergyGrid",',
+    '    "k-bio":            "kbioGrid",',
+    '    "k-beauty":         "kbeautyGrid",',
+    '    "k-tourism-assets": "ktourismGrid"',
     '  };',
     '',
     '  /* Merge into the lexical `P` binding declared in index.html (const P at',

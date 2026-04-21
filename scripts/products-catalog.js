@@ -1703,11 +1703,12 @@
   ]
 };
   var SECTOR_GRID = {
-    "k-security": "productGrid",
-    "k-tech":     "ktechGrid",
-    "k-energy":   "kenergyGrid",
-    "k-bio":      "kbioGrid",
-    "k-beauty":   "kbeautyGrid"
+    "k-security":       "productGrid",
+    "k-tech":           "ktechGrid",
+    "k-energy":         "kenergyGrid",
+    "k-bio":            "kbioGrid",
+    "k-beauty":         "kbeautyGrid",
+    "k-tourism-assets": "ktourismGrid"
   };
 
   /* Merge into the lexical `P` binding declared in index.html (const P at

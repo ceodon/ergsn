@@ -2133,7 +2133,7 @@ button:focus:not(:focus-visible) { outline: none; }
             <li><a href="#products" onclick="switchSector('k-culture-goods');return true"><span class="ds-name">K-Culture Goods <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">K-pop merch · crafts · fashion</span></a></li>
             <li><a href="#products" onclick="switchSector('k-franchise');return true"><span class="ds-name">K-Franchise <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">F&amp;B · retail · service concepts</span></a></li>
             <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-tourism-assets');return true"><span class="ds-name">K-Tourism Assets <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">MICE · medical tourism · hospitality tech</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-tourism-assets');return true"><span class="ds-name">K-Tourism Assets <span class="ds-tag">Active</span></span><span class="ds-desc">Yangpyeong hanok stays · share ownership</span></a></li>
             <li><a href="#match"><span class="ds-name">AI Partner Match</span><span class="ds-desc">Country + industry → Top-3 matches</span></a></li>
             <li><a href="#calculator"><span class="ds-name">Quote Calculator</span><span class="ds-desc">Instant CIF/FOB estimate</span></a></li>
             <li><a href="export-docs.html"><span class="ds-name">Export Documents AI</span><span class="ds-desc">HS code lookup · duty rates · templates</span></a></li>
@@ -2205,7 +2205,7 @@ button:focus:not(:focus-visible) { outline: none; }
       <li><a href="#products" onclick="switchSector('k-culture-goods');closeMenu()">K-Culture Goods (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-franchise');closeMenu()">K-Franchise (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-smart-living');closeMenu()">K-Smart Living (Sourcing)</a></li>
-      <li><a href="#products" onclick="switchSector('k-tourism-assets');closeMenu()">K-Tourism Assets (Sourcing)</a></li>
+      <li><a href="#products" onclick="switchSector('k-tourism-assets');closeMenu()">K-Tourism Assets (Active · Hanok)</a></li>
       <li><a href="#match" onclick="closeMenu()">AI Partner Match</a></li>
       <li><a href="#calculator" onclick="closeMenu()">Quote Calculator</a></li>
       <li><a href="export-docs.html" onclick="closeMenu()">Export Documents AI</a></li>
@@ -2339,8 +2339,8 @@ button:focus:not(:focus-visible) { outline: none; }
       <button class="sector-tab" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
         K-Smart Living <span class="st-tag">Soon</span>
       </button>
-      <button class="sector-tab" data-sector="k-tourism-assets" onclick="switchSector('k-tourism-assets')">
-        K-Tourism Assets <span class="st-tag">Soon</span>
+      <button class="sector-tab is-active-sector" data-sector="k-tourism-assets" onclick="switchSector('k-tourism-assets')">
+        K-Tourism Assets <span class="st-tag">Active</span>
       </button>
     </div>
 
@@ -2730,6 +2730,90 @@ button:focus:not(:focus-visible) { outline: none; }
 
     <!-- K-Beauty product grid: populated by scripts/products-catalog.js from data/products.json -->
     <div class="product-grid" id="kbeautyGrid" style="display:none"></div>
+
+    <!-- K-Tourism Assets product grid: Yangpyeong Soohyang The Hanok property -->
+    <div class="product-grid" id="ktourismGrid" style="display:none">
+
+      <div class="product-card reveal" style="--i:0" tabindex="0" data-model="hanok-sopunghun" onclick="location.href='stays-sopunghun.html'" onkeydown="if(event.key==='Enter'&&event.target===this)location.href='stays-sopunghun.html'">
+        <div class="card-image"><img src="https://yaimg.yanolja.com/v5/2025/07/28/02/1280/6886e260a8f869.86694506.jpg" alt="Sopunghun hanok unit — 25-pyeong traditional Korean house" loading="lazy" referrerpolicy="no-referrer"></div>
+        <p class="card-tag">Classic Hanok Stay &middot; 25-pyeong</p>
+        <p class="card-model">Sopunghun</p>
+        <p class="card-part">Unit ID: YSH-SPH-25 (3 identical units · Rooms 1 · 2 · 3)</p>
+        <p class="card-mfg">Verified Korean K-Tourism Partner <span class="card-verified">&#10003; Yangpyeong &middot; Gyeonggi-do</span></p>
+        <p class="card-desc">25-pyeong traditional hanok stand-alone unit &mdash; accommodates 4 standard / 6 max. Hinoki cypress room, full kitchen, free WiFi. Annual fractional share ownership available.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Floor Area</p><p class="spec-val">25 pyeong (~83 m²)</p></div>
+          <div><p class="spec-lbl">Capacity</p><p class="spec-val">4 std / 6 max</p></div>
+          <div><p class="spec-lbl">Units</p><p class="spec-val">3 identical</p></div>
+          <div><p class="spec-lbl">Share Program</p><p class="spec-val">Annual share</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta">View Room Details</span>
+          <a class="compare-btn" href="stays-sopunghun.html" onclick="event.stopPropagation()" aria-label="Inquire about Sopunghun share ownership"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Details</a>
+        </div>
+      </div>
+
+      <div class="product-card reveal" style="--i:1" tabindex="0" data-model="hanok-soyojae" onclick="location.href='stays-soyojae.html'" onkeydown="if(event.key==='Enter'&&event.target===this)location.href='stays-soyojae.html'">
+        <span class="card-badge">Premium</span>
+        <div class="card-image"><img src="https://yaimg.yanolja.com/v5/2025/07/28/02/1280/6886e256a43ea5.90910803.jpg" alt="Soyojae hanok unit — 30-pyeong premium traditional Korean house" loading="lazy" referrerpolicy="no-referrer"></div>
+        <p class="card-tag">Premium Hanok Stay &middot; 30-pyeong</p>
+        <p class="card-model">Soyojae</p>
+        <p class="card-part">Unit ID: YSH-SYJ-30 (3 identical units · Rooms 1 · 2 · 3)</p>
+        <p class="card-mfg">Verified Korean K-Tourism Partner <span class="card-verified">&#10003; Yangpyeong &middot; Gyeonggi-do</span></p>
+        <p class="card-desc">30-pyeong premium hanok stand-alone unit &mdash; accommodates 4 standard / 8 max. Hinoki cypress room, full kitchen, free WiFi. Annual fractional share ownership available.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Floor Area</p><p class="spec-val">30 pyeong (~99 m²)</p></div>
+          <div><p class="spec-lbl">Capacity</p><p class="spec-val">4 std / 8 max</p></div>
+          <div><p class="spec-lbl">Units</p><p class="spec-val">3 identical</p></div>
+          <div><p class="spec-lbl">Share Program</p><p class="spec-val">Annual share</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta">View Room Details</span>
+          <a class="compare-btn" href="stays-soyojae.html" onclick="event.stopPropagation()" aria-label="Inquire about Soyojae share ownership"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Details</a>
+        </div>
+      </div>
+
+      <div class="product-card reveal" style="--i:2" tabindex="0" data-model="hanok-gyeonwujae" onclick="location.href='stays-gyeonwujae.html'" onkeydown="if(event.key==='Enter'&&event.target===this)location.href='stays-gyeonwujae.html'">
+        <span class="card-badge">Pet-Friendly</span>
+        <div class="card-image"><img src="https://yaimg.yanolja.com/v5/2025/07/28/02/1280/6886e260bcfa12.49605845.jpg" alt="Gyeonwujae pet-friendly hanok unit — 25-pyeong" loading="lazy" referrerpolicy="no-referrer"></div>
+        <p class="card-tag">Pet-Friendly Hanok &middot; 25-pyeong</p>
+        <p class="card-model">Gyeonwujae</p>
+        <p class="card-part">Unit ID: YSH-GWJ-25P (2 identical units · Rooms 1 · 2)</p>
+        <p class="card-mfg">Verified Korean K-Tourism Partner <span class="card-verified">&#10003; Yangpyeong &middot; Gyeonggi-do</span></p>
+        <p class="card-desc">25-pyeong pet-friendly hanok stand-alone unit &mdash; dogs welcome, 4 standard / 6 max occupancy. Hinoki cypress room, full kitchen, free WiFi. Annual fractional share ownership available.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Floor Area</p><p class="spec-val">25 pyeong (~83 m²)</p></div>
+          <div><p class="spec-lbl">Capacity</p><p class="spec-val">4 std / 6 max</p></div>
+          <div><p class="spec-lbl">Pet Policy</p><p class="spec-val">Dogs welcome</p></div>
+          <div><p class="spec-lbl">Share Program</p><p class="spec-val">Annual share</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta">View Room Details</span>
+          <a class="compare-btn" href="stays-gyeonwujae.html" onclick="event.stopPropagation()" aria-label="Inquire about Gyeonwujae share ownership"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Details</a>
+        </div>
+      </div>
+
+      <div class="product-card reveal" style="--i:3" tabindex="0" data-model="hanok-punggyeonru" onclick="location.href='stays-punggyeonru.html'" onkeydown="if(event.key==='Enter'&&event.target===this)location.href='stays-punggyeonru.html'">
+        <span class="card-badge">Premium Pet-Friendly</span>
+        <div class="card-image"><img src="https://yaimg.yanolja.com/v5/2025/07/28/02/1280/6886e26fb0c268.68044712.jpg" alt="Punggyeonru premium pet-friendly hanok unit — 30-pyeong" loading="lazy" referrerpolicy="no-referrer"></div>
+        <p class="card-tag">Premium Pet-Friendly &middot; 30-pyeong</p>
+        <p class="card-model">Punggyeonru</p>
+        <p class="card-part">Unit ID: YSH-PGR-30P (3 identical units · Rooms 1 · 2 · 3)</p>
+        <p class="card-mfg">Verified Korean K-Tourism Partner <span class="card-verified">&#10003; Yangpyeong &middot; Gyeonggi-do</span></p>
+        <p class="card-desc">30-pyeong premium pet-friendly hanok stand-alone unit &mdash; dogs welcome, 4 standard / 8 max occupancy. Hinoki cypress room, full kitchen, free WiFi. Annual fractional share ownership available.</p>
+        <div class="card-specs">
+          <div><p class="spec-lbl">Floor Area</p><p class="spec-val">30 pyeong (~99 m²)</p></div>
+          <div><p class="spec-lbl">Capacity</p><p class="spec-val">4 std / 8 max</p></div>
+          <div><p class="spec-lbl">Pet Policy</p><p class="spec-val">Dogs welcome</p></div>
+          <div><p class="spec-lbl">Share Program</p><p class="spec-val">Annual share</p></div>
+        </div>
+        <div class="card-foot">
+          <span class="card-cta">View Room Details</span>
+          <a class="compare-btn" href="stays-punggyeonru.html" onclick="event.stopPropagation()" aria-label="Inquire about Punggyeonru share ownership"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Details</a>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -4134,12 +4218,13 @@ const SECTORS = {
     desc: 'IoT appliances, wellness devices, and premium K-lifestyle goods curated for global retail.'
   },
   'k-tourism-assets': {
-    active: false,
-    tag: 'K-Tourism Assets',
-    title: 'MICE, Medical Tourism & Hospitality',
+    active: true,
+    gridId: 'ktourismGrid',
+    tag: 'K-Tourism Assets · Hanok Stays',
+    title: 'Yangpyeong Soohyang The Hanok',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/><circle cx="12" cy="11" r="1.2"/></svg>',
     title2: 'K-Tourism Assets Sector',
-    desc: 'MICE event infrastructure, medical-tourism concierge, hospitality tech, and destination-marketing partnerships — connecting global buyers with Korea’s tourism ecosystem.'
+    desc: 'Verified Korean hospitality assets — traditional hanok pension property in Yangpyeong, Gyeonggi Province. Four building types across 11 rooms, with annual-use fractional share ownership available for corporate retreats, B2B hospitality portfolios, and global investors.'
   },
   'k-energy': {
     active: true,
