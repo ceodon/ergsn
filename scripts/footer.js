@@ -64,10 +64,10 @@
               '<li><a href="index.html#products">K-Energy</a></li>' +
               '<li><a href="index.html#products">K-Bio</a></li>' +
               '<li><a href="index.html#products">K-Beauty</a></li>' +
+              '<li><a href="index.html#products">K-Tourism Assets</a></li>' +
               '<li><a href="index.html#products">K-Culture Goods</a></li>' +
               '<li><a href="index.html#products">K-Franchise</a></li>' +
               '<li><a href="index.html#products">K-Smart Living</a></li>' +
-              '<li><a href="index.html#products">K-Tourism Assets</a></li>' +
               '<li><a href="index.html#match">AI Partner Match</a></li>' +
               '<li><a href="index.html#calculator">Quote Calculator</a></li>' +
               '<li><a href="export-docs.html">Export Documents AI</a></li>' +
