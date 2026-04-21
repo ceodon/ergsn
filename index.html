@@ -3628,6 +3628,11 @@ button:focus:not(:focus-visible) { outline: none; }
               <label class="model-cb"><input type="checkbox" id="mKB14"><span class="model-cb-lbl">DEMED Spicule Peptide</span></label>
               <label class="model-cb"><input type="checkbox" id="mKB15"><span class="model-cb-lbl">DEMED Barrier M8</span></label>
               <label class="model-cb"><input type="checkbox" id="mKB16"><span class="model-cb-lbl">DEMED Ceramid Toner</span></label>
+              <label class="model-cb"><input type="checkbox" id="mHANOKSPH"><span class="model-cb-lbl">Hanok · Sopunghun (25p)</span></label>
+              <label class="model-cb"><input type="checkbox" id="mHANOKSYJ"><span class="model-cb-lbl">Hanok · Soyojae (30p)</span></label>
+              <label class="model-cb"><input type="checkbox" id="mHANOKGWJ"><span class="model-cb-lbl">Hanok · Gyeonwujae (25p pet)</span></label>
+              <label class="model-cb"><input type="checkbox" id="mHANOKPGR"><span class="model-cb-lbl">Hanok · Punggyeonru (30p pet)</span></label>
+              <label class="model-cb"><input type="checkbox" id="mGUJWA"><span class="model-cb-lbl">Annual Share (gujwa bunyang)</span></label>
             </div>
           </div>
           <div class="f-row">
@@ -4473,6 +4478,15 @@ document.addEventListener('DOMContentLoaded', function initPageWidgets(){
       switchSector(sector);
       const el = document.getElementById('products');
       if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    }
+    /* Deep-link from standalone product detail pages:
+       /?rfq=hanok-sopunghun,gujwa-share scrolls to #rfq, opens step 2,
+       and pre-ticks every listed item. Comma-separated ids map through
+       RFQ_ID_MAP, so anything in that registry works. */
+    const rfqParam = params.get('rfq');
+    if (rfqParam && typeof requestQuote === 'function') {
+      const ids = rfqParam.split(',').map(s => s.trim()).filter(Boolean);
+      if (ids.length) setTimeout(() => requestQuote(ids), 120);
     }
   } catch(_) {}
 });
@@ -6950,7 +6964,10 @@ const RFQ_ID_MAP = {
   'demed-vitamin-c-ampoule':'mKB09', 'demed-collagen-ampoule-30ml':'mKB10',
   'demed-collagen-ampoule-7ml':'mKB11', 'demed-hyaluronic-soothing-ampoule':'mKB12',
   'demed-brightening-ampoule':'mKB13', 'demed-spicule-peptide-300':'mKB14',
-  'demed-extra-intense-moisture-cream-m8':'mKB15', 'demed-wonder-ceramid-toner':'mKB16'
+  'demed-extra-intense-moisture-cream-m8':'mKB15', 'demed-wonder-ceramid-toner':'mKB16',
+  'hanok-sopunghun':'mHANOKSPH', 'hanok-soyojae':'mHANOKSYJ',
+  'hanok-gyeonwujae':'mHANOKGWJ', 'hanok-punggyeonru':'mHANOKPGR',
+  'gujwa-share':'mGUJWA'
 };
 const MODEL_LABELS = {
   mDL10X: 'DL-10X', mDL12X: 'DL-12X', mDL16X: 'DL-16X',
@@ -6973,7 +6990,12 @@ const MODEL_LABELS = {
   mKB13: "DEMED Brightening Ampoule",
   mKB14: "DEMED Spicule Peptide 300 Shot",
   mKB15: "DEMED Extra Intense Moisture Cream 50g [M8]",
-  mKB16: "DEMED Wonder Ceramid Toner"
+  mKB16: "DEMED Wonder Ceramid Toner",
+  mHANOKSPH: "Hanok Stay · Sopunghun (25-pyeong classic, Yangpyeong)",
+  mHANOKSYJ: "Hanok Stay · Soyojae (30-pyeong premium, Yangpyeong)",
+  mHANOKGWJ: "Hanok Stay · Gyeonwujae (25-pyeong pet-friendly, Yangpyeong)",
+  mHANOKPGR: "Hanok Stay · Punggyeonru (30-pyeong premium pet-friendly, Yangpyeong)",
+  mGUJWA: "Annual Fractional Share Ownership (gujwa bunyang)"
 };
 
 const PRODUCT_IMAGE_BASE = 'https://ceodon.github.io/ergsn/images/products/';
