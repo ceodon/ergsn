@@ -1023,9 +1023,9 @@ section { scroll-margin-top: var(--nav-h); }
 .about-visual-overlay .label { color: var(--gold-light); }
 .about-visual-caption {
   font-family: var(--fc);
-  font-size: clamp(20px,2.4vw,32px);
+  font-size: clamp(15px,1.7vw,24px);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.25;
   color: var(--white);
   max-width: 640px;
 }
@@ -1236,6 +1236,12 @@ section { scroll-margin-top: var(--nav-h); }
   .hamburger     { display: flex; }
   .nav-right .lang-sel { order: -1; }
   .logo-sub      { display: none; }
+  .about-visual  {
+    margin-left: calc(-1 * clamp(24px,4vw,48px));
+    margin-right: calc(-1 * clamp(24px,4vw,48px));
+    aspect-ratio: 16 / 10;
+    border-radius: 0;
+  }
 }
 @media (max-width: 420px) {
   .hero-stats    { grid-template-columns: 1fr 1fr; }
