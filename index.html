@@ -360,9 +360,9 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .mm-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
 .mm-chip {
-  display: inline-flex; padding: 3px 8px; border-radius: 10px;
+  display: inline-flex; padding: 2px 7px; border-radius: 8px;
   background: #1d1d1d; border: 1px solid var(--border);
-  font-size: 11px; color: var(--tx-mid); text-decoration: none;
+  font-size: 9.5px; font-weight: 500; color: var(--tx-mid); text-decoration: none;
   transition: border-color .15s, color .15s, background .15s;
 }
 .mm-chip:hover { border-color: var(--gold); color: var(--white); background: rgba(52,210,152,.08); }
@@ -1277,8 +1277,9 @@ section { scroll-margin-top: var(--nav-h); }
 }
 .rs-tag.soon { background: rgba(255,255,255,.06); color: var(--steel-lt); }
 .rs-meta { font-size: 11.5px; color: var(--steel); margin-left: auto; font-weight: 500; }
-.rs-count { font-weight: 700; color: var(--steel); }
-.rs-count.has-selection { color: var(--gold); }
+.rs-count { font-weight: 700; color: var(--steel); padding: 2px 9px; border-radius: 10px; transition: background .15s, color .15s; }
+.rs-count.has-selection { color: var(--gold); background: rgba(52,210,152,.14); }
+.rs-count.has-selection::before { content: '\25CF '; font-size: 8px; position: relative; top: -1px; margin-right: 2px; }
 .rs-body { padding: 0 14px 14px; border-top: 1px solid rgba(255,255,255,.04); padding-top: 12px; }
 .rs-sub { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; color: var(--steel); text-transform: uppercase; margin: 0 0 8px; }
 .rs-sub:not(:first-child) { margin-top: 14px; }
@@ -2270,9 +2271,9 @@ button:focus:not(:focus-visible) { outline: none; }
                 </a>
                 <p class="mm-sector-desc">2D → 3D services · 3 offerings</p>
                 <div class="mm-chips">
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-AD</a>
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-VID</a>
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');return true">3D-CINE</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');openModal('kt3dad');return false">3D-AD</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');openModal('kt3dvid');return false">3D-VID</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-tech');openModal('kt3dcine');return false">3D-CINE</a>
                 </div>
               </div>
 
@@ -2283,10 +2284,10 @@ button:focus:not(:focus-visible) { outline: none; }
                 </a>
                 <p class="mm-sector-desc">HYGEN Generator · 4 configurations</p>
                 <div class="mm-chips">
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt A</a>
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt B</a>
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt C</a>
-                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');return true">Opt D</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');openModal('keoa');return false">Opt A</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');openModal('keob');return false">Opt B</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');openModal('keoc');return false">Opt C</a>
+                  <a class="mm-chip" href="#products" onclick="switchSector('k-energy');openModal('keod');return false">Opt D</a>
                 </div>
               </div>
 
@@ -3807,13 +3808,6 @@ button:focus:not(:focus-visible) { outline: none; }
       <div class="rfq-info reveal">
         <span class="label" data-t="rfq_label">Get in Touch</span>
         <h2 class="h-lg" style="margin:.6rem 0 1rem;color:var(--white)" data-t="rfq_title">Request a Quote</h2>
-        <div class="sla-badge reveal" aria-label="24-hour response guarantee">
-          <span class="sla-dot"></span>
-          <div>
-            <p class="sla-title">24-Hour Response SLA</p>
-            <p class="sla-sub">Verified Korean partners reply within 24 hours of RFQ submission, or ERGSN refunds 10% of any paid placement fee tied to that maker for the month.</p>
-          </div>
-        </div>
         <p class="body-lg" style="color:var(--steel-lt)" data-t="rfq_desc">Contact us for CIF Baltimore pricing, lead times, and export documentation. We respond within 1 business day (Seoul time, UTC+9).</p>
         <ul class="rfq-contacts">
           <li><span class="rfq-cl">Tel</span><span class="rfq-cv">+82-10-5288-0006</span></li>
@@ -4830,6 +4824,22 @@ document.addEventListener('DOMContentLoaded', function initPageWidgets(){
         requestQuote(ids);
         expandRfqSectorsForCheckedBoxes();
       }, 120);
+    }
+    /* Deep-link from shared header mega-menu on standalone pages:
+       /?product=kt3dad  opens that specific product modal (and switches
+       to the matching sector so the grid behind is consistent when the
+       modal closes). Used by model-level chips (K-Tech, K-Energy).
+       Hanok chips navigate straight to stays-*.html instead. */
+    const product = params.get('product');
+    if (product && typeof openModal === 'function') {
+      const sec = /^kt3d/.test(product)     ? 'k-tech'
+                : /^keo/.test(product)      ? 'k-energy'
+                : /^dl\d/.test(product)     ? 'k-security'
+                : product === 'rosettaplus' ? 'k-bio'
+                : /^(ddell|demed)/.test(product) ? 'k-beauty'
+                : null;
+      if (sec && typeof switchSector === 'function') switchSector(sec);
+      setTimeout(() => openModal(product), 200);
     }
   } catch(_) {}
 });

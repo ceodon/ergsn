@@ -51,20 +51,83 @@
     {
       title: 'Shop',
       href: 'index.html#products',
+      /* Flat `items` array still drives the MOBILE accordion (hamburger)
+         — mega menu below overrides only the DESKTOP dropdown. */
       items: [
-        { href: 'index.html#products', name: 'K-Security',      tag: 'Active', desc: 'DL Series shredders · in stock' },
-        { href: 'index.html#products', name: 'K-Tech',          tag: 'Active', desc: '2D → 3D stereoscopic conversion' },
-        { href: 'index.html#products', name: 'K-Energy',        tag: 'Active', desc: 'HYGEN Generator · one-shaft multi-gen' },
-        { href: 'index.html#products', name: 'K-Bio',           tag: 'Active', desc: 'Rosetta Plus · HACCP · KFDA' },
-        { href: 'index.html#products', name: 'K-Beauty',        tag: 'Sourcing', tagSoon: true, desc: 'Skincare · cosmetics · devices' },
-        { href: 'index.html#products', name: 'K-Culture Goods', tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },
-        { href: 'index.html#products', name: 'K-Franchise',     tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts' },
-        { href: 'index.html#products', name: 'K-Smart Living',  tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle' },
-        { href: 'index.html#products', name: 'K-Tourism Assets',tag: 'Sourcing', tagSoon: true, desc: 'MICE · medical tourism · hospitality tech' },
+        { href: 'index.html?sector=k-security#products',       name: 'K-Security',       tag: 'Active', desc: 'DL Series shredders · 6 models' },
+        { href: 'index.html?sector=k-tech#products',           name: 'K-Tech',           tag: 'Active', desc: '2D → 3D stereoscopic conversion' },
+        { href: 'index.html?sector=k-energy#products',         name: 'K-Energy',         tag: 'Active', desc: 'HYGEN Generator · 4 configurations' },
+        { href: 'index.html?sector=k-bio#products',            name: 'K-Bio',            tag: 'Active', desc: 'Rosetta Plus · HACCP · KFDA' },
+        { href: 'index.html?sector=k-beauty#products',         name: 'K-Beauty',         tag: 'Active', desc: '16 SKUs · 2 makers · MOQ 1,000' },
+        { href: 'index.html?sector=k-tourism-assets#products', name: 'K-Tourism Assets', tag: 'Active', desc: 'Yangpyeong hanok · share ownership' },
+        { href: 'index.html?sector=k-culture-goods#products',  name: 'K-Culture Goods',  tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },
+        { href: 'index.html?sector=k-franchise#products',      name: 'K-Franchise',      tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts' },
+        { href: 'index.html?sector=k-smart-living#products',   name: 'K-Smart Living',   tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle' },
         { href: 'index.html#match',    name: 'AI Partner Match',    desc: 'Country + industry → Top-3 matches' },
         { href: 'index.html#calculator', name: 'Quote Calculator',  desc: 'Instant CIF/FOB estimate' },
         { href: 'export-docs.html',    name: 'Export Documents AI', desc: 'HS code lookup · duty rates · templates' }
-      ]
+      ],
+      mega: {
+        active: [
+          { name: 'K-Security', tag: 'Active', desc: 'DL Series shredders · 6 models',
+            href: 'index.html?sector=k-security#products',
+            chips: [
+              { label: 'Standard Cut', href: 'index.html?sector=k-security#products' },
+              { label: 'Deep Cut',     href: 'index.html?sector=k-security#products' }
+            ] },
+          { name: 'K-Tech', tag: 'Active', desc: '2D → 3D services · 3 offerings',
+            href: 'index.html?sector=k-tech#products',
+            chips: [
+              { label: '3D-AD',   href: 'index.html?product=kt3dad#products' },
+              { label: '3D-VID',  href: 'index.html?product=kt3dvid#products' },
+              { label: '3D-CINE', href: 'index.html?product=kt3dcine#products' }
+            ] },
+          { name: 'K-Energy', tag: 'Active', desc: 'HYGEN Generator · 4 configurations',
+            href: 'index.html?sector=k-energy#products',
+            chips: [
+              { label: 'Opt A', href: 'index.html?product=keoa#products' },
+              { label: 'Opt B', href: 'index.html?product=keob#products' },
+              { label: 'Opt C', href: 'index.html?product=keoc#products' },
+              { label: 'Opt D', href: 'index.html?product=keod#products' }
+            ] },
+          { name: 'K-Bio', tag: 'Active', desc: 'Rosetta Plus · HACCP · KFDA',
+            href: 'index.html?sector=k-bio#products' },
+          { name: 'K-Beauty', tag: 'Active', desc: '16 SKUs · 2 makers · MOQ 1,000',
+            href: 'index.html?sector=k-beauty#products',
+            chips: [
+              { label: "DD'ELL", href: 'index.html?sector=k-beauty#products' },
+              { label: 'DEMED',  href: 'index.html?sector=k-beauty#products' }
+            ] },
+          { name: 'K-Tourism Assets', tag: 'Active', desc: 'Yangpyeong Hanok · 4 types · share ownership',
+            href: 'index.html?sector=k-tourism-assets#products',
+            chips: [
+              { label: 'Sopunghun',   href: 'stays-sopunghun.html' },
+              { label: 'Soyojae',     href: 'stays-soyojae.html' },
+              { label: 'Gyeonwujae',  href: 'stays-gyeonwujae.html' },
+              { label: 'Punggyeonru', href: 'stays-punggyeonru.html' }
+            ] }
+        ],
+        sourcing: [
+          { name: 'K-Culture Goods', tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion',
+            href: 'index.html?sector=k-culture-goods#products' },
+          { name: 'K-Franchise',     tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts',
+            href: 'index.html?sector=k-franchise#products' },
+          { name: 'K-Smart Living',  tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle',
+            href: 'index.html?sector=k-smart-living#products' }
+        ],
+        tools: [
+          { name: 'AI Partner Match',    desc: 'Country + industry → Top-3', href: 'index.html#match' },
+          { name: 'Quote Calculator',    desc: 'Instant CIF/FOB estimate',    href: 'index.html#calculator' },
+          { name: 'Export Documents AI', desc: 'HS codes · duty · templates', href: 'export-docs.html' }
+        ],
+        featured: {
+          title: 'Rosetta Plus',
+          desc:  'HFF · HACCP · KFDA · exporting to MX · YE · IN',
+          img:     'https://ceodon.github.io/ergsn/images/products/rosseta-plus.jpg',
+          imgWebp: 'https://ceodon.github.io/ergsn/images/products/rosseta-plus.webp',
+          href:    'index.html?sector=k-bio#products'
+        }
+      }
     },
     {
       title: 'For Buyers',
@@ -153,6 +216,43 @@
     '#ehNav .eh-nav-dropmenu .eh-ds-desc{font-size:11px;color:#6b7685;font-weight:400}',
     '#ehNav .eh-nav-dropmenu .eh-ds-divider{height:1px;background:rgba(255,255,255,.06);margin:6px 12px;padding:0;list-style:none}',
     '#ehNav .eh-nav-dropmenu .eh-kr-chip{display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid #34d298;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#34d298;vertical-align:1px}',
+    /* Mega menu — Shop dropdown only (eh-nav-dropdown-mega marker).
+       Mirrors index.html inline mega: 2-col grid, sub-category chips,
+       tools + featured card on the right. Dropmenu `::before` hover
+       bridge is reused via the .eh-megamenu class. */
+    '#ehNav .eh-nav-dropdown-mega{position:relative}',
+    '#ehNav .eh-nav-dropdown-mega > a{padding:8px 0;display:inline-block}',
+    '#ehNav .eh-nav-dropdown-mega > a::after{content:" \\25BE";font-size:9px;opacity:.6}',
+    '#ehNav .eh-megamenu{position:absolute;top:100%;left:0;width:min(680px,calc(100vw - 32px));background:#111418;border:1px solid #292929;border-radius:10px;padding:1.25rem;gap:1.25rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s,visibility .18s,transform .18s;transform:translateY(4px);box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:950;display:grid;grid-template-columns:1.7fr 1fr}',
+    '#ehNav .eh-megamenu::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}',
+    '#ehNav .eh-nav-dropdown-mega:hover .eh-megamenu,#ehNav .eh-nav-dropdown-mega:focus-within .eh-megamenu{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}',
+    '#ehNav .eh-mm-col{min-width:0}',
+    '#ehNav .eh-mm-section-title{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:#34d298;text-transform:uppercase;margin:0 0 .8rem}',
+    '#ehNav .eh-mm-col-main > .eh-mm-section-title:not(:first-child){margin-top:1rem}',
+    '#ehNav .eh-mm-sector{margin-bottom:.75rem}',
+    '#ehNav .eh-mm-sector:last-child{margin-bottom:0}',
+    '#ehNav .eh-mm-sector-head{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;padding:2px 0;transition:color .15s}',
+    '#ehNav .eh-mm-sector-head:hover{color:#34d298;background:transparent}',
+    '#ehNav .eh-mm-sector-name{font-size:13.5px;font-weight:600}',
+    '#ehNav .eh-mm-sector-tag{font-size:9px;padding:2px 6px;border-radius:8px;background:rgba(52,210,152,.15);color:#34d298;letter-spacing:.04em;text-transform:uppercase;font-weight:700}',
+    '#ehNav .eh-mm-sector-tag.eh-soon{background:rgba(255,255,255,.06);color:#a7a7a7}',
+    '#ehNav .eh-mm-sector-desc{font-size:11px;color:#6b7685;margin:2px 0 4px;line-height:1.45}',
+    '#ehNav .eh-mm-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}',
+    '#ehNav .eh-mm-chip{display:inline-flex;padding:2px 7px;border-radius:8px;background:#1d1d1d;border:1px solid #292929;font-size:9.5px;font-weight:500;color:#cfcfcf;text-decoration:none;transition:border-color .15s,color .15s,background .15s}',
+    '#ehNav .eh-mm-chip:hover{border-color:#34d298;color:#fff;background:rgba(52,210,152,.08)}',
+    '#ehNav .eh-mm-divider{border:0;border-top:1px solid #292929;margin:.9rem 0}',
+    '#ehNav .eh-mm-tool-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;text-decoration:none;color:inherit}',
+    '#ehNav .eh-mm-tool-item:hover .eh-mm-tool-name{color:#34d298}',
+    '#ehNav .eh-mm-tool-icon{color:#34d298;font-size:12px;flex-shrink:0;margin-top:3px}',
+    '#ehNav .eh-mm-tool-name{display:block;font-size:12.5px;font-weight:600;color:#fff}',
+    '#ehNav .eh-mm-tool-desc{display:block;font-size:10.5px;color:#6b7685;margin-top:1px;line-height:1.4}',
+    '#ehNav .eh-mm-featured-card{display:block;padding:.65rem;background:linear-gradient(160deg,#141414 0%,#0f0f0f 100%);border:1px solid #292929;border-radius:8px;text-decoration:none;transition:border-color .15s}',
+    '#ehNav .eh-mm-featured-card:hover{border-color:#34d298}',
+    '#ehNav .eh-mm-featured-img{width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:6px;margin-bottom:8px;background:#0a0a0a}',
+    '#ehNav .eh-mm-featured-img img{width:100%;height:100%;object-fit:cover;display:block}',
+    '#ehNav .eh-mm-featured-title{display:block;font-size:12.5px;font-weight:700;color:#fff;margin-bottom:2px}',
+    '#ehNav .eh-mm-featured-desc{display:block;font-size:10.5px;color:#6b7685;line-height:1.45}',
+    '@media (max-width:680px){#ehNav .eh-megamenu{display:none !important}}',
     /* Language select — mirrors index.html's `.lang-sel` exactly: pill-shaped
        translucent control with `appearance:none` and no custom arrow glyph.
        !important on width/margin/padding/height/background defends against
@@ -267,8 +367,79 @@
     );
   }
 
+  function buildMegaSector(sec) {
+    var tagCls = sec.tagSoon ? 'eh-mm-sector-tag eh-soon' : 'eh-mm-sector-tag';
+    var tagHtml = sec.tag ? '<span class="' + tagCls + '">' + escapeHTML(sec.tag) + '</span>' : '';
+    var chipsHtml = '';
+    if (sec.chips && sec.chips.length) {
+      chipsHtml = '<div class="eh-mm-chips">' + sec.chips.map(function (c) {
+        return '<a class="eh-mm-chip" href="' + escapeHTML(c.href) + '">' + escapeHTML(c.label) + '</a>';
+      }).join('') + '</div>';
+    }
+    return (
+      '<div class="eh-mm-sector">' +
+        '<a class="eh-mm-sector-head" href="' + escapeHTML(sec.href) + '">' +
+          '<span class="eh-mm-sector-name">' + escapeHTML(sec.name) + '</span>' +
+          tagHtml +
+        '</a>' +
+        (sec.desc ? '<p class="eh-mm-sector-desc">' + escapeHTML(sec.desc) + '</p>' : '') +
+        chipsHtml +
+      '</div>'
+    );
+  }
+
+  function buildDesktopMega(col) {
+    var m = col.mega;
+    var activeHtml   = (m.active   || []).map(buildMegaSector).join('');
+    var sourcingHtml = (m.sourcing || []).map(buildMegaSector).join('');
+    var toolsHtml = (m.tools || []).map(function (t) {
+      return (
+        '<a class="eh-mm-tool-item" href="' + escapeHTML(t.href) + '">' +
+          '<span class="eh-mm-tool-icon">◆</span>' +
+          '<span>' +
+            '<span class="eh-mm-tool-name">' + escapeHTML(t.name) + '</span>' +
+            '<span class="eh-mm-tool-desc">' + escapeHTML(t.desc) + '</span>' +
+          '</span>' +
+        '</a>'
+      );
+    }).join('');
+    var featHtml = '';
+    if (m.featured) {
+      var f = m.featured;
+      var picSrc = f.imgWebp ? ('<source srcset="' + escapeHTML(f.imgWebp) + '" type="image/webp">') : '';
+      featHtml =
+        '<hr class="eh-mm-divider">' +
+        '<p class="eh-mm-section-title">Featured</p>' +
+        '<a class="eh-mm-featured-card" href="' + escapeHTML(f.href) + '">' +
+          '<div class="eh-mm-featured-img"><picture>' + picSrc +
+            '<img src="' + escapeHTML(f.img) + '" alt="' + escapeHTML(f.title) + '" loading="lazy">' +
+          '</picture></div>' +
+          '<span class="eh-mm-featured-title">' + escapeHTML(f.title) + '</span>' +
+          '<span class="eh-mm-featured-desc">' + escapeHTML(f.desc) + '</span>' +
+        '</a>';
+    }
+    return (
+      '<li class="eh-nav-dropdown-mega">' +
+        '<a href="' + escapeHTML(col.href) + '">' + escapeHTML(col.title) + '</a>' +
+        '<div class="eh-megamenu" role="menu">' +
+          '<div class="eh-mm-col eh-mm-col-main">' +
+            '<p class="eh-mm-section-title">Active Sectors</p>' +
+            activeHtml +
+            (sourcingHtml ? '<hr class="eh-mm-divider"><p class="eh-mm-section-title">Sourcing · 2026</p>' + sourcingHtml : '') +
+          '</div>' +
+          '<div class="eh-mm-col eh-mm-col-tools">' +
+            '<p class="eh-mm-section-title">Tools</p>' +
+            toolsHtml +
+            featHtml +
+          '</div>' +
+        '</div>' +
+      '</li>'
+    );
+  }
+
   function buildDesktopNav() {
     var dropdowns = MENU.map(function (col) {
+      if (col.mega) return buildDesktopMega(col);
       var items = col.items.map(buildDesktopItem).join('');
       return (
         '<li class="eh-nav-dropdown">' +
