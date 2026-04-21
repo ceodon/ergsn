@@ -60,6 +60,7 @@
         { href: 'index.html#products', name: 'K-Culture Goods', tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },
         { href: 'index.html#products', name: 'K-Franchise',     tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts' },
         { href: 'index.html#products', name: 'K-Smart Living',  tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle' },
+        { href: 'index.html#products', name: 'K-Tourism Assets',tag: 'Sourcing', tagSoon: true, desc: 'MICE · medical tourism · hospitality tech' },
         { href: 'index.html#match',    name: 'AI Partner Match',    desc: 'Country + industry → Top-3 matches' },
         { href: 'index.html#calculator', name: 'Quote Calculator',  desc: 'Instant CIF/FOB estimate' },
         { href: 'export-docs.html',    name: 'Export Documents AI', desc: 'HS code lookup · duty rates · templates' }

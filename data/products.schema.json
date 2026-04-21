@@ -20,7 +20,8 @@
         "k-beauty",
         "k-culture-goods",
         "k-franchise",
-        "k-smart-living"
+        "k-smart-living",
+        "k-tourism-assets"
       ],
       "description": "Sector the product is listed under. Controls which grid renders the card."
     },

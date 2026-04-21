@@ -92,14 +92,15 @@ function toMatchEntry(p) {
 
 function sectorLabel(key) {
   return ({
-    'k-security':      'K-Security',
-    'k-tech':          'K-Tech',
-    'k-energy':        'K-Energy',
-    'k-bio':           'K-Bio',
-    'k-beauty':        'K-Beauty',
-    'k-culture-goods': 'K-Culture Goods',
-    'k-franchise':     'K-Franchise',
-    'k-smart-living':  'K-Smart Living'
+    'k-security':        'K-Security',
+    'k-tech':            'K-Tech',
+    'k-energy':          'K-Energy',
+    'k-bio':             'K-Bio',
+    'k-beauty':          'K-Beauty',
+    'k-culture-goods':   'K-Culture Goods',
+    'k-franchise':       'K-Franchise',
+    'k-smart-living':    'K-Smart Living',
+    'k-tourism-assets':  'K-Tourism Assets'
   })[key] || key;
 }
 
