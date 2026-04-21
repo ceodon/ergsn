@@ -115,6 +115,10 @@
     /* Push host page content below the 56px fixed bar. Using !important here
        because some standalone pages set body { margin: 0 } inline. */
     'body{padding-top:56px !important}',
+    /* Prevent stray horizontal overflow on mobile — clamp the document to
+       viewport width so accidental wide children (tables, pre, grids with
+       hard widths) don't leave a right-side gap when the browser auto-scales. */
+    'html,body{overflow-x:hidden !important;max-width:100vw}',
     '#ehNav .eh-inner{max-width:1240px;margin:0 auto;height:100%;padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2vw,24px)}',
     /* Logo — byte-for-byte identical to index.html's .logo-mark: system
        font, silver gradient fill, green gradient on the initial "E".
