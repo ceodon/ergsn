@@ -1,14 +1,16 @@
 // ERGSN Service Worker — offline-first cache for slow/intermittent networks
-const CACHE = 'ergsn-v1';
+// Cache version bumped to v2 with the ergsn.net custom-domain migration;
+// old caches built under /ergsn/ are evicted on activate.
+const CACHE = 'ergsn-v2';
 const CORE = [
-  '/ergsn/',
-  '/ergsn/index.html',
-  '/ergsn/translations.js',
-  '/ergsn/favicon.svg',
-  '/ergsn/privacy.html',
-  '/ergsn/terms.html',
-  '/ergsn/partners-kr.html',
-  '/ergsn/tracker.html'
+  '/',
+  '/index.html',
+  '/translations.js',
+  '/favicon.svg',
+  '/privacy.html',
+  '/terms.html',
+  '/partners-kr.html',
+  '/tracker.html'
 ];
 
 self.addEventListener('install', (e) => {
@@ -32,7 +34,7 @@ self.addEventListener('fetch', (e) => {
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return r; })
-        .catch(() => caches.match(req).then(r => r || caches.match('/ergsn/')))
+        .catch(() => caches.match(req).then(r => r || caches.match('/')))
     );
     return;
   }
