@@ -11,7 +11,7 @@
   :root { --gold:#34d298; --white:#fff; --tx-mid:#a5a6a7; --tx-lt:#8a8b8d; --border:#242424; }
   * { box-sizing: border-box; }
   body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:Inter,system-ui,sans-serif; line-height:1.6; min-height:100vh; }
-  .wrap { max-width:640px; margin:0 auto; padding:3rem 1.4rem 4rem; }
+  .wrap { max-width:640px; margin:0 auto; padding:3rem clamp(16px,4vw,48px) 4rem; }
   h1 { color:var(--white); font-size:1.8rem; margin:0 0 .3rem; letter-spacing:-.01em; }
   .sub { color:var(--tx-lt); font-size:13px; margin-bottom:2rem; }
   .back { display:inline-block; margin-bottom:1.4rem; color:var(--gold); text-decoration:none; font-size:13px; }

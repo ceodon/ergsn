@@ -21,7 +21,7 @@
   body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.6; }
   a { color: var(--gold); text-decoration: none; }
   a:hover { text-decoration: underline; }
-  .wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 2rem clamp(16px,4vw,48px) 4rem; }
   .preview-banner { background: linear-gradient(90deg, #181209 0%, #12110d 100%); border: 1px solid var(--gold); border-radius: 10px; padding: 12px 18px; margin-bottom: 1.6rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; }
   .preview-banner strong { color: var(--gold); font-weight: 700; }
   .preview-banner a { margin-left: auto; padding: 8px 14px; background: var(--gold); color: #0a0a0a; border-radius: 8px; font-weight: 700; font-size: 12px; }

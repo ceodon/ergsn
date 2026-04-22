@@ -548,7 +548,7 @@ section { scroll-margin-top: var(--nav-h); }
   position: relative; z-index: 3;
 }
 .trust-inner {
-  padding: .9rem 0;
+  padding: .9rem clamp(16px,4vw,48px);
   display: flex; align-items: center; gap: clamp(1rem,3vw,2.5rem);
   flex-wrap: wrap; justify-content: center;
 }
@@ -564,7 +564,7 @@ section { scroll-margin-top: var(--nav-h); }
    PRODUCTS
 ════════════════════════════════════════ */
 #products { background: var(--off); }
-.products-inner { padding: clamp(3.5rem,7vh,6rem) 0; }
+.products-inner { padding: clamp(3.5rem,7vh,6rem) clamp(16px,4vw,48px); }
 .section-head {
   display: flex; justify-content: space-between; align-items: flex-end;
   margin-bottom: clamp(1.5rem,3vw,3rem); flex-wrap: wrap; gap: 1rem;
@@ -1012,7 +1012,7 @@ section { scroll-margin-top: var(--nav-h); }
    ABOUT
 ════════════════════════════════════════ */
 #about { background: #151515; }
-.about-inner { padding: clamp(3.5rem,7vh,6rem) 0; }
+.about-inner { padding: clamp(3.5rem,7vh,6rem) clamp(16px,4vw,48px); }
 .about-visual {
   position: relative;
   border-radius: var(--radius);
@@ -1102,7 +1102,7 @@ section { scroll-margin-top: var(--nav-h); }
    COMPLIANCE
 ════════════════════════════════════════ */
 #compliance { background: var(--off); }
-.compliance-inner { padding: clamp(3.5rem,7vh,6rem) 0; }
+.compliance-inner { padding: clamp(3.5rem,7vh,6rem) clamp(16px,4vw,48px); }
 .comp-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%,220px),1fr));
@@ -1129,7 +1129,7 @@ section { scroll-margin-top: var(--nav-h); }
    RFQ
 ════════════════════════════════════════ */
 #rfq { background: var(--navy); }
-.rfq-inner { padding: clamp(3.5rem,7vh,6rem) 0; }
+.rfq-inner { padding: clamp(3.5rem,7vh,6rem) clamp(16px,4vw,48px); }
 .rfq-grid {
   display: grid; grid-template-columns: 1fr 1.55fr;
   gap: clamp(2rem,5vw,5rem); align-items: start;
@@ -1353,7 +1353,7 @@ section { scroll-margin-top: var(--nav-h); }
    VERIFICATION PROCESS
 ════════════════════════════════════════ */
 .verify-section { background: #151515; }
-.verify-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
+.verify-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); text-align: center; }
 .verify-grid {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
   margin-top: 2.5rem;
@@ -1395,7 +1395,7 @@ section { scroll-margin-top: var(--nav-h); }
    TRADE ROUTE MAP
 ════════════════════════════════════════ */
 .map-section { background: #0a0a0a; overflow: hidden; }
-.map-inner { padding: clamp(3rem,6vh,5rem) 0; text-align: center; }
+.map-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); text-align: center; }
 /* ── Airline-style world map ── */
 .route-map { width: 100%; max-width: 1100px; height: auto; display: block; margin: 2rem auto 0; }
 .continents-layer use, .continents-layer path {
@@ -1580,7 +1580,7 @@ section { scroll-margin-top: var(--nav-h); }
 
 /* QUOTE CALCULATOR */
 .calc-section { background: #0a0a0a; }
-.calc-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.calc-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); }
 .calc-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: clamp(2rem,4vw,4rem); align-items: start;
@@ -1757,7 +1757,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── Newsletter section ─────────────── */
 .news-section { background: linear-gradient(180deg, #0a0a0a 0%, #141414 100%); }
-.news-inner { padding: clamp(2.5rem,5vh,4rem) 0; text-align: center; }
+.news-inner { padding: clamp(2.5rem,5vh,4rem) clamp(16px,4vw,48px); text-align: center; }
 .news-inner h2 { margin: .4rem 0 .8rem; }
 .news-inner p { color: var(--tx-mid); max-width: 540px; margin: 0 auto 1.6rem; font-size: 14px; }
 .news-form { display: flex; gap: 8px; max-width: 440px; margin: 0 auto; flex-wrap: wrap; }
@@ -1775,7 +1775,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── Case studies ──────────────────── */
 .cases-section { background: #0a0a0a; }
-.cases-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.cases-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); }
 .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(1.2rem,2vw,1.8rem); margin-top: 2rem; }
 .case-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem; }
 .case-card .c-flag { font-size: 28px; line-height: 1; margin-bottom: .6rem; }
@@ -1965,7 +1965,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── Trade Tools (Tier 3) ─────────────── */
 .tools-section { background: #0f0f0f; }
-.tools-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.tools-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); }
 .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem,2vw,1.6rem); margin-top: 2rem; }
 @media (max-width: 900px){ .tools-grid { grid-template-columns: 1fr; } }
 .tool-card { background: #141414; border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; display: flex; flex-direction: column; gap: .8rem; }
@@ -1981,7 +1981,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── Q&A Wall (Tier 2) ─────────────── */
 .qa-section { background: #0a0a0a; }
-.qa-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.qa-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); }
 .qa-wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(1.5rem,3vw,2.5rem); margin-top: 2rem; }
 @media (max-width: 900px){ .qa-wrap { grid-template-columns: 1fr; } }
 .qa-list { display: flex; flex-direction: column; gap: 10px; max-height: 440px; overflow-y: auto; padding-right: 4px; }
@@ -1999,7 +1999,7 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* ── AI Curation / Partner Match-making ── */
 .match-section { background: radial-gradient(ellipse at top, #131616 0%, #0a0a0a 70%); }
-.match-inner { padding: clamp(3rem,6vh,5rem) 0; }
+.match-inner { padding: clamp(3rem,6vh,5rem) clamp(16px,4vw,48px); }
 .match-wrap {
   display: grid; grid-template-columns: 1.1fr 1fr;
   gap: clamp(2rem,4vw,3.5rem); align-items: start; margin-top: 2rem;
