@@ -951,13 +951,16 @@ section { scroll-margin-top: var(--nav-h); }
 .modal-image-row {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: clamp(1.5rem,3vw,2.5rem);
-  display: flex; align-items: center; justify-content: center;
-  min-height: clamp(220px, 30vh, 340px);
+  padding: 0;
+  display: block;
+  width: 100%;
 }
 .modal-image-row img {
-  max-width: 100%; max-height: clamp(200px, 28vh, 320px);
-  object-fit: contain;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
 }
 .modal-image-row.modal-svg-row { padding: 0; background: #ffffff; }
 .modal-image-row.modal-svg-row svg { width: 100%; max-width: 560px; height: auto; display: block; }
