@@ -367,6 +367,21 @@
       document.body.insertBefore(nodes[i], document.body.firstChild);
     }
 
+    /* Route the brand logo back to the originating sector on standalone
+       product detail pages, so users land in the right sector tab instead
+       of the top of index.html. Currently only K-Tourism Assets has
+       stays-*.html detail pages. */
+    try {
+      var path = (location.pathname || '').toLowerCase();
+      var file = path.substring(path.lastIndexOf('/') + 1);
+      var sectorReturn = null;
+      if (/^stays-[a-z0-9-]+\.html$/.test(file)) sectorReturn = 'k-tourism-assets';
+      if (sectorReturn) {
+        var logo = document.querySelector('#ehNav .eh-logo');
+        if (logo) logo.setAttribute('href', 'index.html?sector=' + sectorReturn + '#products');
+      }
+    } catch (_) {}
+
     /* Append only the Top FAB — Chat FAB comes from scripts/chat.js */
     var fabWrap = document.createElement('div');
     fabWrap.innerHTML = TO_TOP_MARKUP;
