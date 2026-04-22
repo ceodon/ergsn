@@ -3,5 +3,6 @@ Allow: /
 Disallow: /tracker.html
 Disallow: /invoice-template.html
 Disallow: /verified-certificate.html
+Disallow: /docs/
 
 Sitemap: https://ergsn.net/sitemap.xml
