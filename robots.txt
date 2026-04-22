@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /tracker.html
+Disallow: /invoice-template.html
+Disallow: /verified-certificate.html
+
+Sitemap: https://ergsn.net/sitemap.xml
