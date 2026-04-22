@@ -7,7 +7,9 @@
  * 3. Settings → Variables → add secrets (all values are SECRETS — never commit real values):
  *      TG_BOT       = <telegram-bot-token from @BotFather>
  *      TG_CHAT      = <telegram-chat-id>
- *      ALLOW_ORIGIN = https://ceodon.github.io
+ *      ALLOW_ORIGIN = https://ergsn.net,https://ceodon.github.io
+ *                     (comma-separated list; during custom-domain migration
+ *                      keep both values so users on either host can post)
  * 4. Deploy → copy the workers.dev URL (e.g. https://ergsn-tg.<sub>.workers.dev)
  * 5. In index.html set:   const TG_PROXY_URL = 'https://ergsn-tg.<sub>.workers.dev';
  *
@@ -21,28 +23,37 @@
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
-    const allow = env.ALLOW_ORIGIN || '*';
+    const allowRaw = env.ALLOW_ORIGIN || '*';
+    const allowList = allowRaw.split(',').map(s => s.trim()).filter(Boolean);
+    const wildcard = allowList.includes('*');
+    const matched = wildcard ? '*' : (allowList.includes(origin) ? origin : '');
     const cors = {
-      'Access-Control-Allow-Origin': allow === '*' ? '*' : (origin === allow ? allow : ''),
+      'Access-Control-Allow-Origin': matched,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400'
+      'Access-Control-Max-Age': '86400',
+      'Vary': 'Origin'
     };
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
     if (request.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: cors });
-    if (allow !== '*' && origin !== allow) {
+    if (!matched) {
       return new Response(JSON.stringify({ ok: false, error: 'origin not allowed' }), { status: 403, headers: { ...cors, 'Content-Type': 'application/json' } });
     }
 
     let body;
     try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers: cors }); }
 
-    // Only allow photo URLs hosted on our own GitHub Pages product image path.
+    // Only allow photo URLs hosted on our own product image paths.
     // Prevents abuse of the worker as an image relay for arbitrary third-party content.
-    const PHOTO_ALLOW_PREFIX = 'https://ceodon.github.io/ergsn/images/';
+    // Kept as an array so the custom domain (ergsn.net) and the legacy
+    // GitHub Pages URL (ceodon.github.io/ergsn) both work during migration.
+    const PHOTO_ALLOW_PREFIXES = [
+      'https://ergsn.net/images/',
+      'https://ceodon.github.io/ergsn/images/'
+    ];
     const rawPhotos = Array.isArray(body.photos) ? body.photos : [];
-    if (rawPhotos.some(u => typeof u !== 'string' || !u.startsWith(PHOTO_ALLOW_PREFIX))) {
-      return new Response(JSON.stringify({ ok: false, error: 'photos must start with ' + PHOTO_ALLOW_PREFIX }), { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } });
+    if (rawPhotos.some(u => typeof u !== 'string' || !PHOTO_ALLOW_PREFIXES.some(p => u.startsWith(p)))) {
+      return new Response(JSON.stringify({ ok: false, error: 'photos must start with one of: ' + PHOTO_ALLOW_PREFIXES.join(', ') }), { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } });
     }
     const photos = rawPhotos.slice(0, 10);
     const text = String(body.text || '').slice(0, 3800);

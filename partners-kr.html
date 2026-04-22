@@ -9,7 +9,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#0f0f0f">
 <!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
-<script defer data-domain="ceodon.github.io/ergsn" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
+<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 <style>
   :root {
     --gold: #34d298; --gold-light: #00ffa1;
@@ -515,7 +515,7 @@ function submitPartnerForm(e) {
     _template: 'table',
     _captcha: 'true',
     ...fields,
-    Source: 'ceodon.github.io/ergsn/partners-kr'
+    Source: 'ergsn.net/partners-kr'
   };
   const hasProduct = fields.제품_모델명 !== '-';
   const tgText = [
@@ -539,7 +539,7 @@ function submitPartnerForm(e) {
     ] : []),
     '',
     `*메시지:* ${fields.메시지}`, '',
-    '_partners-kr · ceodon.github.io/ergsn_'
+    '_partners-kr · ergsn.net_'
   ].join('\n');
 
   Promise.allSettled([

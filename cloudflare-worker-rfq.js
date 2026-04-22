@@ -11,7 +11,8 @@
  *      D1 database:   ergsn-rfq
  * 4. Settings → Variables & Secrets:
  *      ADMIN_KEY    = (any random 32+ char string — keep private)
- *      ALLOW_ORIGIN = https://ceodon.github.io
+ *      ALLOW_ORIGIN = https://ergsn.net,https://ceodon.github.io
+ *                     (comma-separated list; keep both during domain migration)
  *
  * Routes:
  *   GET  /debug                          → binding diagnostics
@@ -21,13 +22,18 @@
  */
 const STAGES = ['received', 'reviewed', 'quoted', 'in_production', 'shipped', 'closed'];
 
-function cors(origin, allow) {
-  const ok = allow === '*' || origin === allow;
+function parseAllow(raw) {
+  return (raw || '*').split(',').map(s => s.trim()).filter(Boolean);
+}
+function cors(origin, allowList) {
+  const wildcard = allowList.includes('*');
+  const matched = wildcard ? '*' : (allowList.includes(origin) ? origin : '');
   return {
-    'Access-Control-Allow-Origin': ok ? (allow === '*' ? '*' : allow) : '',
+    'Access-Control-Allow-Origin': matched,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
-    'Access-Control-Max-Age': '86400'
+    'Access-Control-Max-Age': '86400',
+    'Vary': 'Origin'
   };
 }
 function genId() {
@@ -49,8 +55,9 @@ async function ensureSchema(db) {
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
-    const allow = env.ALLOW_ORIGIN || '*';
-    const headers = cors(origin, allow);
+    const allowList = parseAllow(env.ALLOW_ORIGIN);
+    const matched = allowList.includes('*') ? '*' : (allowList.includes(origin) ? origin : '');
+    const headers = cors(origin, allowList);
     if (request.method === 'OPTIONS') return new Response(null, { headers });
 
     const url = new URL(request.url);
@@ -66,7 +73,7 @@ export default {
 
     // POST /create — publicly accessible from the site
     if (request.method === 'POST' && path.endsWith('/create')) {
-      if (allow !== '*' && origin !== allow) {
+      if (!matched) {
         return new Response(JSON.stringify({ ok: false, error: 'origin not allowed' }), { status: 403, headers: { ...headers, 'Content-Type': 'application/json' } });
       }
       let body;

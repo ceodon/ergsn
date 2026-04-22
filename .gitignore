@@ -11,3 +11,7 @@ images/raw/*
 images/raw/processed/
 # Third-party maker contact details — local-only, never publish without explicit approval
 data/maker-contacts.json
+# Secrets — API tokens, deploy keys, etc. Never commit.
+.env
+.env.*
+!.env.example

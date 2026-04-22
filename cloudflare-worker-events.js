@@ -9,7 +9,8 @@
  *      Variable name: EVENTS
  *      KV namespace:  ergsn-events
  *    Settings → Variables & Secrets:
- *      ALLOW_ORIGIN = https://ceodon.github.io
+ *      ALLOW_ORIGIN = https://ergsn.net,https://ceodon.github.io
+ *                     (comma-separated list; keep both during domain migration)
  * 5. In index.html, set EVENTS_URL = the Worker URL.
  *
  * Routes:
@@ -19,21 +20,27 @@
 const MAX_EVENTS = 50;
 const KEY = 'ticker';
 
-function cors(origin, allow) {
-  const ok = allow === '*' || origin === allow;
+function parseAllow(raw) {
+  return (raw || '*').split(',').map(s => s.trim()).filter(Boolean);
+}
+function cors(origin, allowList) {
+  const wildcard = allowList.includes('*');
+  const matched = wildcard ? '*' : (allowList.includes(origin) ? origin : '');
   return {
-    'Access-Control-Allow-Origin': ok ? (allow === '*' ? '*' : allow) : '',
+    'Access-Control-Allow-Origin': matched,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': '86400'
+    'Access-Control-Max-Age': '86400',
+    'Vary': 'Origin'
   };
 }
 
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
-    const allow = env.ALLOW_ORIGIN || '*';
-    const headers = cors(origin, allow);
+    const allowList = parseAllow(env.ALLOW_ORIGIN);
+    const matched = allowList.includes('*') ? '*' : (allowList.includes(origin) ? origin : '');
+    const headers = cors(origin, allowList);
     if (request.method === 'OPTIONS') return new Response(null, { headers });
 
     if (!env.EVENTS || typeof env.EVENTS.get !== 'function') {
@@ -44,7 +51,7 @@ export default {
     const path = url.pathname.replace(/\/$/, '');
 
     if (request.method === 'POST' && path.endsWith('/log')) {
-      if (allow !== '*' && origin !== allow) {
+      if (!matched) {
         return new Response(JSON.stringify({ ok: false, error: 'origin not allowed' }), { status: 403, headers: { ...headers, 'Content-Type': 'application/json' } });
       }
       let body;

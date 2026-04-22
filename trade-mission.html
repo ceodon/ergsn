@@ -7,7 +7,7 @@
 <title>Trade Mission Live · Q3 2026 · ERGSN</title>
 <meta name="description" content="ERGSN Trade Mission Live — quarterly 90-minute broadcast featuring 5 verified Korean makers presenting directly to 50+ global procurement buyers. Inaugural edition July 15, 2026 KST.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://ceodon.github.io/ergsn/trade-mission.html">
+<link rel="canonical" href="https://ergsn.net/trade-mission.html">
 <meta property="og:title" content="ERGSN Trade Mission Live · Q3 2026">
 <meta property="og:description" content="5 verified Korean makers · 50+ global buyers · one 90-minute broadcast.">
 <meta property="og:type" content="event">
@@ -220,14 +220,14 @@
       _template: 'table', _captcha: 'true',
       Name: g('bName'), Company: g('bCo'), Country: g('bCountry'),
       Industry: g('bIndustry'), Email: g('bEmail'), Interest: g('bInterest'),
-      Source: 'ceodon.github.io/ergsn (Trade Mission Buyer)'
+      Source: 'ergsn.net (Trade Mission Buyer)'
     } : {
       _cc: RFQ_CC,
       _subject: `[TRADE MISSION MAKER] ${g('mCo')}`,
       _template: 'table', _captcha: 'true',
       Company: g('mCo'), BRN: g('mBrn'), Contact: g('mName'),
       Email: g('mEmail'), Sector: g('mSector'), Pitch: g('mPitch'),
-      Source: 'ceodon.github.io/ergsn (Trade Mission Maker)'
+      Source: 'ergsn.net (Trade Mission Maker)'
     };
     if (role === 'buyer' && !(body.Name && body.Company && body.Country && body.Email)) return;
     if (role === 'maker' && !(body.Company && body.Contact && body.Email)) return;
