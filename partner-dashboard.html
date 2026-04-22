@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-<title>Partner Analytics Dashboard · Preview · ERGSN</title>
+<title>Partner Analytics Dashboard · ERGSN</title>
 <meta name="description" content="Preview of the ERGSN Partner Analytics Dashboard available to Verified+ tier Korean manufacturers. Tracks product views, RFQ volume, country-level buyer interest, and benchmark ranking.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://ergsn.net/partner-dashboard.html">
@@ -227,19 +228,207 @@
 </div>
 
 <script>
-  // Render a plausible 30-day daily views series.
-  (function render(){
+/* Dual-mode dashboard:
+   - No `?t=token` in URL  → preview mode with hardcoded sample data (marketing page).
+   - `?t=token` present    → live mode, fetch from Cloudflare Worker and swap content.
+   Token acts as both identifier and authz; it can be rotated via the admin
+   /partner/rotate endpoint if leaked. Treat the dashboard URL like a password. */
+(function () {
+  const WORKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+  const params = new URLSearchParams(location.search);
+  const token = (params.get('t') || '').trim();
+
+  if (!token) {
+    renderPreviewChart();
+    return;
+  }
+
+  fetch(WORKER_URL + '/partner/metrics?token=' + encodeURIComponent(token) + '&range=30')
+    .then(r => r.json())
+    .then(data => {
+      if (!data || !data.ok) {
+        showError((data && data.error) || 'Failed to load dashboard');
+        renderPreviewChart();
+        return;
+      }
+      renderLive(data);
+    })
+    .catch(err => {
+      showError((err && err.message) || 'Network error');
+      renderPreviewChart();
+    });
+
+  function renderPreviewChart() {
     const chart = document.getElementById('viewsChart');
     if (!chart) return;
-    // Pseudo-random but deterministic dataset.
     const seed = [420, 510, 460, 540, 610, 390, 480, 550, 620, 580, 490, 470, 600, 680, 560, 530, 610, 720, 690, 640, 580, 550, 620, 710, 780, 720, 690, 640, 580, 610];
     const max = Math.max.apply(null, seed);
-    const html = seed.map(v => {
+    chart.innerHTML = seed.map(v => {
       const h = Math.max(4, Math.round((v / max) * 100));
-      return `<div class="chart-bar" style="height:${h}%" data-v="${v} views"></div>`;
+      return '<div class="chart-bar" style="height:' + h + '%" data-v="' + v + ' views"></div>';
     }).join('');
-    chart.innerHTML = html;
-  })();
+  }
+
+  function renderLive(data) {
+    // Banner — swap preview framing for live stamp.
+    const banner = document.querySelector('.preview-banner');
+    if (banner) {
+      banner.innerHTML = '<strong>Live dashboard</strong><span>— Partner ' + esc(data.partner.id) + ' · ' + esc(data.partner.tier) + ' tier · updated ' + new Date(data.generated_at).toLocaleString() + '</span>';
+      banner.style.borderColor = 'var(--green)';
+    }
+
+    // Title + subheader.
+    const h1 = document.querySelector('h1');
+    if (h1) h1.textContent = 'Partner Analytics — ' + data.partner.company_name;
+    const sub = document.querySelector('.sub');
+    if (sub) {
+      const prods = data.partner.product_ids.join(' · ') || '(no products mapped)';
+      sub.innerHTML = '<strong>' + esc(prods) + (data.partner.sector ? ' · ' + esc(data.partner.sector) : '') + ' · ' + esc(data.partner.tier) + '</strong> &middot; period: last ' + data.range_days + ' days';
+    }
+
+    // KPI row — positional (first .kpi-grid has 4 cards in known order).
+    const cards = document.querySelectorAll('.kpi-grid .kpi-card');
+    const kpis = Array.from(cards).slice(0, 4);
+    // 0: Product views — not tracked in Phase 0
+    setKpi(kpis[0], '—', 'flat', 'tracking pending (Phase 1)');
+    // 1: RFQs received
+    {
+      const cur = data.kpis.total_rfqs, prev = data.kpis.prev_total_rfqs;
+      const delta = cur - prev;
+      const cls = delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+      const arrow = delta > 0 ? '▲ +' : delta < 0 ? '▼ ' : '– ';
+      setKpi(kpis[1], String(cur), cls, arrow + Math.abs(delta) + ' vs prev ' + data.range_days + 'd');
+    }
+    // 2: Conversion (quoted+ / total)
+    {
+      const sc = data.kpis.stage_counts;
+      const progressed = sc.quoted + sc.in_production + sc.shipped + sc.closed;
+      const rate = data.kpis.total_rfqs ? (progressed / data.kpis.total_rfqs * 100).toFixed(1) : '0.0';
+      setKpi(kpis[2], rate + '%', 'flat', progressed + ' of ' + data.kpis.total_rfqs + ' quoted+');
+    }
+    // 3: Unique buyer countries
+    setKpi(kpis[3], String(data.kpis.unique_countries), 'flat', 'last ' + data.range_days + 'd');
+
+    // Chart.
+    renderLiveChart(data.daily_series);
+
+    // Country list.
+    const cl = document.querySelector('.country-list');
+    if (cl) {
+      if (data.top_countries.length) {
+        cl.innerHTML = data.top_countries.map(c =>
+          '<li><span class="country-flag">' + flagEmoji(c.code) + '</span><span class="country-name">' + esc(countryName(c.code)) + '</span><span class="country-count">' + c.count + '</span></li>'
+        ).join('');
+      } else {
+        cl.innerHTML = '<li style="color:var(--tx-lt);border:0">No RFQs yet in this period.</li>';
+      }
+    }
+
+    // Benchmark panel — Phase 0 shows peer count only.
+    const panels = document.querySelectorAll('.panel');
+    const benchPanel = Array.from(panels).find(p => {
+      const t = p.querySelector('.panel-title');
+      return t && /benchmark/i.test(t.textContent);
+    });
+    if (benchPanel) {
+      benchPanel.querySelectorAll('.bench-row').forEach(r => r.remove());
+      const note = document.createElement('div');
+      note.style.cssText = 'color:var(--tx-lt);font-size:13px;line-height:1.8;padding:8px 0';
+      note.innerHTML = 'Sector: <strong style="color:var(--white)">' + esc(data.benchmark.sector || '—') + '</strong><br>Verified peers in this sector: <strong style="color:var(--gold)">' + data.benchmark.sector_partner_count + '</strong><br><span style="font-size:11.5px">Percentile ranking across views / response time / acceptance launches in Phase 1.</span>';
+      benchPanel.appendChild(note);
+      const title = benchPanel.querySelector('.panel-title');
+      if (title) title.textContent = 'Sector benchmark' + (data.benchmark.sector ? ' — ' + data.benchmark.sector : '');
+    }
+
+    // Recent RFQs table.
+    const tbody = document.querySelector('.rfq-table tbody');
+    if (tbody) {
+      if (data.recent_rfqs.length) {
+        tbody.innerHTML = data.recent_rfqs.map(r => {
+          const d = new Date(r.createdAt);
+          const statusClass = r.stage === 'closed' ? 'won' : (r.stage === 'quoted' || r.stage === 'in_production' || r.stage === 'shipped') ? 'quoted' : 'pending';
+          const statusText = r.stage === 'received' ? 'Received' : r.stage.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+          const ctryLabel = r.country ? (flagEmoji(r.country) + ' ' + r.country) : '🏳 ??';
+          const tierLabel = r.tier ? (' · ' + esc(r.tier.toLowerCase())) : '';
+          return '<tr><td>' + ctryLabel + tierLabel + '</td><td>' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + '</td><td><span class="rfq-status ' + statusClass + '">' + statusText + '</span></td></tr>';
+        }).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="3" style="color:var(--tx-lt);text-align:center;padding:20px 0">No RFQs yet in this period.</td></tr>';
+      }
+    }
+
+    // Hide sections not applicable to Phase 0 live mode.
+    const listingPanel = Array.from(panels).find(p => {
+      const t = p.querySelector('.panel-title');
+      return t && /^Listing performance/.test(t.textContent);
+    });
+    if (listingPanel) listingPanel.style.display = 'none';
+    const cta = document.querySelector('.cta-row');
+    if (cta) cta.style.display = 'none';
+    const footerNote = document.querySelector('.footer-note');
+    if (footerNote) footerNote.innerHTML = '<strong>About this dashboard</strong> — Live metrics refreshed per request. Treat your dashboard URL as a secret — if it leaks, contact ERGSN to rotate your access token.';
+  }
+
+  function renderLiveChart(series) {
+    const chart = document.getElementById('viewsChart');
+    if (!chart) return;
+    if (!series || !series.length) { chart.innerHTML = '<div style="color:var(--tx-lt);font-size:12px;align-self:center;margin:auto">no data yet</div>'; return; }
+    const max = Math.max(1, ...series.map(s => s.count));
+    chart.innerHTML = series.map(s => {
+      const h = Math.max(4, Math.round((s.count / max) * 100));
+      return '<div class="chart-bar" style="height:' + h + '%" data-v="' + s.date + ': ' + s.count + ' RFQ"></div>';
+    }).join('');
+    const xs = document.querySelector('.chart-x');
+    if (xs && series.length >= 4) {
+      const idx = [0, Math.floor(series.length / 3), Math.floor(series.length * 2 / 3), series.length - 1];
+      xs.innerHTML = idx.map(i => '<span>' + new Date(series[i].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + '</span>').join('');
+    }
+    const viewsPanel = chart.closest('.panel');
+    if (viewsPanel) {
+      const t = viewsPanel.querySelector('.panel-title');
+      if (t) t.textContent = 'Daily RFQs (' + series.length + 'd)';
+      const hint = viewsPanel.querySelector('.panel-hint');
+      if (hint) hint.textContent = 'hover bars';
+    }
+  }
+
+  function setKpi(card, val, deltaClass, deltaText) {
+    if (!card) return;
+    const v = card.querySelector('.kpi-val');
+    const d = card.querySelector('.kpi-delta');
+    if (v) v.textContent = val;
+    if (d) { d.className = 'kpi-delta ' + deltaClass; d.textContent = deltaText; }
+  }
+
+  function showError(msg) {
+    const banner = document.querySelector('.preview-banner');
+    if (banner) {
+      banner.innerHTML = '<strong style="color:#e06a6a">Dashboard error</strong><span>— ' + esc(msg) + '. Continuing in preview mode.</span>';
+      banner.style.borderColor = '#e06a6a';
+    }
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[<>&"']/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
+
+  function flagEmoji(code) {
+    if (!code || code.length !== 2) return '🏳';
+    const cc = code.toUpperCase();
+    const A = 0x1F1E6, offset = 65;
+    try {
+      return String.fromCodePoint(A + cc.charCodeAt(0) - offset) + String.fromCodePoint(A + cc.charCodeAt(1) - offset);
+    } catch { return '🏳'; }
+  }
+
+  function countryName(code) {
+    try {
+      return new Intl.DisplayNames(['en'], { type: 'region' }).of(code) || code;
+    } catch {
+      return code || 'Unknown';
+    }
+  }
+})();
 </script>
 
 <script defer src="scripts/header.js"></script>
