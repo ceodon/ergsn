@@ -951,15 +951,26 @@ section { scroll-margin-top: var(--nav-h); }
 .modal-image-row {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: 0;
-  display: block;
-  width: 100%;
+  padding: clamp(1.5rem,3vw,2.5rem);
+  display: flex; align-items: center; justify-content: center;
+  min-height: clamp(220px, 30vh, 340px);
 }
 .modal-image-row img {
+  max-width: 100%; max-height: clamp(200px, 28vh, 320px);
+  object-fit: contain;
+}
+/* Edge-to-edge hero variant for K-Tech and K-Energy modals. */
+.modal-image-row.modal-image-fill {
+  padding: 0;
+  display: block;
+  min-height: 0;
+}
+.modal-image-row.modal-image-fill img {
   display: block;
   width: 100%;
   height: auto;
   max-width: 100%;
+  max-height: none;
   object-fit: cover;
 }
 .modal-image-row.modal-svg-row { padding: 0; background: #ffffff; }
@@ -4166,8 +4177,9 @@ function openModal(id) {
       <div class="c-cell"><span class="c-l">Sample Policy</span><span class="c-v">Available · DDP, buyer pays freight</span></div>
     </div>` : '';
   let mediaHtml = '';
+  const fillRow = /^(kt|ke)/.test(id) ? ' modal-image-fill' : '';
   if (p.img) {
-    mediaHtml = `<div class="modal-image-row"><img src="${p.img}" class="modal-main" alt="ERGSN ${p.model}" loading="lazy"></div>`;
+    mediaHtml = `<div class="modal-image-row${fillRow}"><img src="${p.img}" class="modal-main" alt="ERGSN ${p.model}" loading="lazy"></div>`;
   } else {
     const cardSvg = document.querySelector(`.product-card[data-model="${id}"] .card-image-svg svg`);
     if (cardSvg) mediaHtml = `<div class="modal-image-row modal-svg-row">${cardSvg.outerHTML}</div>`;
