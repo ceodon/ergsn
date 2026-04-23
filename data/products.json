@@ -491,6 +491,114 @@
       "matchDesc": "Barrier-repair moisture cream · DEMED · MOQ 1,000"
     },
     {
+      "id": "hanok-sopunghun",
+      "sector": "k-tourism-assets",
+      "model": "Sopunghun",
+      "part": "YSH-SPH-25 (3 identical units · Rooms 1 · 2 · 3)",
+      "sub": "Classic Hanok Stay · 25-pyeong (~83 m²)",
+      "desc": "25-pyeong traditional stand-alone hanok unit at Yangpyeong Soohyang The Hanok — accommodates 4 standard / 6 max guests. Each unit features a hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered to long-term investors.",
+      "specs": [
+        ["Floor Area", "25 pyeong (~83 m²)"],
+        ["Capacity", "4 standard / 6 max"],
+        ["Units", "3 identical (Rooms 1·2·3)"],
+        ["Amenities", "Hinoki cypress room · Full kitchen · Free WiFi"],
+        ["Location", "Yangpyeong, Gyeonggi-do"],
+        ["Share Program", "Annual gujwa-bunyang fractional share"]
+      ],
+      "features": [
+        "Stand-alone 25-pyeong traditional hanok unit",
+        "Hinoki cypress bath room and full kitchen",
+        "Three identical units operable independently",
+        "Annual fractional share (gujwa-bunyang) ownership available"
+      ],
+      "tags": ["hospitality"],
+      "scale": ["m", "l"],
+      "maker": "Yangpyeong Soohyang The Hanok",
+      "cardTag": "Classic Hanok Stay · 25-pyeong",
+      "matchDesc": "Classic 25-pyeong hanok unit · Yangpyeong · 4 std / 6 max · annual share"
+    },
+    {
+      "id": "hanok-soyojae",
+      "sector": "k-tourism-assets",
+      "model": "Soyojae",
+      "part": "YSH-SYJ-30 (3 identical units · Rooms 1 · 2 · 3)",
+      "sub": "Premium Hanok Stay · 30-pyeong (~99 m²)",
+      "desc": "30-pyeong premium stand-alone hanok unit at Yangpyeong Soohyang The Hanok — accommodates 4 standard / 8 max guests. Larger footprint with hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered.",
+      "specs": [
+        ["Floor Area", "30 pyeong (~99 m²)"],
+        ["Capacity", "4 standard / 8 max"],
+        ["Units", "3 identical (Rooms 1·2·3)"],
+        ["Amenities", "Hinoki cypress room · Full kitchen · Free WiFi"],
+        ["Location", "Yangpyeong, Gyeonggi-do"],
+        ["Share Program", "Annual gujwa-bunyang fractional share"]
+      ],
+      "features": [
+        "Premium 30-pyeong stand-alone hanok with larger footprint",
+        "Hinoki cypress bath room and full kitchen",
+        "Three identical units operable independently",
+        "Annual fractional share (gujwa-bunyang) ownership available"
+      ],
+      "tags": ["hospitality"],
+      "scale": ["m", "l"],
+      "maker": "Yangpyeong Soohyang The Hanok",
+      "cardTag": "Premium Hanok Stay · 30-pyeong",
+      "matchDesc": "Premium 30-pyeong hanok unit · Yangpyeong · 4 std / 8 max · annual share"
+    },
+    {
+      "id": "hanok-gyeonwujae",
+      "sector": "k-tourism-assets",
+      "model": "Gyeonwujae",
+      "part": "YSH-GWJ-25P (2 identical units · Rooms 1 · 2)",
+      "sub": "Pet-Friendly Hanok · 25-pyeong (~83 m²)",
+      "desc": "25-pyeong pet-friendly stand-alone hanok unit at Yangpyeong Soohyang The Hanok — dogs welcome. Accommodates 4 standard / 6 max guests with hinoki cypress room, full kitchen, and free WiFi. Two identical units available (Rooms 1·2). Annual gujwa-bunyang fractional share ownership program offered.",
+      "specs": [
+        ["Floor Area", "25 pyeong (~83 m²)"],
+        ["Capacity", "4 standard / 6 max"],
+        ["Units", "2 identical (Rooms 1·2)"],
+        ["Pet Policy", "Dogs welcome"],
+        ["Location", "Yangpyeong, Gyeonggi-do"],
+        ["Share Program", "Annual gujwa-bunyang fractional share"]
+      ],
+      "features": [
+        "Pet-friendly 25-pyeong stand-alone hanok (dogs welcome)",
+        "Hinoki cypress bath room and full kitchen",
+        "Two identical units operable independently",
+        "Annual fractional share (gujwa-bunyang) ownership available"
+      ],
+      "tags": ["hospitality"],
+      "scale": ["m", "l"],
+      "maker": "Yangpyeong Soohyang The Hanok",
+      "cardTag": "Pet-Friendly Hanok · 25-pyeong",
+      "matchDesc": "Pet-friendly 25-pyeong hanok · Yangpyeong · 4 std / 6 max · dogs welcome"
+    },
+    {
+      "id": "hanok-punggyeonru",
+      "sector": "k-tourism-assets",
+      "model": "Punggyeonru",
+      "part": "YSH-PGR-30P (3 identical units · Rooms 1 · 2 · 3)",
+      "sub": "Premium Pet-Friendly Hanok · 30-pyeong (~99 m²)",
+      "desc": "30-pyeong premium pet-friendly stand-alone hanok unit at Yangpyeong Soohyang The Hanok — dogs welcome. Accommodates 4 standard / 8 max guests with hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered.",
+      "specs": [
+        ["Floor Area", "30 pyeong (~99 m²)"],
+        ["Capacity", "4 standard / 8 max"],
+        ["Units", "3 identical (Rooms 1·2·3)"],
+        ["Pet Policy", "Dogs welcome"],
+        ["Location", "Yangpyeong, Gyeonggi-do"],
+        ["Share Program", "Annual gujwa-bunyang fractional share"]
+      ],
+      "features": [
+        "Premium pet-friendly 30-pyeong stand-alone hanok (dogs welcome)",
+        "Hinoki cypress bath room and full kitchen",
+        "Three identical units operable independently",
+        "Annual fractional share (gujwa-bunyang) ownership available"
+      ],
+      "tags": ["hospitality"],
+      "scale": ["m", "l"],
+      "maker": "Yangpyeong Soohyang The Hanok",
+      "cardTag": "Premium Pet-Friendly · 30-pyeong",
+      "matchDesc": "Premium pet-friendly 30-pyeong hanok · Yangpyeong · 4 std / 8 max · dogs welcome"
+    },
+    {
       "id": "demed-wonder-ceramid-toner",
       "sector": "k-beauty",
       "model": "WONDER CERAMID TONER",
