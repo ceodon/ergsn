@@ -55,7 +55,7 @@
         { href: 'index.html?sector=k-security#products',       name: 'K-Security',       tag: 'Active', desc: 'DL Series shredders · 6 models' },
         { href: 'index.html?sector=k-tech#products',           name: 'K-Tech',           tag: 'Active', desc: '2D → 3D stereoscopic conversion' },
         { href: 'index.html?sector=k-energy#products',         name: 'K-Energy',         tag: 'Active', desc: 'HYGEN Generator · 4 configurations' },
-        { href: 'index.html?sector=k-bio#products',            name: 'K-Bio',            tag: 'Active', desc: 'Rosetta Plus · HACCP · KFDA' },
+        { href: 'index.html?sector=k-bio#products',            name: 'K-Bio',            tag: 'Active', desc: 'Rosetta Plus HFF · RAY-1 Bio Cream' },
         { href: 'index.html?sector=k-beauty#products',         name: 'K-Beauty',         tag: 'Active', desc: '16 SKUs · 2 makers · MOQ 1,000' },
         { href: 'index.html?sector=k-tourism-assets#products', name: 'K-Tourism Assets', tag: 'Active', desc: 'Yangpyeong hanok · share ownership' },
         { href: 'index.html?sector=k-culture-goods#products',  name: 'K-Culture Goods',  tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },

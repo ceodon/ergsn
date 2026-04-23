@@ -200,7 +200,7 @@ function handleMore() {
         { label: 'Browse K-Security (DL Series)', action: () => chatStep('browse_models') },
         { label: 'Browse K-Tech 3D services', action: () => chatStep('browse_ktech') },
         { label: 'Browse K-Energy (HYGEN Generator)', action: () => chatStep('browse_kenergy') },
-        { label: 'K-Bio · Rosetta Plus', action: () => chatStep('browse_kbio') },
+        { label: 'K-Bio (Rosetta Plus · RAY-1)', action: () => chatStep('browse_kbio') },
         { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living)', action: () => chatStep('browse_sourcing') },
         { label: cl('quote') + ' →', action: () => chatStep('quote_direct') }
       ]);
@@ -258,16 +258,27 @@ function dynamicSpecLookup(text, modelId) {
     'revisions':['revision','rounds','review cycle']
   };
   const kbioKeywords = {
+    /* Rosetta Plus (HFF) — ingestible supplement spec keys */
     'target function':['function','depression','psychosis','panic','mental','wellness','efficacy','claim'],
     'certifications':['certification','haccp','kfda','fda','license','compliance','certified'],
-    'production capacity':['capacity','volume','units','production','scale','output'],
+    'production capacity':['production capacity','units per month','monthly production','scale','throughput'],
     'active export markets':['export','market','country','where','mexico','yemen','india'],
-    'form':['form','liquid','emulsion','capsule','tablet','format'],
     'process':['process','how made','manufactur','fermentation','extract'],
-    'core raw materials':['raw material','ingredient','cholecalciferol','glycosamin','lecithin','mucoda','what is in','composition'],
+    'core raw materials':['raw material','cholecalciferol','glycosamin','lecithin','mucoda'],
+    /* Shared — both products have Form/Format, Origin, Packaging, Lead Time */
+    'form':['form','liquid','emulsion','capsule','tablet','format','tube','squeeze','container','jar','bottle'],
     'origin':['origin','country of origin','where from','made in'],
     'packaging':['packaging','pack','lot','batch'],
-    'lead time':['lead time','turnaround','how long','when ready','delivery time']
+    'lead time':['lead time','turnaround','how long','when ready','delivery time'],
+    /* RAY-1 Bio Cream (dermaceutical) — topical cosmetic spec keys */
+    'brand':['brand','label','product name'],
+    'category':['category','type of product','cosmetic','skincare','dermaceutical','cream'],
+    'volume':['volume','size','ml','milliliter','gram','net content','how much','how big'],
+    'manufacturer':['manufacturer','made by','produced by','factory','who makes','esthemiga'],
+    'owner':['brand owner','distributor','responsible','iho biotech','reseller','licensor','owner'],
+    'shelf':['shelf life','expiry','expiration','pao','use by','open after','storage life','months','valid'],
+    'usage':['usage','how to use','apply','application','directions','routine','instructions'],
+    'inci':['inci','ingredient','전성분','composition','full ingredients','formula','content','what is in']
   };
   const keywordMap = sector === 'k-tech' ? ktechKeywords : sector === 'k-bio' ? kbioKeywords : shredderKeywords;
   for (const [specKey, keywords] of Object.entries(keywordMap)) {
@@ -322,7 +333,7 @@ function cl(key) { const lang = document.documentElement.lang || 'en'; return (C
 
 const SHREDDER_IDS = ['dl10x','dl12x','dl16x','dl10xd','dl12xd','dl16xd'];
 const KTECH_IDS = ['kt3dad','kt3dvid','kt3dcine'];
-const KBIO_IDS = ['rosettaplus'];
+const KBIO_IDS = ['rosettaplus', 'ray1-bio-cream'];
 const KENERGY_IDS = ['keoa','keob','keoc','keod'];
 const MODEL_IDS = [...SHREDDER_IDS, ...KTECH_IDS, ...KBIO_IDS, ...KENERGY_IDS];
 
@@ -461,7 +472,7 @@ ACTIVE sectors (products ready to quote):
 - K-Security: DL Series industrial shredders (DL-10X, DL-12X, DL-16X, DL-10XD, DL-12XD, DL-16XD). All models Level 3 / P-4 cross-cut, all-metal chain drive, oil-free, HIPAA · GSA Schedule. DL-16XD flagship: up to 90 sheets/pass at 31 FPM, 3.25 Hp, 115V/30A NEMA L5-30P.
 - K-Tech: proprietary 2D → 3D stereoscopic conversion services — KT-3DAD (3D advertising production, 3–6 wk), KT-3DVID (2D→3D video conversion, 2–4 wk for ≤90 min), KT-3DCINE (feature-film 3D remaster, 8–16 wk). Output up to 4K UHD, Side-by-Side / Over-Under / MVC / Frame-Packed / Stereo DCP.
 - K-Energy: HYGEN Generator — a single DC 24V / 400W motor rotates one shared shaft at 1 rpm, driving multiple generators (150–200 W each) in parallel. Four configurations: KE-Option A (5 gen · 1 set · ≈1.0 kW/h), KE-Option B (6 gen · 1 set · ≈1.2 kW/h), KE-Option C (12 gen · 2 sets · ≈2.4 kW/h), KE-Option D (18 gen · 3 sets · ≈3.6 kW/h flagship). Unit chassis 80×30×30 cm / ≈60 kg, 10 output ports per set.
-- K-Bio: Rosetta Plus HFF — HACCP-certified, KFDA-assured Health Functional Food, representative function of improving depression, psychosis and panic disorder. Capacity 1,000+ units/month. Already exporting to Mexico, Yemen, India.
+- K-Bio: two active lines. (1) Rosetta Plus HFF — HACCP-certified, KFDA-assured Health Functional Food, representative function of improving depression, psychosis and panic disorder. Capacity 1,000+ units/month. Already exporting to Mexico, Yemen, India. (2) RAY-1 Bio Cream — dermaceutical face cream, 100 ml squeeze tube, brand owned by Iho Biotech Co., Ltd. (Seoul) and manufactured by Esthemiga (Republic of Korea). Shelf life 24 months / PAO 12 months. Full INCI list available under NDA via RFQ.
 - K-Tourism Assets: Yangpyeong Soohyang The Hanok property — 11 hanok units across 4 building types (Sopunghun 25p, Soyojae 30p, Gyeonwujae 25p pet-friendly, Punggyeonru 30p premium pet-friendly) in Gyeonggi Province. Annual fractional share ownership (gujwa bunyang) available in addition to nightly bookings. Detail pages: stays-sopunghun / stays-soyojae / stays-gyeonwujae / stays-punggyeonru.
 
 SOURCING in 2026 (partner-matching in progress — direct to RFQ for early inquiries): K-Beauty · K-Culture Goods (K-pop merch, crafts, fashion) · K-Franchise (F&B, retail, service master-franchise) · K-Smart Living (IoT appliances, wellness).
@@ -677,7 +688,7 @@ function handleCompareText(text) {
   // Non-shredder sector comparison is not spec-for-spec compatible
   const nonShredder = [...KTECH_IDS, ...KBIO_IDS, ...KENERGY_IDS].filter(id => t.includes(id) || t.includes(P[id].model.toLowerCase()));
   if (nonShredder.length >= 1) {
-    chatBotMsg("Spec-to-spec comparison is currently available within the DL Series (K-Security) and across KE-Option A/B/C/D (K-Energy HYGEN). K-Tech services (KT-3DAD / KT-3DVID / KT-3DCINE) and K-Bio Rosetta Plus use different spec dimensions — ask me about any of them individually and I'll walk through the details.");
+    chatBotMsg("Spec-to-spec comparison is currently available within the DL Series (K-Security) and across KE-Option A/B/C/D (K-Energy HYGEN). K-Tech services (KT-3DAD / KT-3DVID / KT-3DCINE) and K-Bio Rosetta Plus / RAY-1 Bio Cream use different spec dimensions — ask me about any of them individually and I'll walk through the details.");
     return;
   }
   chatBotMsg("Which two DL Series models would you like to compare? For example: \"Compare DL-12X vs DL-16XD\"");
@@ -692,7 +703,7 @@ function handleCapacity(text) {
   if (/(\bkw\b|\bkwh\b|kilo[- ]?watt|\bwatt\b|\d\s*w\b|hygen|generator|off[- ]?grid|micro[- ]?grid|\bess\b|\bsolar\b|backup power|power load|continuous load|kw\/h|발전)/i.test(lower)) {
     return handleCapacityKEnergy(text);
   }
-  if (/(rosetta|hff|health functional|kfda|haccp|depression|psychosis|panic|mental wellness|bottle|capsule|dose|supplement|k-bio|kbio|units?\s*\/\s*month|units? per month|monthly volume)/i.test(lower)) {
+  if (/(rosetta|hff|health functional|kfda|haccp|depression|psychosis|panic|mental wellness|bottle|capsule|dose|supplement|k-bio|kbio|units?\s*\/\s*month|units? per month|monthly volume|ray.?1|ray1|bio.?cream|iho.?biotech|esthemiga|dermaceutical|face cream|skincare cream|레이원|바이오크림)/i.test(lower)) {
     return handleCapacityKBio(text);
   }
   if (/(3d|stereoscop|kt-3d|kt3d|\bvideo\b|\bfilm\b|feature|advert|\bad\b|\bads\b|commercial|campaign|episode|broadcast|dcp|cinema|theatrical|remaster|documentary|training video|corporate video|dooh)/i.test(lower)) {
@@ -812,12 +823,12 @@ function handleQuoteChat() {
 
 const CHAT_TREE = {
   start: {
-    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway : every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security : DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech : 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Energy : HYGEN Generator (KE-Option A / B / C / D)\n• K-Bio : Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN)\n• K-Tourism Assets : Yangpyeong Soohyang The Hanok — 11 units · 4 types · annual share ownership available\n\nSourcing partners for 2026 : K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nHow may I assist you today?",
+    msg: "Hello, and thank you for visiting ERGSN.\n\nERGSN is Korea's certified trade gateway : every product passes our 4-step verification (vendor audit · quality testing · compliance · long-term partnership) before we offer it to global buyers.\n\nActive catalog (ready to quote):\n• K-Security : DL Series industrial shredders (GSA Schedule, U.S. defense procured)\n• K-Tech : 2D → 3D stereoscopic conversion (KT-3DAD / KT-3DVID / KT-3DCINE)\n• K-Energy : HYGEN Generator (KE-Option A / B / C / D)\n• K-Bio : Rosetta Plus HFF (HACCP · KFDA, exporting to MX/YE/IN) + RAY-1 Bio Cream (100 ml dermaceutical, Iho Biotech)\n• K-Tourism Assets : Yangpyeong Soohyang The Hanok — 11 units · 4 types · annual share ownership available\n\nSourcing partners for 2026 : K-Beauty · K-Culture Goods · K-Franchise · K-Smart Living.\n\nHow may I assist you today?",
     opts: [
       { label: 'Browse K-Security (DL Series)', next: 'browse_models' },
       { label: 'Browse K-Tech 3D services', next: 'browse_ktech' },
       { label: 'Browse K-Energy (HYGEN Generator)', next: 'browse_kenergy' },
-      { label: 'Ask about K-Bio (Rosetta Plus)', next: 'browse_kbio' },
+      { label: 'Ask about K-Bio (Rosetta Plus · RAY-1)', next: 'browse_kbio' },
       { label: 'Browse K-Tourism Assets (Hanok Stays)', next: 'browse_ktourism' },
       { label: 'Upcoming sectors (K-Beauty / Culture / Franchise / Smart Living)', next: 'browse_sourcing' },
       { label: 'About ERGSN & verification', next: 'about_company' },
@@ -854,10 +865,12 @@ const CHAT_TREE = {
     ]
   },
   browse_kbio: {
-    msg: "K-Bio · Rosetta Plus (ACTIVE). KFDA-assured Health Functional Food with representative function of improving depression, psychosis and panic disorder. HACCP production; 1,000+ units/month capacity; currently exporting to Mexico, Yemen and India. What would you like to see?",
+    msg: "K-Bio · two active lines.\n\n• Rosetta Plus — KFDA-assured Health Functional Food (HFF). Representative function: improvement of depression, psychosis and panic disorder. HACCP production, 1,000+ units/month capacity, exporting to Mexico, Yemen and India.\n\n• RAY-1 Bio Cream — dermaceutical face cream. 100 ml squeeze tube. Brand owned by Iho Biotech Co., Ltd. (Seoul), manufactured by Esthemiga (Republic of Korea). Shelf life 24 months from MFG / PAO 12 months. Full INCI ingredient list available under NDA via RFQ.\n\nWhat would you like to see?",
     opts: [
       { label: 'View Rosetta Plus full spec sheet', action: 'browse_rosettaplus' },
-      { label: 'Request a Rosetta Plus quote', action: 'quote_rosettaplus' }
+      { label: 'View RAY-1 Bio Cream full spec sheet', action: 'browse_ray1-bio-cream' },
+      { label: 'Request a Rosetta Plus quote', action: 'quote_rosettaplus' },
+      { label: 'Request a RAY-1 Bio Cream quote', action: 'quote_ray1-bio-cream' }
     ]
   },
   browse_kenergy: {
@@ -922,6 +935,7 @@ const CHAT_TREE = {
       { label: 'KE-Option C \u2014 HYGEN Dual-Set (K-Energy)', action: 'quote_keoc' },
       { label: 'KE-Option D \u2014 HYGEN Triple-Set (K-Energy)', action: 'quote_keod' },
       { label: 'Rosetta Plus (K-Bio)', action: 'quote_rosettaplus' },
+      { label: 'RAY-1 Bio Cream (K-Bio)', action: 'quote_ray1-bio-cream' },
       { label: 'Not sure yet \u2014 help me choose', next: 'find_office_size' }
     ]
   },

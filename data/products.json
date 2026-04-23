@@ -599,6 +599,40 @@
       "matchDesc": "Premium pet-friendly 30-pyeong hanok · Yangpyeong · 4 std / 8 max · dogs welcome"
     },
     {
+      "id": "ray1-bio-cream",
+      "sector": "k-bio",
+      "model": "RAY-1 Bio Cream",
+      "part": "RAY1-BIO-100 (DRM-RAY1)",
+      "sub": "RAY-1 · Korean dermaceutical bio-cream by Iho Biotech",
+      "desc": "Dermaceutical face cream positioned in the K-Bio biotech-skincare category. Brand owned by Iho Biotech Co., Ltd. (Seoul, Republic of Korea) and manufactured by Esthemiga. Tube format, net 100 ml (approximately 100 g), formulated for direct topical application. Full INCI ingredient list and any functional-cosmetic certifications are shared by the brand owner under NDA — request via RFQ for buyer-side due diligence and OEM / private-label terms.",
+      "img": "images/products/ray1-bio-cream.jpg",
+      "specs": [
+        ["Brand", "RAY-1"],
+        ["Category", "Dermaceutical Face Cream"],
+        ["Volume", "100 ml (~100 g)"],
+        ["Format", "Squeeze tube"],
+        ["Manufacturer", "Esthemiga"],
+        ["Brand Owner", "Iho Biotech Co., Ltd."],
+        ["Origin", "Republic of Korea"],
+        ["Shelf Life", "24 months from MFG · PAO 12 months"],
+        ["Usage", "Direct topical application"],
+        ["Full INCI", "Available from brand owner on request (NDA)"]
+      ],
+      "features": [
+        "Dermaceutical face cream — K-Bio biotech-skincare positioning",
+        "Brand: RAY-1 by Iho Biotech Co., Ltd. (Seoul, Republic of Korea)",
+        "Manufactured in Republic of Korea by Esthemiga",
+        "Tube format — 100 ml net (approximately 100 g)",
+        "Shelf life: 24 months from manufacture / 12 months PAO after opening",
+        "OEM / private-label and export terms negotiable via RFQ"
+      ],
+      "tags": ["retail", "healthcare", "hospitality"],
+      "scale": ["m", "l"],
+      "maker": "Iho Biotech Co., Ltd.",
+      "cardTag": "K-Bio · Dermaceutical · RAY-1",
+      "matchDesc": "RAY-1 Bio Cream dermaceutical · Iho Biotech · 100 ml tube"
+    },
+    {
       "id": "demed-wonder-ceramid-toner",
       "sector": "k-beauty",
       "model": "WONDER CERAMID TONER",
