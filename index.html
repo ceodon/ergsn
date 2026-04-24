@@ -581,34 +581,52 @@ section { scroll-margin-top: var(--nav-h); }
   border-radius: var(--radius);
   overflow: hidden;
 }
-/* Sub-category grouping (Plan C-1) — used on K-Beauty grid today.
-   scripts/build-products.js adds `.is-grouped` to the grid and inserts a
-   <div class="product-group-header"> at every sub-category transition.
-   `overflow: visible` is required so position:sticky on the headers can
-   actually stick (the default .product-grid clips them). */
+/* Sub-category filtering (Plan C-1 v2) — used on K-Beauty grid today.
+   scripts/build-products.js adds `.is-grouped` to the grid and prepends a
+   <div class="filter-chips"> with one chip per sub-category (plus "All").
+   Chip click toggles `[hidden]` on cards whose data-subcategory mismatches.
+   `overflow: visible` is required so position:sticky on the chip row works. */
 .product-grid.is-grouped {
   overflow: visible;
 }
-.product-group-header {
+.filter-chips {
   grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 18px;
+  background: #0f1110;
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: calc(var(--nav-h, 60px) + 6px);
-  background: #0f1110;
-  padding: 12px 18px;
-  margin: 0;
   z-index: 5;
-  border-top: 1px solid var(--gold);
-  border-bottom: 1px solid var(--gold);
-  display: flex;
-  align-items: baseline;
 }
-.pgh-title {
-  margin: 0;
-  font-size: 0.85rem;
+.filter-chip {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--tx-mid, #cfcfcf);
+  padding: 6px 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  letter-spacing: .03em;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.filter-chip:hover { border-color: var(--gold); color: var(--gold); }
+.filter-chip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.filter-chip.is-active {
+  background: var(--gold);
+  color: #0f1110;
+  border-color: var(--gold);
   font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
+}
+.filter-chip-count {
+  margin-left: 6px;
+  font-weight: 700;
+  opacity: .85;
+  font-variant-numeric: tabular-nums;
 }
 .product-card {
   background: #171717;
