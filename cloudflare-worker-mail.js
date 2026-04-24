@@ -274,7 +274,7 @@ function wrapInTemplate(bodyHtml, subject, locale) {
      visual chrome; body is pure white edge-to-edge so it matches whatever
      width the mail client allocates. -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
-  <tr><td style="padding:12px 10px;">
+  <tr><td style="padding:4px;">
     <!-- Outer card chrome lives on a <div>, NOT on the table. Gmail (web,
          Android, iOS) strips border-radius / overflow:hidden when applied to
          <table>; the same rules survive on <div>. So:
@@ -283,8 +283,11 @@ function wrapInTemplate(bodyHtml, subject, locale) {
          Outlook desktop ignores border-radius on the div too, but renders
          the inner table normally — so the worst-case fallback is a square
          card with the same colours. Every other client gets the rounded
-         16px chamfer with the dark outline tied at the corners. -->
-    <div style="background:#ffffff;border:2px solid #0f0f0f;border-radius:16px;overflow:hidden;">
+         12px chamfer with the dark outline tied at the corners.
+         Outer <td> padding kept at 4px (the minimum that still lets the
+         12px chamfer be visible) so the card stretches almost edge-to-edge
+         in the reading pane. Smaller padding clips the chamfer entirely. -->
+    <div style="background:#ffffff;border:2px solid #0f0f0f;border-radius:12px;overflow:hidden;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-collapse:collapse;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
