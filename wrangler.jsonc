@@ -1,0 +1,24 @@
+// Cloudflare Workers + Static Assets — ERGSN deploy config
+//
+// Why this file exists:
+//   The CF dashboard auto-detected this repo as Workers + Static Assets
+//   (Pages tab is no longer offered on newer accounts). Without an
+//   explicit assets.directory + .cfignore, wrangler tried to upload
+//   node_modules and hit the 25 MiB-per-asset cap.
+//
+// Headers / redirects:
+//   _headers (root) and _redirects are still honoured by Workers + Static
+//   Assets — same syntax as Pages — so the security header file we already
+//   ship keeps working unchanged.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ergsn",
+  "compatibility_date": "2026-04-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "."
+  },
+  "observability": {
+    "enabled": true
+  }
+}

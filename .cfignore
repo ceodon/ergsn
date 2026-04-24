@@ -1,0 +1,31 @@
+## Cloudflare Workers + Static Assets — exclusion list
+##
+## Anything matched here is NOT uploaded as a static asset, so it doesn't
+## count toward the 25 MiB-per-asset limit and doesn't get served publicly.
+## Same glob syntax as .gitignore.
+
+# Dependency tree (workerd alone is ~118 MiB and breaks the upload)
+node_modules/
+
+# VCS / scratch
+.git/
+.wrangler/
+.claude/
+.tmp/
+.tmp_*
+*.log
+
+# Local-only data and secrets
+images/raw/
+data/maker-contacts.json
+.env
+.env.*
+
+# Internal docs that should not be served publicly
+CLAUDE.md
+PRODUCTS.md
+
+# Lock files — no need to ship
+package-lock.json
+bun.lock
+bun.lockb
