@@ -234,7 +234,7 @@ function logoInline(fontSize, color) {
 const I18N = {
   en: {
     tagline:    "Korea’s Trusted<br>Trade Gateway",
-    reach:      "Reach the trade desk:",
+    reach:      "Trade Desk:",
     contacts:   '<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">Telegram</a>' +
                 ' · <a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">WhatsApp</a>',
     address:    "#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea",
@@ -244,7 +244,7 @@ const I18N = {
   },
   ko: {
     tagline:    "한국 신뢰 무역<br>플랫폼",
-    reach:      "고객지원 문의:",
+    reach:      "고객지원:",
     contacts:   '<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">텔레그램</a>' +
                 ' · <a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">왓츠앱</a>' +
                 ' · <a href="https://pf.kakao.com/_AxowjX" style="color:#0f0f0f;text-decoration:none;font-weight:700;">카카오톡</a>',
@@ -267,11 +267,15 @@ function wrapInTemplate(bodyHtml, subject, locale) {
 <meta name="x-apple-disable-message-reformatting">
 <title>${safeTitle}</title>
 </head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:#333;line-height:1.6;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:#333;line-height:1.6;">
 <div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(stripHtml(bodyHtml).slice(0, 120))}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f4f4;padding:16px 0;">
-  <tr><td align="center" style="padding:0 8px;">
-    <table role="presentation" width="800" cellpadding="0" cellspacing="0" border="0" style="max-width:800px;width:100%;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+<!-- Card spans the entire reading pane: no outer gutter or background tint,
+     no rounded corners, no shadow. Header/footer dark bands provide the only
+     visual chrome; body is pure white edge-to-edge so it matches whatever
+     width the mail client allocates. -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
+  <tr><td>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
@@ -287,7 +291,7 @@ function wrapInTemplate(bodyHtml, subject, locale) {
 
       <!-- Body — caller HTML inserted verbatim -->
       <tr>
-        <td style="padding:26px 32px;font-size:13px;line-height:1.7;color:#333;">
+        <td style="padding:26px 32px;font-size:12px;line-height:1.7;color:#333;">
           ${bodyHtml}
         </td>
       </tr>
@@ -302,15 +306,15 @@ function wrapInTemplate(bodyHtml, subject, locale) {
         </td>
       </tr>
 
-      <!-- Footer — wordmark only (no suffix), copyright on its own line, then Privacy/Terms below -->
+      <!-- Footer — wordmark only, all text in the same #8a8b8d grey for visual unity -->
       <tr>
-        <td style="background:#0f0f0f;padding:20px 32px;color:#8a8b8d;font-size:11px;line-height:1.7;">
-          <p style="margin:0 0 10px;">${logoInline(16, '#ffffff')}</p>
-          <p style="margin:0 0 12px;">${L.address}</p>
+        <td style="background:#0f0f0f;padding:20px 32px;font-size:11px;line-height:1.7;">
+          <p style="margin:0 0 10px;">${logoInline(14, '#ffffff')}</p>
+          <p style="margin:0 0 12px;color:#8a8b8d;">${L.address}</p>
           <p style="margin:0 0 6px;font-size:10px;color:#8a8b8d;">${L.copy}</p>
-          <p style="margin:0;font-size:10px;">
-            <a href="https://ergsn.net/privacy.html" style="color:#34d298;text-decoration:none;">${L.privacy}</a>
-            · <a href="https://ergsn.net/terms.html" style="color:#34d298;text-decoration:none;">${L.terms}</a>
+          <p style="margin:0;font-size:10px;color:#8a8b8d;">
+            <a href="https://ergsn.net/privacy.html" style="color:#8a8b8d;text-decoration:underline;">${L.privacy}</a>
+            · <a href="https://ergsn.net/terms.html" style="color:#8a8b8d;text-decoration:underline;">${L.terms}</a>
           </p>
         </td>
       </tr>
