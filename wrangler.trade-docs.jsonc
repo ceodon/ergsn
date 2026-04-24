@@ -1,0 +1,27 @@
+// ERGSN Trade Documentation Worker config — separate from the site,
+// mail, and rfq-tracker workers.
+//
+// Backs the 5-doc trade workflow:
+//   Quotation → P/O → Proforma → Commercial Invoice → Packing List
+// All linked by a parent transaction_id; buyer accesses their own
+// transaction via a 32-char token URL on trade-buyer.html.
+//
+// Usage:
+//   npx wrangler deploy --config wrangler.trade-docs.jsonc
+//   npx wrangler d1 execute ergsn-trade-docs --remote --config wrangler.trade-docs.jsonc --file migrations/trade-docs/0001_init.sql
+//   npx wrangler secret put ADMIN_KEY    --config wrangler.trade-docs.jsonc
+//   npx wrangler secret put ALLOW_ORIGIN --config wrangler.trade-docs.jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ergsn-trade-docs",
+  "main": "cloudflare-worker-trade-docs.js",
+  "compatibility_date": "2026-04-24",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding":       "DB",
+      "database_name": "ergsn-trade-docs",
+      "database_id":   "9a3e3579-2458-4710-9ebe-90d49e03f85c"
+    }
+  ]
+}
