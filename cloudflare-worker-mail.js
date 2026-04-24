@@ -1,10 +1,14 @@
 /**
- * ERGSN Mail Worker — branded transactional email via MailChannels
+ * ERGSN Mail Worker — branded transactional email via Resend
  *
- * Sends ERGSN-branded HTML email through Cloudflare's free MailChannels
- * relay. Wraps the caller's HTML body in a navy + neon-green template
- * with masthead logo, address block, and Telegram/WhatsApp links so
- * every outbound message looks like the same brand.
+ * Sends ERGSN-branded HTML email through the Resend API. Wraps the
+ * caller's HTML body in a navy + neon-green template with masthead
+ * logo, address block, and Telegram/WhatsApp links so every outbound
+ * message looks like the same brand.
+ *
+ * NOTE 2026-04-25: previous version targeted MailChannels which ended
+ * its free Cloudflare Workers plan in 2024-06. Switched to Resend
+ * (free tier 100/day · 3000/month, sufficient for ERGSN volume).
  *
  * ----------------------------------------------------------------------
  * ENDPOINTS
@@ -21,7 +25,7 @@
  *         replyTo?:     "ceodon@gmail.com" | { email, name },
  *         cc?:          [{ email, name? }, ...]
  *       }
- *     Response: { ok: true } on success, { ok: false, error, ... } on fail.
+ *     Response: { ok: true, id } on success, { ok: false, error, ... } on fail.
  *
  *   POST /raw        — admin-only (X-Admin-Key). Bypasses brand wrap.
  *                      For owner-side admin tasks; never call from browser.
@@ -29,45 +33,30 @@
  * ----------------------------------------------------------------------
  * SECRETS (Cloudflare → Worker → Settings → Variables and Secrets)
  *
- *   ALLOW_ORIGIN — comma list, e.g. "https://ergsn.net,https://ceodon.github.io"
- *   ADMIN_KEY    — long random string for the /raw endpoint
+ *   RESEND_API_KEY — Resend API key (re_...)
+ *   ALLOW_ORIGIN   — comma list, e.g. "https://ergsn.net,https://ceodon.github.io"
+ *   ADMIN_KEY      — long random string for the /raw endpoint
  *
  * ----------------------------------------------------------------------
- * DNS — required for MailChannels to accept ergsn.net `from`:
+ * RESEND DOMAIN VERIFICATION (one-time, owner action)
  *
- *   1) SPF (single TXT record at apex):
- *        Type: TXT
- *        Name: @  (or ergsn.net)
- *        Value: v=spf1 include:relay.mailchannels.net ~all
- *
- *      If a SPF record already exists, MERGE — do not create a second
- *      v=spf1 record (only one is allowed per domain). Insert
- *      `include:relay.mailchannels.net` into the existing record.
- *
- *   2) Domain Lockdown (recommended — prevents others from sending as
- *      ergsn.net through MailChannels):
- *        Type: TXT
- *        Name: _mailchannels
- *        Value: v=mc1 cfid=<your-account-subdomain>.workers.dev
- *
- *   3) DKIM (optional but boosts inbox placement) — generate keys via
- *      `openssl genrsa 2048` + add `_domainkey.ergsn.net` TXT.
- *      Skip on first deploy; revisit if Gmail/Outlook flags as spam.
+ *   1. resend.com → Sign up
+ *   2. Domains → Add Domain → "ergsn.net"
+ *   3. Add the four DNS records Resend shows (SPF + 3× DKIM) to
+ *      Cloudflare DNS (Websites → ergsn.net → DNS → Records)
+ *   4. Click Verify in Resend (waits for DNS propagation, ~5 min)
+ *   5. API Keys → Create API Key → name "ergsn-mail-worker" → copy
  *
  * ----------------------------------------------------------------------
- * DEPLOY
+ * HEALTH CHECK
  *
- *   1. CF Dashboard → Workers & Pages → Create Worker → name "ergsn-mail"
- *   2. Code: paste this entire file → Save and deploy
- *   3. Settings → Variables and Secrets → add ALLOW_ORIGIN + ADMIN_KEY
- *   4. Add the SPF DNS record above
- *   5. Health check (with origin set so CORS gate passes):
- *        curl -X POST -H "Origin: https://ergsn.net" \
- *             -H "Content-Type: application/json" \
- *             -d '{"to":"ceodon@gmail.com","subject":"ERGSN mail worker test",
- *                  "htmlBody":"<p>Hello from <strong>ERGSN</strong></p>"}' \
- *             https://ergsn-mail.<your-sub>.workers.dev/send
- *      Expect: HTTP 200 + {"ok":true}, and the email lands in your inbox.
+ *   curl -X POST -H "Origin: https://ergsn.net" \
+ *        -H "Content-Type: application/json" \
+ *        -d '{"to":"ceodon@gmail.com","subject":"ERGSN test",
+ *             "htmlBody":"<p>Hello</p>"}' \
+ *        https://ergsn-mail.<sub>.workers.dev/send
+ *   Expect: HTTP 200 + {"ok":true,"id":"..."} and the email lands in
+ *   inbox (or spam if DNS verification incomplete).
  */
 
 export default {
@@ -131,17 +120,15 @@ async function handleSend(body, env, cors) {
 
   const wrappedHtml = wrapInTemplate(htmlBody, subject);
 
-  const payload = buildMailChannelsPayload({
-    from:    { email: fromEmail, name: fromName },
-    to:      recipients,
-    cc:      cc || undefined,
+  return sendThroughResend({
+    fromEmail, fromName,
+    to: recipients,
+    cc: cc || null,
+    replyTo,
     subject,
-    html:    wrappedHtml,
-    text:    textBody,
-    replyTo: replyTo
-  });
-
-  return sendThroughMailChannels(payload, cors);
+    html: wrappedHtml,
+    text: textBody
+  }, env, cors);
 }
 
 /* ==================================================================
@@ -152,49 +139,67 @@ async function handleRaw(body, env, cors, request) {
   if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
     return jsonResponse({ ok: false, error: 'unauthorized' }, 401, cors);
   }
-  /* Caller is fully responsible for the MailChannels payload shape. */
-  return sendThroughMailChannels(body, cors);
+  /* Caller is fully responsible for the Resend payload shape — passed
+     through as-is. Use this only when the brand wrap is in the way
+     (e.g. plaintext receipts, vendor-facing system emails). */
+  return sendRawResend(body, env, cors);
 }
 
 /* ==================================================================
- * MailChannels relay
+ * Resend relay
  * ================================================================== */
-async function sendThroughMailChannels(payload, cors) {
+async function sendThroughResend({ fromEmail, fromName, to, cc, replyTo, subject, html, text }, env, cors) {
+  if (!env.RESEND_API_KEY) {
+    return jsonResponse({ ok: false, error: 'RESEND_API_KEY not configured' }, 500, cors);
+  }
+
+  const resendBody = {
+    from:    fromName ? `${fromName} <${fromEmail}>` : fromEmail,
+    to:      to.map(r => r.email),
+    subject,
+    html,
+    text
+  };
+  if (cc && cc.length) resendBody.cc = cc.map(r => r.email);
+  if (replyTo) {
+    const r = (typeof replyTo === 'string') ? replyTo : replyTo.email;
+    if (r) resendBody.reply_to = r;
+  }
+
+  return callResend(resendBody, env, cors);
+}
+
+async function sendRawResend(rawBody, env, cors) {
+  if (!env.RESEND_API_KEY) {
+    return jsonResponse({ ok: false, error: 'RESEND_API_KEY not configured' }, 500, cors);
+  }
+  return callResend(rawBody, env, cors);
+}
+
+async function callResend(body, env, cors) {
   let r;
   try {
-    r = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: {
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     });
   } catch (e) {
     return jsonResponse({ ok: false, error: 'fetch failed', detail: String(e).slice(0, 300) }, 502, cors);
   }
-  if (r.ok) return jsonResponse({ ok: true }, 200, cors);
+  if (r.ok) {
+    const data = await r.json().catch(() => ({}));
+    return jsonResponse({ ok: true, id: data.id || null }, 200, cors);
+  }
   const detail = await r.text().catch(() => '');
   return jsonResponse(
-    { ok: false, error: 'mailchannels rejected', status: r.status, detail: detail.slice(0, 500) },
+    { ok: false, error: 'resend rejected', status: r.status, detail: detail.slice(0, 500) },
     502,
     cors
   );
-}
-
-function buildMailChannelsPayload({ from, to, cc, subject, html, text, replyTo }) {
-  const personalisation = { to: to };
-  if (cc && cc.length) personalisation.cc = cc;
-  const content = [];
-  if (text) content.push({ type: 'text/plain', value: text });
-  if (html) content.push({ type: 'text/html',  value: html });
-  const payload = {
-    personalizations: [personalisation],
-    from,
-    subject,
-    content
-  };
-  if (replyTo) {
-    payload.reply_to = typeof replyTo === 'string' ? { email: replyTo } : replyTo;
-  }
-  return payload;
 }
 
 /* ==================================================================

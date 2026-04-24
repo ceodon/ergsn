@@ -1,0 +1,17 @@
+// ERGSN Mail Worker config — separate from the site's wrangler.jsonc so
+// `wrangler deploy --config wrangler.mail.jsonc` ships ONLY the mail
+// worker without re-uploading the entire static site.
+//
+// Usage:
+//   npx wrangler deploy --config wrangler.mail.jsonc
+//   npx wrangler secret put ALLOW_ORIGIN --config wrangler.mail.jsonc
+//   npx wrangler secret put ADMIN_KEY    --config wrangler.mail.jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ergsn-mail",
+  "main": "cloudflare-worker-mail.js",
+  "compatibility_date": "2026-04-24",
+  "observability": {
+    "enabled": true
+  }
+}
