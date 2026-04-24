@@ -275,18 +275,17 @@ function wrapInTemplate(bodyHtml, subject, locale) {
      width the mail client allocates. -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
   <tr><td style="padding:12px 10px;">
-    <!-- Inner card: left/right black borders tie the white body to the dark
-         header and footer so the three rows read as one coherent card. The
-         borders share #0f0f0f with the header/footer background, so they
-         visually merge at the corners. border-radius + overflow:hidden round
-         the four corners (Outlook desktop falls back to square corners but
-         keeps the colours intact). border-collapse must be `separate` for
-         border-radius to apply at all in HTML tables.
-         The outer <td> padding (12px top/bottom, 10px sides) lifts the card
-         off the reading-pane edge so the rounded corners are actually visible
-         — at padding:0 the corners were being clipped flush against the pane
-         in Gmail web + iOS Mail. -->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-top:2px solid #0f0f0f;border-bottom:2px solid #0f0f0f;border-radius:16px;overflow:hidden;border-collapse:separate;border-spacing:0;">
+    <!-- Outer card chrome lives on a <div>, NOT on the table. Gmail (web,
+         Android, iOS) strips border-radius / overflow:hidden when applied to
+         <table>; the same rules survive on <div>. So:
+           div  → border + radius + overflow:hidden + outer card paint
+           table → flat layout grid for the rows (header / body / footer)
+         Outlook desktop ignores border-radius on the div too, but renders
+         the inner table normally — so the worst-case fallback is a square
+         card with the same colours. Every other client gets the rounded
+         16px chamfer with the dark outline tied at the corners. -->
+    <div style="background:#ffffff;border:2px solid #0f0f0f;border-radius:16px;overflow:hidden;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-collapse:collapse;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
@@ -334,6 +333,7 @@ function wrapInTemplate(bodyHtml, subject, locale) {
       </tr>
 
     </table>
+    </div>
   </td></tr>
 </table>
 </body>
