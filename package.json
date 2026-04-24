@@ -4,11 +4,15 @@
   "description": "ERGSN — Korea's Trusted Trade Gateway. Static site + ingestion pipeline for the verified product catalog.",
   "scripts": {
     "build:products": "node scripts/build-products.js",
+    "build:js":       "esbuild scripts/app.entry.js  --bundle --minify --sourcemap --target=es2018 --outfile=dist/app.js",
+    "build:css":      "esbuild styles/app.entry.css  --bundle --minify --outfile=dist/app.css",
+    "build":          "npm run build:products && npm run build:js && npm run build:css",
     "process:images": "node scripts/process-images.js",
-    "extract:pdf": "node scripts/extract-from-pdf.js"
+    "extract:pdf":    "node scripts/extract-from-pdf.js"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
+    "esbuild": "^0.24.0",
     "sharp": "^0.34.0"
   }
 }

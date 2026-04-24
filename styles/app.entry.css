@@ -1,0 +1,5 @@
+/* ERGSN style bundle entry — Plan B-0 placeholder.
+ *
+ * B-1 will lift the inline <style> blocks out of index.html into
+ * per-area .css partials @import-ed from here. Empty for now so
+ * `npm run build:css` succeeds without yet touching the live HTML. */

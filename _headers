@@ -1,0 +1,40 @@
+## ERGSN — Cloudflare Pages security headers
+## ----------------------------------------------------------------
+## Active only when the site is served from Cloudflare Pages.
+## On GitHub Pages this file is ignored (Pages does not support
+## custom HTTP headers). Reference: A-1 from the unsafe-inline /
+## frame-ancestors / Cloudflare Pages migration plan.
+##
+## What this file fixes vs. meta-CSP alone:
+##   - `frame-ancestors` is HEADER-ONLY in modern browsers; the same
+##     directive in <meta http-equiv="Content-Security-Policy"> is
+##     silently ignored. So clickjacking defence requires this file.
+##   - `Strict-Transport-Security`, `Permissions-Policy`,
+##     `Cross-Origin-Opener-Policy` are header-only as well.
+##
+## Other CSP directives (script-src, style-src, connect-src, …)
+## remain in each page's <meta> tag because they apply page-by-page
+## and we do not want to maintain two sources of truth. Once
+## `'unsafe-inline'` is removed (Plan B-1), the script-src / style-src
+## hashes can be promoted into the headers below.
+
+/*
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  X-Content-Type-Options: nosniff
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+## Long-lived cache for fingerprinted build output (will be added when
+## esbuild emits hashed filenames into /dist/). Safe even before /dist
+## exists — non-matching paths simply fall through.
+/dist/*
+  Cache-Control: public, max-age=31536000, immutable
+
+## Product images are content-addressed by filename; treat as immutable.
+/images/products/*
+  Cache-Control: public, max-age=31536000, immutable
+/images/stays/*
+  Cache-Control: public, max-age=31536000, immutable
