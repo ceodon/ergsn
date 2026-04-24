@@ -117,6 +117,30 @@ function sectorGridId(key) {
   })[key];
 }
 
+/* ---------------------------------------------------------------------------
+ * Sub-category grouping (Plan C-1)
+ *
+ * When a sector defines an ORDER below, the catalog runtime sorts that
+ * sector's cards by sub-category and inserts a sticky `.product-group-header`
+ * before each new group. The LABEL map controls the human-readable string.
+ *
+ * To enable a new sector: add an array to SUB_CATEGORY_ORDER and a label
+ * map to SUB_CATEGORY_LABEL. Sectors without an entry render flat as before.
+ * ------------------------------------------------------------------------- */
+const SUB_CATEGORY_ORDER = {
+  'k-beauty': ['toner', 'ampoule', 'cream', 'primer', 'cushion', 'setting-mist']
+};
+const SUB_CATEGORY_LABEL = {
+  'k-beauty': {
+    toner:          'Toner',
+    ampoule:        'Ampoule',
+    cream:          'Cream',
+    primer:         'Primer',
+    cushion:        'Cushion',
+    'setting-mist': 'Setting Mist'
+  }
+};
+
 function main() {
   const products = load().filter(p => p.active !== false);
   products.forEach(validate);
@@ -137,7 +161,12 @@ function main() {
   for (const p of products) {
     pMap[p.id] = toPEntry(p);
     matchRows.push(toMatchEntry(p));
-    (cardsBySector[p.sector] = cardsBySector[p.sector] || []).push(p);
+    /* Trim each card row to just the fields the runtime needs — id, sub-
+       category, sector — so the emitted JSON stays compact. */
+    (cardsBySector[p.sector] = cardsBySector[p.sector] || []).push({
+      id: p.id,
+      subCategory: p.subCategory || ''
+    });
   }
 
   /* Emit output file — an IIFE so no globals leak other than the merges
@@ -194,6 +223,8 @@ function main() {
     '    "k-beauty":         "kbeautyGrid",',
     '    "k-tourism-assets": "ktourismGrid"',
     '  };',
+    '  var SUB_CATEGORY_ORDER = ' + JSON.stringify(SUB_CATEGORY_ORDER, null, 2) + ';',
+    '  var SUB_CATEGORY_LABEL = ' + JSON.stringify(SUB_CATEGORY_LABEL, null, 2) + ';',
     '',
     '  /* Merge into the lexical `P` binding declared in index.html (const P at',
     '     script scope is shared across classic scripts via the global lexical',
@@ -239,8 +270,36 @@ function main() {
     '      var grid = document.getElementById(gridId);',
     '      if (!grid) return;',
     '      var existing = Array.prototype.map.call(grid.querySelectorAll(":scope > .product-card"), function (c) { return c.getAttribute("data-model"); });',
-    '      CARDS_BY_SECTOR[sector].forEach(function (p, i) {',
+    '',
+    '      /* If this sector has a sub-category order, sort cards by it and',
+    '         insert a sticky group header at every transition. Sectors without',
+    '         an order render flat in their original products.json order. */',
+    '      var order  = SUB_CATEGORY_ORDER[sector] || [];',
+    '      var labels = SUB_CATEGORY_LABEL[sector] || {};',
+    '      var cards  = CARDS_BY_SECTOR[sector].slice();',
+    '      if (order.length) {',
+    '        cards.sort(function (a, b) {',
+    '          var ai = order.indexOf(a.subCategory || ""); if (ai === -1) ai = 999;',
+    '          var bi = order.indexOf(b.subCategory || ""); if (bi === -1) bi = 999;',
+    '          return ai - bi;',
+    '        });',
+    '        /* Mark this grid as grouped so CSS can lift overflow:hidden,',
+    '           which would otherwise break position:sticky on the headers. */',
+    '        grid.classList.add("is-grouped");',
+    '      }',
+    '',
+    '      var prevSub = null;',
+    '      cards.forEach(function (p, i) {',
     '        if (existing.indexOf(p.id) !== -1) return; /* already rendered inline */',
+    '        var sub = p.subCategory || "";',
+    '        if (sub !== prevSub && labels[sub]) {',
+    '          var header = document.createElement("div");',
+    '          header.className = "product-group-header";',
+    '          header.setAttribute("data-subcategory", sub);',
+    '          header.innerHTML = "<h3 class=\\"pgh-title\\">" + labels[sub] + "<\\/h3>";',
+    '          grid.appendChild(header);',
+    '        }',
+    '        prevSub = sub;',
     '        var tmp = document.createElement("div");',
     '        tmp.innerHTML = cardHtmlFor(p.id, ADDITIONS[p.id], i);',
     '        grid.appendChild(tmp.firstChild);',

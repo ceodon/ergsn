@@ -581,6 +581,35 @@ section { scroll-margin-top: var(--nav-h); }
   border-radius: var(--radius);
   overflow: hidden;
 }
+/* Sub-category grouping (Plan C-1) — used on K-Beauty grid today.
+   scripts/build-products.js adds `.is-grouped` to the grid and inserts a
+   <div class="product-group-header"> at every sub-category transition.
+   `overflow: visible` is required so position:sticky on the headers can
+   actually stick (the default .product-grid clips them). */
+.product-grid.is-grouped {
+  overflow: visible;
+}
+.product-group-header {
+  grid-column: 1 / -1;
+  position: sticky;
+  top: calc(var(--nav-h, 60px) + 6px);
+  background: #0f1110;
+  padding: 12px 18px;
+  margin: 0;
+  z-index: 5;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+  display: flex;
+  align-items: baseline;
+}
+.pgh-title {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
 .product-card {
   background: #171717;
   padding: clamp(1.25rem,2.5vw,2rem);

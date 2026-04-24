@@ -25,6 +25,11 @@
       ],
       "description": "Sector the product is listed under. Controls which grid renders the card."
     },
+    "subCategory": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Optional within-sector grouping slug. Used to render sticky group headers in the catalog grid and to refine AI Partner Match scoring. Display order and labels are configured in scripts/build-products.js (SUB_CATEGORY_ORDER / SUB_CATEGORY_LABEL). Suggested values per sector: k-beauty → toner, ampoule, cream, primer, cushion, setting-mist; k-tourism-assets → classic-hanok, premium-hanok, pet-friendly; others not yet conventionalised."
+    },
     "active": {
       "type": "boolean",
       "default": true,

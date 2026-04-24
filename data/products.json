@@ -35,6 +35,7 @@
     {
       "id": "ddell-dewy-glow-cushion",
       "sector": "k-beauty",
+      "subCategory": "cushion",
       "model": "DEWY GLOW CUSHION PACT",
       "part": "DDELL-CUSH-DG (PRD-955)",
       "sub": "DD'ELL · Dewy-finish cushion foundation for hydrated glow",
@@ -65,6 +66,7 @@
     {
       "id": "ddell-line-lift-cushion",
       "sector": "k-beauty",
+      "subCategory": "cushion",
       "model": "LINE LIFT CUSHION PACT",
       "part": "DDELL-CUSH-LL (PRD-954)",
       "sub": "DD'ELL · Lifting cushion with firming peptide complex",
@@ -95,6 +97,7 @@
     {
       "id": "ddell-filter-primer-zeropore",
       "sector": "k-beauty",
+      "subCategory": "primer",
       "model": "FILTER PRIMER ZEROPORE",
       "part": "DDELL-PRIM-ZP (PRD-964)",
       "sub": "DD'ELL · Pore-blurring primer with smoothing silicone matrix",
@@ -125,6 +128,7 @@
     {
       "id": "ddell-setup-creame",
       "sector": "k-beauty",
+      "subCategory": "cream",
       "model": "SETUP CREAME",
       "part": "DDELL-CRM-SU (PRD-956)",
       "sub": "DD'ELL · Hydrating makeup-base cream for lasting wear",
@@ -155,6 +159,7 @@
     {
       "id": "ddell-glowup-cream",
       "sector": "k-beauty",
+      "subCategory": "cream",
       "model": "GLOWUP CREAM",
       "part": "DDELL-CRM-GU (PRD-958)",
       "sub": "DD'ELL · Radiance-boosting cream with luminous pigment complex",
@@ -185,6 +190,7 @@
     {
       "id": "ddell-mask-defense",
       "sector": "k-beauty",
+      "subCategory": "setting-mist",
       "model": "MAKEUP FIXER MASK DEFENSE",
       "part": "DDELL-FIX-MD (PRD-961)",
       "sub": "DD'ELL · Setting mist engineered for mask-on makeup wear",
@@ -215,6 +221,7 @@
     {
       "id": "ddell-fixer-dewy-glow",
       "sector": "k-beauty",
+      "subCategory": "setting-mist",
       "model": "MAKEUP FIXER DEWY GLOW",
       "part": "DDELL-FIX-DG (PRD-959)",
       "sub": "DD'ELL · Setting mist that locks in a dewy, luminous finish",
@@ -245,6 +252,7 @@
     {
       "id": "ddell-egf-ampoule",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "E.G.F AMPOULE",
       "part": "DDELL-AMP-EGF (PRD-909)",
       "sub": "DD'ELL · Epidermal Growth Factor ampoule for advanced skin repair",
@@ -276,6 +284,7 @@
     {
       "id": "demed-vitamin-c-ampoule",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "VITAMIN C AMPOULE",
       "part": "DEMED-AMP-VC (PRD-81)",
       "sub": "DEMED · Brightening ampoule with fast-absorbing Vitamin C",
@@ -307,6 +316,7 @@
     {
       "id": "demed-collagen-ampoule-30ml",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "COLLAGEN AMPOULE 30ML",
       "part": "DEMED-AMP-COL30 (PRD-65)",
       "sub": "DEMED · Firming collagen ampoule in 30 ml jumbo format",
@@ -338,6 +348,7 @@
     {
       "id": "demed-collagen-ampoule-7ml",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "COLLAGEN AMPOULE 7ML × 5EA",
       "part": "DEMED-AMP-COL5 (PRD-82)",
       "sub": "DEMED · Collagen ampoule in single-use vial 5-pack",
@@ -369,6 +380,7 @@
     {
       "id": "demed-hyaluronic-soothing-ampoule",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "HYALURONIC SOOTHING AMPOULE",
       "part": "DEMED-AMP-HYA (PRD-60)",
       "sub": "DEMED · Multi-weight hyaluronic soothing ampoule, 7 ml × 5",
@@ -400,6 +412,7 @@
     {
       "id": "demed-brightening-ampoule",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "BRIGHTENING AMPOULE",
       "part": "DEMED-AMP-BRT (PRD-61)",
       "sub": "DEMED · Intensive brightening ampoule, 7 ml × 5",
@@ -431,6 +444,7 @@
     {
       "id": "demed-spicule-peptide-300",
       "sector": "k-beauty",
+      "subCategory": "ampoule",
       "model": "SPICULE PEPTIDE 300 SHOT",
       "part": "DEMED-AMP-SP300 (PRD-59)",
       "sub": "DEMED · Spicule-delivery peptide shot ampoule, 7 ml × 5",
@@ -462,6 +476,7 @@
     {
       "id": "demed-extra-intense-moisture-cream-m8",
       "sector": "k-beauty",
+      "subCategory": "cream",
       "model": "EXTRA INTENSE MOISTURE CREAM 50G [M8]",
       "part": "DEMED-CRM-M8 (PRD-71)",
       "sub": "DEMED · Barrier-repair cream for very dry / compromised skin",
@@ -635,6 +650,7 @@
     {
       "id": "demed-wonder-ceramid-toner",
       "sector": "k-beauty",
+      "subCategory": "toner",
       "model": "WONDER CERAMID TONER",
       "part": "DEMED-TNR-WC (PRD-92)",
       "sub": "DEMED · New-release ceramide toner for barrier support",
