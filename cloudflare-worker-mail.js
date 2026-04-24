@@ -310,7 +310,10 @@ function wrapInTemplate(bodyHtml, subject, locale) {
       <tr>
         <td style="background:#0f0f0f;padding:20px 32px;font-size:11px;line-height:1.7;">
           <p style="margin:0 0 10px;">${logoInline(14, '#ffffff')}</p>
-          <p style="margin:0 0 12px;color:#8a8b8d;">${L.address}</p>
+          <!-- Address wrapped in a no-op anchor + cursor:default + pointer-events:none
+               so Gmail/Apple Mail do NOT auto-detect it and turn the line into a
+               Google Maps hyperlink (the wrapper signals "already linked, leave it"). -->
+          <p style="margin:0 0 12px;"><a href="#" style="color:#8a8b8d;text-decoration:none;cursor:default;pointer-events:none;-webkit-tap-highlight-color:transparent;">${L.address}</a></p>
           <p style="margin:0 0 6px;font-size:10px;color:#8a8b8d;">${L.copy}</p>
           <p style="margin:0;font-size:10px;color:#8a8b8d;">
             <a href="https://ergsn.net/privacy.html" style="color:#8a8b8d;text-decoration:underline;">${L.privacy}</a>
