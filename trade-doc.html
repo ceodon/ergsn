@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERGSN Trade Document · Editor</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --gold:#34d298; --navy:#0f0f0f; --navy-2:#141414; --white:#fff; --tx-mid:#cfcfcf; --tx-lt:#8a8b8d; --border:#242424; --warn:#e0a83f; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans KR",sans-serif; line-height:1.55; }
+  .wrap { max-width:1100px; margin:0 auto; padding:2rem clamp(16px,4vw,32px) 4rem; }
+  h1 { color:var(--white); font-size:1.3rem; margin:0 0 .3rem; }
+  .pill { display:inline-block; padding:3px 9px; background:rgba(52,210,152,.14); color:var(--gold); border:1px solid rgba(52,210,152,.3); border-radius:12px; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:.5rem; }
+  .panel { background:var(--navy-2); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.3rem; margin-bottom:.9rem; }
+  .row { display:flex; flex-direction:column; gap:6px; margin-bottom:.7rem; }
+  .row.two { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:.7rem; }
+  .row.three { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:.7rem; }
+  @media (max-width:600px) { .row.two, .row.three { grid-template-columns:1fr; } }
+  label { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tx-lt); font-weight:700; }
+  input, select, textarea { width:100%; padding:8px 10px; background:#0d0d0d; border:1px solid var(--border); border-radius:6px; color:var(--white); font:inherit; font-size:12.5px; outline:none; }
+  input:focus, select:focus, textarea:focus { border-color:var(--gold); }
+  textarea { min-height:80px; resize:vertical; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 16px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; border:0; text-decoration:none; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; }
+  .btn-warn { background:var(--warn); color:#0a0a0a; }
+  .btn-ghost { background:transparent; color:var(--tx-mid); border:1px solid var(--border); }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:.8rem; }
+  .toast { padding:9px 13px; border-radius:6px; font-size:12.5px; margin-top:.7rem; display:none; }
+  .toast.ok { background:rgba(52,210,152,.12); color:var(--gold); border:1px solid rgba(52,210,152,.3); display:block; }
+  .toast.err { background:rgba(224,107,107,.12); color:#ff8a8a; border:1px solid rgba(224,107,107,.3); display:block; }
+  .small { font-size:11.5px; color:var(--tx-lt); }
+
+  /* Line item table */
+  table.tdli { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:.6rem; }
+  table.tdli th, table.tdli td { padding:5px 6px; border-bottom:1px solid #1d1d1d; vertical-align:middle; }
+  table.tdli th { text-align:left; font-size:10px; letter-spacing:.06em; color:var(--tx-lt); text-transform:uppercase; font-weight:700; }
+  table.tdli td.amt { text-align:right; font-family:ui-monospace,Menlo,monospace; color:var(--white); }
+  table.tdli input { padding:5px 7px; font-size:12px; }
+  table.tdli .rm { background:transparent; border:0; color:#ff8a8a; cursor:pointer; font-size:16px; }
+  .tdli-add { background:transparent; color:var(--gold); border:1px dashed var(--border); padding:6px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer; margin-top:4px; }
+  .tdli-add:hover { border-color:var(--gold); }
+  .totals { margin-left:auto; max-width:300px; font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--white); border-top:1px solid var(--border); padding-top:.5rem; }
+  .totals .r { display:flex; justify-content:space-between; padding:3px 0; }
+  .totals .r.total { border-top:1px solid var(--gold); margin-top:.3rem; padding-top:.4rem; font-weight:700; color:var(--gold); }
+
+  @media print {
+    body * { visibility:hidden; }
+    #print-area, #print-area * { visibility:visible; }
+    #print-area { position:absolute; left:0; top:0; width:100%; background:#fff; color:#000; padding:18mm; }
+    .no-print { display:none !important; }
+  }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js (no-print on PDF) -->
+<div class="wrap" id="ui">
+  <p class="pill"><span id="docTypeLabel">Document</span></p>
+  <h1><span id="docTitle">Loading…</span></h1>
+  <p class="small" id="txInfo">Transaction <code id="txIdLabel">-</code> · <span id="buyerInfo"></span></p>
+
+  <div class="panel" id="gate">
+    <div class="row"><label>ADMIN_KEY</label><input type="password" id="adminKeyInput" autocomplete="off"></div>
+    <div><button class="btn btn-primary" id="gateBtn">진입 →</button></div>
+    <div class="toast" id="gateToast"></div>
+  </div>
+
+  <div id="app" style="display:none;">
+    <div class="panel">
+      <div class="row two"><div><label>Document Date</label><input type="date" id="docDate"></div><div><label>Currency</label><select id="currency"><option>USD</option><option>EUR</option><option>KRW</option><option>JPY</option><option>CNY</option></select></div></div>
+      <div id="extraFields"></div>
+      <div class="row"><label>Items</label><div id="lineItems"></div></div>
+      <div class="totals">
+        <div class="r"><span>Subtotal</span><span id="ttSub">0.00</span></div>
+        <div class="r"><span>Discount</span><span><input id="ttDisc" type="number" min="0" step="any" style="width:90px;text-align:right;font-family:inherit;font-size:12px"></span></div>
+        <div class="r"><span>Tax %</span><span><input id="ttTax" type="number" min="0" step="any" value="0" style="width:90px;text-align:right;font-family:inherit;font-size:12px"></span></div>
+        <div class="r total"><span>Total</span><span id="ttTotal">0.00</span></div>
+      </div>
+      <div class="row" style="margin-top:1rem"><label>Notes / Terms</label><textarea id="docNotes" placeholder="Payment terms, delivery, validity, special instructions…"></textarea></div>
+      <div class="actions">
+        <button class="btn btn-primary" id="saveBtn">💾 Save</button>
+        <button class="btn btn-warn" id="sendBtn">📨 Send to buyer (brand mail)</button>
+        <button class="btn btn-ghost" id="printBtn">🖨 Print / PDF</button>
+        <a class="btn btn-ghost" href="trade-docs.html">← Dashboard</a>
+      </div>
+      <div class="toast" id="opToast"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Print area (rendered just-in-time before window.print()) -->
+<div id="print-area" style="display:none"></div>
+
+<script src="scripts/trade-docs.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const TYPE = params.get('type');     // quotation|po|proforma|commercial|packing
+const TX_ID = params.get('tx');
+const DOC_ID = params.get('id');     // optional: edit existing
+let txData = null;
+let li = null;
+let docDateMs = Date.now();
+
+if (!TYPE || !TD.DOC_META[TYPE]) document.body.innerHTML = '<div class="wrap"><h1>Bad ?type</h1><p>type=quotation|po|proforma|commercial|packing</p></div>';
+if (!TX_ID) document.body.innerHTML = '<div class="wrap"><h1>Missing ?tx</h1><p>tx=TX-2026-0001</p></div>';
+
+const meta = TD.DOC_META[TYPE];
+$('docTypeLabel').textContent = meta.title_en + ' / ' + meta.title_ko;
+$('docTitle').textContent = meta.title_en;
+$('txIdLabel').textContent = TX_ID;
+$('docDate').value = new Date().toISOString().slice(0,10);
+
+function showApp() { $('gate').style.display = 'none'; $('app').style.display = 'block'; loadTx(); }
+
+async function loadTx() {
+  try {
+    const r = await TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID));
+    txData = r.transaction;
+    $('buyerInfo').innerHTML = TD.esc(txData.buyer_company) + ' · ' + TD.esc(txData.buyer_email) + ' · ' + TD.esc(txData.buyer_country || '');
+    initFields();
+    if (DOC_ID) loadDoc();
+  } catch (e) {
+    $('app').innerHTML = '<div class="panel" style="color:#ff8a8a">Transaction load failed: ' + TD.esc(e.message) + '</div>';
+  }
+}
+
+function initFields() {
+  /* Per-type extra fields */
+  const ex = $('extraFields');
+  ex.innerHTML = '';
+  if (TYPE === 'commercial') {
+    ex.innerHTML = `
+      <div class="row three">
+        <div><label>B/L Number</label><input id="ex_bl"></div>
+        <div><label>Container No.</label><input id="ex_container"></div>
+        <div><label>Shipped Date</label><input id="ex_shipped" type="date"></div>
+      </div>
+      <div class="row two">
+        <div><label>Country of Origin</label><input id="ex_coo" value="Republic of Korea"></div>
+        <div><label>Incoterms</label><select id="ex_incoterms"><option>CIF</option><option>FOB</option><option>EXW</option><option>DAP</option><option>DDP</option></select></div>
+      </div>`;
+  } else if (TYPE === 'packing') {
+    ex.innerHTML = `
+      <div class="row three">
+        <div><label>Total Cartons</label><input id="ex_cartons" type="number"></div>
+        <div><label>Total Net Wt (kg)</label><input id="ex_nw" type="number" step="any"></div>
+        <div><label>Total Gross Wt (kg)</label><input id="ex_gw" type="number" step="any"></div>
+      </div>
+      <div class="row"><label>Total Volume (m³)</label><input id="ex_vol" type="number" step="any"></div>`;
+  } else if (TYPE === 'quotation') {
+    ex.innerHTML = `<div class="row"><label>Valid Until</label><input id="ex_validUntil" type="date"></div>`;
+  } else if (TYPE === 'po') {
+    ex.innerHTML = `<div class="row"><label>Buyer Reference / Internal PO No.</label><input id="ex_buyerRef"></div>`;
+  } else if (TYPE === 'proforma') {
+    ex.innerHTML = `<div class="row two">
+      <div><label>Payment Terms</label><input id="ex_payterms" value="100% T/T in advance"></div>
+      <div><label>Delivery Time</label><input id="ex_delivery" value="4-6 weeks ARO"></div>
+    </div>`;
+  }
+  /* Line items */
+  li = TD.renderLineItems($('lineItems'), [{}], { showHs: TYPE === 'commercial', showPack: TYPE === 'packing', onChange: recalc });
+  ['ttDisc','ttTax'].forEach(id => $(id).addEventListener('input', recalc));
+  recalc();
+}
+
+function recalc() {
+  const rows = li ? li.getRows() : [];
+  const sub = rows.reduce((s, r) => s + (r.amt || 0), 0);
+  const disc = +$('ttDisc').value || 0;
+  const tax  = +$('ttTax').value  || 0;
+  const taxed = (sub - disc) * (1 + tax / 100);
+  $('ttSub').textContent = TD.fmt(sub);
+  $('ttTotal').textContent = TD.fmt(taxed);
+}
+
+function gather() {
+  const data = {
+    document_date: $('docDate').value,
+    currency: $('currency').value,
+    items: li.getRows(),
+    discount: +$('ttDisc').value || 0,
+    tax_pct: +$('ttTax').value || 0,
+    notes: $('docNotes').value
+  };
+  /* per-type extras */
+  if (TYPE === 'commercial') {
+    data.bl_number    = $('ex_bl').value;
+    data.container_no = $('ex_container').value;
+    data.shipped_at   = $('ex_shipped').value ? Date.parse($('ex_shipped').value) : null;
+    data.coo          = $('ex_coo').value;
+    data.incoterms    = $('ex_incoterms').value;
+  } else if (TYPE === 'packing') {
+    data.total_weight_kg = +$('ex_gw').value || data.items.reduce((s,r)=>s+(r.gw||0),0);
+    data.total_net_kg    = +$('ex_nw').value || data.items.reduce((s,r)=>s+(r.nw||0),0);
+    data.total_volume_m3 = +$('ex_vol').value || 0;
+    data.carton_count    = +$('ex_cartons').value || data.items.reduce((s,r)=>s+(r.ctns||0),0);
+  } else if (TYPE === 'quotation') {
+    data.valid_until = $('ex_validUntil').value ? Date.parse($('ex_validUntil').value) : null;
+  } else if (TYPE === 'po') {
+    data.buyer_ref = $('ex_buyerRef').value;
+  } else if (TYPE === 'proforma') {
+    data.payment_terms = $('ex_payterms').value;
+    data.delivery      = $('ex_delivery').value;
+  }
+  /* totals echoed for D1 promoted columns */
+  const sub = data.items.reduce((s,r)=>s+(r.amt||0),0);
+  data.subtotal = sub;
+  data.total_amount = (sub - data.discount) * (1 + data.tax_pct/100);
+  return data;
+}
+
+async function loadDoc() {
+  try {
+    const r = await TD.apiAdmin('GET', '/doc/' + TYPE + '/' + DOC_ID);
+    const d = r.doc.data;
+    if (d.document_date) $('docDate').value = d.document_date;
+    if (d.currency) $('currency').value = d.currency;
+    if (d.discount) $('ttDisc').value = d.discount;
+    if (d.tax_pct) $('ttTax').value = d.tax_pct;
+    if (d.notes) $('docNotes').value = d.notes;
+    /* Re-render line items with loaded data */
+    li = TD.renderLineItems($('lineItems'), d.items || [{}], { showHs: TYPE==='commercial', showPack: TYPE==='packing', onChange: recalc });
+    /* Per-type extras */
+    if (TYPE === 'commercial') {
+      $('ex_bl').value = d.bl_number || '';
+      $('ex_container').value = d.container_no || '';
+      $('ex_shipped').value = d.shipped_at ? new Date(d.shipped_at).toISOString().slice(0,10) : '';
+      $('ex_coo').value = d.coo || 'Republic of Korea';
+      if (d.incoterms) $('ex_incoterms').value = d.incoterms;
+    } else if (TYPE === 'packing') {
+      $('ex_cartons').value = d.carton_count || '';
+      $('ex_nw').value = d.total_net_kg || '';
+      $('ex_gw').value = d.total_weight_kg || '';
+      $('ex_vol').value = d.total_volume_m3 || '';
+    } else if (TYPE === 'quotation') {
+      $('ex_validUntil').value = d.valid_until ? new Date(d.valid_until).toISOString().slice(0,10) : '';
+    } else if (TYPE === 'po') {
+      $('ex_buyerRef').value = d.buyer_ref || '';
+    } else if (TYPE === 'proforma') {
+      $('ex_payterms').value = d.payment_terms || '';
+      $('ex_delivery').value = d.delivery || '';
+    }
+    recalc();
+  } catch (_) {}
+}
+
+async function save() {
+  const t = $('opToast'); t.className='toast'; t.textContent='';
+  try {
+    const data = gather();
+    if (DOC_ID) {
+      await TD.apiAdmin('PATCH', '/doc/' + TYPE + '/' + DOC_ID, { data, total_amount: data.total_amount, currency: data.currency });
+      t.className='toast ok'; t.textContent='✓ Updated ' + DOC_ID;
+    } else {
+      const r = await TD.apiAdmin('POST', '/doc/' + TYPE, { transaction_id: TX_ID, data });
+      t.className='toast ok'; t.innerHTML='✓ ' + TD.esc(r.id) + ' 생성됨. <a href="?type=' + TYPE + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">편집 모드로 이동</a>';
+    }
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+function buildPrintHtml(data) {
+  const items = data.items.map((r, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${TD.esc(r.desc || '')}</td>
+      ${TYPE==='commercial' ? `<td>${TD.esc(r.hs || '')}</td>` : ''}
+      <td style="text-align:right">${TD.fmt(r.qty, 0)} ${TD.esc(r.unit || '')}</td>
+      <td style="text-align:right">${TD.fmt(r.up)}</td>
+      <td style="text-align:right">${TD.fmt(r.amt)}</td>
+      ${TYPE==='packing' ? `<td style="text-align:right">${TD.fmt(r.ctns,0)}</td><td style="text-align:right">${TD.fmt(r.nw)}</td><td style="text-align:right">${TD.fmt(r.gw)}</td>` : ''}
+    </tr>`).join('');
+  const extras = (() => {
+    if (TYPE === 'commercial') return `<p><b>B/L:</b> ${TD.esc(data.bl_number||'')} · <b>Container:</b> ${TD.esc(data.container_no||'')} · <b>Incoterms:</b> ${TD.esc(data.incoterms||'')} · <b>COO:</b> ${TD.esc(data.coo||'')}</p>`;
+    if (TYPE === 'packing')    return `<p><b>Cartons:</b> ${data.carton_count||''} · <b>Net:</b> ${TD.fmt(data.total_net_kg)} kg · <b>Gross:</b> ${TD.fmt(data.total_weight_kg)} kg · <b>Vol:</b> ${TD.fmt(data.total_volume_m3)} m³</p>`;
+    if (TYPE === 'quotation')  return data.valid_until ? `<p><b>Valid until:</b> ${new Date(data.valid_until).toISOString().slice(0,10)}</p>` : '';
+    if (TYPE === 'proforma')   return `<p><b>Payment Terms:</b> ${TD.esc(data.payment_terms||'')} · <b>Delivery:</b> ${TD.esc(data.delivery||'')}</p>`;
+    if (TYPE === 'po')         return data.buyer_ref ? `<p><b>Buyer Ref:</b> ${TD.esc(data.buyer_ref)}</p>` : '';
+    return '';
+  })();
+  return `
+    <div style="font-family:'Segoe UI',Arial,sans-serif;color:#000;font-size:12px;line-height:1.4">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0f0f0f;padding-bottom:8px;margin-bottom:14px">
+        <div style="font-size:22px;font-weight:800;letter-spacing:.04em"><span style="color:#34d298">E</span>RGSN</div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:800">${meta.title_en}</div>
+          <div style="font-size:11px;color:#666">${meta.title_ko} · ${TX_ID}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;font-size:11px">
+        <div>
+          <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Seller</div>
+          ERGSN CO., LTD.<br>
+          #503 Susong BD, 12-21, Seoae-ro 5-gil<br>
+          Joong-gu, Seoul 04623, Republic of Korea<br>
+          ergsn.net
+        </div>
+        <div>
+          <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Buyer</div>
+          ${TD.esc(txData.buyer_company)}<br>
+          ${TD.esc(txData.buyer_email)}<br>
+          ${TD.esc(txData.buyer_country || '')}
+        </div>
+      </div>
+      <div style="margin-bottom:8px;font-size:11px"><b>Document Date:</b> ${TD.esc(data.document_date || '')} · <b>Currency:</b> ${TD.esc(data.currency || '')} · <b>Maker:</b> ${TD.esc(txData.ergsn_partner || '')}</div>
+      ${extras}
+      <table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:11px">
+        <thead style="background:#0f0f0f;color:#fff">
+          <tr>
+            <th style="padding:6px;text-align:left">#</th><th style="padding:6px;text-align:left">Description</th>
+            ${TYPE==='commercial' ? '<th style="padding:6px">HS</th>' : ''}
+            <th style="padding:6px;text-align:right">Qty</th>
+            <th style="padding:6px;text-align:right">Unit Price</th>
+            <th style="padding:6px;text-align:right">Amount</th>
+            ${TYPE==='packing' ? '<th>Ctns</th><th>NW</th><th>GW</th>' : ''}
+          </tr>
+        </thead>
+        <tbody>${items}</tbody>
+      </table>
+      <div style="margin-left:auto;width:260px;font-family:ui-monospace,Menlo,monospace;font-size:12px;border-top:2px solid #0f0f0f;padding-top:6px">
+        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${TD.fmt(data.subtotal)}</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Discount</span><span>-${TD.fmt(data.discount)}</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Tax (${data.tax_pct}%)</span><span>${TD.fmt((data.subtotal-data.discount)*data.tax_pct/100)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:#34d298;border-top:1px solid #0f0f0f;padding-top:4px;margin-top:4px"><span>Total</span><span>${TD.fmt(data.total_amount)}</span></div>
+      </div>
+      ${data.notes ? `<div style="margin-top:18px;font-size:11px;border-top:1px dashed #999;padding-top:8px"><b>Notes:</b> ${TD.esc(data.notes)}</div>` : ''}
+      <div style="margin-top:30px;font-size:10px;color:#666;border-top:1px solid #ddd;padding-top:6px">© 2013 ERGSN CO., LTD. · ergsn.net · Generated ${new Date().toISOString().slice(0,16).replace('T',' ')} UTC</div>
+    </div>`;
+}
+
+function doPrint() {
+  $('print-area').innerHTML = buildPrintHtml(gather());
+  $('print-area').style.display = 'block';
+  setTimeout(() => { window.print(); $('print-area').style.display = 'none'; }, 80);
+}
+
+async function send() {
+  const t = $('opToast'); t.className='toast'; t.textContent='';
+  try {
+    const data = gather();
+    /* Save first if new */
+    let docId = DOC_ID;
+    if (!docId) {
+      const r = await TD.apiAdmin('POST', '/doc/' + TYPE, { transaction_id: TX_ID, data });
+      docId = r.id;
+    }
+    const tokenLink = `https://ergsn.net/trade-buyer.html?t=${txData.buyer_token}`;
+    const body = `<p>Dear ${TD.esc(txData.buyer_company)},</p>
+      <p>${meta.title_en} <strong>${docId}</strong> for transaction ${TX_ID} is now available.</p>
+      <p style="padding:12px 16px;background:#f0fff5;border-left:3px solid #34d298;border-radius:6px;font-size:13px">
+        <strong>Total:</strong> ${TD.fmt(data.total_amount)} ${TD.esc(data.currency)}<br>
+        <strong>Document Date:</strong> ${TD.esc(data.document_date)}<br>
+        <strong>View / Download:</strong> <a href="${tokenLink}" style="color:#0f0f0f;font-weight:700">Open in ERGSN portal</a>
+      </p>
+      <p>Reply to this email if anything needs adjustment.</p>`;
+    await TD.sendBrandMail({
+      to: txData.buyer_email,
+      subject: `ERGSN ${meta.title_en} ${docId} — ${TD.esc(txData.buyer_company)}`,
+      htmlBody: body,
+      locale: 'en',
+      replyTo: 'ceodon@gmail.com',
+      fromName: 'ERGSN Trade Desk'
+    });
+    t.className='toast ok'; t.textContent = '✓ Sent to ' + txData.buyer_email + ' (doc id: ' + docId + ')';
+  } catch (e) { t.className='toast err'; t.textContent = '발송 실패: ' + e.message; }
+}
+
+async function tryGate() {
+  const k = $('adminKeyInput').value.trim();
+  if (!k) return;
+  TD.setAdminKey(k);
+  try { await TD.apiAdmin('GET', '/health'); }
+  catch (_) { /* /health is public; try real admin call to confirm key */ }
+  try { await TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID)); showApp(); }
+  catch (e) { TD.clearAdminKey(); const t=$('gateToast'); t.className='toast err'; t.textContent='❌ '+e.message; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (TD.adminKey()) showApp();
+  $('gateBtn').addEventListener('click', tryGate);
+  $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
+  $('saveBtn').addEventListener('click', save);
+  $('sendBtn').addEventListener('click', send);
+  $('printBtn').addEventListener('click', doPrint);
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

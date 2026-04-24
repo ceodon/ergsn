@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERGSN — Submit Purchase Order</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --gold:#34d298; --navy:#0f0f0f; --navy-2:#141414; --white:#fff; --tx-mid:#cfcfcf; --tx-lt:#8a8b8d; --border:#242424; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.55; }
+  .wrap { max-width:880px; margin:0 auto; padding:2rem clamp(16px,4vw,32px) 4rem; }
+  h1 { color:var(--white); font-size:1.4rem; margin:0 0 .3rem; }
+  .panel { background:var(--navy-2); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.3rem; margin-bottom:.9rem; }
+  .row { display:flex; flex-direction:column; gap:6px; margin-bottom:.7rem; }
+  .row.two { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:.7rem; }
+  @media (max-width:600px) { .row.two { grid-template-columns:1fr; } }
+  label { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tx-lt); font-weight:700; }
+  input, textarea, select { width:100%; padding:8px 10px; background:#0d0d0d; border:1px solid var(--border); border-radius:6px; color:var(--white); font:inherit; font-size:12.5px; outline:none; }
+  input:focus, textarea:focus, select:focus { border-color:var(--gold); }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:0; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; }
+  .btn-ghost { background:transparent; color:var(--tx-mid); border:1px solid var(--border); text-decoration:none; }
+  .toast { padding:9px 13px; border-radius:6px; font-size:12.5px; margin-top:.7rem; display:none; }
+  .toast.ok { background:rgba(52,210,152,.12); color:var(--gold); border:1px solid rgba(52,210,152,.3); display:block; }
+  .toast.err { background:rgba(224,107,107,.12); color:#ff8a8a; border:1px solid rgba(224,107,107,.3); display:block; }
+  table.tdli { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:.6rem; }
+  table.tdli th, table.tdli td { padding:5px 6px; border-bottom:1px solid #1d1d1d; }
+  table.tdli th { text-align:left; font-size:10px; color:var(--tx-lt); text-transform:uppercase; }
+  table.tdli td.amt { text-align:right; color:var(--white); font-family:ui-monospace,Menlo,monospace; }
+  table.tdli input { padding:5px 7px; font-size:12px; }
+  table.tdli .rm { background:transparent; border:0; color:#ff8a8a; cursor:pointer; font-size:16px; }
+  .tdli-add { background:transparent; color:var(--gold); border:1px dashed var(--border); padding:6px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer; margin-top:4px; }
+  .small { font-size:11.5px; color:var(--tx-lt); }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js -->
+<div class="wrap">
+  <h1>Submit Purchase Order</h1>
+  <p class="small" id="info">Loading transaction…</p>
+  <div class="panel" id="form" style="display:none">
+    <div class="row two">
+      <div><label>PO Date</label><input type="date" id="poDate"></div>
+      <div><label>Buyer Reference / Internal PO No.</label><input id="poRef" placeholder="PO-2026-001"></div>
+    </div>
+    <div class="row two">
+      <div><label>Currency</label><select id="poCur"><option>USD</option><option>EUR</option><option>JPY</option><option>CNY</option><option>KRW</option></select></div>
+      <div><label>Incoterms</label><select id="poInc"><option>CIF</option><option>FOB</option><option>EXW</option><option>DAP</option><option>DDP</option></select></div>
+    </div>
+    <div class="row"><label>Line Items</label><div id="lineItems"></div></div>
+    <div class="row"><label>Notes / Special Instructions</label><textarea id="poNotes"></textarea></div>
+    <div class="row two">
+      <div><label>Signed By (이름)</label><input id="poSignedBy"></div>
+      <div><label>I confirm this Purchase Order</label><input type="checkbox" id="poAgree" style="width:auto"></div>
+    </div>
+    <div style="margin-top:1rem">
+      <button class="btn btn-primary" id="submitBtn">Submit PO →</button>
+      <a class="btn btn-ghost" id="backLink" href="trade-buyer.html">← Back to portal</a>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script src="scripts/trade-docs.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const token = new URLSearchParams(location.search).get('t') || '';
+let li = null;
+let txData = null;
+
+if (!/^[a-f0-9]{32}$/i.test(token)) document.body.innerHTML = '<div style="padding:2rem;color:#ff8a8a">Invalid token.</div>';
+
+$('poDate').value = new Date().toISOString().slice(0,10);
+$('backLink').href = 'trade-buyer.html?t=' + encodeURIComponent(token);
+
+TD.apiBuyer(token).then(r => {
+  txData = r.transaction;
+  $('info').innerHTML = 'Transaction <code>' + TD.esc(txData.id) + '</code> · ' + TD.esc(txData.buyer_company);
+  $('form').style.display = 'block';
+  li = TD.renderLineItems($('lineItems'), [{}], { onChange: () => {} });
+}).catch(e => {
+  $('info').innerHTML = '<span style="color:#ff8a8a">Load failed: ' + TD.esc(e.message) + '</span>';
+});
+
+async function submit() {
+  const t = $('toast'); t.className='toast'; t.textContent='';
+  if (!$('poAgree').checked) { t.className='toast err'; t.textContent='Please tick the confirmation checkbox.'; return; }
+  if (!$('poSignedBy').value.trim()) { t.className='toast err'; t.textContent='Signature name is required.'; return; }
+  const items = li.getRows();
+  if (!items.some(r => r.desc && r.qty > 0)) { t.className='toast err'; t.textContent='Add at least one line item.'; return; }
+  const data = {
+    document_date: $('poDate').value,
+    buyer_ref:     $('poRef').value.trim(),
+    currency:      $('poCur').value,
+    incoterms:     $('poInc').value,
+    items,
+    subtotal:      items.reduce((s,r)=>s+(r.amt||0),0),
+    notes:         $('poNotes').value.trim(),
+    buyer_signed_at: Date.now(),
+    buyer_signature: $('poSignedBy').value.trim()
+  };
+  data.total_amount = data.subtotal;
+  try {
+    const r = await TD.apiBuyerPO(token, data);
+    t.className='toast ok'; t.textContent='✓ PO ' + r.id + ' 제출 완료. ERGSN trade desk 가 곧 연락드립니다.';
+    $('submitBtn').disabled = true;
+    setTimeout(() => location.href = 'trade-buyer.html?t=' + encodeURIComponent(token), 3000);
+  } catch (e) { t.className='toast err'; t.textContent='제출 실패: ' + e.message; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('submitBtn').addEventListener('click', submit);
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

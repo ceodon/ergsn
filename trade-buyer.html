@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERGSN Trade — Buyer Portal</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --gold:#34d298; --navy:#0f0f0f; --navy-2:#141414; --white:#fff; --tx-mid:#cfcfcf; --tx-lt:#8a8b8d; --border:#242424; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.55; }
+  .wrap { max-width:880px; margin:0 auto; padding:2rem clamp(16px,4vw,32px) 4rem; }
+  h1 { color:var(--white); font-size:1.4rem; margin:0 0 .3rem; }
+  .small { font-size:11.5px; color:var(--tx-lt); }
+  .panel { background:var(--navy-2); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.3rem; margin-bottom:.9rem; }
+  .panel h2 { color:var(--white); font-size:13px; margin:0 0 .8rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { padding:8px 6px; text-align:left; border-bottom:1px solid #1d1d1d; }
+  th { font-size:10.5px; text-transform:uppercase; color:var(--tx-lt); font-weight:700; letter-spacing:.06em; }
+  td a { color:var(--gold); text-decoration:none; }
+  .empty { color:var(--tx-lt); font-style:italic; font-size:12.5px; padding:8px 0; }
+  .status { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10.5px; font-weight:700; background:#1f1f1f; color:var(--tx-mid); }
+  .status.shipped, .status.paid { background:rgba(52,210,152,.14); color:var(--gold); }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:1rem; }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border-radius:6px; font-size:12px; font-weight:700; text-decoration:none; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; }
+  .btn-ghost { background:transparent; color:var(--tx-mid); border:1px solid var(--border); }
+  .err { color:#ff8a8a; padding:1rem; }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js -->
+<div class="wrap">
+  <h1>ERGSN Trade Portal</h1>
+  <p class="small" id="info">Loading…</p>
+  <div id="content"></div>
+</div>
+<script src="scripts/trade-docs.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const token = new URLSearchParams(location.search).get('t') || '';
+
+if (!/^[a-f0-9]{32}$/i.test(token)) {
+  $('content').innerHTML = '<div class="err">Invalid or missing token. Please use the link sent by ERGSN.</div>';
+} else {
+  TD.apiBuyer(token).then(render).catch(e => {
+    $('content').innerHTML = '<div class="err">Failed to load: ' + TD.esc(e.message) + '</div>';
+  });
+}
+
+function row(d, type) {
+  const meta = TD.DOC_META[type];
+  return `<tr>
+    <td><code>${TD.esc(d.id)}</code></td>
+    <td>${TD.esc(meta.title_en)}</td>
+    <td>${TD.fmtDate(d.created_at)}</td>
+    <td>${d.total_amount ? (TD.fmt(d.total_amount) + ' ' + TD.esc(d.currency || '')) : ''}</td>
+    <td>${type === 'po' ? '' : '<a href="trade-doc-view.html?type=' + type + '&id=' + encodeURIComponent(d.id) + '&t=' + encodeURIComponent(token) + '">View / Print</a>'}</td>
+  </tr>`;
+}
+
+function render(r) {
+  const tx = r.transaction;
+  $('info').innerHTML = 'Transaction <code>' + TD.esc(tx.id) + '</code> · ' + TD.esc(tx.buyer_company) + ' · <span class="status ' + tx.status + '">' + TD.esc(TD.STATUS_LABELS[tx.status] || tx.status) + '</span>';
+  let html = '';
+  ['quotation','proforma','commercial','packing'].forEach(type => {
+    const list = r.docs[type] || [];
+    html += '<div class="panel"><h2>' + TD.DOC_META[type].title_en + '</h2>';
+    if (!list.length) html += '<div class="empty">아직 발행된 문서가 없습니다.</div>';
+    else html += '<table><thead><tr><th>ID</th><th>Type</th><th>Date</th><th>Amount</th><th></th></tr></thead><tbody>' + list.map(d => row(d, type)).join('') + '</tbody></table>';
+    html += '</div>';
+  });
+  /* PO section — submitted POs + new PO link */
+  const pos = r.docs.po || [];
+  html += '<div class="panel"><h2>Purchase Orders</h2>';
+  if (pos.length) {
+    html += '<table><thead><tr><th>ID</th><th>Submitted</th><th>Reference</th></tr></thead><tbody>';
+    pos.forEach(p => {
+      html += '<tr><td><code>' + TD.esc(p.id) + '</code></td><td>' + TD.fmtDate(p.created_at) + '</td><td>' + TD.esc((p.data && p.data.buyer_ref) || '-') + '</td></tr>';
+    });
+    html += '</tbody></table>';
+  } else {
+    html += '<div class="empty">아직 제출된 P/O가 없습니다.</div>';
+  }
+  html += '<div class="actions"><a class="btn btn-primary" href="trade-doc-po.html?t=' + encodeURIComponent(token) + '">+ Submit Purchase Order →</a></div>';
+  html += '</div>';
+  $('content').innerHTML = html;
+}
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

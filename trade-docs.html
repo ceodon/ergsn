@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERGSN Trade Documents · Admin Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --gold:#34d298; --navy:#0f0f0f; --navy-2:#141414; --white:#fff; --tx-mid:#cfcfcf; --tx-lt:#8a8b8d; --border:#242424; --warn:#e0a83f; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Noto Sans KR",sans-serif; line-height:1.55; }
+  .wrap { max-width:1100px; margin:0 auto; padding:2.4rem clamp(16px,4vw,32px) 4rem; }
+  h1 { color:var(--white); font-size:1.4rem; margin:0 0 .3rem; font-weight:700; }
+  .pill { display:inline-block; padding:3px 9px; background:rgba(224,168,63,.14); color:var(--warn); border:1px solid rgba(224,168,63,.4); border-radius:12px; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:.6rem; }
+  .row { display:flex; flex-direction:column; gap:6px; margin-bottom:.9rem; }
+  .row.two { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:.9rem; }
+  @media (max-width:560px) { .row.two { grid-template-columns:1fr; } }
+  label { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--tx-lt); font-weight:700; }
+  input, select, textarea { width:100%; padding:9px 11px; background:#0d0d0d; border:1px solid var(--border); border-radius:6px; color:var(--white); font:inherit; font-size:13px; outline:none; }
+  input:focus, select:focus, textarea:focus { border-color:var(--gold); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 16px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; border:0; text-decoration:none; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; }
+  .btn-ghost { background:transparent; color:var(--tx-mid); border:1px solid var(--border); }
+  .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+  .panel { background:var(--navy-2); border:1px solid var(--border); border-radius:10px; padding:1.2rem 1.4rem; margin-bottom:1rem; }
+  .panel h2 { color:var(--white); font-size:14px; margin:0 0 .8rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+  table.tx { width:100%; border-collapse:collapse; font-size:13px; }
+  table.tx th, table.tx td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--border); }
+  table.tx th { font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--tx-lt); font-weight:700; }
+  table.tx td a { color:var(--gold); text-decoration:none; }
+  .status { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#1f1f1f; color:var(--tx-mid); }
+  .status.open { background:rgba(224,168,63,.14); color:var(--warn); }
+  .status.shipped, .status.paid { background:rgba(52,210,152,.14); color:var(--gold); }
+  .small { font-size:11.5px; color:var(--tx-lt); margin:.4rem 0 0; }
+  .toast { padding:9px 13px; border-radius:6px; font-size:12.5px; margin-top:.8rem; display:none; }
+  .toast.ok { background:rgba(52,210,152,.12); color:var(--gold); border:1px solid rgba(52,210,152,.3); display:block; }
+  .toast.err { background:rgba(224,107,107,.12); color:#ff8a8a; border:1px solid rgba(224,107,107,.3); display:block; }
+  .doctype-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:.4rem; }
+  .doctype-row a { padding:5px 10px; background:#0d0d0d; border:1px solid var(--border); border-radius:5px; font-size:11.5px; color:var(--tx-mid); text-decoration:none; }
+  .doctype-row a:hover { border-color:var(--gold); color:var(--gold); }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js -->
+<div class="wrap">
+  <p class="pill">Owner Tool · Admin Only</p>
+  <h1>ERGSN Trade Documents</h1>
+  <p class="small">Quotation → P/O → Proforma → Commercial → Packing List · 모든 문서가 한 transaction으로 연결됩니다.</p>
+
+  <div class="panel" id="gate">
+    <h2>관리자 인증</h2>
+    <div class="row"><label>ADMIN_KEY</label><input type="password" id="adminKeyInput" autocomplete="off"></div>
+    <div><button class="btn btn-primary" id="gateBtn">진입 →</button></div>
+    <div class="toast" id="gateToast"></div>
+  </div>
+
+  <div id="app" style="display:none;">
+    <div class="panel">
+      <h2>새 Transaction 생성</h2>
+      <div class="row two">
+        <div><label>Buyer Company *</label><input id="nbCompany" required></div>
+        <div><label>Buyer Email *</label><input id="nbEmail" type="email" required></div>
+      </div>
+      <div class="row two">
+        <div><label>Buyer Country</label><input id="nbCountry" placeholder="MX"></div>
+        <div><label>ERGSN Maker / Partner</label><input id="nbPartner" placeholder="COSMEDIQUE Co., Ltd."></div>
+      </div>
+      <div class="row"><label>Notes (옵션)</label><input id="nbNotes"></div>
+      <div><button class="btn btn-primary" id="newTxBtn">Transaction 생성 →</button></div>
+      <div class="toast" id="newTxToast"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Transactions <button class="btn btn-ghost" id="reloadBtn" style="float:right">⟳ Reload</button></h2>
+      <div id="txList" class="small">로딩 중…</div>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/trade-docs.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+function showApp() { $('gate').style.display = 'none'; $('app').style.display = 'block'; loadTxList(); }
+
+async function tryGate() {
+  const k = $('adminKeyInput').value.trim();
+  if (!k) return;
+  TD.setAdminKey(k);
+  try {
+    await TD.apiAdmin('GET', '/tx?limit=1');
+    showApp();
+  } catch (e) {
+    TD.clearAdminKey();
+    const t = $('gateToast'); t.className = 'toast err'; t.textContent = '❌ ' + e.message;
+  }
+}
+
+async function loadTxList() {
+  const el = $('txList');
+  el.textContent = '로딩 중…';
+  try {
+    const r = await TD.apiAdmin('GET', '/tx?limit=100');
+    if (!r.items.length) { el.innerHTML = '<p class="small">아직 transaction이 없습니다.</p>'; return; }
+    let html = '<table class="tx"><thead><tr><th>ID</th><th>Buyer</th><th>Country</th><th>Partner</th><th>Status</th><th>Created</th><th>Docs</th></tr></thead><tbody>';
+    r.items.forEach(t => {
+      const docs = ['quotation','po','proforma','commercial','packing'].map(typ =>
+        `<a href="trade-doc.html?type=${typ}&tx=${encodeURIComponent(t.id)}">${TD.DOC_META[typ].prefix}</a>`
+      ).join(' ');
+      html += `<tr>
+        <td><code>${TD.esc(t.id)}</code></td>
+        <td>${TD.esc(t.buyer_company)}<br><span class="small">${TD.esc(t.buyer_email)}</span></td>
+        <td>${TD.esc(t.buyer_country || '-')}</td>
+        <td>${TD.esc(t.ergsn_partner || '-')}</td>
+        <td><span class="status ${t.status}">${TD.esc(TD.STATUS_LABELS[t.status] || t.status)}</span></td>
+        <td>${TD.fmtDate(t.created_at)}</td>
+        <td class="doctype-row" style="border:0">${docs}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  } catch (e) {
+    el.innerHTML = '<p class="small" style="color:#ff8a8a">로딩 실패: ' + TD.esc(e.message) + '</p>';
+  }
+}
+
+async function newTx() {
+  const t = $('newTxToast'); t.className = 'toast'; t.textContent = '';
+  const body = {
+    buyer_company: $('nbCompany').value.trim(),
+    buyer_email:   $('nbEmail').value.trim(),
+    buyer_country: $('nbCountry').value.trim(),
+    ergsn_partner: $('nbPartner').value.trim(),
+    notes:         $('nbNotes').value.trim()
+  };
+  if (!body.buyer_company || !body.buyer_email) { t.className='toast err'; t.textContent='Buyer company + email 필수'; return; }
+  try {
+    const r = await TD.apiAdmin('POST', '/tx', body);
+    t.className='toast ok';
+    t.innerHTML = '✓ ' + TD.esc(r.id) + ' 생성됨. Buyer URL: <a href="' + TD.esc(r.buyer_url) + '" target="_blank" style="color:#34d298">' + TD.esc(r.buyer_url) + '</a>';
+    ['nbCompany','nbEmail','nbCountry','nbPartner','nbNotes'].forEach(id => $(id).value = '');
+    loadTxList();
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (TD.adminKey()) { try { showApp(); } catch (_) {} }
+  $('gateBtn').addEventListener('click', tryGate);
+  $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
+  $('newTxBtn').addEventListener('click', newTx);
+  $('reloadBtn').addEventListener('click', loadTxList);
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

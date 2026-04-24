@@ -67,6 +67,9 @@ export default {
       if (path === '/buyer' && request.method === 'GET') {
         return handleBuyerView(url, env, cors);
       }
+      if (path === '/buyer/po' && request.method === 'POST') {
+        return handleBuyerPO(request, env, cors);
+      }
 
       /* admin: transactions */
       if (path === '/tx' && request.method === 'POST')   return adminGate(request, env, cors, () => createTransaction(request, env, cors));
@@ -284,6 +287,24 @@ function deserialiseDoc(row) {
 }
 
 /* ───────────── buyer portal ───────────── */
+
+async function handleBuyerPO(request, env, cors) {
+  const body = await safeJson(request);
+  if (!body) return fail(400, 'invalid JSON', cors);
+  const { token, data } = body;
+  if (!token || !/^[a-f0-9]{32}$/i.test(token)) return fail(400, 'invalid token', cors);
+  if (!data) return fail(400, 'data required', cors);
+  const tx = await env.DB.prepare(`SELECT id FROM transactions WHERE buyer_token = ?`).bind(token).first();
+  if (!tx) return fail(404, 'transaction not found', cors);
+  const id = await nextId(env, 'PO');
+  const now = Date.now();
+  await env.DB.prepare(
+    `INSERT INTO purchase_orders (id, transaction_id, data, buyer_signed_at, buyer_signature, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  ).bind(id, tx.id, JSON.stringify(data), data.buyer_signed_at || now, data.buyer_signature || null, now, now).run();
+  await env.DB.prepare(`UPDATE transactions SET status = 'po-received', updated_at = ? WHERE id = ?`).bind(now, tx.id).run();
+  return ok({ ok: true, id }, cors);
+}
 
 async function handleBuyerView(url, env, cors) {
   const token = url.searchParams.get('t') || '';
