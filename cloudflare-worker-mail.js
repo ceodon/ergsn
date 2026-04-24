@@ -278,8 +278,11 @@ function wrapInTemplate(bodyHtml, subject, locale) {
     <!-- Inner card: left/right black borders tie the white body to the dark
          header and footer so the three rows read as one coherent card. The
          borders share #0f0f0f with the header/footer background, so they
-         visually merge at the corners. -->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-collapse:collapse;">
+         visually merge at the corners. border-radius + overflow:hidden round
+         the four corners (Outlook desktop falls back to square corners but
+         keeps the colours intact). border-collapse must be `separate` for
+         border-radius to apply at all in HTML tables. -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-radius:8px;overflow:hidden;border-collapse:separate;border-spacing:0;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
