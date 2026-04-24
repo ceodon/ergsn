@@ -275,7 +275,11 @@ function wrapInTemplate(bodyHtml, subject, locale) {
      width the mail client allocates. -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
   <tr><td>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
+    <!-- Inner card: left/right black borders tie the white body to the dark
+         header and footer so the three rows read as one coherent card. The
+         borders share #0f0f0f with the header/footer background, so they
+         visually merge at the corners. -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-collapse:collapse;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
