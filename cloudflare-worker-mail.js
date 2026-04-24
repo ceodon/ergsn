@@ -91,6 +91,16 @@ export default {
 
     if (path === '/send') return handleSend(body, env, cors);
     if (path === '/raw')  return handleRaw(body, env, cors, request);
+    if (path === '/admin-send') {
+      /* Same brand-wrap as /send, gated by ADMIN_KEY header. Used by
+         the owner-only send-mail.html composer so a leaked URL alone
+         can't spray spam through the relay. */
+      const key = request.headers.get('X-Admin-Key') || '';
+      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
+        return jsonResponse({ ok: false, error: 'unauthorized' }, 401, cors);
+      }
+      return handleSend(body, env, cors);
+    }
     return jsonResponse({ ok: false, error: 'not found' }, 404, cors);
   }
 };

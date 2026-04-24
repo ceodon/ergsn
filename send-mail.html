@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>ERGSN 브랜드 메일 발송 — Owner Tool</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #34d298; --gold-light: #00ffa1;
+    --navy: #0f0f0f; --navy-2: #141414;
+    --white: #fff; --tx-mid: #cfcfcf; --tx-lt: #8a8b8d;
+    --border: #242424; --warn: #e0a83f;
+    --fb: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0a0a; color: var(--tx-mid); font-family: var(--fb); line-height: 1.6; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 3rem clamp(16px,4vw,32px) 4rem; }
+  .head { border-bottom: 1px solid var(--border); padding-bottom: 1.4rem; margin-bottom: 1.6rem; }
+  .head h1 { color: var(--white); font-size: 1.4rem; margin: 0 0 .4rem; font-weight: 700; }
+  .head p { font-size: 12.5px; color: var(--tx-lt); margin: 0; }
+  .head .pill { display: inline-block; padding: 3px 9px; background: rgba(224,168,63,.14); color: var(--warn); border: 1px solid rgba(224,168,63,.4); border-radius: 12px; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; margin-bottom: .6rem; }
+
+  /* Gate */
+  .gate, .form { background: var(--navy-2); border: 1px solid var(--border); border-radius: 12px; padding: clamp(1.2rem,3vw,1.8rem); }
+  .gate p { font-size: 13px; color: var(--tx-mid); margin: 0 0 1rem; }
+  .row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+  .row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
+  @media (max-width: 560px) { .row.two { grid-template-columns: 1fr; } }
+  label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; }
+  input, select, textarea { width: 100%; padding: 10px 12px; background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); font: inherit; font-size: 13px; outline: none; }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+  textarea { min-height: 220px; resize: vertical; line-height: 1.6; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 22px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: .04em; cursor: pointer; border: 0; }
+  .btn-primary { background: var(--gold); color: #0a0a0a; }
+  .btn-primary:hover:not(:disabled) { background: var(--gold-light); }
+  .btn-primary:disabled { opacity: .5; cursor: wait; }
+  .btn-ghost { background: transparent; color: var(--tx-mid); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
+  .toast { padding: 10px 14px; border-radius: 8px; font-size: 12.5px; line-height: 1.5; margin-top: 1rem; display: none; }
+  .toast.ok   { background: rgba(52,210,152,.12); color: var(--gold); border: 1px solid rgba(52,210,152,.3); display: block; }
+  .toast.err  { background: rgba(224,107,107,.12); color: #ff8a8a; border: 1px solid rgba(224,107,107,.3); display: block; }
+  .small { font-size: 11.5px; color: var(--tx-lt); margin-top: .6rem; line-height: 1.55; }
+  .small code { background: #0d0d0d; padding: 1px 6px; border-radius: 4px; color: var(--gold); font-size: 11px; }
+  .lockout { font-size: 11.5px; color: var(--tx-lt); margin-top: .8rem; }
+</style>
+</head>
+<body>
+
+<!-- Shared ERGSN header is injected via scripts/header.js (unified page chrome policy) -->
+
+<div class="wrap">
+  <div class="head">
+    <p class="pill">Owner Tool · Admin only</p>
+    <h1>ERGSN 브랜드 메일 발송</h1>
+    <p>특정 바이어 / 파트너에게 ERGSN 브랜드 디자인이 적용된 메일을 직접 발송합니다. 발송된 메일은 사이트의 RFQ 자동 발송 메일과 동일한 헤더 / 푸터 / 디자인으로 도착합니다.</p>
+  </div>
+
+  <!-- Gate -->
+  <div class="gate" id="gate">
+    <p>관리자 인증이 필요합니다. ADMIN_KEY (Cloudflare Worker secret 과 동일) 를 입력하세요. 인증은 브라우저 세션 동안만 유지됩니다.</p>
+    <div class="row">
+      <label for="adminKeyInput">ADMIN_KEY</label>
+      <input type="password" id="adminKeyInput" autocomplete="off" placeholder="cfut_… 또는 32자 hex">
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="gateBtn">인증 후 진입 →</button>
+    </div>
+    <p class="lockout" id="gateNote"></p>
+  </div>
+
+  <!-- Form (hidden until gate passes) -->
+  <form class="form" id="composer" style="display:none;" onsubmit="submitMail(event)">
+    <div class="row two">
+      <div>
+        <label for="locale">Locale (chrome 언어)</label>
+        <select id="locale">
+          <option value="ko">한국어 (ko)</option>
+          <option value="en">English (en)</option>
+        </select>
+      </div>
+      <div>
+        <label for="fromName">From Name (보낸 사람 표시)</label>
+        <input type="text" id="fromName" value="ERGSN 무역센터" placeholder="ERGSN Trade Desk">
+      </div>
+    </div>
+    <div class="row two">
+      <div>
+        <label for="from">From Address (ergsn.net 도메인)</label>
+        <input type="email" id="from" value="noreply@ergsn.net" placeholder="trade@ergsn.net">
+      </div>
+      <div>
+        <label for="replyTo">Reply-To (수신자가 회신 시 받는 곳)</label>
+        <input type="email" id="replyTo" value="ceodon@gmail.com" placeholder="ceodon@gmail.com">
+      </div>
+    </div>
+    <div class="row">
+      <label for="to">To (수신자, 콤마로 여러 명 가능)</label>
+      <input type="text" id="to" required placeholder="buyer@example.com">
+    </div>
+    <div class="row">
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" required placeholder="ERGSN 견적 안내 — 회사명">
+    </div>
+    <div class="row">
+      <label for="body">Body (일반 텍스트 — 빈 줄로 단락 구분, URL 자동 링크 처리됨)</label>
+      <textarea id="body" required placeholder="안녕하세요 OOO님,&#10;&#10;요청해주신 견적 정보를 첨부하여 안내드립니다.&#10;&#10;자세한 사양은 https://ergsn.net 에서 확인 가능합니다.&#10;&#10;감사합니다.&#10;ERGSN 무역센터"></textarea>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary" id="sendBtn">메일 발송 →</button>
+      <button type="button" class="btn btn-ghost" id="logoutBtn">인증 해제 (logout)</button>
+    </div>
+    <div class="toast" id="toast"></div>
+    <p class="small">발송 메일은 ERGSN 브랜드 헤더 + 푸터로 자동 wrapping 됩니다. <code>From</code> 은 반드시 <code>ergsn.net</code> 도메인이어야 합니다 (Resend SPF/DKIM 검증). <code>Reply-To</code> 는 답장 시 받을 곳입니다 (default: ceodon@gmail.com).</p>
+  </form>
+</div>
+
+<script>
+const ADMIN_SEND_URL = 'https://ergsn-mail.ceodon.workers.dev/admin-send';
+const SS_KEY = 'ergsn_admin_key';
+
+function $(id) { return document.getElementById(id); }
+function escHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* Plain text → HTML body. Blank line = paragraph; single newline = <br>;
+   bare URLs become anchors. The worker template wraps the result. */
+function plainToHtml(text) {
+  return String(text || '').split(/\n{2,}/).map(p => {
+    const safe = escHtml(p)
+      .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#0f0f0f;text-decoration:underline;">$1</a>')
+      .replace(/\n/g, '<br>');
+    return '<p style="margin:0 0 14px;font-size:13px;line-height:1.7;">' + safe + '</p>';
+  }).join('');
+}
+
+function showToast(kind, msg) {
+  const t = $('toast');
+  t.className = 'toast ' + kind;
+  t.textContent = msg;
+  if (kind === 'ok') setTimeout(() => { t.className = 'toast'; t.textContent = ''; }, 5000);
+}
+
+function lockGate(reason) {
+  $('gateNote').textContent = reason || '';
+}
+
+function showComposer() {
+  $('gate').style.display = 'none';
+  $('composer').style.display = 'block';
+}
+
+function logout() {
+  try { sessionStorage.removeItem(SS_KEY); } catch(_) {}
+  $('composer').style.display = 'none';
+  $('gate').style.display = 'block';
+  $('adminKeyInput').value = '';
+  $('toast').className = 'toast';
+  $('toast').textContent = '';
+  lockGate('인증 해제됨. 키를 다시 입력해주세요.');
+}
+
+/* Gate validation: send a no-op call (empty body, expect 400) with the
+   key. If we get 400, the key passed the auth gate. If 401, key wrong. */
+async function tryGate(key) {
+  $('gateBtn').disabled = true;
+  $('gateBtn').textContent = '확인 중…';
+  try {
+    const r = await fetch(ADMIN_SEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Admin-Key': key },
+      body: JSON.stringify({ /* intentionally empty — server returns 400, not 401, if key is right */ })
+    });
+    if (r.status === 401) {
+      lockGate('❌ ADMIN_KEY 가 잘못되었습니다. Worker 의 ADMIN_KEY secret 과 동일한 값을 입력해주세요.');
+      $('gateBtn').disabled = false;
+      $('gateBtn').textContent = '인증 후 진입 →';
+      return;
+    }
+    /* 400 / 200 / anything else = key accepted by gate */
+    try { sessionStorage.setItem(SS_KEY, key); } catch(_) {}
+    showComposer();
+  } catch (e) {
+    lockGate('네트워크 오류: ' + e.message);
+    $('gateBtn').disabled = false;
+    $('gateBtn').textContent = '인증 후 진입 →';
+  }
+}
+
+async function submitMail(e) {
+  e.preventDefault();
+  const key = (function(){ try { return sessionStorage.getItem(SS_KEY) || ''; } catch(_) { return ''; } })();
+  if (!key) { logout(); return; }
+  const payload = {
+    to:       $('to').value.split(',').map(s => s.trim()).filter(Boolean),
+    subject:  $('subject').value.trim(),
+    htmlBody: plainToHtml($('body').value),
+    locale:   $('locale').value,
+    from:     $('from').value.trim(),
+    fromName: $('fromName').value.trim(),
+    replyTo:  $('replyTo').value.trim()
+  };
+  if (payload.to.length === 1) payload.to = payload.to[0];
+  $('sendBtn').disabled = true;
+  $('sendBtn').textContent = '발송 중…';
+  try {
+    const r = await fetch(ADMIN_SEND_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Admin-Key': key },
+      body: JSON.stringify(payload)
+    });
+    if (r.status === 401) { logout(); showToast('err', '인증 만료. 다시 로그인 후 재발송.'); return; }
+    const data = await r.json().catch(() => ({}));
+    if (r.ok && data.ok) {
+      showToast('ok', '✓ 발송 완료. id=' + (data.id || '(none)') + ' — 수신함을 확인하세요.');
+      $('subject').value = ''; $('body').value = '';
+    } else {
+      showToast('err', '✗ 발송 실패 (' + r.status + ') — ' + (data.error || data.detail || 'unknown'));
+    }
+  } catch (e) {
+    showToast('err', '네트워크 오류: ' + e.message);
+  } finally {
+    $('sendBtn').disabled = false;
+    $('sendBtn').textContent = '메일 발송 →';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('gateBtn').addEventListener('click', () => {
+    const key = $('adminKeyInput').value.trim();
+    if (!key) { lockGate('키를 입력해주세요.'); return; }
+    tryGate(key);
+  });
+  $('adminKeyInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); $('gateBtn').click(); }
+  });
+  $('logoutBtn').addEventListener('click', logout);
+  /* Auto-restore session if key already cached */
+  try {
+    const cached = sessionStorage.getItem(SS_KEY);
+    if (cached) showComposer();
+  } catch(_) {}
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>
