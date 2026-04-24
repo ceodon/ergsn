@@ -5034,6 +5034,11 @@ const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
 // RFQ Tracker: after deploying cloudflare-worker-rfq.js, paste its URL here.
 // When set, RFQ submissions receive a trackable ID and the success message shows it.
 const RFQ_TRACKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+// ERGSN brand mail worker (cloudflare-worker-mail.js). Wraps caller HTML
+// in the ERGSN navy + neon-green template (per locale) before relaying
+// through Resend. Kept side-by-side with FormSubmit during the v4.x
+// stabilisation window — see reference_email_template_policy memory.
+const ERGSN_MAIL_URL = 'https://ergsn-mail.ceodon.workers.dev/send';
 // Live Events ticker: deploy cloudflare-worker-events.js and paste its URL here to replace
 // the illustrative ticker with real anonymous buyer activity from around the world.
 const EVENTS_URL = '';
@@ -5182,6 +5187,104 @@ function sendTGPhotos(urls, caption) {
   }).catch(() => {});
 }
 
+/* ──────────────────────────────────────────────────────────────────
+ * Brand-mail helpers (Phase 2-C). Send through the ergsn-mail Worker
+ * which wraps caller HTML in the ERGSN navy + neon-green template per
+ * locale. Always swallows errors so a brand-mail outage never blocks
+ * the existing FormSubmit + Telegram dispatch path.
+ * ────────────────────────────────────────────────────────────────── */
+function sendBrandEmail({ to, subject, htmlBody, locale, replyTo, fromName, cc }) {
+  if (!ERGSN_MAIL_URL) return Promise.resolve();
+  const payload = { to, subject, htmlBody };
+  if (locale)   payload.locale   = locale;
+  if (replyTo)  payload.replyTo  = replyTo;
+  if (fromName) payload.fromName = fromName;
+  if (cc)       payload.cc       = cc;
+  return fetch(ERGSN_MAIL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+}
+
+/* Choose ko/en based on the language selector (header.js writes
+   ergsn_lang to localStorage; default en). All non-Korean locales
+   currently fall through to the English chrome. */
+function siteLocale() {
+  try { return localStorage.getItem('ergsn_lang') === 'ko' ? 'ko' : 'en'; }
+  catch (_) { return 'en'; }
+}
+
+function escHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* HTML body for the OWNER-side RFQ alert (always English — operational). */
+function rfqOwnerAlertHtml(f, trackingId) {
+  const trackerLink = trackingId ? `https://ergsn.net/tracker.html?id=${encodeURIComponent(trackingId)}` : '';
+  const row = (label, val) => `<tr><td style="padding:6px 10px 6px 0;color:#6b7685;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;vertical-align:top;">${escHtml(label)}</td><td style="padding:6px 0;color:#222;font-size:12.5px;vertical-align:top;">${val}</td></tr>`;
+  return `
+    <p style="margin:0 0 14px;font-size:13.5px;"><strong>NEW RFQ — ${escHtml(f.tier || 'Unqualified')}</strong></p>
+    ${trackingId ? `<p style="margin:0 0 14px;font-size:12px;color:#6b7685;">Tracker ID: <a href="${trackerLink}" style="color:#0f0f0f;font-weight:700;">${escHtml(trackingId)}</a></p>` : ''}
+    <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+      ${row('Name', escHtml(f.first + ' ' + f.last))}
+      ${row('Company', escHtml(f.company))}
+      ${row('Email', `<a href="mailto:${escHtml(f.email)}" style="color:#0f0f0f;">${escHtml(f.email)}</a>`)}
+      ${row('Phone', escHtml(f.phone || '-'))}
+      ${row('Models', escHtml(f.models))}
+      ${row('Quantity', escHtml(f.qty || '-'))}
+      ${row('Incoterms', escHtml(f.incoterms))}
+      ${row('Country', escHtml(f.country))}
+      ${row('Port', escHtml(f.port))}
+    </table>
+    <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>BANT Qualification</strong></p>
+    <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+      ${row('Annual Volume', escHtml(f.volume || '-'))}
+      ${row('Timeline',      escHtml(f.timeline || '-'))}
+      ${row('Experience',    escHtml(f.experience || '-'))}
+      ${row('Payment',       escHtml(f.paymentResp || '-'))}
+    </table>
+    <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>Message</strong></p>
+    <p style="margin:0 0 14px;font-size:13px;color:#333;white-space:pre-wrap;">${escHtml(f.msg || '(none)')}</p>
+    <p style="margin:0;font-size:11px;color:#8a8b8d;">Reply directly to this email to respond to ${escHtml(f.first)}.</p>
+  `;
+}
+
+/* HTML body for the SUBMITTER confirmation. ko/en split inline. */
+function rfqSubmitterHtml(f, trackingId, locale) {
+  const ko = locale === 'ko';
+  const trackerLink = trackingId ? `https://ergsn.net/tracker.html?id=${encodeURIComponent(trackingId)}` : '';
+  const row = (l, v) => `<tr><td style="padding:5px 10px 5px 0;color:#6b7685;font-size:11.5px;white-space:nowrap;vertical-align:top;">${escHtml(l)}</td><td style="padding:5px 0;color:#222;font-size:12.5px;vertical-align:top;">${escHtml(v)}</td></tr>`;
+  const greet  = ko ? `안녕하세요 ${escHtml(f.first)}님,` : `Dear ${escHtml(f.first)},`;
+  const intro  = ko
+    ? 'ERGSN에 견적 요청을 보내주셔서 감사합니다. 요청을 정상적으로 접수하였으며, 한국 시간 기준 1영업일 이내에 회신드리겠습니다.'
+    : 'Thank you for your quote request with ERGSN. We have received your submission and will respond within 1 business day (KST, UTC+9).';
+  const trackerLine = trackingId ? (ko
+    ? `<p style="margin:0 0 16px;padding:12px 16px;background:#f0fff5;border-left:3px solid #34d298;border-radius:6px;font-size:13px;">RFQ 추적번호: <strong>${escHtml(trackingId)}</strong><br><a href="${trackerLink}" style="color:#0f0f0f;font-weight:700;">진행 상태 확인</a></p>`
+    : `<p style="margin:0 0 16px;padding:12px 16px;background:#f0fff5;border-left:3px solid #34d298;border-radius:6px;font-size:13px;">RFQ Tracker ID: <strong>${escHtml(trackingId)}</strong><br><a href="${trackerLink}" style="color:#0f0f0f;font-weight:700;">Check status</a></p>`) : '';
+  const sectionHd = ko ? '요청 내용' : 'Your request';
+  const closing = ko
+    ? '추가로 수정하실 내용이 있으시면 본 메일에 회신해주시고, 추적번호를 함께 적어주세요.'
+    : 'If you need to update anything, reply to this email and reference your Tracker ID.';
+  return `
+    <p style="margin:0 0 14px;font-size:13.5px;">${greet}</p>
+    <p style="margin:0 0 16px;font-size:13px;">${intro}</p>
+    ${trackerLine}
+    <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>${sectionHd}</strong></p>
+    <table style="width:100%;border-collapse:collapse;margin:0 0 16px;">
+      ${row(ko ? '회사' : 'Company', f.company)}
+      ${row(ko ? '품목' : 'Models', f.models)}
+      ${row(ko ? '수량' : 'Quantity', f.qty || '-')}
+      ${row(ko ? '인코텀즈' : 'Incoterms', f.incoterms)}
+      ${row(ko ? '도착지' : 'Destination', f.country + (f.port && f.port !== 'N/A' ? ' — ' + f.port : ''))}
+      ${row(ko ? '메시지' : 'Message', f.msg || (ko ? '(없음)' : '(none)'))}
+    </table>
+    <p style="margin:0;font-size:12.5px;color:#444;">${closing}</p>
+  `;
+}
+
 function rfqStepTo(n) {
   document.getElementById('rfqStep1').style.display = n === 1 ? '' : 'none';
   document.getElementById('rfqStep2').style.display = n === 2 ? '' : 'none';
@@ -5316,6 +5419,16 @@ function submitRFQ() {
       images: imageUrls
     };
 
+    /* Brand-mail dispatch (Phase 2-C). Owner alert always English
+       (operational), submitter confirmation follows site locale.
+       FormSubmit + Telegram remain primary; brand mail is additive
+       during the stabilisation window. */
+    const _locale = siteLocale();
+    const _ownerAlertSubject = `[RFQ${trackingId ? ' ' + trackingId : ''}] ${v('fCo')} — ${selected.join(', ')}`;
+    const _submitterSubject = _locale === 'ko'
+      ? `ERGSN 견적 요청 접수 확인${trackingId ? ' — ' + trackingId : ''}`
+      : `ERGSN quote request received${trackingId ? ' — ' + trackingId : ''}`;
+
     return Promise.allSettled([
       fetch(RFQ_ENDPOINT, {
         method: 'POST',
@@ -5325,7 +5438,25 @@ function submitRFQ() {
         if (!(data && (data.success === 'true' || data.success === true)))
           throw new Error((data && data.message) || 'Email failed');
       }),
-      sendTelegram(tgFields)
+      sendTelegram(tgFields),
+      /* NEW — owner alert via ergsn-mail (brand-wrapped table) */
+      sendBrandEmail({
+        to: 'ceodon@gmail.com',
+        subject: _ownerAlertSubject,
+        htmlBody: rfqOwnerAlertHtml(tgFields, trackingId),
+        locale: 'en',
+        replyTo: buyerEmail,
+        fromName: 'ERGSN RFQ Notification'
+      }),
+      /* NEW — submitter confirmation via ergsn-mail (locale-aware) */
+      sendBrandEmail({
+        to: buyerEmail,
+        subject: _submitterSubject,
+        htmlBody: rfqSubmitterHtml(tgFields, trackingId, _locale),
+        locale: _locale,
+        replyTo: 'ceodon@gmail.com',
+        fromName: _locale === 'ko' ? 'ERGSN 무역센터' : 'ERGSN Trade Desk'
+      })
     ]).then(results => {
       const emailOk = results[0].status === 'fulfilled';
       if (!emailOk) throw results[0].reason || new Error('Submission failed');

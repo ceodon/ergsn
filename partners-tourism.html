@@ -301,9 +301,23 @@
 <!-- Shared ERGSN footer is injected via scripts/footer.js (loaded by header.js) -->
 
 <script>
-/* Mirror submission to Telegram so the trade desk gets a push regardless of
-   FormSubmit delivery latency. */
+/* Mirror submission to Telegram + ergsn-mail brand mail so the trade desk
+   gets a push regardless of FormSubmit delivery latency. FormSubmit
+   stays primary for the email channel during Phase 2-C stabilisation. */
 const TG_PROXY = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev';
+const ERGSN_MAIL_URL = 'https://ergsn-mail.ceodon.workers.dev/send';
+function _esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function _sendBrand(p) {
+  return fetch(ERGSN_MAIL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(p)
+  }).catch(() => {});
+}
 function notifyTourismApply(e) {
   try {
     const f = e.target;
@@ -330,6 +344,54 @@ function notifyTourismApply(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, parse_mode: 'Markdown' })
     }).catch(() => {});
+
+    /* Brand mail — owner alert + submitter confirmation (Korean) */
+    const _row = (l, val) => `<tr><td style="padding:6px 10px 6px 0;color:#6b7685;font-size:11.5px;white-space:nowrap;vertical-align:top;">${_esc(l)}</td><td style="padding:6px 0;color:#222;font-size:12.5px;vertical-align:top;">${_esc(val)}</td></tr>`;
+    const _ownerHtml = `
+      <p style="margin:0 0 14px;font-size:13.5px;"><strong>K-Tourism 파트너 신청</strong></p>
+      <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+        ${_row('Property', v('property'))}
+        ${_row('위치', v('location'))}
+        ${_row('총 객실 수', v('rooms'))}
+        ${_row('운영 상태', v('status'))}
+        ${_row('운영자', v('name'))}
+        ${_row('연락처', v('phone'))}
+        ${_row('이메일', v('email'))}
+      </table>
+      <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>메시지</strong></p>
+      <p style="margin:0 0 14px;font-size:13px;color:#333;white-space:pre-wrap;">${_esc(v('message') || '(없음)')}</p>
+      <p style="margin:0;font-size:11px;color:#8a8b8d;">본 메일에 회신하면 ${_esc(v('name'))}님께 직접 연락됩니다.</p>
+    `;
+    const _submitterHtml = `
+      <p style="margin:0 0 14px;font-size:13.5px;">${_esc(v('name'))}님 안녕하세요,</p>
+      <p style="margin:0 0 16px;font-size:13px;">ERGSN K-Tourism 파트너 신청을 접수하였습니다. 감사합니다. 한국 시간 기준 24시간 내 ERGSN trade desk 가 회신드리며, 이후 1주 안에 운영자 인터뷰 일정을 확정합니다.</p>
+      <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>접수 내용</strong></p>
+      <table style="width:100%;border-collapse:collapse;margin:0 0 16px;">
+        ${_row('Property', v('property'))}
+        ${_row('위치', v('location'))}
+        ${_row('총 객실 수', v('rooms'))}
+        ${_row('운영 상태', v('status'))}
+      </table>
+      <p style="margin:0 0 12px;font-size:12.5px;color:#444;">급한 문의는 텔레그램 <strong style="color:#0f0f0f;">@ceodon</strong>, 왓츠앱, 또는 카카오톡 채널로 직접 연락 주시기 바랍니다.</p>
+    `;
+    if (v('email')) {
+      _sendBrand({
+        to: 'ceodon@gmail.com',
+        subject: `[K-Tourism 파트너 신청] ${v('property')} — ${v('location')}`,
+        htmlBody: _ownerHtml,
+        locale: 'ko',
+        replyTo: v('email'),
+        fromName: 'ERGSN 파트너 알림'
+      });
+      _sendBrand({
+        to: v('email'),
+        subject: `ERGSN K-Tourism 파트너 신청이 접수되었습니다 — ${v('property')}`,
+        htmlBody: _submitterHtml,
+        locale: 'ko',
+        replyTo: 'ceodon@gmail.com',
+        fromName: 'ERGSN 무역센터'
+      });
+    }
   } catch (_) { /* never block FormSubmit */ }
   /* let the form continue to FormSubmit */
 }

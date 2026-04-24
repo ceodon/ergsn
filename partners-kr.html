@@ -473,6 +473,21 @@
 const RFQ_ENDPOINT = 'https://formsubmit.co/ajax/ceodon@gmail.com';
 const RFQ_CC = 'ceodon69@gmail.com';
 const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
+/* ERGSN brand mail (Phase 2-C, runs alongside FormSubmit during stabilisation) */
+const ERGSN_MAIL_URL = 'https://ergsn-mail.ceodon.workers.dev/send';
+function escHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function sendBrandEmail(p) {
+  if (!ERGSN_MAIL_URL) return Promise.resolve();
+  return fetch(ERGSN_MAIL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify(p)
+  }).catch(() => {});
+}
 
 function toast(msg) {
   const wrap = document.getElementById('toastWrap');
@@ -546,6 +561,48 @@ function submitPartnerForm(e) {
     '_partners-kr · ergsn.net_'
   ].join('\n');
 
+  /* ERGSN brand mail bodies — Korean for both owner alert and submitter
+     confirmation since this form is Korean-only by audience. */
+  const _row = (l, val) => `<tr><td style="padding:6px 10px 6px 0;color:#6b7685;font-size:11.5px;white-space:nowrap;vertical-align:top;">${escHtml(l)}</td><td style="padding:6px 0;color:#222;font-size:12.5px;vertical-align:top;">${escHtml(val)}</td></tr>`;
+  const _ownerHtml = `
+    <p style="margin:0 0 14px;font-size:13.5px;"><strong>한국 파트너 신청</strong>${hasProduct ? ' · 제품 등록 포함' : ''}</p>
+    <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+      ${_row('회사명', fields.회사명)}
+      ${_row('대표자', fields.대표자)}
+      ${_row('이메일', fields.이메일)}
+      ${_row('연락처', fields.연락처)}
+      ${_row('섹터', fields.섹터)}
+      ${_row('월 생산능력', fields.월생산능력)}
+      ${_row('주력 제품', fields.주력제품)}
+      ${_row('보유 인증', fields.보유인증)}
+      ${_row('수출 이력', fields.수출이력)}
+    </table>
+    ${hasProduct ? `
+      <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>Verified Partner 제품 등록</strong></p>
+      <table style="width:100%;border-collapse:collapse;margin:0 0 18px;">
+        ${_row('모델 / Part', fields.제품_모델명 + ' (' + fields.제품_Part + ')')}
+        ${_row('부제', fields.제품_부제)}
+        ${_row('MOQ / Lead', fields.제품_MOQ + ' / ' + fields.제품_리드타임 + '주')}
+        ${_row('이미지 링크', fields.제품_이미지링크)}
+      </table>
+    ` : ''}
+    <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>메시지</strong></p>
+    <p style="margin:0 0 14px;font-size:13px;color:#333;white-space:pre-wrap;">${escHtml(fields.메시지)}</p>
+    <p style="margin:0;font-size:11px;color:#8a8b8d;">본 메일에 회신하시면 ${escHtml(fields.대표자)}님께 직접 연락됩니다.</p>
+  `;
+  const _submitterHtml = `
+    <p style="margin:0 0 14px;font-size:13.5px;">${escHtml(fields.대표자)}님 안녕하세요,</p>
+    <p style="margin:0 0 16px;font-size:13px;">ERGSN 한국 파트너 신청을 접수하였습니다. 감사합니다. 한국 시간 기준 1영업일 이내에 담당자가 직접 연락드리겠습니다.</p>
+    <p style="margin:0 0 6px;font-size:11.5px;color:#6b7685;text-transform:uppercase;letter-spacing:.06em;"><strong>접수 내용</strong></p>
+    <table style="width:100%;border-collapse:collapse;margin:0 0 16px;">
+      ${_row('회사명', fields.회사명)}
+      ${_row('섹터', fields.섹터)}
+      ${_row('주력 제품', fields.주력제품)}
+      ${hasProduct ? _row('제품 등록', '신청 포함 — Verified 인증 후 카탈로그 등록 진행') : ''}
+    </table>
+    <p style="margin:0 0 12px;font-size:12.5px;color:#444;">급한 문의는 텔레그램 <strong style="color:#0f0f0f;">@ceodon</strong>, 왓츠앱, 또는 카카오톡 채널로 직접 연락 주시기 바랍니다.</p>
+  `;
+
   Promise.allSettled([
     fetch(RFQ_ENDPOINT, {
       method: 'POST',
@@ -556,7 +613,23 @@ function submitPartnerForm(e) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: tgText, parse_mode: 'Markdown' })
-    }).catch(()=>{})
+    }).catch(()=>{}),
+    sendBrandEmail({
+      to: 'ceodon@gmail.com',
+      subject: `[파트너 신청] ${fields.회사명} — ${fields.섹터}`,
+      htmlBody: _ownerHtml,
+      locale: 'ko',
+      replyTo: fields.이메일,
+      fromName: 'ERGSN 파트너 알림'
+    }),
+    sendBrandEmail({
+      to: fields.이메일,
+      subject: `ERGSN 한국 파트너 신청이 접수되었습니다 — ${fields.회사명}`,
+      htmlBody: _submitterHtml,
+      locale: 'ko',
+      replyTo: 'ceodon@gmail.com',
+      fromName: 'ERGSN 무역센터'
+    })
   ]).then(() => {
     document.getElementById('kForm').style.display = 'none';
     document.getElementById('kSuccess').classList.add('open');
