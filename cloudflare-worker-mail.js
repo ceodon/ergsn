@@ -185,7 +185,10 @@ async function callResend(body, env, cors) {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json'
+        /* charset=utf-8 explicit so Resend never falls back to a
+           guessed encoding — Korean glyphs were rendering as mojibake
+           in some clients without it. */
+        'Content-Type': 'application/json; charset=utf-8'
       },
       body: JSON.stringify(body)
     });
@@ -225,30 +228,30 @@ function logoInline(fontSize, color) {
   `</span>`;
 }
 
+/* All glyphs below are direct UTF-8 characters (no HTML entities) so
+   email clients render them consistently across charset detection
+   paths. `·` not `&middot;`, `’` not `&rsquo;`, `©` not `&copy;`. */
 const I18N = {
   en: {
-    tagline:    "Korea&rsquo;s Trusted<br>Trade Gateway",
+    tagline:    "Korea’s Trusted<br>Trade Gateway",
     reach:      "Reach the trade desk:",
-    telegram:   "Telegram",
-    whatsapp:   "WhatsApp",
-    site:       "ergsn.net",
-    suffix:     "CO., LTD.",
+    contacts:   '<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">Telegram</a>' +
+                ' · <a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">WhatsApp</a>',
     address:    "#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea",
     privacy:    "Privacy",
     terms:      "Terms",
-    copy:       "&copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea"
+    copy:       "© 2013 ERGSN CO., LTD. All rights reserved."
   },
   ko: {
     tagline:    "한국 신뢰 무역<br>플랫폼",
     reach:      "고객지원 문의:",
-    telegram:   "텔레그램",
-    whatsapp:   "왓츠앱",
-    site:       "ergsn.net",
-    suffix:     "주식회사",
+    contacts:   '<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">텔레그램</a>' +
+                ' · <a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">왓츠앱</a>' +
+                ' · <a href="https://pf.kakao.com/_AxowjX" style="color:#0f0f0f;text-decoration:none;font-weight:700;">카카오톡</a>',
     address:    "서울특별시 중구 서애로5길 12-21 수송빌딩 #503 (04623)",
     privacy:    "개인정보처리방침",
     terms:      "이용약관",
-    copy:       "&copy; 2013 ERGSN 주식회사 &middot; All rights reserved &middot; Made in Korea"
+    copy:       "© 2013 ERGSN 주식회사. All rights reserved."
   }
 };
 
@@ -268,14 +271,14 @@ function wrapInTemplate(bodyHtml, subject, locale) {
 <div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(stripHtml(bodyHtml).slice(0, 120))}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f4f4;padding:16px 0;">
   <tr><td align="center" style="padding:0 8px;">
-    <table role="presentation" width="720" cellpadding="0" cellspacing="0" border="0" style="max-width:720px;width:100%;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+    <table role="presentation" width="800" cellpadding="0" cellspacing="0" border="0" style="max-width:800px;width:100%;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
 
-      <!-- Header / masthead -->
+      <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
         <td style="background:#0f0f0f;padding:18px 28px;border-bottom:3px solid #34d298;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td>${logoInline(18, '#ffffff')}</td>
+              <td><a href="https://ergsn.net" style="text-decoration:none;display:inline-block;">${logoInline(18, '#ffffff')}</a></td>
               <td align="right" style="font-size:10.5px;color:#a7a7a7;letter-spacing:.06em;line-height:1.4;">${L.tagline}</td>
             </tr>
           </table>
@@ -292,27 +295,23 @@ function wrapInTemplate(bodyHtml, subject, locale) {
       <!-- Divider -->
       <tr><td style="padding:0 32px;"><hr style="border:0;border-top:1px solid #e5e5e5;margin:0;"></td></tr>
 
-      <!-- CTA strip -->
+      <!-- CTA strip — locale supplies the chip block. EN: TG+WA, KO: TG+WA+Kakao -->
       <tr>
         <td style="padding:16px 32px;font-size:11.5px;color:#6b7685;line-height:1.7;">
-          ${L.reach}
-          &nbsp;<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.telegram}</a>
-          &nbsp;&middot;&nbsp;<a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.whatsapp}</a>
-          &nbsp;&middot;&nbsp;<a href="https://ergsn.net" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.site}</a>
+          ${L.reach} ${L.contacts}
         </td>
       </tr>
 
-      <!-- Footer -->
+      <!-- Footer — wordmark only (no suffix), copyright on its own line, then Privacy/Terms below -->
       <tr>
         <td style="background:#0f0f0f;padding:20px 32px;color:#8a8b8d;font-size:11px;line-height:1.7;">
-          <p style="margin:0 0 8px;">${logoInline(16, '#ffffff')}&nbsp;<span style="color:#cfcfcf;font-size:11px;font-weight:600;">${L.suffix}</span></p>
-          <p style="margin:0 0 4px;">${L.address}</p>
-          <p style="margin:0 0 10px;">
-            <a href="https://ergsn.net" style="color:#34d298;text-decoration:none;">ergsn.net</a>
-            &middot; <a href="https://ergsn.net/privacy.html" style="color:#34d298;text-decoration:none;">${L.privacy}</a>
-            &middot; <a href="https://ergsn.net/terms.html" style="color:#34d298;text-decoration:none;">${L.terms}</a>
+          <p style="margin:0 0 10px;">${logoInline(16, '#ffffff')}</p>
+          <p style="margin:0 0 12px;">${L.address}</p>
+          <p style="margin:0 0 6px;font-size:10px;color:#8a8b8d;">${L.copy}</p>
+          <p style="margin:0;font-size:10px;">
+            <a href="https://ergsn.net/privacy.html" style="color:#34d298;text-decoration:none;">${L.privacy}</a>
+            · <a href="https://ergsn.net/terms.html" style="color:#34d298;text-decoration:none;">${L.terms}</a>
           </p>
-          <p style="margin:0;font-size:10px;color:#6b7685;">${L.copy}</p>
         </td>
       </tr>
 
