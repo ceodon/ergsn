@@ -128,7 +128,7 @@
        No fallback color (matches index.html) so browsers rendering
        `-webkit-text-fill-color: transparent` show the gradient through. */
     '#ehNav .eh-logo{display:flex;align-items:center;gap:0;text-decoration:none;flex-shrink:0}',
-    '#ehNav .eh-logo-mark{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;line-height:1;position:relative;padding-bottom:0;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
+    '#ehNav .eh-logo-mark{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:clamp(22px,2.8vw,30px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;line-height:1;position:relative;padding-bottom:0;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-kerning:none;font-feature-settings:"kern" 0;-webkit-font-feature-settings:"kern" 0}',
     '#ehNav .eh-logo-mark .eh-e{background:linear-gradient(84deg,#00bf79 42%,#00ffa1 81%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
     /* Right side */
     '#ehNav .eh-right{display:flex;align-items:center;gap:clamp(12px,2vw,20px)}',
@@ -334,7 +334,7 @@
       '<nav id="ehNav" role="banner">' +
         '<div class="eh-inner">' +
           '<a href="index.html" class="eh-logo" aria-label="ERGSN home">' +
-            '<span class="eh-logo-mark"><span class="eh-e">E</span>RGSN</span>' +
+            '<span class="eh-logo-mark"><span class="eh-e">E</span><span>R</span><span>G</span><span>S</span><span>N</span></span>' +
           '</a>' +
           '<div class="eh-right">' +
             buildDesktopNav() +

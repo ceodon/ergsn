@@ -138,6 +138,12 @@ section { scroll-margin-top: var(--nav-h); }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Disable font kerning so letter-spacing applies uniformly between every
+     pair of glyphs (E↔R was rendering wider than R↔G↔S↔N when kerning
+     was on, especially under Webkit-clipped gradient text). */
+  font-kerning: none;
+  font-feature-settings: "kern" 0;
+  -webkit-font-feature-settings: "kern" 0;
 }
 .logo-mark::after { display: none; }
 .logo-mark .e {
@@ -1038,6 +1044,9 @@ section { scroll-margin-top: var(--nav-h); }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-kerning: none;
+  font-feature-settings: "kern" 0;
+  -webkit-font-feature-settings: "kern" 0;
 }
 .ceo-logo-text .e {
   background: var(--grad-green);
@@ -1205,6 +1214,9 @@ section { scroll-margin-top: var(--nav-h); }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-kerning: none;
+  font-feature-settings: "kern" 0;
+  -webkit-font-feature-settings: "kern" 0;
 }
 .footer-logo-text .e {
   background: var(--grad-green);

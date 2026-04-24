@@ -229,8 +229,8 @@ function wrapInTemplate(bodyHtml, subject) {
         <td style="background:#0f0f0f;padding:24px 32px;border-bottom:3px solid #34d298;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;letter-spacing:.12em;color:#ffffff;text-transform:uppercase;line-height:1;">
-                <span style="color:#34d298;">E</span>RGSN
+              <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;letter-spacing:.12em;color:#ffffff;text-transform:uppercase;line-height:1;font-kerning:none;-webkit-font-feature-settings:'kern' 0;font-feature-settings:'kern' 0;">
+                <span style="color:#34d298;">E</span><span>R</span><span>G</span><span>S</span><span>N</span>
               </td>
               <td align="right" style="font-size:11px;color:#a7a7a7;letter-spacing:.08em;line-height:1.4;">
                 Korea&rsquo;s Trusted<br>Trade Gateway

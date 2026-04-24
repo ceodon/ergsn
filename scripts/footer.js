@@ -30,7 +30,7 @@
     '@media (max-width:960px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
     '@media (max-width:680px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
     '#ergsnFooter .ef-logo-row{display:flex;align-items:center;margin-bottom:1rem}',
-    '#ergsnFooter .ef-logo{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;position:relative;padding-bottom:5px;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:#fff}',
+    '#ergsnFooter .ef-logo{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:20px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;position:relative;padding-bottom:5px;background:linear-gradient(320deg,#a8a8a6 15%,#c2c0c0 48%,#f9f8f6 64%,#d4d4d4 76%,#7f7f7f 88%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:#fff;font-kerning:none;font-feature-settings:"kern" 0;-webkit-font-feature-settings:"kern" 0}',
     '#ergsnFooter .ef-logo .ef-e{background:linear-gradient(84deg,#00bf79 42%,#00ffa1 81%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}',
     '#ergsnFooter .ef-about{font-size:12px;color:#6b7685;line-height:1.75;margin:0}',
     '#ergsnFooter .ef-col-title{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#34d298;margin:0 0 1rem}',
@@ -52,7 +52,7 @@
         '<div class="ef-top">' +
           '<div class="ef-brand">' +
             '<div class="ef-logo-row">' +
-              '<span class="ef-logo"><span class="ef-e">E</span>RGSN</span>' +
+              '<span class="ef-logo"><span class="ef-e">E</span><span>R</span><span>G</span><span>S</span><span>N</span></span>' +
             '</div>' +
             '<p class="ef-about">Korea’s Trusted Trade Gateway.<br>#503 Susong BD, 12-21, Seoae-ro 5-gil,<br>Joong-gu, Seoul 04623, Republic of Korea</p>' +
           '</div>' +
