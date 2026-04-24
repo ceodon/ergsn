@@ -274,15 +274,19 @@ function wrapInTemplate(bodyHtml, subject, locale) {
      visual chrome; body is pure white edge-to-edge so it matches whatever
      width the mail client allocates. -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;">
-  <tr><td>
+  <tr><td style="padding:12px 10px;">
     <!-- Inner card: left/right black borders tie the white body to the dark
          header and footer so the three rows read as one coherent card. The
          borders share #0f0f0f with the header/footer background, so they
          visually merge at the corners. border-radius + overflow:hidden round
          the four corners (Outlook desktop falls back to square corners but
          keeps the colours intact). border-collapse must be `separate` for
-         border-radius to apply at all in HTML tables. -->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-radius:8px;overflow:hidden;border-collapse:separate;border-spacing:0;">
+         border-radius to apply at all in HTML tables.
+         The outer <td> padding (12px top/bottom, 10px sides) lifts the card
+         off the reading-pane edge so the rounded corners are actually visible
+         — at padding:0 the corners were being clipped flush against the pane
+         in Gmail web + iOS Mail. -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-left:2px solid #0f0f0f;border-right:2px solid #0f0f0f;border-top:2px solid #0f0f0f;border-bottom:2px solid #0f0f0f;border-radius:16px;overflow:hidden;border-collapse:separate;border-spacing:0;">
 
       <!-- Header / masthead — logo wraps in <a> so click goes to ergsn.net -->
       <tr>
