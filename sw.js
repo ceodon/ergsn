@@ -1,7 +1,10 @@
 // ERGSN Service Worker — offline-first cache for slow/intermittent networks
-// Cache version bumped to v2 with the ergsn.net custom-domain migration;
-// old caches built under /ergsn/ are evicted on activate.
-const CACHE = 'ergsn-v2';
+// Cache version bumped to v3 on 2026-04-25 to evict stale cached copies of
+// scripts/header.js, scripts/footer.js, and scripts/products-catalog.js
+// after the nav + footer expansion (partners-tourism.html + kbeauty-latam.html
+// links) and the K-Beauty chip filter were added — cache-first returning
+// v2 cached bundles left new pages invisible in shared chrome.
+const CACHE = 'ergsn-v3';
 const CORE = [
   '/',
   '/index.html',
