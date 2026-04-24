@@ -54,7 +54,7 @@
             '<div class="ef-logo-row">' +
               '<span class="ef-logo"><span class="ef-e">E</span>RGSN</span>' +
             '</div>' +
-            '<p class="ef-about">Korea\u2019s Trusted Trade Gateway.<br>#503 Susong BD, 12-21, Seoae-ro 5-gil,<br>Joong-gu, Seoul 04623, Republic of Korea</p>' +
+            '<p class="ef-about">Korea’s Trusted Trade Gateway.<br>#503 Susong BD, 12-21, Seoae-ro 5-gil,<br>Joong-gu, Seoul 04623, Republic of Korea</p>' +
           '</div>' +
           '<div>' +
             '<p class="ef-col-title">Shop</p>' +
@@ -81,6 +81,7 @@
               '<li><a href="buyers-healthcare.html">Healthcare Procurement</a></li>' +
               '<li><a href="buyers-government.html">Government Procurement</a></li>' +
               '<li><a href="buyers-hospitality.html">Hospitality &amp; Retail</a></li>' +
+              '<li><a href="kbeauty-latam.html">K-Beauty for LATAM</a></li>' +
             '</ul>' +
           '</div>' +
           '<div>' +
@@ -105,12 +106,13 @@
               '<li><a href="tracker.html">RFQ Tracker</a></li>' +
               '<li><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a></li>' +
               '<li><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>' +
-              '<li><a href="partners-kr.html" style="color:#34d298"><span class="ef-kr-chip">KR</span>\uD30C\uD2B8\uB108 \uBB38\uC758</a></li>' +
+              '<li><a href="partners-kr.html" style="color:#34d298"><span class="ef-kr-chip">KR</span>제조사 파트너</a></li>' +
+              '<li><a href="partners-tourism.html" style="color:#34d298"><span class="ef-kr-chip">KR</span>K-Tourism 파트너</a></li>' +
             '</ul>' +
           '</div>' +
         '</div>' +
         '<div class="ef-bottom">' +
-          '<p class="ef-copy">\u00A9 2013 ERGSN CO., LTD. All rights reserved \u00B7 Made in Korea \u00B7 <a href="privacy.html">Privacy</a> \u00B7 <a href="terms.html">Terms</a></p>' +
+          '<p class="ef-copy">© 2013 ERGSN CO., LTD. All rights reserved · Made in Korea · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>' +
         '</div>' +
       '</div>' +
     '</footer>'

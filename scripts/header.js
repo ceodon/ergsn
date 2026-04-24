@@ -57,6 +57,7 @@
         { href: 'index.html?sector=k-energy#products',         name: 'K-Energy',         tag: 'Active', desc: 'HYGEN Generator · 4 configurations' },
         { href: 'index.html?sector=k-bio#products',            name: 'K-Bio',            tag: 'Active', desc: 'Rosetta Plus HFF · RAY-1 Bio Cream' },
         { href: 'index.html?sector=k-beauty#products',         name: 'K-Beauty',         tag: 'Active', desc: '16 SKUs · 2 makers · MOQ 1,000' },
+        { href: 'kbeauty-latam.html',                          name: 'K-Beauty · LATAM pitch', desc: 'OEM/ODM 1-pager · duty-free + MENA' },
         { href: 'index.html?sector=k-tourism-assets#products', name: 'K-Tourism Assets', tag: 'Active', desc: 'Yangpyeong hanok · share ownership' },
         { href: 'index.html?sector=k-culture-goods#products',  name: 'K-Culture Goods',  tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },
         { href: 'index.html?sector=k-franchise#products',      name: 'K-Franchise',      tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts' },
@@ -102,7 +103,8 @@
         { href: 'tracker.html',       name: 'RFQ Tracker',        desc: 'Check status of submitted RFQ' },
         { href: 'https://t.me/ceodon',       name: 'Telegram',  desc: 'Chat directly with ERGSN trade team', external: true },
         { href: 'https://wa.me/821052880006', name: 'WhatsApp', desc: 'Chat directly with ERGSN trade team', external: true },
-        { href: 'partners-kr.html', name: 'KR · 파트너 문의', kr: true, desc: '한국 제조사 입점 신청' }
+        { href: 'partners-kr.html',     name: 'KR · 제조사 파트너',  kr: true, desc: '한국 제조사 입점 신청' },
+        { href: 'partners-tourism.html', name: 'KR · K-Tourism 파트너', kr: true, desc: '한옥 운영자 모집 · 양평 다음' }
       ]
     }
   ];
