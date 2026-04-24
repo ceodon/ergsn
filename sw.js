@@ -1,10 +1,9 @@
 // ERGSN Service Worker — offline-first cache for slow/intermittent networks
-// Cache version bumped to v3 on 2026-04-25 to evict stale cached copies of
-// scripts/header.js, scripts/footer.js, and scripts/products-catalog.js
-// after the nav + footer expansion (partners-tourism.html + kbeauty-latam.html
-// links) and the K-Beauty chip filter were added — cache-first returning
-// v2 cached bundles left new pages invisible in shared chrome.
-const CACHE = 'ergsn-v3';
+// Cache version bumped to v4 on 2026-04-25 to evict v3 cached copies of
+// index.html / partners-kr.html / partners-tourism.html which lacked the
+// Phase 2-C brand-mail dispatch (sendBrandEmail helpers + Promise.allSettled
+// extension). Stale v3 entries silently dropped the new fetch path.
+const CACHE = 'ergsn-v4';
 const CORE = [
   '/',
   '/index.html',
