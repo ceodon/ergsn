@@ -319,18 +319,22 @@ function wrapInTemplate(bodyHtml, subject, locale) {
         </td>
       </tr>
 
-      <!-- Footer — wordmark only, all text in the same #8a8b8d grey for visual unity -->
+      <!-- Footer — wordmark only, all text in the same #8a8b8d grey for visual unity.
+           Every text <p> below the logo carries the SAME font-size, line-height,
+           and margin so PC + mobile leading look identical (mobile clients were
+           inheriting the default leading and rendering tighter than PC). The
+           logo row keeps its own slightly looser leading. -->
       <tr>
-        <td style="background:#0f0f0f;padding:20px 32px;font-size:11px;line-height:1.7;">
-          <p style="margin:0 0 10px;">${logoInline(14, '#ffffff')}</p>
+        <td style="background:#0f0f0f;padding:20px 32px;">
+          <p style="margin:0 0 12px;font-size:11px;line-height:1.7;color:#8a8b8d;">${logoInline(14, '#ffffff')}</p>
           <!-- Address wrapped in a no-op anchor + cursor:default + pointer-events:none
                so Gmail/Apple Mail do NOT auto-detect it and turn the line into a
                Google Maps hyperlink (the wrapper signals "already linked, leave it"). -->
-          <p style="margin:0 0 12px;"><a href="#" style="color:#8a8b8d;text-decoration:none;cursor:default;pointer-events:none;-webkit-tap-highlight-color:transparent;">${L.address}</a></p>
-          <p style="margin:0 0 6px;font-size:10px;color:#8a8b8d;">${L.copy}</p>
-          <p style="margin:0;font-size:10px;color:#8a8b8d;">
-            <a href="https://ergsn.net/privacy.html" style="color:#8a8b8d;text-decoration:underline;">${L.privacy}</a>
-            · <a href="https://ergsn.net/terms.html" style="color:#8a8b8d;text-decoration:underline;">${L.terms}</a>
+          <p style="margin:0 0 6px;font-size:10px;line-height:1.6;color:#8a8b8d;"><a href="#" style="color:#8a8b8d;text-decoration:none;cursor:default;pointer-events:none;-webkit-tap-highlight-color:transparent;line-height:1.6;">${L.address}</a></p>
+          <p style="margin:0 0 6px;font-size:10px;line-height:1.6;color:#8a8b8d;">${L.copy}</p>
+          <p style="margin:0;font-size:10px;line-height:1.6;color:#8a8b8d;">
+            <a href="https://ergsn.net/privacy.html" style="color:#8a8b8d;text-decoration:underline;line-height:1.6;">${L.privacy}</a>
+            · <a href="https://ergsn.net/terms.html" style="color:#8a8b8d;text-decoration:underline;line-height:1.6;">${L.terms}</a>
           </p>
         </td>
       </tr>
