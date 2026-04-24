@@ -102,6 +102,14 @@
   .form-wrap button[type=submit] { width: 100%; }
   .form-note { font-size: 12px; color: var(--tx-lt); text-align: center; margin-top: 1rem; }
 
+  /* Korean-page contact chips (Telegram · WhatsApp · KakaoTalk). Same
+     spec as partners-kr.html — see feedback_contact_chips_kr_pages
+     memory: every Korean-language standalone page carries this row at
+     hero AND at form footer. English-only pages do NOT include the
+     KakaoTalk chip (overseas buyers don't use Kakao). */
+  .contact-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 1.4rem; }
+  .contact-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--navy-2); border: 1px solid var(--border); border-radius: 30px; font-size: 13px; color: var(--white); transition: border-color .15s, color .15s; }
+  .contact-chip:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
 </style>
 </head>
 <body>
