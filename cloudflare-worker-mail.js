@@ -104,7 +104,9 @@ async function handleSend(body, env, cors) {
   const htmlBody  = String(body.htmlBody || '');
   const textBody  = body.textBody ? String(body.textBody) : stripHtml(htmlBody);
   const fromEmail = isErgsnDomain(body.from) ? body.from : 'noreply@ergsn.net';
-  const fromName  = String(body.fromName || 'ERGSN Trade Desk').slice(0, 100);
+  const locale    = (body.locale === 'ko' || body.lang === 'ko') ? 'ko' : 'en';
+  const defaultFromName = locale === 'ko' ? 'ERGSN 무역센터' : 'ERGSN Trade Desk';
+  const fromName  = String(body.fromName || defaultFromName).slice(0, 100);
   const replyTo   = body.replyTo || null;
   const cc        = Array.isArray(body.cc) ? body.cc : null;
 
@@ -118,7 +120,7 @@ async function handleSend(body, env, cors) {
     return jsonResponse({ ok: false, error: 'invalid `cc` address' }, 400, cors);
   }
 
-  const wrappedHtml = wrapInTemplate(htmlBody, subject);
+  const wrappedHtml = wrapInTemplate(htmlBody, subject, locale);
 
   return sendThroughResend({
     fromEmail, fromName,
@@ -205,36 +207,76 @@ async function callResend(body, env, cors) {
 /* ==================================================================
  * ERGSN brand template — single source of truth
  * Inline-styled HTML (no external CSS — most mail clients strip <style>).
- * Designed for 600px width, dark masthead/footer + light body for
- * legibility, navy + neon-green token set matching ergsn.net.
+ * 720px max-width to match the Gmail/Outlook reading pane so the
+ * branded card doesn't look narrower than the From/To/Date row above.
+ * Dark masthead/footer + light body. Logo uses per-letter spans +
+ * font-kerning:none (see feedback_logo_kerning_policy memory).
+ * Localised: English (default) or Korean (pass `locale: "ko"` in the
+ * /send payload). Only surrounding chrome localises — the caller-
+ * provided `htmlBody` is inserted verbatim.
  * ================================================================== */
-function wrapInTemplate(bodyHtml, subject) {
+
+/* Logo markup helper — identical shape on every surface, only font-size
+   and letter-spacing differ. Keep sync with feedback_logo_kerning_policy. */
+function logoInline(fontSize, color) {
+  const eColor = '#34d298';
+  return `<span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:${fontSize}px;font-weight:800;letter-spacing:.04em;color:${color};text-transform:uppercase;line-height:1;font-kerning:none;-webkit-font-feature-settings:'kern' 0;font-feature-settings:'kern' 0;">` +
+    `<span style="color:${eColor};">E</span><span>R</span><span>G</span><span>S</span><span>N</span>` +
+  `</span>`;
+}
+
+const I18N = {
+  en: {
+    tagline:    "Korea&rsquo;s Trusted<br>Trade Gateway",
+    reach:      "Reach the trade desk:",
+    telegram:   "Telegram",
+    whatsapp:   "WhatsApp",
+    site:       "ergsn.net",
+    suffix:     "CO., LTD.",
+    address:    "#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea",
+    privacy:    "Privacy",
+    terms:      "Terms",
+    copy:       "&copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea"
+  },
+  ko: {
+    tagline:    "한국 신뢰 무역<br>플랫폼",
+    reach:      "고객지원 문의:",
+    telegram:   "텔레그램",
+    whatsapp:   "왓츠앱",
+    site:       "ergsn.net",
+    suffix:     "주식회사",
+    address:    "서울특별시 중구 서애로5길 12-21 수송빌딩 #503 (04623)",
+    privacy:    "개인정보처리방침",
+    terms:      "이용약관",
+    copy:       "&copy; 2013 ERGSN 주식회사 &middot; All rights reserved &middot; Made in Korea"
+  }
+};
+
+function wrapInTemplate(bodyHtml, subject, locale) {
+  const L = I18N[locale] || I18N.en;
   const safeTitle = escapeHtml(subject || 'ERGSN');
+  const htmlLang = locale === 'ko' ? 'ko' : 'en';
   return `<!doctype html>
-<html lang="en">
+<html lang="${htmlLang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="x-apple-disable-message-reformatting">
 <title>${safeTitle}</title>
 </head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:#333;line-height:1.65;">
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;color:#333;line-height:1.6;">
 <div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(stripHtml(bodyHtml).slice(0, 120))}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f4f4;padding:24px 0;">
-  <tr><td align="center" style="padding:0 12px;">
-    <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f4f4;padding:16px 0;">
+  <tr><td align="center" style="padding:0 8px;">
+    <table role="presentation" width="720" cellpadding="0" cellspacing="0" border="0" style="max-width:720px;width:100%;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);">
 
       <!-- Header / masthead -->
       <tr>
-        <td style="background:#0f0f0f;padding:24px 32px;border-bottom:3px solid #34d298;">
+        <td style="background:#0f0f0f;padding:18px 28px;border-bottom:3px solid #34d298;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:24px;font-weight:800;letter-spacing:.12em;color:#ffffff;text-transform:uppercase;line-height:1;font-kerning:none;-webkit-font-feature-settings:'kern' 0;font-feature-settings:'kern' 0;">
-                <span style="color:#34d298;">E</span><span>R</span><span>G</span><span>S</span><span>N</span>
-              </td>
-              <td align="right" style="font-size:11px;color:#a7a7a7;letter-spacing:.08em;line-height:1.4;">
-                Korea&rsquo;s Trusted<br>Trade Gateway
-              </td>
+              <td>${logoInline(18, '#ffffff')}</td>
+              <td align="right" style="font-size:10.5px;color:#a7a7a7;letter-spacing:.06em;line-height:1.4;">${L.tagline}</td>
             </tr>
           </table>
         </td>
@@ -242,7 +284,7 @@ function wrapInTemplate(bodyHtml, subject) {
 
       <!-- Body — caller HTML inserted verbatim -->
       <tr>
-        <td style="padding:32px;font-size:14.5px;line-height:1.7;color:#333;">
+        <td style="padding:26px 32px;font-size:13px;line-height:1.7;color:#333;">
           ${bodyHtml}
         </td>
       </tr>
@@ -252,27 +294,25 @@ function wrapInTemplate(bodyHtml, subject) {
 
       <!-- CTA strip -->
       <tr>
-        <td style="padding:20px 32px;font-size:12.5px;color:#6b7685;line-height:1.7;">
-          Reach the trade desk:
-          &nbsp;<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">Telegram</a>
-          &nbsp;&middot;&nbsp;<a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">WhatsApp</a>
-          &nbsp;&middot;&nbsp;<a href="https://ergsn.net" style="color:#0f0f0f;text-decoration:none;font-weight:700;">ergsn.net</a>
+        <td style="padding:16px 32px;font-size:11.5px;color:#6b7685;line-height:1.7;">
+          ${L.reach}
+          &nbsp;<a href="https://t.me/ceodon" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.telegram}</a>
+          &nbsp;&middot;&nbsp;<a href="https://wa.me/821052880006" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.whatsapp}</a>
+          &nbsp;&middot;&nbsp;<a href="https://ergsn.net" style="color:#0f0f0f;text-decoration:none;font-weight:700;">${L.site}</a>
         </td>
       </tr>
 
       <!-- Footer -->
       <tr>
-        <td style="background:#0f0f0f;padding:24px 32px;color:#8a8b8d;font-size:11.5px;line-height:1.7;">
-          <p style="margin:0 0 8px;color:#cfcfcf;font-weight:600;">ERGSN CO., LTD.</p>
-          <p style="margin:0 0 4px;">#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea</p>
-          <p style="margin:0 0 12px;">
+        <td style="background:#0f0f0f;padding:20px 32px;color:#8a8b8d;font-size:11px;line-height:1.7;">
+          <p style="margin:0 0 8px;">${logoInline(16, '#ffffff')}&nbsp;<span style="color:#cfcfcf;font-size:11px;font-weight:600;">${L.suffix}</span></p>
+          <p style="margin:0 0 4px;">${L.address}</p>
+          <p style="margin:0 0 10px;">
             <a href="https://ergsn.net" style="color:#34d298;text-decoration:none;">ergsn.net</a>
-            &middot; <a href="https://ergsn.net/privacy.html" style="color:#34d298;text-decoration:none;">Privacy</a>
-            &middot; <a href="https://ergsn.net/terms.html" style="color:#34d298;text-decoration:none;">Terms</a>
+            &middot; <a href="https://ergsn.net/privacy.html" style="color:#34d298;text-decoration:none;">${L.privacy}</a>
+            &middot; <a href="https://ergsn.net/terms.html" style="color:#34d298;text-decoration:none;">${L.terms}</a>
           </p>
-          <p style="margin:0;font-size:10.5px;color:#6b7685;">
-            &copy; 2013 ERGSN CO., LTD. All rights reserved &middot; Made in Korea
-          </p>
+          <p style="margin:0;font-size:10px;color:#6b7685;">${L.copy}</p>
         </td>
       </tr>
 
