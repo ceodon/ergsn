@@ -5048,6 +5048,10 @@ const TG_PROXY_URL = 'https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev/';
 // RFQ Tracker: after deploying cloudflare-worker-rfq.js, paste its URL here.
 // When set, RFQ submissions receive a trackable ID and the success message shows it.
 const RFQ_TRACKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+// Trade-Docs bridge: when set, RFQ submissions also auto-create a trade-docs
+// transaction so the same buyer can be progressed through Quotation → P/O →
+// Proforma → Commercial → Packing without manual data entry.
+const TRADE_DOCS_URL = 'https://ergsn-trade-docs.ceodon.workers.dev';
 // ERGSN brand mail worker (cloudflare-worker-mail.js). Wraps caller HTML
 // in the ERGSN navy + neon-green template (per locale) before relaying
 // through Resend. Kept side-by-side with FormSubmit during the v4.x
@@ -5360,6 +5364,30 @@ function submitRFQ() {
   // Wait for tracker ID first, then dispatch email + Telegram in parallel with ID attached.
   trackerPromise.then(trk => {
     const trackingId = (trk && trk.ok && trk.id) ? trk.id : '';
+
+    // Phase B — auto-create a trade-docs transaction so the buyer can be
+    // progressed through Quotation → Shipped without manual entry. Fire and
+    // forget; if the bridge worker is offline, the rfq-tracker still runs.
+    if (TRADE_DOCS_URL) {
+      const rfqSummary = [
+        'Models: ' + selected.join(', '),
+        'Qty: ' + (v('fQty') || '(not specified)'),
+        'Incoterms: ' + incoterms + ' (' + country + (port !== 'N/A' ? ' / ' + port : '') + ')',
+        'Tier: ' + trackerBase.tier,
+        v('fMsg') ? 'Message: ' + v('fMsg') : ''
+      ].filter(Boolean).join('\n');
+      fetch(TRADE_DOCS_URL.replace(/\/$/, '') + '/rfq-bridge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyer_company: v('fCo'),
+          buyer_email:   buyerEmail,
+          buyer_country: country,
+          rfq_tracker_id: trackingId,
+          rfq_summary:    rfqSummary
+        })
+      }).catch(() => {});
+    }
     const trackerLink = trackingId ? `https://ergsn.net/tracker.html?id=${trackingId}` : '';
     const imageLines = imageUrls.length ? imageUrls.join('\n') : '(none — service/SVG product)';
 

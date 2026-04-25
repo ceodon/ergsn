@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERGSN Trade Document</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root { --gold:#34d298; --navy:#0f0f0f; --navy-2:#141414; --white:#fff; --tx-mid:#cfcfcf; --tx-lt:#8a8b8d; --border:#242424; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0a0a0a; color:var(--tx-mid); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.55; }
+  .wrap { max-width:1000px; margin:0 auto; padding:2rem clamp(16px,4vw,32px) 4rem; }
+  h1 { color:var(--white); font-size:1.3rem; margin:0 0 .3rem; }
+  .small { font-size:11.5px; color:var(--tx-lt); }
+  .panel { background:var(--navy-2); border:1px solid var(--border); border-radius:10px; padding:1.2rem 1.4rem; margin-bottom:1rem; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:1rem; }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:6px; font-size:12.5px; font-weight:700; cursor:pointer; border:0; text-decoration:none; }
+  .btn-primary { background:var(--gold); color:#0a0a0a; }
+  .btn-ghost { background:transparent; color:var(--tx-mid); border:1px solid var(--border); }
+  .err { color:#ff8a8a; padding:1rem; }
+  /* On-screen rendering of doc body — same look as print but on dark canvas wrapped in white card */
+  .doc-card { background:#fff; color:#000; border-radius:8px; padding:18mm 14mm; }
+  @media print {
+    body * { visibility:hidden; }
+    #print-area, #print-area * { visibility:visible; }
+    #print-area { position:absolute; left:0; top:0; width:100%; background:#fff; color:#000; padding:18mm; }
+    .no-print { display:none !important; }
+  }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js (no-print on PDF) -->
+<div class="wrap no-print" id="ui">
+  <h1 id="docTitle">Loading…</h1>
+  <p class="small" id="docMeta"></p>
+  <div class="panel" id="errPanel" style="display:none"><div class="err" id="errMsg"></div></div>
+  <div class="panel" id="docCardWrap" style="display:none">
+    <div class="doc-card" id="docCard"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="printBtn">🖨 Print / Save PDF</button>
+      <a class="btn btn-ghost" id="backLink" href="trade-buyer.html">← Back to portal</a>
+    </div>
+  </div>
+</div>
+
+<!-- Print render area (cloned just-in-time before window.print()) -->
+<div id="print-area" style="display:none"></div>
+
+<script src="scripts/trade-docs.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const TYPE   = params.get('type');
+const DOC_ID = params.get('id');
+const TOKEN  = params.get('t') || '';
+
+function showErr(msg) {
+  $('errPanel').style.display = 'block';
+  $('errMsg').textContent = msg;
+  $('docTitle').textContent = 'Document';
+}
+
+if (!TYPE || !TD.DOC_META[TYPE]) showErr('Bad ?type — expected quotation|po|proforma|commercial|packing.');
+else if (!DOC_ID) showErr('Missing ?id.');
+else if (!/^[a-f0-9]{32}$/i.test(TOKEN)) showErr('Missing or invalid token.');
+else { $('backLink').href = 'trade-buyer.html?t=' + encodeURIComponent(TOKEN); load(); }
+
+async function load() {
+  try {
+    const r = await TD.apiBuyer(TOKEN);
+    const doc = (r.docs[TYPE] || []).find(d => d.id === DOC_ID);
+    if (!doc) { showErr('Document ' + DOC_ID + ' not found for this transaction.'); return; }
+    render(r.transaction, doc);
+  } catch (e) {
+    showErr('Failed to load: ' + e.message);
+  }
+}
+
+function render(tx, doc) {
+  const meta = TD.DOC_META[TYPE];
+  $('docTitle').textContent = meta.title_en + ' · ' + doc.id;
+  $('docMeta').innerHTML = 'Transaction <code>' + TD.esc(tx.id) + '</code> · ' + TD.esc(tx.buyer_company) + ' · ' + TD.fmtDate(doc.created_at);
+  const html = TD.buildPrintHtml(TYPE, tx, doc.data, doc.id);
+  $('docCard').innerHTML = html;
+  $('docCardWrap').style.display = 'block';
+}
+
+function doPrint() {
+  $('print-area').innerHTML = $('docCard').innerHTML;
+  $('print-area').style.display = 'block';
+  setTimeout(() => { window.print(); $('print-area').style.display = 'none'; }, 80);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('printBtn').addEventListener('click', doPrint);
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

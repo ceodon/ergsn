@@ -82,9 +82,27 @@
       <div class="row" style="margin-top:1rem"><label>Notes / Terms</label><textarea id="docNotes" placeholder="Payment terms, delivery, validity, special instructions…"></textarea></div>
       <div class="actions">
         <button class="btn btn-primary" id="saveBtn">💾 Save</button>
-        <button class="btn btn-warn" id="sendBtn">📨 Send to buyer (brand mail)</button>
+        <button class="btn btn-warn" id="sendBtn">📨 Send to buyer</button>
         <button class="btn btn-ghost" id="printBtn">🖨 Print / PDF</button>
+        <a class="btn btn-ghost" id="txDetailLink" href="trade-docs.html">⤴ Tx detail</a>
         <a class="btn btn-ghost" href="trade-docs.html">← Dashboard</a>
+      </div>
+      <!-- Phase D — 1-click doc succession (only meaningful when editing an existing doc) -->
+      <div class="row two" id="convertWrap" style="display:none;margin-top:.6rem">
+        <div>
+          <label>Convert this doc to…</label>
+          <select id="convertType">
+            <option value="">(pick destination)</option>
+            <option value="quotation">Quotation</option>
+            <option value="proforma">Proforma Invoice</option>
+            <option value="commercial">Commercial Invoice</option>
+            <option value="packing">Packing List</option>
+          </select>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="btn btn-warn" id="convertBtn" type="button">→ Create derived doc</button>
+        </div>
       </div>
       <div class="toast" id="opToast"></div>
     </div>
@@ -142,7 +160,20 @@ function initFields() {
       <div class="row two">
         <div><label>Country of Origin</label><input id="ex_coo" value="Republic of Korea"></div>
         <div><label>Incoterms</label><select id="ex_incoterms"><option>CIF</option><option>FOB</option><option>EXW</option><option>DAP</option><option>DDP</option></select></div>
-      </div>`;
+      </div>
+      <div class="row two">
+        <div><label>Port of Loading</label><input id="ex_pol" placeholder="Busan, Korea"></div>
+        <div><label>Port of Discharge</label><input id="ex_pod" placeholder="Long Beach, USA"></div>
+      </div>
+      <div class="row two">
+        <div><label>Vessel Name</label><input id="ex_vessel"></div>
+        <div><label>Voyage No.</label><input id="ex_voyage"></div>
+      </div>
+      <div class="row two">
+        <div><label>Consignee</label><textarea id="ex_consignee" rows="2"></textarea></div>
+        <div><label>Notify Party</label><textarea id="ex_notify" rows="2"></textarea></div>
+      </div>
+      <div class="row"><label>Shipping Marks &amp; Numbers</label><textarea id="ex_marks" rows="2" placeholder="ERGSN / SEOUL / 1-N"></textarea></div>`;
   } else if (TYPE === 'packing') {
     ex.innerHTML = `
       <div class="row three">
@@ -152,14 +183,27 @@ function initFields() {
       </div>
       <div class="row"><label>Total Volume (m³)</label><input id="ex_vol" type="number" step="any"></div>`;
   } else if (TYPE === 'quotation') {
-    ex.innerHTML = `<div class="row"><label>Valid Until</label><input id="ex_validUntil" type="date"></div>`;
+    ex.innerHTML = `
+      <div class="row two">
+        <div><label>Valid Until</label><input id="ex_validUntil" type="date"></div>
+        <div><label>&nbsp;</label><button class="btn btn-ghost" id="aiDraftBtn" type="button">🤖 AI draft from RFQ</button></div>
+      </div>`;
   } else if (TYPE === 'po') {
     ex.innerHTML = `<div class="row"><label>Buyer Reference / Internal PO No.</label><input id="ex_buyerRef"></div>`;
   } else if (TYPE === 'proforma') {
     ex.innerHTML = `<div class="row two">
-      <div><label>Payment Terms</label><input id="ex_payterms" value="100% T/T in advance"></div>
-      <div><label>Delivery Time</label><input id="ex_delivery" value="4-6 weeks ARO"></div>
-    </div>`;
+        <div><label>Payment Terms</label><input id="ex_payterms" value="100% T/T in advance"></div>
+        <div><label>Delivery Time</label><input id="ex_delivery" value="4-6 weeks ARO"></div>
+      </div>
+      <div class="row two">
+        <div><label>Bank Name</label><input id="ex_bankName" placeholder="Shinhan Bank"></div>
+        <div><label>Beneficiary</label><input id="ex_bankBenef" placeholder="ERGSN CO., LTD."></div>
+      </div>
+      <div class="row three">
+        <div><label>Bank Account No.</label><input id="ex_bankAcct"></div>
+        <div><label>SWIFT / BIC</label><input id="ex_bankSwift" placeholder="SHBKKRSE"></div>
+        <div><label>IBAN</label><input id="ex_bankIban"></div>
+      </div>`;
   }
   /* Line items */
   li = TD.renderLineItems($('lineItems'), [{}], { showHs: TYPE === 'commercial', showPack: TYPE === 'packing', onChange: recalc });
@@ -188,11 +232,18 @@ function gather() {
   };
   /* per-type extras */
   if (TYPE === 'commercial') {
-    data.bl_number    = $('ex_bl').value;
-    data.container_no = $('ex_container').value;
-    data.shipped_at   = $('ex_shipped').value ? Date.parse($('ex_shipped').value) : null;
-    data.coo          = $('ex_coo').value;
-    data.incoterms    = $('ex_incoterms').value;
+    data.bl_number      = $('ex_bl').value;
+    data.container_no   = $('ex_container').value;
+    data.shipped_at     = $('ex_shipped').value ? Date.parse($('ex_shipped').value) : null;
+    data.coo            = $('ex_coo').value;
+    data.incoterms      = $('ex_incoterms').value;
+    data.port_loading   = $('ex_pol').value;
+    data.port_discharge = $('ex_pod').value;
+    data.vessel         = $('ex_vessel').value;
+    data.voyage         = $('ex_voyage').value;
+    data.consignee      = $('ex_consignee').value;
+    data.notify_party   = $('ex_notify').value;
+    data.shipping_marks = $('ex_marks').value;
   } else if (TYPE === 'packing') {
     data.total_weight_kg = +$('ex_gw').value || data.items.reduce((s,r)=>s+(r.gw||0),0);
     data.total_net_kg    = +$('ex_nw').value || data.items.reduce((s,r)=>s+(r.nw||0),0);
@@ -203,8 +254,13 @@ function gather() {
   } else if (TYPE === 'po') {
     data.buyer_ref = $('ex_buyerRef').value;
   } else if (TYPE === 'proforma') {
-    data.payment_terms = $('ex_payterms').value;
-    data.delivery      = $('ex_delivery').value;
+    data.payment_terms   = $('ex_payterms').value;
+    data.delivery        = $('ex_delivery').value;
+    data.bank_name       = $('ex_bankName').value;
+    data.bank_account    = $('ex_bankAcct').value;
+    data.bank_swift      = $('ex_bankSwift').value;
+    data.bank_iban       = $('ex_bankIban').value;
+    data.bank_beneficiary= $('ex_bankBenef').value;
   }
   /* totals echoed for D1 promoted columns */
   const sub = data.items.reduce((s,r)=>s+(r.amt||0),0);
@@ -231,6 +287,13 @@ async function loadDoc() {
       $('ex_shipped').value = d.shipped_at ? new Date(d.shipped_at).toISOString().slice(0,10) : '';
       $('ex_coo').value = d.coo || 'Republic of Korea';
       if (d.incoterms) $('ex_incoterms').value = d.incoterms;
+      $('ex_pol').value = d.port_loading || '';
+      $('ex_pod').value = d.port_discharge || '';
+      $('ex_vessel').value = d.vessel || '';
+      $('ex_voyage').value = d.voyage || '';
+      $('ex_consignee').value = d.consignee || '';
+      $('ex_notify').value    = d.notify_party || '';
+      $('ex_marks').value     = d.shipping_marks || '';
     } else if (TYPE === 'packing') {
       $('ex_cartons').value = d.carton_count || '';
       $('ex_nw').value = d.total_net_kg || '';
@@ -243,6 +306,11 @@ async function loadDoc() {
     } else if (TYPE === 'proforma') {
       $('ex_payterms').value = d.payment_terms || '';
       $('ex_delivery').value = d.delivery || '';
+      $('ex_bankName').value = d.bank_name || '';
+      $('ex_bankAcct').value = d.bank_account || '';
+      $('ex_bankSwift').value= d.bank_swift || '';
+      $('ex_bankIban').value = d.bank_iban || '';
+      $('ex_bankBenef').value= d.bank_beneficiary || '';
     }
     recalc();
   } catch (_) {}
@@ -262,77 +330,8 @@ async function save() {
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
 
-function buildPrintHtml(data) {
-  const items = data.items.map((r, i) => `
-    <tr>
-      <td>${i+1}</td>
-      <td>${TD.esc(r.desc || '')}</td>
-      ${TYPE==='commercial' ? `<td>${TD.esc(r.hs || '')}</td>` : ''}
-      <td style="text-align:right">${TD.fmt(r.qty, 0)} ${TD.esc(r.unit || '')}</td>
-      <td style="text-align:right">${TD.fmt(r.up)}</td>
-      <td style="text-align:right">${TD.fmt(r.amt)}</td>
-      ${TYPE==='packing' ? `<td style="text-align:right">${TD.fmt(r.ctns,0)}</td><td style="text-align:right">${TD.fmt(r.nw)}</td><td style="text-align:right">${TD.fmt(r.gw)}</td>` : ''}
-    </tr>`).join('');
-  const extras = (() => {
-    if (TYPE === 'commercial') return `<p><b>B/L:</b> ${TD.esc(data.bl_number||'')} · <b>Container:</b> ${TD.esc(data.container_no||'')} · <b>Incoterms:</b> ${TD.esc(data.incoterms||'')} · <b>COO:</b> ${TD.esc(data.coo||'')}</p>`;
-    if (TYPE === 'packing')    return `<p><b>Cartons:</b> ${data.carton_count||''} · <b>Net:</b> ${TD.fmt(data.total_net_kg)} kg · <b>Gross:</b> ${TD.fmt(data.total_weight_kg)} kg · <b>Vol:</b> ${TD.fmt(data.total_volume_m3)} m³</p>`;
-    if (TYPE === 'quotation')  return data.valid_until ? `<p><b>Valid until:</b> ${new Date(data.valid_until).toISOString().slice(0,10)}</p>` : '';
-    if (TYPE === 'proforma')   return `<p><b>Payment Terms:</b> ${TD.esc(data.payment_terms||'')} · <b>Delivery:</b> ${TD.esc(data.delivery||'')}</p>`;
-    if (TYPE === 'po')         return data.buyer_ref ? `<p><b>Buyer Ref:</b> ${TD.esc(data.buyer_ref)}</p>` : '';
-    return '';
-  })();
-  return `
-    <div style="font-family:'Segoe UI',Arial,sans-serif;color:#000;font-size:12px;line-height:1.4">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0f0f0f;padding-bottom:8px;margin-bottom:14px">
-        <div style="font-size:22px;font-weight:800;letter-spacing:.04em"><span style="color:#34d298">E</span>RGSN</div>
-        <div style="text-align:right">
-          <div style="font-size:18px;font-weight:800">${meta.title_en}</div>
-          <div style="font-size:11px;color:#666">${meta.title_ko} · ${TX_ID}</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;font-size:11px">
-        <div>
-          <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Seller</div>
-          ERGSN CO., LTD.<br>
-          #503 Susong BD, 12-21, Seoae-ro 5-gil<br>
-          Joong-gu, Seoul 04623, Republic of Korea<br>
-          ergsn.net
-        </div>
-        <div>
-          <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Buyer</div>
-          ${TD.esc(txData.buyer_company)}<br>
-          ${TD.esc(txData.buyer_email)}<br>
-          ${TD.esc(txData.buyer_country || '')}
-        </div>
-      </div>
-      <div style="margin-bottom:8px;font-size:11px"><b>Document Date:</b> ${TD.esc(data.document_date || '')} · <b>Currency:</b> ${TD.esc(data.currency || '')} · <b>Maker:</b> ${TD.esc(txData.ergsn_partner || '')}</div>
-      ${extras}
-      <table style="width:100%;border-collapse:collapse;margin:10px 0;font-size:11px">
-        <thead style="background:#0f0f0f;color:#fff">
-          <tr>
-            <th style="padding:6px;text-align:left">#</th><th style="padding:6px;text-align:left">Description</th>
-            ${TYPE==='commercial' ? '<th style="padding:6px">HS</th>' : ''}
-            <th style="padding:6px;text-align:right">Qty</th>
-            <th style="padding:6px;text-align:right">Unit Price</th>
-            <th style="padding:6px;text-align:right">Amount</th>
-            ${TYPE==='packing' ? '<th>Ctns</th><th>NW</th><th>GW</th>' : ''}
-          </tr>
-        </thead>
-        <tbody>${items}</tbody>
-      </table>
-      <div style="margin-left:auto;width:260px;font-family:ui-monospace,Menlo,monospace;font-size:12px;border-top:2px solid #0f0f0f;padding-top:6px">
-        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${TD.fmt(data.subtotal)}</span></div>
-        <div style="display:flex;justify-content:space-between"><span>Discount</span><span>-${TD.fmt(data.discount)}</span></div>
-        <div style="display:flex;justify-content:space-between"><span>Tax (${data.tax_pct}%)</span><span>${TD.fmt((data.subtotal-data.discount)*data.tax_pct/100)}</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:#34d298;border-top:1px solid #0f0f0f;padding-top:4px;margin-top:4px"><span>Total</span><span>${TD.fmt(data.total_amount)}</span></div>
-      </div>
-      ${data.notes ? `<div style="margin-top:18px;font-size:11px;border-top:1px dashed #999;padding-top:8px"><b>Notes:</b> ${TD.esc(data.notes)}</div>` : ''}
-      <div style="margin-top:30px;font-size:10px;color:#666;border-top:1px solid #ddd;padding-top:6px">© 2013 ERGSN CO., LTD. · ergsn.net · Generated ${new Date().toISOString().slice(0,16).replace('T',' ')} UTC</div>
-    </div>`;
-}
-
 function doPrint() {
-  $('print-area').innerHTML = buildPrintHtml(gather());
+  $('print-area').innerHTML = TD.buildPrintHtml(TYPE, txData, gather(), DOC_ID || '');
   $('print-area').style.display = 'block';
   setTimeout(() => { window.print(); $('print-area').style.display = 'none'; }, 80);
 }
@@ -341,31 +340,55 @@ async function send() {
   const t = $('opToast'); t.className='toast'; t.textContent='';
   try {
     const data = gather();
-    /* Save first if new */
+    /* Save first (or update) so the doc exists server-side before send */
     let docId = DOC_ID;
     if (!docId) {
       const r = await TD.apiAdmin('POST', '/doc/' + TYPE, { transaction_id: TX_ID, data });
       docId = r.id;
+    } else {
+      await TD.apiAdmin('PATCH', '/doc/' + TYPE + '/' + docId, { data, total_amount: data.total_amount, currency: data.currency });
     }
-    const tokenLink = `https://ergsn.net/trade-buyer.html?t=${txData.buyer_token}`;
-    const body = `<p>Dear ${TD.esc(txData.buyer_company)},</p>
-      <p>${meta.title_en} <strong>${docId}</strong> for transaction ${TX_ID} is now available.</p>
-      <p style="padding:12px 16px;background:#f0fff5;border-left:3px solid #34d298;border-radius:6px;font-size:13px">
-        <strong>Total:</strong> ${TD.fmt(data.total_amount)} ${TD.esc(data.currency)}<br>
-        <strong>Document Date:</strong> ${TD.esc(data.document_date)}<br>
-        <strong>View / Download:</strong> <a href="${tokenLink}" style="color:#0f0f0f;font-weight:700">Open in ERGSN portal</a>
-      </p>
-      <p>Reply to this email if anything needs adjustment.</p>`;
-    await TD.sendBrandMail({
-      to: txData.buyer_email,
-      subject: `ERGSN ${meta.title_en} ${docId} — ${TD.esc(txData.buyer_company)}`,
-      htmlBody: body,
-      locale: 'en',
-      replyTo: 'ceodon@gmail.com',
-      fromName: 'ERGSN Trade Desk'
-    });
-    t.className='toast ok'; t.textContent = '✓ Sent to ' + txData.buyer_email + ' (doc id: ' + docId + ')';
+    /* Server-side send so it gets logged to email_log */
+    const r = await TD.apiAdmin('POST', '/send/' + TYPE + '/' + encodeURIComponent(docId));
+    if (r.ok) { t.className='toast ok'; t.textContent = '✓ Sent to ' + (r.sent_to || txData.buyer_email) + ' (doc id: ' + docId + ')'; }
+    else      { t.className='toast err'; t.textContent = '발송 실패'; }
   } catch (e) { t.className='toast err'; t.textContent = '발송 실패: ' + e.message; }
+}
+
+async function convertDoc() {
+  const t = $('opToast'); t.className='toast'; t.textContent='';
+  if (!DOC_ID) { t.className='toast err'; t.textContent='먼저 이 문서를 저장하세요.'; return; }
+  const dst = $('convertType').value;
+  if (!dst) return;
+  try {
+    const r = await TD.apiAdmin('POST', '/doc/from/' + TYPE + '/' + encodeURIComponent(DOC_ID) + '/to/' + dst);
+    t.className='toast ok';
+    t.innerHTML = '✓ ' + TD.esc(r.id) + ' 생성됨. <a href="?type=' + dst + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">→ 편집</a>';
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+async function aiDraft() {
+  const t = $('opToast'); t.className='toast'; t.textContent='AI drafting…';
+  try {
+    const r = await TD.apiAdmin('POST', '/ai/draft-quotation', {
+      rfq_summary: txData.rfq_summary || ('Buyer ' + txData.buyer_company + ' (' + txData.buyer_email + ') from ' + (txData.buyer_country||'?')),
+      transaction_id: TX_ID
+    });
+    if (r && r.draft) {
+      const d = r.draft;
+      if (d.currency) $('currency').value = d.currency;
+      if (d.notes) $('docNotes').value = d.notes;
+      if (d.valid_until_days && $('ex_validUntil')) {
+        const futureMs = Date.now() + d.valid_until_days * 24 * 3600 * 1000;
+        $('ex_validUntil').value = new Date(futureMs).toISOString().slice(0,10);
+      }
+      /* Re-render line items with AI suggestions */
+      li = TD.renderLineItems($('lineItems'), d.items || [{}], { showHs: TYPE==='commercial', showPack: TYPE==='packing', onChange: recalc });
+      /* re-bind AI button (extras was re-rendered? no — extras stays. But ex_validUntil is in extras) */
+      recalc();
+      t.className='toast ok'; t.textContent = '✓ AI 초안 ' + (d.items?.length || 0) + '개 line items 적용. 가격 검토 후 저장.';
+    } else { t.className='toast err'; t.textContent='AI 응답 비정상'; }
+  } catch (e) { t.className='toast err'; t.textContent='AI 실패: ' + e.message; }
 }
 
 async function tryGate() {
@@ -385,6 +408,18 @@ document.addEventListener('DOMContentLoaded', () => {
   $('saveBtn').addEventListener('click', save);
   $('sendBtn').addEventListener('click', send);
   $('printBtn').addEventListener('click', doPrint);
+  $('convertBtn').addEventListener('click', convertDoc);
+  /* Show convert / tx-detail link only when editing an existing doc */
+  if (DOC_ID) {
+    $('convertWrap').style.display = 'grid';
+    $('txDetailLink').href = 'trade-tx.html?id=' + encodeURIComponent(TX_ID);
+  } else {
+    $('txDetailLink').style.display = 'none';
+  }
+  /* Wire AI draft button which is rendered inside extras for quotation type */
+  document.body.addEventListener('click', e => {
+    if (e.target && e.target.id === 'aiDraftBtn') { e.preventDefault(); aiDraft(); }
+  });
 });
 </script>
 <script defer src="scripts/header.js"></script>

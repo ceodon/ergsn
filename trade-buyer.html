@@ -69,12 +69,15 @@ function render(r) {
   ['quotation','proforma','commercial','packing'].forEach(type => {
     const list = r.docs[type] || [];
     html += '<div class="panel"><h2>' + TD.DOC_META[type].title_en + '</h2>';
-    if (!list.length) html += '<div class="empty">아직 발행된 문서가 없습니다.</div>';
+    if (!list.length) html += '<div class="empty">No documents issued yet.</div>';
     else html += '<table><thead><tr><th>ID</th><th>Type</th><th>Date</th><th>Amount</th><th></th></tr></thead><tbody>' + list.map(d => row(d, type)).join('') + '</tbody></table>';
     html += '</div>';
   });
-  /* PO section — submitted POs + new PO link */
+  /* PO section — submitted POs + new PO link / accept quotation */
   const pos = r.docs.po || [];
+  const quotes = r.docs.quotation || [];
+  const latestQuote = quotes.length ? quotes[quotes.length - 1] : null;
+  const poLocked = !!tx.po_locked_at;
   html += '<div class="panel"><h2>Purchase Orders</h2>';
   if (pos.length) {
     html += '<table><thead><tr><th>ID</th><th>Submitted</th><th>Reference</th></tr></thead><tbody>';
@@ -83,11 +86,55 @@ function render(r) {
     });
     html += '</tbody></table>';
   } else {
-    html += '<div class="empty">아직 제출된 P/O가 없습니다.</div>';
+    html += '<div class="empty">No purchase order submitted yet.</div>';
   }
-  html += '<div class="actions"><a class="btn btn-primary" href="trade-doc-po.html?t=' + encodeURIComponent(token) + '">+ Submit Purchase Order →</a></div>';
+  if (poLocked) {
+    html += '<p class="small" style="margin-top:.6rem">A purchase order has already been submitted for this transaction. Contact ERGSN if you need to amend it.</p>';
+  } else {
+    html += '<div class="actions">';
+    if (latestQuote) {
+      html += '<button class="btn btn-primary" id="acceptQuoteBtn" data-quote="' + TD.esc(latestQuote.id) + '">✓ Accept latest quotation (' + TD.esc(latestQuote.id) + ') →</button>';
+    }
+    html += '<a class="btn btn-ghost" href="trade-doc-po.html?t=' + encodeURIComponent(token) + '">Or submit a custom Purchase Order</a>';
+    html += '</div>';
+  }
   html += '</div>';
+  /* ERGSN contact panel — every buyer landing should know who to contact */
+  html += `<div class="panel">
+    <h2>Need Help?</h2>
+    <p style="font-size:13px;color:var(--tx-mid);margin:0 0 .6rem">
+      Reply to any ERGSN email or reach our trade desk directly:
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <a class="btn btn-ghost" href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram @ceodon</a>
+      <a class="btn btn-ghost" href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      <a class="btn btn-ghost" href="mailto:ceodon@gmail.com">ceodon@gmail.com</a>
+    </div>
+    <p class="small" style="margin-top:.7rem">ERGSN CO., LTD. &middot; #503 Susong BD, 12-21 Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea</p>
+  </div>`;
   $('content').innerHTML = html;
+
+  /* Wire Accept Quotation button if present */
+  const acceptBtn = document.getElementById('acceptQuoteBtn');
+  if (acceptBtn) acceptBtn.addEventListener('click', () => acceptQuote(acceptBtn.dataset.quote));
+}
+
+async function acceptQuote(quotationId) {
+  const sig = prompt('Type your full name to sign acceptance of quotation ' + quotationId + ':');
+  if (!sig || !sig.trim()) return;
+  try {
+    const r = await fetch(TD.API_URL + '/buyer/accept-quotation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, quotation_id: quotationId, buyer_signature: sig.trim() })
+    });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    alert('✓ PO ' + j.id + ' created. ERGSN trade desk will follow up shortly.');
+    location.reload();
+  } catch (e) {
+    alert('Accept failed: ' + e.message);
+  }
 }
 </script>
 <script defer src="scripts/header.js"></script>

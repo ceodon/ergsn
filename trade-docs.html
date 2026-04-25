@@ -74,7 +74,35 @@
     </div>
 
     <div class="panel">
-      <h2>Transactions <button class="btn btn-ghost" id="reloadBtn" style="float:right">⟳ Reload</button></h2>
+      <h2>Transactions
+        <span style="float:right;display:flex;gap:6px">
+          <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+          <button class="btn btn-ghost" id="csvBtn">↓ CSV</button>
+          <button class="btn btn-ghost" id="reloadBtn">⟳ Reload</button>
+        </span>
+      </h2>
+      <div class="row two" style="margin-bottom:.4rem">
+        <div>
+          <label>Status filter</label>
+          <select id="statusFilter">
+            <option value="">All</option>
+            <option value="open">Open</option>
+            <option value="quoted">Quoted</option>
+            <option value="po-received">P/O received</option>
+            <option value="proforma-sent">Proforma sent</option>
+            <option value="paid">Paid</option>
+            <option value="commercial-issued">Commercial issued</option>
+            <option value="packing-issued">Packing issued</option>
+            <option value="shipped">Shipped</option>
+            <option value="closed">Closed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div>
+          <label>Search (company / email / id)</label>
+          <input id="searchBox" placeholder="ACME, john@…, TX-2026-0001">
+        </div>
+      </div>
       <div id="txList" class="small">로딩 중…</div>
     </div>
   </div>
@@ -98,32 +126,48 @@ async function tryGate() {
   }
 }
 
+let allTx = [];
 async function loadTxList() {
   const el = $('txList');
   el.textContent = '로딩 중…';
   try {
-    const r = await TD.apiAdmin('GET', '/tx?limit=100');
-    if (!r.items.length) { el.innerHTML = '<p class="small">아직 transaction이 없습니다.</p>'; return; }
-    let html = '<table class="tx"><thead><tr><th>ID</th><th>Buyer</th><th>Country</th><th>Partner</th><th>Status</th><th>Created</th><th>Docs</th></tr></thead><tbody>';
-    r.items.forEach(t => {
-      const docs = ['quotation','po','proforma','commercial','packing'].map(typ =>
-        `<a href="trade-doc.html?type=${typ}&tx=${encodeURIComponent(t.id)}">${TD.DOC_META[typ].prefix}</a>`
-      ).join(' ');
-      html += `<tr>
-        <td><code>${TD.esc(t.id)}</code></td>
-        <td>${TD.esc(t.buyer_company)}<br><span class="small">${TD.esc(t.buyer_email)}</span></td>
-        <td>${TD.esc(t.buyer_country || '-')}</td>
-        <td>${TD.esc(t.ergsn_partner || '-')}</td>
-        <td><span class="status ${t.status}">${TD.esc(TD.STATUS_LABELS[t.status] || t.status)}</span></td>
-        <td>${TD.fmtDate(t.created_at)}</td>
-        <td class="doctype-row" style="border:0">${docs}</td>
-      </tr>`;
-    });
-    html += '</tbody></table>';
-    el.innerHTML = html;
+    const status = $('statusFilter').value;
+    const qs = '/tx?limit=200' + (status ? '&status=' + encodeURIComponent(status) : '');
+    const r = await TD.apiAdmin('GET', qs);
+    allTx = r.items || [];
+    renderTxList();
   } catch (e) {
     el.innerHTML = '<p class="small" style="color:#ff8a8a">로딩 실패: ' + TD.esc(e.message) + '</p>';
   }
+}
+
+function renderTxList() {
+  const el = $('txList');
+  const q = ($('searchBox').value || '').toLowerCase().trim();
+  let items = allTx;
+  if (q) {
+    items = items.filter(t =>
+      (t.id || '').toLowerCase().includes(q) ||
+      (t.buyer_company || '').toLowerCase().includes(q) ||
+      (t.buyer_email || '').toLowerCase().includes(q)
+    );
+  }
+  if (!items.length) { el.innerHTML = '<p class="small">표시할 transaction이 없습니다 (총 ' + allTx.length + '건).</p>'; return; }
+  let html = '<table class="tx"><thead><tr><th>ID</th><th>Buyer</th><th>Country</th><th>Partner</th><th>Status</th><th>Created</th></tr></thead><tbody>';
+  items.forEach(t => {
+    const link = 'trade-tx.html?id=' + encodeURIComponent(t.id);
+    html += `<tr style="cursor:pointer" onclick="location.href='${link}'">
+      <td><a href="${link}"><code>${TD.esc(t.id)}</code></a></td>
+      <td>${TD.esc(t.buyer_company)}<br><span class="small">${TD.esc(t.buyer_email)}</span></td>
+      <td>${TD.esc(t.buyer_country || '-')}</td>
+      <td>${TD.esc(t.ergsn_partner || '-')}</td>
+      <td><span class="status ${t.status}">${TD.esc(TD.STATUS_LABELS[t.status] || t.status)}</span></td>
+      <td>${TD.fmtDate(t.created_at)}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  html += '<p class="small" style="margin-top:.6rem">총 ' + items.length + '건' + (q ? ' (전체 ' + allTx.length + '건 중 검색)' : '') + '</p>';
+  el.innerHTML = html;
 }
 
 async function newTx() {
@@ -151,6 +195,23 @@ document.addEventListener('DOMContentLoaded', () => {
   $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
   $('newTxBtn').addEventListener('click', newTx);
   $('reloadBtn').addEventListener('click', loadTxList);
+  $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.reload(); });
+  $('statusFilter').addEventListener('change', loadTxList);
+  $('searchBox').addEventListener('input', renderTxList);
+  /* CSV export — fetch with admin key, then trigger browser download. The
+     /export endpoint requires header auth so we can't use a plain anchor. */
+  $('csvBtn').addEventListener('click', async () => {
+    try {
+      const r = await fetch(TD.API_URL + '/export/transactions.csv', { headers: { 'X-Admin-Key': TD.adminKey() } });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'ergsn-transactions-' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) { alert('Export failed: ' + e.message); }
+  });
 });
 </script>
 <script defer src="scripts/header.js"></script>
