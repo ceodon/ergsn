@@ -1196,8 +1196,8 @@ section { scroll-margin-top: var(--nav-h); }
 .footer-inner { padding: clamp(2.5rem,5vh,4rem) clamp(16px,4vw,48px) clamp(1.5rem,3vh,2.5rem); }
 .footer-top {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
-  gap: clamp(1.5rem,3vw,2.5rem);
+  grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr;
+  gap: clamp(1.25rem,2.4vw,2rem);
   padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255,255,255,.05);
   margin-bottom: 1.5rem;
@@ -1235,7 +1235,8 @@ section { scroll-margin-top: var(--nav-h); }
   display: flex; justify-content: space-between; align-items: center;
   flex-wrap: wrap; gap: 10px;
 }
-.footer-copy { font-size: 11px; color: var(--tx-lt); }
+.footer-copy { font-size: 11px; color: var(--tx-lt); line-height: 1.9; }
+.footer-copy .footer-mid { margin: 0 8px; color: #3a3d40; }
 .footer-swift { font-size: 10px; color: #2e4260; background: rgba(255,255,255,.02); padding: 4px 10px; border: 1px solid rgba(255,255,255,.03); border-radius: var(--radius); }
 
 /* ════════════════════════════════════════

@@ -57,54 +57,60 @@
         { href: 'index.html?sector=k-energy#products',         name: 'K-Energy',         tag: 'Active', desc: 'HYGEN Generator · 4 configurations' },
         { href: 'index.html?sector=k-bio#products',            name: 'K-Bio',            tag: 'Active', desc: 'Rosetta Plus HFF · RAY-1 Bio Cream' },
         { href: 'index.html?sector=k-beauty#products',         name: 'K-Beauty',         tag: 'Active', desc: '16 SKUs · 2 makers · MOQ 1,000' },
-        { href: 'kbeauty-latam.html',                          name: 'K-Beauty · LATAM pitch', desc: 'OEM/ODM 1-pager · duty-free + MENA' },
         { href: 'index.html?sector=k-tourism-assets#products', name: 'K-Tourism Assets', tag: 'Active', desc: 'Yangpyeong hanok · share ownership' },
         { href: 'index.html?sector=k-culture-goods#products',  name: 'K-Culture Goods',  tag: 'Sourcing', tagSoon: true, desc: 'K-pop merch · crafts · fashion' },
         { href: 'index.html?sector=k-franchise#products',      name: 'K-Franchise',      tag: 'Sourcing', tagSoon: true, desc: 'F&B · retail · service concepts' },
-        { href: 'index.html?sector=k-smart-living#products',   name: 'K-Smart Living',   tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle' },
-        { href: 'index.html#match',    name: 'AI Partner Match',    desc: 'Country + industry → Top-3 matches' },
-        { href: 'index.html#calculator', name: 'Quote Calculator',  desc: 'Instant CIF/FOB estimate' },
-        { href: 'export-docs.html',    name: 'Export Documents AI', desc: 'HS code lookup · duty rates · templates' }
+        { href: 'index.html?sector=k-smart-living#products',   name: 'K-Smart Living',   tag: 'Sourcing', tagSoon: true, desc: 'Appliances · wellness · lifestyle' }
       ]
     },
     {
-      title: 'For Buyers',
+      title: 'Solutions',
       href: 'index.html#wanted',
       items: [
-        { href: 'index.html#wanted', name: 'Wanted Board',    desc: 'Post a sourcing need · anonymous' },
-        { href: 'index.html#trend',  name: 'Trend Monthly',   desc: 'Monthly Korea export intelligence' },
+        { href: 'index.html#wanted',       name: 'Wanted Board',           desc: 'Post a sourcing need · anonymous' },
         { divider: true },
-        { href: 'buyers-healthcare.html',  name: 'Healthcare Procurement',  desc: 'HIPAA shredders · KFDA HFF · cleanroom' },
-        { href: 'buyers-government.html',  name: 'Government Procurement',  desc: 'GSA Schedule · Level-3 · ministerial' },
-        { href: 'buyers-hospitality.html', name: 'Hospitality & Retail',    desc: 'K-Beauty · K-Bio wellness · duty-free' }
+        { href: 'buyers-healthcare.html',  name: 'Healthcare Procurement', desc: 'HIPAA shredders · KFDA HFF · cleanroom' },
+        { href: 'buyers-government.html',  name: 'Government Procurement', desc: 'GSA Schedule · Level-3 · ministerial' },
+        { href: 'buyers-hospitality.html', name: 'Hospitality & Retail',   desc: 'K-Beauty · K-Bio wellness · duty-free' },
+        { href: 'kbeauty-latam.html',      name: 'K-Beauty · LATAM pitch', desc: 'OEM/ODM 1-pager · duty-free + MENA' }
+      ]
+    },
+    {
+      title: 'Tools',
+      href: 'index.html#match',
+      items: [
+        { href: 'index.html#match',      name: 'AI Partner Match',    desc: 'Country + industry → Top-3 matches' },
+        { href: 'index.html#calculator', name: 'Quote Calculator',    desc: 'Instant CIF/FOB estimate' },
+        { href: 'export-docs.html',      name: 'Export Documents AI', desc: 'HS code lookup · duty rates · templates' },
+        { href: 'index.html#map',        name: 'Trade Route Map',     desc: 'Global shipping lanes from Korea' },
+        { href: 'index.html#trend',      name: 'Trend Monthly',       desc: 'Monthly Korea export intelligence' },
+        { href: 'tracker.html',          name: 'RFQ Tracker',         desc: 'Check status of submitted RFQ' }
       ]
     },
     {
       title: 'Trust',
       href: 'index.html#about',
       items: [
-        { href: 'index.html#about',     name: 'About ERGSN',           desc: 'Trade platform identity & mission' },
-        { href: 'index.html#cases',     name: 'Case Studies',          desc: 'Real shipments · real buyers' },
-        { href: 'index.html#verify',    name: 'Verification Process',  desc: '4-step partner qualification' },
+        { href: 'index.html#about',      name: 'About ERGSN',              desc: 'Trade platform identity & mission' },
+        { href: 'index.html#cases',      name: 'Case Studies',             desc: 'Real shipments · real buyers' },
+        { href: 'index.html#verify',     name: 'Verification Process',     desc: '4-step partner qualification' },
         { href: 'verified-partner.html', name: 'Verified Partner Program', desc: 'Official badge & certificate of verification' },
-        { href: 'escrow.html',           name: 'Escrow Service',       desc: 'Protected T/T settlement · 1% pilot' },
-        { href: 'index.html#map',        name: 'Trade Route Map',      desc: 'Global shipping lanes from Korea' },
-        { href: 'index.html#compliance', name: 'Compliance',           desc: 'HIPAA · GSA · DIN 66399' },
-        { href: 'index.html#qa',         name: 'Q&A Wall',             desc: 'Buyer community questions & answers' }
+        { href: 'escrow.html',           name: 'Escrow Service',           desc: 'Protected T/T settlement · 1% pilot' },
+        { href: 'index.html#compliance', name: 'Compliance',               desc: 'HIPAA · GSA · DIN 66399' }
       ]
     },
     {
       title: 'Connect',
       href: 'index.html#rfq',
       items: [
-        { href: 'index.html#rfq',   name: 'Request a Quote', desc: '2-step form · reply within 1 biz day' },
-        { href: 'index.html#tools', name: 'Book a Demo',     desc: '30-min Zoom · compliance checker · landed cost' },
-        { href: 'trade-mission.html', name: 'Trade Mission Live', desc: 'Quarterly broadcast · 5 makers × 50 buyers' },
-        { href: 'tracker.html',       name: 'RFQ Tracker',        desc: 'Check status of submitted RFQ' },
-        { href: 'https://t.me/ceodon',       name: 'Telegram',  desc: 'Chat directly with ERGSN trade team', external: true },
-        { href: 'https://wa.me/821052880006', name: 'WhatsApp', desc: 'Chat directly with ERGSN trade team', external: true },
-        { href: 'partners-kr.html',     name: 'KR · 제조사 파트너',  kr: true, desc: '한국 제조사 입점 신청' },
-        { href: 'partners-tourism.html', name: 'KR · K-Tourism 파트너', kr: true, desc: '한옥 운영자 모집 · 양평 다음' }
+        { href: 'index.html#rfq',             name: 'Request a Quote',       desc: '2-step form · reply within 1 biz day' },
+        { href: 'index.html#tools',           name: 'Book a Demo',           desc: '30-min Zoom · compliance checker · landed cost' },
+        { href: 'trade-mission.html',         name: 'Trade Mission Live',    desc: 'Quarterly broadcast · 5 makers × 50 buyers' },
+        { href: 'index.html#qa',              name: 'Q&A Wall',              desc: 'Buyer community questions & answers' },
+        { href: 'https://t.me/ceodon',        name: 'Telegram',              desc: 'Chat directly with ERGSN trade team', external: true },
+        { href: 'https://wa.me/821052880006', name: 'WhatsApp',              desc: 'Chat directly with ERGSN trade team', external: true },
+        { href: 'partners-kr.html',           name: 'KR · 제조사 파트너',      kr: true, desc: '한국 제조사 입점 신청' },
+        { href: 'partners-tourism.html',      name: 'KR · K-Tourism 파트너', kr: true, desc: '한옥 운영자 모집 · 양평 다음' }
       ]
     }
   ];
@@ -282,7 +288,6 @@
     return (
       '<ul class="eh-nav-links">' +
         dropdowns +
-        '<li><a href="index.html#rfq" class="eh-nav-cta">Request Quote</a></li>' +
       '</ul>'
     );
   }

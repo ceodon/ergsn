@@ -26,7 +26,7 @@
        still spans. No 420px single-column rule — index.html keeps
        2 cols all the way down so content reads balanced on mobile
        instead of a left-aligned stack. */
-    '#ergsnFooter .ef-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:clamp(1.5rem,3vw,2.5rem);padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:1.5rem}',
+    '#ergsnFooter .ef-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr 1fr;gap:clamp(1.25rem,2.4vw,2rem);padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:1.5rem}',
     '@media (max-width:960px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
     '@media (max-width:680px){#ergsnFooter .ef-top{grid-template-columns:1fr 1fr}#ergsnFooter .ef-brand{grid-column:1 / -1}}',
     '#ergsnFooter .ef-logo-row{display:flex;align-items:center;margin-bottom:1rem}',
@@ -39,12 +39,22 @@
     '#ergsnFooter .ef-links a{font-size:13px;color:#6b7685;transition:color .15s;text-decoration:none;line-height:normal;display:inline-block}',
     '#ergsnFooter .ef-links a:hover{color:#fff}',
     '#ergsnFooter .ef-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}',
-    '#ergsnFooter .ef-copy{font-size:11px;color:#8a8b8d;margin:0}',
+    '#ergsnFooter .ef-copy{font-size:11px;color:#8a8b8d;margin:0;line-height:1.9}',
     '#ergsnFooter .ef-copy a{color:#8a8b8d;text-decoration:none}',
     '#ergsnFooter .ef-copy a:hover{color:#cfcfcf}',
+    '#ergsnFooter .ef-copy .ef-mid{margin:0 8px;color:#3a3d40}',
     '#ergsnFooter .ef-kr-chip{display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid #34d298;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#34d298;vertical-align:1px}',
     '@media print{#ergsnFooter{display:none !important}}'
   ].join('');
+
+  /* Korean-language pages add a KakaoTalk link to the utility row.
+     Detection is `<html lang="ko">` only — overseas English buyers
+     don't use Kakao. Reference: memory/feedback_contact_chips_kr_pages.md */
+  var IS_KR = (function () {
+    try { return (document.documentElement.getAttribute('lang') || '').toLowerCase().indexOf('ko') === 0; }
+    catch (_) { return false; }
+  })();
+  var KAKAO_LINK = '<span class="ef-mid">·</span><a href="https://pf.kakao.com/_AxowjX" target="_blank" rel="noopener noreferrer">KakaoTalk</a>';
 
   var MARKUP = (
     '<footer id="ergsnFooter" role="contentinfo">' +
@@ -59,29 +69,36 @@
           '<div>' +
             '<p class="ef-col-title">Shop</p>' +
             '<ul class="ef-links">' +
-              '<li><a href="index.html#products">K-Security</a></li>' +
-              '<li><a href="index.html#products">K-Tech</a></li>' +
-              '<li><a href="index.html#products">K-Energy</a></li>' +
-              '<li><a href="index.html#products">K-Bio</a></li>' +
-              '<li><a href="index.html#products">K-Beauty</a></li>' +
-              '<li><a href="index.html#products">K-Tourism Assets</a></li>' +
-              '<li><a href="index.html#products">K-Culture Goods</a></li>' +
-              '<li><a href="index.html#products">K-Franchise</a></li>' +
-              '<li><a href="index.html#products">K-Smart Living</a></li>' +
-              '<li><a href="index.html#match">AI Partner Match</a></li>' +
-              '<li><a href="index.html#calculator">Quote Calculator</a></li>' +
-              '<li><a href="export-docs.html">Export Documents AI</a></li>' +
+              '<li><a href="index.html?sector=k-security#products">K-Security</a></li>' +
+              '<li><a href="index.html?sector=k-tech#products">K-Tech</a></li>' +
+              '<li><a href="index.html?sector=k-energy#products">K-Energy</a></li>' +
+              '<li><a href="index.html?sector=k-bio#products">K-Bio</a></li>' +
+              '<li><a href="index.html?sector=k-beauty#products">K-Beauty</a></li>' +
+              '<li><a href="index.html?sector=k-tourism-assets#products">K-Tourism Assets</a></li>' +
+              '<li><a href="index.html?sector=k-culture-goods#products">K-Culture Goods</a></li>' +
+              '<li><a href="index.html?sector=k-franchise#products">K-Franchise</a></li>' +
+              '<li><a href="index.html?sector=k-smart-living#products">K-Smart Living</a></li>' +
             '</ul>' +
           '</div>' +
           '<div>' +
-            '<p class="ef-col-title">For Buyers</p>' +
+            '<p class="ef-col-title">Solutions</p>' +
             '<ul class="ef-links">' +
               '<li><a href="index.html#wanted">Wanted Board</a></li>' +
-              '<li><a href="index.html#trend">Trend Monthly</a></li>' +
               '<li><a href="buyers-healthcare.html">Healthcare Procurement</a></li>' +
               '<li><a href="buyers-government.html">Government Procurement</a></li>' +
               '<li><a href="buyers-hospitality.html">Hospitality &amp; Retail</a></li>' +
-              '<li><a href="kbeauty-latam.html">K-Beauty for LATAM</a></li>' +
+              '<li><a href="kbeauty-latam.html">K-Beauty · LATAM pitch</a></li>' +
+            '</ul>' +
+          '</div>' +
+          '<div>' +
+            '<p class="ef-col-title">Tools</p>' +
+            '<ul class="ef-links">' +
+              '<li><a href="index.html#match">AI Partner Match</a></li>' +
+              '<li><a href="index.html#calculator">Quote Calculator</a></li>' +
+              '<li><a href="export-docs.html">Export Documents AI</a></li>' +
+              '<li><a href="index.html#map">Trade Route Map</a></li>' +
+              '<li><a href="index.html#trend">Trend Monthly</a></li>' +
+              '<li><a href="tracker.html">RFQ Tracker</a></li>' +
             '</ul>' +
           '</div>' +
           '<div>' +
@@ -92,9 +109,7 @@
               '<li><a href="index.html#verify">Verification Process</a></li>' +
               '<li><a href="verified-partner.html">Verified Partner Program</a></li>' +
               '<li><a href="escrow.html">Escrow Service</a></li>' +
-              '<li><a href="index.html#map">Trade Route Map</a></li>' +
               '<li><a href="index.html#compliance">Compliance</a></li>' +
-              '<li><a href="index.html#qa">Q&amp;A Wall</a></li>' +
             '</ul>' +
           '</div>' +
           '<div>' +
@@ -103,7 +118,7 @@
               '<li><a href="index.html#rfq">Request a Quote</a></li>' +
               '<li><a href="index.html#tools">Book a Demo</a></li>' +
               '<li><a href="trade-mission.html">Trade Mission Live</a></li>' +
-              '<li><a href="tracker.html">RFQ Tracker</a></li>' +
+              '<li><a href="index.html#qa">Q&amp;A Wall</a></li>' +
               '<li><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a></li>' +
               '<li><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>' +
               '<li><a href="partners-kr.html" style="color:#34d298"><span class="ef-kr-chip">KR</span>제조사 파트너</a></li>' +
@@ -112,7 +127,16 @@
           '</div>' +
         '</div>' +
         '<div class="ef-bottom">' +
-          '<p class="ef-copy">© 2013 ERGSN CO., LTD. All rights reserved · Made in Korea · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>' +
+          '<p class="ef-copy">' +
+            'Copyright &copy; 2013 ERGSN All rights reserved' +
+            '<span class="ef-mid">·</span><a href="privacy.html">Privacy</a>' +
+            '<span class="ef-mid">·</span><a href="terms.html">Terms</a>' +
+            '<span class="ef-mid">·</span><a href="index.html#compliance">Compliance</a>' +
+            '<span class="ef-mid">·</span><a href="sitemap.html">Sitemap</a>' +
+            '<span class="ef-mid">·</span><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a>' +
+            '<span class="ef-mid">·</span><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
+            (IS_KR ? KAKAO_LINK : '') +
+          '</p>' +
         '</div>' +
       '</div>' +
     '</footer>'
