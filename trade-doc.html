@@ -80,6 +80,16 @@
         <div class="r total"><span>Total</span><span id="ttTotal">0.00</span></div>
       </div>
       <div class="row" style="margin-top:1rem"><label>Notes / Terms</label><textarea id="docNotes" placeholder="Payment terms, delivery, validity, special instructions…"></textarea></div>
+      <div class="row two" style="margin-bottom:.4rem">
+        <div>
+          <label>Doc state</label>
+          <select id="docState"><option value="issued">Issued (자동 발급)</option><option value="draft">Draft (initial save · 발급 전)</option></select>
+        </div>
+        <div>
+          <label class="small" style="font-size:11px;color:var(--tx-lt)">&nbsp;</label>
+          <p class="small" style="margin:0">Draft은 buyer portal에 노출 안 됨. Send 클릭 시 자동 issued.</p>
+        </div>
+      </div>
       <div class="actions">
         <button class="btn btn-primary" id="saveBtn">💾 Save</button>
         <button class="btn btn-warn" id="sendBtn">📨 Send to buyer</button>
@@ -101,7 +111,10 @@
         </div>
         <div>
           <label>&nbsp;</label>
-          <button class="btn btn-warn" id="convertBtn" type="button">→ Create derived doc</button>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <label style="font-size:11px;color:var(--tx-mid)"><input type="checkbox" id="convertAdvance" style="width:auto"> auto-advance status</label>
+            <button class="btn btn-warn" id="convertBtn" type="button">→ Create derived doc</button>
+          </div>
         </div>
       </div>
       <div class="toast" id="opToast"></div>
@@ -273,6 +286,7 @@ async function loadDoc() {
   try {
     const r = await TD.apiAdmin('GET', '/doc/' + TYPE + '/' + DOC_ID);
     const d = r.doc.data;
+    if (r.doc.state) $('docState').value = r.doc.state;
     if (d.document_date) $('docDate').value = d.document_date;
     if (d.currency) $('currency').value = d.currency;
     if (d.discount) $('ttDisc').value = d.discount;
@@ -320,12 +334,17 @@ async function save() {
   const t = $('opToast'); t.className='toast'; t.textContent='';
   try {
     const data = gather();
+    const state = $('docState').value;
     if (DOC_ID) {
       await TD.apiAdmin('PATCH', '/doc/' + TYPE + '/' + DOC_ID, { data, total_amount: data.total_amount, currency: data.currency });
-      t.className='toast ok'; t.textContent='✓ Updated ' + DOC_ID;
+      /* If admin flipped Draft → Issued, also call /issue */
+      if (state === 'issued') {
+        await TD.apiAdmin('POST', '/doc/' + TYPE + '/' + encodeURIComponent(DOC_ID) + '/issue').catch(() => {});
+      }
+      t.className='toast ok'; t.textContent='✓ Updated ' + DOC_ID + (state==='draft' ? ' (kept as draft)' : '');
     } else {
-      const r = await TD.apiAdmin('POST', '/doc/' + TYPE, { transaction_id: TX_ID, data });
-      t.className='toast ok'; t.innerHTML='✓ ' + TD.esc(r.id) + ' 생성됨. <a href="?type=' + TYPE + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">편집 모드로 이동</a>';
+      const r = await TD.apiAdmin('POST', '/doc/' + TYPE, { transaction_id: TX_ID, data, state });
+      t.className='toast ok'; t.innerHTML='✓ ' + TD.esc(r.id) + ' 생성됨' + (state==='draft' ? ' (draft)' : '') + '. <a href="?type=' + TYPE + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">편집 모드로 이동</a>';
     }
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
@@ -360,10 +379,14 @@ async function convertDoc() {
   if (!DOC_ID) { t.className='toast err'; t.textContent='먼저 이 문서를 저장하세요.'; return; }
   const dst = $('convertType').value;
   if (!dst) return;
+  const advance = $('convertAdvance').checked;
   try {
-    const r = await TD.apiAdmin('POST', '/doc/from/' + TYPE + '/' + encodeURIComponent(DOC_ID) + '/to/' + dst);
+    const r = await TD.apiAdmin('POST', '/doc/from/' + TYPE + '/' + encodeURIComponent(DOC_ID) + '/to/' + dst, { advance_status: advance });
     t.className='toast ok';
-    t.innerHTML = '✓ ' + TD.esc(r.id) + ' 생성됨. <a href="?type=' + dst + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">→ 편집</a>';
+    let msg = '✓ ' + TD.esc(r.id) + ' 생성됨';
+    if (r.advanced) msg += ' · status → ' + r.advanced;
+    msg += '. <a href="?type=' + dst + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r.id) + '" style="color:#34d298">→ 편집</a>';
+    t.innerHTML = msg;
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
 

@@ -105,10 +105,86 @@
           <div><label>HMAC secret (선택)</label><input id="whSecret" placeholder="32+ char random string"></div>
         </div>
         <div class="row two">
-          <div><label>Events</label><input id="whEvents" placeholder="all (default) or tx.status,doc.create,attachment.upload"></div>
+          <div>
+            <label>Events</label>
+            <select id="whEvents" multiple size="5" style="min-height:120px">
+              <option value="all" selected>all (default)</option>
+              <option value="tx.status">tx.status</option>
+              <option value="doc.create">doc.create</option>
+              <option value="attachment.upload">attachment.upload</option>
+            </select>
+            <p class="small" style="margin:.3rem 0 0">Ctrl/Cmd-click to select multiple. "all" 1개만 선택해도 됨.</p>
+          </div>
           <div><label>&nbsp;</label><button class="btn btn-primary" id="whAddBtn">Add webhook</button></div>
         </div>
-        <p class="small">각 이벤트 발생 시 위 URL로 POST. <code>X-ERGSN-Signature</code> 헤더에 HMAC-SHA256 서명 동봉.</p>
+        <p class="small">각 이벤트 발생 시 위 URL로 POST. <code>X-ERGSN-Signature</code> 헤더에 HMAC-SHA256 서명 동봉. 5초 timeout · 5회 retry (1m → 12h backoff).</p>
+      </div>
+    </details>
+
+    <!-- Admin users (multi-user · roles) -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">👥 Admin Users (multi-user · roles)</summary>
+      <div style="margin-top:1rem">
+        <div id="adminUserList" class="small">로딩 중…</div>
+        <div class="row two" style="margin-top:.6rem">
+          <div><label>Username</label><input id="auUser" placeholder="accountant1"></div>
+          <div><label>Role</label>
+            <select id="auRole">
+              <option value="viewer">viewer (read-only)</option>
+              <option value="accountant">accountant (read + redact)</option>
+              <option value="trader">trader (read/write transactions, makers)</option>
+              <option value="owner">owner (full access)</option>
+            </select>
+          </div>
+        </div>
+        <div class="row two">
+          <div><label>Display name (선택)</label><input id="auName"></div>
+          <div><label>&nbsp;</label><button class="btn btn-primary" id="auAddBtn">+ Issue API key</button></div>
+        </div>
+        <p class="small">새 유저 생성 시 발급된 API key를 한 번만 표시. owner 외 역할은 일부 액션 제한.</p>
+      </div>
+    </details>
+
+    <!-- Maker master -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">🏭 Makers (제조사 마스터)</summary>
+      <div style="margin-top:1rem">
+        <div id="makerList" class="small">로딩 중…</div>
+        <div class="row two" style="margin-top:.6rem">
+          <div><label>Name *</label><input id="mkName" placeholder="COSMEDIQUE Co., Ltd."></div>
+          <div><label>Sector</label><input id="mkSector" placeholder="K-Beauty"></div>
+        </div>
+        <div class="row two">
+          <div><label>Tier</label>
+            <select id="mkTier">
+              <option value="free">Free</option>
+              <option value="verified" selected>Verified</option>
+              <option value="featured">Featured</option>
+              <option value="exclusive">Exclusive</option>
+            </select>
+          </div>
+          <div><label>Contact email</label><input id="mkEmail"></div>
+        </div>
+        <div class="row two">
+          <div><label>Telegram</label><input id="mkTg" placeholder="@handle"></div>
+          <div><label>Phone</label><input id="mkPhone"></div>
+        </div>
+        <div class="row two">
+          <div><label>Certifications (쉼표 구분)</label><input id="mkCerts" placeholder="ISO9001, KFDA, GSA"></div>
+          <div><label>&nbsp;</label><button class="btn btn-primary" id="mkAddBtn">+ Add maker</button></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Backups -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">💾 D1 Backups (R2 export)</summary>
+      <div style="margin-top:1rem">
+        <div id="backupList" class="small">로딩 중…</div>
+        <div style="display:flex;gap:8px;margin-top:.6rem">
+          <button class="btn btn-primary" id="backupRunBtn">▶ Run backup now</button>
+        </div>
+        <p class="small">매주 일요일 자동 실행. 모든 테이블을 JSON으로 R2에 저장.</p>
       </div>
     </details>
 
@@ -133,7 +209,10 @@
         <div><label>Buyer Country</label><input id="nbCountry" placeholder="MX"></div>
         <div><label>ERGSN Maker / Partner</label><input id="nbPartner" placeholder="COSMEDIQUE Co., Ltd."></div>
       </div>
-      <div class="row"><label>Notes (옵션)</label><input id="nbNotes"></div>
+      <div class="row two">
+        <div><label>Notes (옵션)</label><input id="nbNotes"></div>
+        <div><label>Locale</label><select id="nbLocale"><option value="en">English</option><option value="ko">한국어</option></select></div>
+      </div>
       <div><button class="btn btn-primary" id="newTxBtn">Transaction 생성 →</button></div>
       <div class="toast" id="newTxToast"></div>
     </div>
@@ -168,6 +247,10 @@
           <input id="searchBox" placeholder="ACME, john@…, TX-2026-0001">
         </div>
       </div>
+      <div class="row two" style="margin-bottom:.4rem">
+        <div><label>From date</label><input id="dateFrom" type="date"></div>
+        <div><label>To date</label><input id="dateTo" type="date"></div>
+      </div>
       <div id="txList" class="small">로딩 중…</div>
     </div>
   </div>
@@ -183,6 +266,9 @@ function showApp() {
   loadStats();
   loadSettings();
   loadWebhooks();
+  loadAdminUsers();
+  loadMakers();
+  loadBackups();
 }
 
 async function tryGate() {
@@ -217,14 +303,19 @@ let pageSize = 50, pageIdx = 0;
 function renderTxList() {
   const el = $('txList');
   const q = ($('searchBox').value || '').toLowerCase().trim();
+  const fromTs = $('dateFrom').value ? Date.parse($('dateFrom').value + 'T00:00:00Z') : null;
+  const toTs   = $('dateTo').value   ? Date.parse($('dateTo').value   + 'T23:59:59Z') : null;
   let items = allTx;
   if (q) {
     items = items.filter(t =>
       (t.id || '').toLowerCase().includes(q) ||
       (t.buyer_company || '').toLowerCase().includes(q) ||
-      (t.buyer_email || '').toLowerCase().includes(q)
+      (t.buyer_email || '').toLowerCase().includes(q) ||
+      (t.rfq_tracker_id || '').toLowerCase().includes(q)
     );
   }
+  if (fromTs) items = items.filter(t => t.created_at >= fromTs);
+  if (toTs)   items = items.filter(t => t.created_at <= toTs);
   const total = items.length;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   if (pageIdx >= totalPages) pageIdx = 0;
@@ -269,11 +360,112 @@ async function newTx() {
   if (!body.buyer_company || !body.buyer_email) { t.className='toast err'; t.textContent='Buyer company + email 필수'; return; }
   try {
     const r = await TD.apiAdmin('POST', '/tx', body);
+    /* Apply locale immediately if not 'en' (default) */
+    const loc = $('nbLocale').value;
+    if (loc && loc !== 'en') {
+      await TD.apiAdmin('PATCH', '/tx/' + encodeURIComponent(r.id), { locale: loc }).catch(() => {});
+    }
     t.className='toast ok';
     t.innerHTML = '✓ ' + TD.esc(r.id) + ' 생성됨. Buyer URL: <a href="' + TD.esc(r.buyer_url) + '" target="_blank" style="color:#34d298">' + TD.esc(r.buyer_url) + '</a>';
     ['nbCompany','nbEmail','nbCountry','nbPartner','nbNotes'].forEach(id => $(id).value = '');
     loadTxList();
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+/* ─── Admin users ─── */
+async function loadAdminUsers() {
+  try {
+    const r = await TD.apiAdmin('GET', '/admin-users');
+    const items = r.items || [];
+    if (!items.length) { $('adminUserList').innerHTML = '<p class="small">아직 등록된 사용자 없음 (master ADMIN_KEY만 사용 중).</p>'; return; }
+    let html = '<table class="tx" style="font-size:12px"><tr><th>User</th><th>Role</th><th>Last seen</th><th>Status</th><th></th></tr>';
+    items.forEach(u => {
+      html += '<tr><td>' + TD.esc(u.username) + (u.display_name ? ' <span class="small">(' + TD.esc(u.display_name) + ')</span>' : '') + '</td>'
+            + '<td>' + TD.esc(u.role) + '</td>'
+            + '<td>' + (u.last_seen_at ? TD.fmtDate(u.last_seen_at) : '-') + '</td>'
+            + '<td>' + (u.disabled_at ? 'disabled' : 'active') + '</td>'
+            + '<td>' + (!u.disabled_at ? '<a href="javascript:disableUser(' + u.id + ')" style="color:#ff8a8a">Disable</a>' : '') + '</td></tr>';
+    });
+    html += '</table>';
+    $('adminUserList').innerHTML = html;
+  } catch (e) { $('adminUserList').innerHTML = '<p class="small" style="color:#ff8a8a">' + TD.esc(e.message) + '</p>'; }
+}
+window.disableUser = async function(id) {
+  if (!confirm('Disable user #' + id + '?')) return;
+  try { await TD.apiAdmin('DELETE', '/admin-users/' + id); loadAdminUsers(); }
+  catch (e) { alert('실패: ' + e.message); }
+};
+async function addAdminUser() {
+  const username = $('auUser').value.trim();
+  const role = $('auRole').value;
+  if (!username) return;
+  try {
+    const r = await TD.apiAdmin('POST', '/admin-users', { username, role, display_name: $('auName').value.trim() });
+    prompt('✓ User created. API key (단 한 번만 표시 — 안전하게 보관):', r.api_key);
+    $('auUser').value=''; $('auName').value=''; loadAdminUsers();
+  } catch (e) { alert('실패: ' + e.message); }
+}
+
+/* ─── Makers ─── */
+async function loadMakers() {
+  try {
+    const r = await TD.apiAdmin('GET', '/makers');
+    const items = r.items || [];
+    if (!items.length) { $('makerList').innerHTML = '<p class="small">등록된 maker 없음.</p>'; return; }
+    let html = '<table class="tx" style="font-size:12px"><tr><th>ID</th><th>Name</th><th>Sector</th><th>Tier</th><th>Contact</th><th></th></tr>';
+    items.forEach(m => {
+      html += '<tr><td><code>' + TD.esc(m.id) + '</code></td>'
+            + '<td>' + TD.esc(m.name) + '</td>'
+            + '<td>' + TD.esc(m.sector || '-') + '</td>'
+            + '<td>' + TD.esc(m.tier) + '</td>'
+            + '<td class="small">' + [m.contact_email, m.contact_telegram, m.contact_phone].filter(Boolean).map(TD.esc).join(' · ') + '</td>'
+            + '<td><a href="javascript:delMaker(\'' + TD.esc(m.id) + '\')" style="color:#ff8a8a">Delete</a></td></tr>';
+    });
+    html += '</table>';
+    $('makerList').innerHTML = html;
+  } catch (e) { $('makerList').innerHTML = '<p class="small" style="color:#ff8a8a">' + TD.esc(e.message) + '</p>'; }
+}
+window.delMaker = async function(id) {
+  if (!confirm('Delete maker ' + id + '?')) return;
+  try { await TD.apiAdmin('DELETE', '/makers/' + encodeURIComponent(id)); loadMakers(); }
+  catch (e) { alert('실패: ' + e.message); }
+};
+async function addMaker() {
+  const name = $('mkName').value.trim();
+  if (!name) return;
+  try {
+    await TD.apiAdmin('POST', '/makers', {
+      name, sector: $('mkSector').value.trim(), tier: $('mkTier').value,
+      contact_email: $('mkEmail').value.trim(), contact_phone: $('mkPhone').value.trim(),
+      contact_telegram: $('mkTg').value.trim(), certifications: $('mkCerts').value.trim()
+    });
+    ['mkName','mkSector','mkEmail','mkPhone','mkTg','mkCerts'].forEach(id => $(id).value = '');
+    loadMakers();
+  } catch (e) { alert('실패: ' + e.message); }
+}
+
+/* ─── Backups ─── */
+async function loadBackups() {
+  try {
+    const r = await TD.apiAdmin('GET', '/backup/list');
+    const items = r.items || [];
+    if (!items.length) { $('backupList').innerHTML = '<p class="small">아직 백업 없음.</p>'; return; }
+    let html = '<table class="tx" style="font-size:12px"><tr><th>Date</th><th>Size</th><th>R2 key</th></tr>';
+    items.slice(0, 10).forEach(b => {
+      html += '<tr><td>' + TD.fmtDate(b.ran_at) + '</td>'
+            + '<td>' + (b.bytes ? (b.bytes/1024).toFixed(0) + ' KB' : '-') + '</td>'
+            + '<td><code style="font-size:11px">' + TD.esc(b.r2_key || '') + '</code></td></tr>';
+    });
+    html += '</table>';
+    $('backupList').innerHTML = html;
+  } catch (e) { $('backupList').innerHTML = '<p class="small" style="color:#ff8a8a">' + TD.esc(e.message) + '</p>'; }
+}
+async function runBackup() {
+  try {
+    const r = await TD.apiAdmin('POST', '/backup/run');
+    alert('✓ Backup: ' + r.key + ' (' + (r.bytes/1024).toFixed(0) + ' KB)');
+    loadBackups();
+  } catch (e) { alert('실패: ' + e.message); }
 }
 
 async function loadStats() {
@@ -356,7 +548,7 @@ async function loadWebhooks() {
       html += '<tr><td>' + w.id + '</td><td style="word-break:break-all"><code>' + TD.esc(w.url) + '</code></td>'
             + '<td>' + TD.esc(w.events) + '</td>'
             + '<td>' + TD.fmtDate(w.created_at) + '</td>'
-            + '<td><a href="javascript:delWebhook(' + w.id + ')" style="color:#ff8a8a">Delete</a></td></tr>';
+            + '<td><a href="javascript:testWebhook(' + w.id + ')" style="color:var(--gold)">Test</a> · <a href="javascript:delWebhook(' + w.id + ')" style="color:#ff8a8a">Delete</a></td></tr>';
     });
     html += '</table>';
     $('webhookList').innerHTML = html;
@@ -369,14 +561,25 @@ window.delWebhook = async function(id) {
   catch (e) { alert('실패: ' + e.message); }
 };
 
+window.testWebhook = async function(id) {
+  try {
+    const r = await TD.apiAdmin('POST', '/webhooks/' + id + '/test');
+    alert(r.ok ? ('✓ Test sent · status ' + (r.status || 'ok')) : ('Test failed: ' + (r.error || '')));
+  } catch (e) { alert('실패: ' + e.message); }
+};
+
 async function addWebhook() {
   const url = $('whUrl').value.trim();
   if (!url) return;
+  /* multi-select returns an array */
+  const sel = $('whEvents');
+  const events = Array.from(sel.selectedOptions).map(o => o.value).filter(Boolean);
+  const eventsStr = events.length === 0 || events.includes('all') ? 'all' : events.join(',');
   try {
     await TD.apiAdmin('POST', '/webhooks', {
-      url, secret: $('whSecret').value.trim() || null, events: $('whEvents').value.trim() || 'all'
+      url, secret: $('whSecret').value.trim() || null, events: eventsStr
     });
-    $('whUrl').value=''; $('whSecret').value=''; $('whEvents').value='';
+    $('whUrl').value=''; $('whSecret').value='';
     loadWebhooks();
   } catch (e) { alert('실패: ' + e.message); }
 }
@@ -408,6 +611,11 @@ document.addEventListener('DOMContentLoaded', () => {
   $('cronRunBtn').addEventListener('click', runCron);
   $('whAddBtn').addEventListener('click', addWebhook);
   $('csvUpBtn').addEventListener('click', importCsv);
+  $('auAddBtn').addEventListener('click', addAdminUser);
+  $('mkAddBtn').addEventListener('click', addMaker);
+  $('backupRunBtn').addEventListener('click', runBackup);
+  $('dateFrom').addEventListener('change', renderTxList);
+  $('dateTo').addEventListener('change', renderTxList);
   $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.reload(); });
   $('statusFilter').addEventListener('change', loadTxList);
   $('searchBox').addEventListener('input', renderTxList);

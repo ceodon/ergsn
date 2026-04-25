@@ -81,15 +81,38 @@
           <select id="nextStatus"></select>
         </div>
         <div>
-          <label>&nbsp;</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-primary" id="advanceBtn">→ Advance status</button>
-            <button class="btn btn-ghost" id="revertBtn" type="button" title="Revert one step (e.g. unmark Paid)">↩ Revert one step</button>
-          </div>
+          <label>Locale (invoice 언어)</label>
+          <select id="txLocale"><option value="en">English</option><option value="ko">한국어</option></select>
         </div>
       </div>
-      <p class="small">Advance: buyer에게 자동 메일 + Telegram 알림. Revert: 직전 단계로 1-step 되돌림 (메일 발송 안 함, owner Telegram만).</p>
+      <div class="row">
+        <label>Notes (이번 전이 사유 · 선택)</label>
+        <input id="advanceNotes" placeholder="customer confirmed wire, lot held at port, etc.">
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="advanceBtn">→ Advance status</button>
+        <button class="btn btn-ghost" id="revertBtn" type="button" title="Revert one step (e.g. unmark Paid)">↩ Revert one step</button>
+        <button class="btn btn-ghost" id="saveLocaleBtn" type="button" style="margin-left:auto">Save locale</button>
+      </div>
+      <p class="small">Advance: buyer에게 자동 메일 + Telegram 알림. Revert: 직전 단계로 1-step 되돌림 (메일 발송 안 함, owner Telegram만). Locale 변경 시 다음 발송부터 한국어/영어로 invoice 렌더.</p>
       <div class="toast" id="statusToast"></div>
+    </div>
+
+    <!-- Makers (multi-maker per transaction) -->
+    <div class="panel">
+      <h2>Makers (제조사)</h2>
+      <div id="txMakerList"><span class="small">로딩 중…</span></div>
+      <div class="row two" style="margin-top:.6rem">
+        <div>
+          <label>Add maker</label>
+          <select id="addMakerSel"><option value="">— select —</option></select>
+        </div>
+        <div>
+          <label>Share % (선택)</label>
+          <input id="addMakerShare" type="number" min="0" max="100" placeholder="e.g. 60">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px"><label style="font-size:11px;color:var(--tx-mid)"><input id="addMakerPrimary" type="checkbox"> primary</label><button class="btn btn-primary" id="addMakerBtn">+ Add</button></div>
     </div>
 
     <!-- Documents -->
@@ -151,12 +174,24 @@
         <a class="btn btn-ghost" href="trade-docs.html">← Dashboard</a>
         <button class="btn btn-ghost" id="copyTokenBtn">📋 Copy buyer URL</button>
         <button class="btn btn-danger" id="cancelTxBtn">Cancel transaction</button>
+        <button class="btn btn-danger" id="redactBtn" title="GDPR right-to-delete: redact buyer PII, keep audit">⚠ Redact buyer (GDPR)</button>
         <button class="btn btn-ghost" id="logoutBtn" style="margin-left:auto">Logout</button>
       </div>
       <div class="toast" id="toolsToast"></div>
     </div>
   </div>
 </div>
+
+<!-- Doc preview modal (server-rendered HTML embedded in iframe for fidelity) -->
+<dialog id="previewDialog" style="border:0;border-radius:12px;padding:0;background:transparent;max-width:95vw;width:1000px">
+  <div style="background:var(--navy-2);border:1px solid var(--border);border-radius:12px;padding:1rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem">
+      <strong id="previewTitle" style="color:var(--white);font-size:13px;letter-spacing:.06em;text-transform:uppercase">Preview</strong>
+      <button class="btn btn-ghost" onclick="document.getElementById('previewDialog').close()" style="padding:5px 12px;font-size:11px">Close ✕</button>
+    </div>
+    <iframe id="previewFrame" style="width:100%;height:75vh;border:0;background:#fff;border-radius:6px"></iframe>
+  </div>
+</dialog>
 
 <script src="scripts/trade-docs.js"></script>
 <script>
@@ -175,21 +210,96 @@ let attachments = [];
 async function load() {
   $('pageTitle').textContent = 'Transaction ' + TX_ID;
   try {
-    const r1 = await TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID));
+    const [r1, r2, r3, r4] = await Promise.all([
+      TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID)),
+      TD.apiAdmin('GET', '/doc/by-tx/' + encodeURIComponent(TX_ID)),
+      TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID) + '/makers').catch(() => ({ items: [] })),
+      TD.apiAdmin('GET', '/makers').catch(() => ({ items: [] }))
+    ]);
     txData = r1.transaction;
     attachments = r1.attachments || [];
-    const r2 = await TD.apiAdmin('GET', '/doc/by-tx/' + encodeURIComponent(TX_ID));
     docs = r2.docs || {};
     renderTxCard();
     renderProgress();
     renderDocs();
     renderAttachments();
+    renderMakers(r3.items || [], r4.items || []);
+    if (txData.locale) $('txLocale').value = txData.locale;
     loadAudit();
     loadEmailHistory();
   } catch (e) {
     $('app').innerHTML = '<div class="panel" style="color:#ff8a8a">Load failed: ' + TD.esc(e.message) + '</div>';
   }
 }
+
+function renderMakers(linked, all) {
+  let html = '';
+  if (linked.length) {
+    html += '<table class="tx" style="font-size:12.5px"><thead><tr><th>Maker</th><th>Sector</th><th>Tier</th><th>Share %</th><th>Primary</th><th></th></tr></thead><tbody>';
+    linked.forEach(m => {
+      html += '<tr>'
+            + '<td>' + TD.esc(m.name) + ' <span class="small">(' + TD.esc(m.id) + ')</span></td>'
+            + '<td>' + TD.esc(m.sector || '-') + '</td>'
+            + '<td>' + TD.esc(m.tier) + '</td>'
+            + '<td>' + (m.share_pct != null ? m.share_pct + '%' : '-') + '</td>'
+            + '<td>' + (m.primary_flag ? '✓' : '') + '</td>'
+            + '<td><a href="javascript:removeMaker(\'' + TD.esc(m.id) + '\')" style="color:#ff8a8a">Remove</a></td>'
+            + '</tr>';
+    });
+    html += '</tbody></table>';
+  } else {
+    html += '<div class="empty">연결된 maker 없음.</div>';
+  }
+  $('txMakerList').innerHTML = html;
+  /* Populate select with makers not yet linked */
+  const linkedIds = new Set(linked.map(m => m.id));
+  const sel = $('addMakerSel');
+  sel.innerHTML = '<option value="">— select —</option>' + (all || [])
+    .filter(m => !linkedIds.has(m.id))
+    .map(m => '<option value="' + TD.esc(m.id) + '">' + TD.esc(m.name) + ' (' + TD.esc(m.tier) + ')</option>')
+    .join('');
+}
+
+window.removeMaker = async function(makerId) {
+  if (!confirm('Remove maker ' + makerId + ' from this transaction?')) return;
+  try {
+    await TD.apiAdmin('DELETE', '/tx/' + encodeURIComponent(TX_ID) + '/makers/' + encodeURIComponent(makerId));
+    load();
+  } catch (e) { alert('실패: ' + e.message); }
+};
+
+async function addMaker() {
+  const id = $('addMakerSel').value;
+  if (!id) return;
+  try {
+    await TD.apiAdmin('POST', '/tx/' + encodeURIComponent(TX_ID) + '/makers', {
+      maker_id: id,
+      primary_flag: $('addMakerPrimary').checked,
+      share_pct: $('addMakerShare').value ? +$('addMakerShare').value : null
+    });
+    $('addMakerSel').value = ''; $('addMakerShare').value = ''; $('addMakerPrimary').checked = false;
+    load();
+  } catch (e) { alert('실패: ' + e.message); }
+}
+
+async function redactBuyer() {
+  if (!confirm('GDPR REDACT: bayer PII (company, email, country, attachments) will be permanently deleted. Audit log + doc IDs are preserved. Continue?')) return;
+  if (!confirm('정말 확실합니까? 되돌릴 수 없습니다.')) return;
+  try {
+    await TD.apiAdmin('POST', '/tx/' + encodeURIComponent(TX_ID) + '/redact-buyer');
+    alert('✓ Buyer data redacted.');
+    load();
+  } catch (e) { alert('실패: ' + e.message); }
+}
+
+window.previewDoc = function(type, docId) {
+  const url = TD.API_URL + '/render/' + type + '/' + encodeURIComponent(docId) + '?_admin=1';
+  /* Server /render gates by admin key OR token; we add token for parity */
+  const fullUrl = url + '&t=' + encodeURIComponent(txData.buyer_token || '');
+  $('previewTitle').textContent = TD.DOC_META[type].title_en + ' · ' + docId;
+  $('previewFrame').src = fullUrl;
+  $('previewDialog').showModal();
+};
 
 function renderTxCard() {
   const buyerUrl = 'https://ergsn.net/trade-buyer.html?t=' + (txData.buyer_token || '');
@@ -253,11 +363,20 @@ async function advance() {
   const t = $('statusToast'); t.className='toast'; t.textContent='';
   const next = $('nextStatus').value;
   if (!next) return;
+  const notes = $('advanceNotes').value.trim();
   try {
-    await TD.apiAdmin('PATCH', '/tx/' + encodeURIComponent(TX_ID), { status: next });
+    await TD.apiAdmin('PATCH', '/tx/' + encodeURIComponent(TX_ID), { status: next, advance_notes: notes || null });
     t.className='toast ok'; t.textContent='✓ Status → ' + TD.STATUS_LABELS[next] + ' (buyer 메일 + Telegram 알림 발송됨)';
+    $('advanceNotes').value = '';
     setTimeout(load, 600);
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+async function saveLocale() {
+  try {
+    await TD.apiAdmin('PATCH', '/tx/' + encodeURIComponent(TX_ID), { locale: $('txLocale').value });
+    setTimeout(load, 300);
+  } catch (e) { alert('locale 저장 실패: ' + e.message); }
 }
 
 const STATUS_PREV = { quoted:'open','po-received':'quoted','proforma-sent':'po-received',paid:'proforma-sent','commercial-issued':'paid','packing-issued':'commercial-issued',shipped:'packing-issued',closed:'shipped' };
@@ -308,8 +427,9 @@ function renderDocs() {
         const note = type==='po' && d.buyer_signed_at ? '✓ buyer signed' : (data.notes ? data.notes.slice(0, 60) : '');
         const rowStyle = isSuperseded ? ' style="opacity:.5"' : '';
         const supersededBadge = isSuperseded ? ' <span style="background:rgba(255,255,255,.06);color:var(--tx-lt);padding:1px 6px;border-radius:8px;font-size:10px">superseded</span>' : '';
+        const draftBadge = d.state === 'draft' ? ' <span style="background:rgba(224,168,63,.14);color:var(--warn);padding:1px 6px;border-radius:8px;font-size:10px;font-weight:700">DRAFT</span>' : '';
         html += '<tr' + rowStyle + '>';
-        html += '<td><code>' + TD.esc(d.id) + '</code>' + supersededBadge + expiryNote + '</td>';
+        html += '<td><code>' + TD.esc(d.id) + '</code>' + draftBadge + supersededBadge + expiryNote + '</td>';
         html += '<td>v' + (d.revision || 1) + (d.parent_doc_id ? ' <span class="small" title="from ' + TD.esc(d.parent_doc_id) + '">↩</span>' : '') + '</td>';
         html += '<td>' + TD.fmtDate(d.created_at) + '</td>';
         html += '<td class="amt">' + TD.fmt(d.total_amount || data.total_amount) + '</td>';
@@ -320,7 +440,8 @@ function renderDocs() {
           html += '<a href="' + editUrl + '">Edit</a> · ';
           html += '<a href="javascript:reviseDoc(\'' + type + '\',\'' + d.id + '\')" style="color:var(--warn)">Revise</a> · ';
         }
-        html += '<a href="' + buyerUrl + '" target="_blank">View</a>' + extraBtn;
+        html += '<a href="javascript:previewDoc(\'' + type + '\',\'' + d.id + '\')" style="color:var(--gold)">Preview</a> · ';
+        html += '<a href="' + buyerUrl + '" target="_blank">Open</a>' + extraBtn;
         html += '</td>';
         html += '</tr>';
       });
@@ -476,6 +597,9 @@ document.addEventListener('DOMContentLoaded', () => {
   $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.href = 'trade-docs.html'; });
   $('upBtn').addEventListener('click', uploadFile);
   $('revertBtn').addEventListener('click', revertStatus);
+  $('saveLocaleBtn').addEventListener('click', saveLocale);
+  $('redactBtn').addEventListener('click', redactBuyer);
+  $('addMakerBtn').addEventListener('click', addMaker);
 });
 </script>
 <script defer src="scripts/header.js"></script>

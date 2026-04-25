@@ -86,11 +86,33 @@ async function lookup(e) {
     }).join('');
     document.getElementById('resNotes').textContent = data.notes;
     res.classList.add('open');
+    /* Phase 9 — admin-only reverse link to trade-tx admin if a transaction
+       exists for this RFQ. Only fires when an ADMIN_KEY is in sessionStorage. */
+    showAdminLink(id);
   } catch (e) {
     err.textContent = 'Network error. Please try again.'; err.classList.add('open');
   } finally {
     btn.disabled = false; btn.textContent = 'Track';
   }
+}
+
+const TRADE_DOCS_URL = 'https://ergsn-trade-docs.ceodon.workers.dev';
+async function showAdminLink(rfqId) {
+  let key = '';
+  try { key = sessionStorage.getItem('ergsn_admin_key') || ''; } catch (_) {}
+  if (!key) return;
+  try {
+    const r = await fetch(TRADE_DOCS_URL + '/tx/by-rfq/' + encodeURIComponent(rfqId), {
+      headers: { 'X-Admin-Key': key }
+    });
+    if (!r.ok) return;
+    const j = await r.json();
+    if (!j.ok || !j.id) return;
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:1rem;padding:.7rem 1rem;background:rgba(52,210,152,.08);border:1px solid rgba(52,210,152,.3);border-radius:6px;font-size:13px';
+    wrap.innerHTML = 'Admin: linked transaction <a href="trade-tx.html?id=' + encodeURIComponent(j.id) + '" style="color:var(--gold);text-decoration:none;font-weight:700">' + j.id + ' →</a>';
+    document.getElementById('result').appendChild(wrap);
+  } catch (_) {}
 }
 // Prefill from ?id= query
 const params = new URLSearchParams(location.search);
