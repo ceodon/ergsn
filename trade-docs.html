@@ -58,6 +58,71 @@
   </div>
 
   <div id="app" style="display:none;">
+
+    <!-- Stats dashboard -->
+    <div class="panel">
+      <h2>대시보드 <span style="float:right"><button class="btn btn-ghost" id="statsReloadBtn">⟳</button></span></h2>
+      <div id="statsBox" class="small">로딩 중…</div>
+    </div>
+
+    <!-- System settings (seller info + seal upload) -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">⚙ System Settings (사업자번호 · 인감 · 리마인더)</summary>
+      <div style="margin-top:1rem">
+        <div class="row two">
+          <div><label>사업자등록번호</label><input id="setBiz" placeholder="123-45-67890"></div>
+          <div><label>대표자명 / Representative</label><input id="setRep" placeholder="홍길동"></div>
+        </div>
+        <div class="row two">
+          <div><label>전화</label><input id="setPhone" placeholder="+82-10-XXXX-XXXX"></div>
+          <div><label>인감 R2 key (예: system/seal.png)</label><input id="setSealKey" placeholder="system/seal.png"></div>
+        </div>
+        <div class="row">
+          <label>인감 PNG 업로드</label>
+          <input id="setSeal" type="file" accept="image/png,image/jpeg" style="background:#0d0d0d;border:1px solid var(--border);padding:6px;border-radius:6px">
+          <p class="small">업로드하면 자동으로 <code>system/seal.png</code> 키에 저장되고 R2 key 필드도 갱신됩니다.</p>
+        </div>
+        <div class="row two">
+          <div><label>견적 만료 리마인더 (일)</label><input id="setQuoteDays" type="number" min="1" value="3"></div>
+          <div><label>미결제 Proforma 리마인더 (일)</label><input id="setUnpaidDays" type="number" min="1" value="7"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" id="settingsSaveBtn">Save settings</button>
+          <button class="btn btn-ghost" id="cronRunBtn" type="button">▶ Run reminder job now</button>
+        </div>
+        <div class="toast" id="setToast"></div>
+        <p class="small" style="margin-top:.6rem">인감 업로드 후 모든 새 invoice의 우하단에 자동 인쇄됨. 자동 리마인더는 매일 한국시간 03:00에 일괄 발송.</p>
+      </div>
+    </details>
+
+    <!-- Webhooks (ERP integration) -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">🔌 ERP Webhooks (out-bound integrations)</summary>
+      <div style="margin-top:1rem">
+        <div id="webhookList" class="small">로딩 중…</div>
+        <div class="row two" style="margin-top:.6rem">
+          <div><label>URL</label><input id="whUrl" placeholder="https://your-erp.example.com/ergsn"></div>
+          <div><label>HMAC secret (선택)</label><input id="whSecret" placeholder="32+ char random string"></div>
+        </div>
+        <div class="row two">
+          <div><label>Events</label><input id="whEvents" placeholder="all (default) or tx.status,doc.create,attachment.upload"></div>
+          <div><label>&nbsp;</label><button class="btn btn-primary" id="whAddBtn">Add webhook</button></div>
+        </div>
+        <p class="small">각 이벤트 발생 시 위 URL로 POST. <code>X-ERGSN-Signature</code> 헤더에 HMAC-SHA256 서명 동봉.</p>
+      </div>
+    </details>
+
+    <!-- CSV import -->
+    <details class="panel" style="background:var(--navy-2)">
+      <summary style="cursor:pointer;font-weight:700;color:var(--white);font-size:13px;text-transform:uppercase;letter-spacing:.06em">📥 CSV Import (기존 거래 일괄 등록)</summary>
+      <div style="margin-top:1rem">
+        <p class="small">CSV 헤더: <code>buyer_company,buyer_email,buyer_country,ergsn_partner,notes</code>. 첫 두 컬럼 필수, 나머지 선택. 최대 500행/회.</p>
+        <div class="row"><label>CSV file</label><input id="csvUpFile" type="file" accept="text/csv,.csv" style="background:#0d0d0d;border:1px solid var(--border);padding:6px;border-radius:6px"></div>
+        <div><button class="btn btn-primary" id="csvUpBtn">Import</button></div>
+        <div class="toast" id="csvUpToast"></div>
+      </div>
+    </details>
+
     <div class="panel">
       <h2>새 Transaction 생성</h2>
       <div class="row two">
@@ -111,7 +176,14 @@
 <script src="scripts/trade-docs.js"></script>
 <script>
 const $ = (id) => document.getElementById(id);
-function showApp() { $('gate').style.display = 'none'; $('app').style.display = 'block'; loadTxList(); }
+function showApp() {
+  $('gate').style.display = 'none';
+  $('app').style.display = 'block';
+  loadTxList();
+  loadStats();
+  loadSettings();
+  loadWebhooks();
+}
 
 async function tryGate() {
   const k = $('adminKeyInput').value.trim();
@@ -141,6 +213,7 @@ async function loadTxList() {
   }
 }
 
+let pageSize = 50, pageIdx = 0;
 function renderTxList() {
   const el = $('txList');
   const q = ($('searchBox').value || '').toLowerCase().trim();
@@ -152,6 +225,10 @@ function renderTxList() {
       (t.buyer_email || '').toLowerCase().includes(q)
     );
   }
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  if (pageIdx >= totalPages) pageIdx = 0;
+  items = items.slice(pageIdx * pageSize, (pageIdx + 1) * pageSize);
   if (!items.length) { el.innerHTML = '<p class="small">표시할 transaction이 없습니다 (총 ' + allTx.length + '건).</p>'; return; }
   let html = '<table class="tx"><thead><tr><th>ID</th><th>Buyer</th><th>Country</th><th>Partner</th><th>Status</th><th>Created</th></tr></thead><tbody>';
   items.forEach(t => {
@@ -166,9 +243,19 @@ function renderTxList() {
     </tr>`;
   });
   html += '</tbody></table>';
-  html += '<p class="small" style="margin-top:.6rem">총 ' + items.length + '건' + (q ? ' (전체 ' + allTx.length + '건 중 검색)' : '') + '</p>';
+  html += '<div class="small" style="margin-top:.6rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap">';
+  html += '<span>' + total + '건' + (q ? ' (검색)' : '') + ' · page ' + (pageIdx + 1) + '/' + totalPages + '</span>';
+  if (totalPages > 1) {
+    html += '<button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="pageGo(-1)">‹ Prev</button>';
+    html += '<button class="btn btn-ghost" style="padding:3px 10px;font-size:11px" onclick="pageGo(1)">Next ›</button>';
+  }
+  html += '<select onchange="pageSize=+this.value;pageIdx=0;renderTxList()" style="background:#0d0d0d;color:var(--white);border:1px solid var(--border);border-radius:5px;padding:3px 7px;font-size:11px">';
+  [25, 50, 100, 200].forEach(n => { html += '<option' + (n===pageSize?' selected':'') + '>' + n + '</option>'; });
+  html += '</select> per page';
+  html += '</div>';
   el.innerHTML = html;
 }
+window.pageGo = function(dir) { pageIdx += dir; if (pageIdx < 0) pageIdx = 0; renderTxList(); };
 
 async function newTx() {
   const t = $('newTxToast'); t.className = 'toast'; t.textContent = '';
@@ -189,12 +276,138 @@ async function newTx() {
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
 
+async function loadStats() {
+  try {
+    const r = await TD.apiAdmin('GET', '/stats?days=90');
+    const byStatus = (r.by_status || []).map(s => '<b>' + TD.esc(s.status) + '</b>: ' + s.n).join(' · ');
+    const unpaid = (r.unpaid_value || []).map(u => TD.fmt(u.total) + ' ' + TD.esc(u.currency || '')).join(' / ') || '0';
+    $('statsBox').innerHTML =
+      '<div style="margin-bottom:.4rem">' + byStatus + '</div>' +
+      '<div class="small">미결제 proforma 합계: <span style="color:var(--gold)">' + unpaid + '</span></div>';
+  } catch (e) { $('statsBox').innerHTML = '<span class="small" style="color:#ff8a8a">통계 로드 실패: ' + TD.esc(e.message) + '</span>'; }
+}
+
+async function loadSettings() {
+  try {
+    const r = await TD.apiAdmin('GET', '/system-settings');
+    const s = r.settings || {};
+    $('setBiz').value        = s.seller_biz_number || '';
+    $('setRep').value        = s.seller_representative || '';
+    $('setPhone').value      = s.seller_phone || '';
+    $('setSealKey').value    = s.seller_seal_r2_key || '';
+    $('setQuoteDays').value  = s.reminder_quote_days || '3';
+    $('setUnpaidDays').value = s.reminder_unpaid_days || '7';
+  } catch (_) {}
+}
+
+async function saveSettings() {
+  const t = $('setToast'); t.className='toast'; t.textContent='';
+  /* If a seal file was picked, upload it first under the fixed key */
+  const sealFile = $('setSeal').files && $('setSeal').files[0];
+  let sealKey = $('setSealKey').value.trim();
+  if (sealFile) {
+    /* We piggyback the existing /upload route by attaching to the most
+       recent transaction. Then we copy the R2 key into system_settings.
+       (Workers' raw R2 PUT would be cleaner; this keeps one upload path.) */
+    if (!allTx.length) { t.className='toast err'; t.textContent='Seal 업로드 전에 transaction이 최소 1건 필요합니다 (R2 업로드 경로 제약)'; return; }
+    const fd = new FormData();
+    fd.append('file', sealFile);
+    fd.append('transaction_id', allTx[0].id);
+    fd.append('kind', 'seal');
+    try {
+      const r = await fetch(TD.API_URL + '/upload', { method:'POST', headers:{ 'X-Admin-Key': TD.adminKey() }, body: fd });
+      const j = await r.json();
+      if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+      /* Worker stored under attachments/<tx>/<id>/<filename>; copy into key */
+      sealKey = `attachments/${allTx[0].id}/${j.id}/${j.filename}`;
+      $('setSealKey').value = sealKey;
+    } catch (e) { t.className='toast err'; t.textContent='Seal 업로드 실패: ' + e.message; return; }
+  }
+  const body = {
+    seller_biz_number:    $('setBiz').value.trim(),
+    seller_representative:$('setRep').value.trim(),
+    seller_phone:         $('setPhone').value.trim(),
+    seller_seal_r2_key:   sealKey,
+    reminder_quote_days:  $('setQuoteDays').value.trim(),
+    reminder_unpaid_days: $('setUnpaidDays').value.trim()
+  };
+  try {
+    await TD.apiAdmin('PATCH', '/system-settings', body);
+    t.className='toast ok'; t.textContent = '✓ Settings saved.' + (sealFile ? ' Seal uploaded.' : '');
+    $('setSeal').value = '';
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+async function runCron() {
+  const t = $('setToast'); t.className='toast'; t.textContent='cron 실행 중…';
+  try {
+    const r = await TD.apiAdmin('POST', '/cron/run');
+    t.className='toast ok'; t.textContent='✓ cron 결과: ' + (r.ran || '');
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+async function loadWebhooks() {
+  try {
+    const r = await TD.apiAdmin('GET', '/webhooks');
+    const items = r.items || [];
+    if (!items.length) { $('webhookList').innerHTML = '<p class="small">등록된 webhook 없음.</p>'; return; }
+    let html = '<table class="tx" style="font-size:12px"><tr><th>ID</th><th>URL</th><th>Events</th><th>Created</th><th></th></tr>';
+    items.forEach(w => {
+      html += '<tr><td>' + w.id + '</td><td style="word-break:break-all"><code>' + TD.esc(w.url) + '</code></td>'
+            + '<td>' + TD.esc(w.events) + '</td>'
+            + '<td>' + TD.fmtDate(w.created_at) + '</td>'
+            + '<td><a href="javascript:delWebhook(' + w.id + ')" style="color:#ff8a8a">Delete</a></td></tr>';
+    });
+    html += '</table>';
+    $('webhookList').innerHTML = html;
+  } catch (e) { $('webhookList').innerHTML = '<p class="small">로드 실패: ' + TD.esc(e.message) + '</p>'; }
+}
+
+window.delWebhook = async function(id) {
+  if (!confirm('Delete webhook #' + id + '?')) return;
+  try { await TD.apiAdmin('DELETE', '/webhooks/' + id); loadWebhooks(); }
+  catch (e) { alert('실패: ' + e.message); }
+};
+
+async function addWebhook() {
+  const url = $('whUrl').value.trim();
+  if (!url) return;
+  try {
+    await TD.apiAdmin('POST', '/webhooks', {
+      url, secret: $('whSecret').value.trim() || null, events: $('whEvents').value.trim() || 'all'
+    });
+    $('whUrl').value=''; $('whSecret').value=''; $('whEvents').value='';
+    loadWebhooks();
+  } catch (e) { alert('실패: ' + e.message); }
+}
+
+async function importCsv() {
+  const t = $('csvUpToast'); t.className='toast'; t.textContent='';
+  const f = $('csvUpFile').files && $('csvUpFile').files[0];
+  if (!f) { t.className='toast err'; t.textContent='파일 선택 필요'; return; }
+  const text = await f.text();
+  try {
+    const r = await fetch(TD.API_URL + '/import/transactions.csv', {
+      method: 'POST', headers: { 'X-Admin-Key': TD.adminKey(), 'Content-Type': 'text/csv' }, body: text
+    });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    t.className='toast ok'; t.textContent='✓ ' + j.count + '건 import.';
+    loadTxList();
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   if (TD.adminKey()) { try { showApp(); } catch (_) {} }
   $('gateBtn').addEventListener('click', tryGate);
   $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
   $('newTxBtn').addEventListener('click', newTx);
   $('reloadBtn').addEventListener('click', loadTxList);
+  $('statsReloadBtn').addEventListener('click', loadStats);
+  $('settingsSaveBtn').addEventListener('click', saveSettings);
+  $('cronRunBtn').addEventListener('click', runCron);
+  $('whAddBtn').addEventListener('click', addWebhook);
+  $('csvUpBtn').addEventListener('click', importCsv);
   $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.reload(); });
   $('statusFilter').addEventListener('change', loadTxList);
   $('searchBox').addEventListener('input', renderTxList);

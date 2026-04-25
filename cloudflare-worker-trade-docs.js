@@ -41,7 +41,18 @@
  *   accepts the legacy GH Pages origin during transition.
  */
 
-const VERSION = 'trade-docs-2026-04-26-v2';
+const VERSION = 'trade-docs-2026-04-26-v3-phase8';
+
+/* Default seller block — shown on every doc. The owner can override via
+   /system-settings without redeploying. Keep in sync with footer.js
+   address line. */
+const SELLER_DEFAULT = {
+  name: 'ERGSN CO., LTD.',
+  address: '#503 Susong BD, 12-21, Seoae-ro 5-gil, Joong-gu, Seoul 04623, Republic of Korea',
+  phone: '+82-10-5288-0006',
+  email: 'ceodon@gmail.com',
+  website: 'ergsn.net'
+};
 
 const DOC_TABLES = {
   quotation:  { table: 'quotations',          prefix: 'Q'  },
@@ -73,13 +84,46 @@ const STATUS_LABELS = {
   shipped: 'Shipped', closed: 'Closed', cancelled: 'Cancelled'
 };
 
+/* Reverse map — used by `revert: true` PATCH to allow exactly one step
+   backward in case admin advanced too far (e.g. Mark Paid by mistake). */
+const STATUS_PREV = {
+  quoted:              'open',
+  'po-received':       'quoted',
+  'proforma-sent':     'po-received',
+  paid:                'proforma-sent',
+  'commercial-issued': 'paid',
+  'packing-issued':    'commercial-issued',
+  shipped:             'packing-issued',
+  closed:              'shipped'
+};
+
+/* Public endpoints that get rate-limited (admin endpoints rely on key). */
+const PUBLIC_RATE_LIMITED = ['/rfq-bridge', '/buyer/po', '/buyer/accept-quotation', '/buyer/reject-quotation', '/upload'];
+/* Sliding-window: max N requests per IP per minute per path. Conservative
+   defaults — bona-fide buyers won't hit this; bots will. */
+const RATE_LIMIT_PER_MIN = 30;
+
 export default {
+  /* Cron trigger entry point — Cloudflare invokes this on the schedule
+     declared in wrangler.trade-docs.jsonc. We use it for buyer reminders
+     (quote-expiring, unpaid-proforma). See handleScheduled below. */
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(handleScheduled(env, event));
+  },
+
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/$/, '') || '/';
 
     const cors = corsHeaders(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+
+    /* Lightweight rate limiting on the public surface. Skip for admin
+       endpoints (X-Admin-Key gate is stronger). */
+    if (PUBLIC_RATE_LIMITED.some(p => path === p || path.startsWith(p + '/'))) {
+      const limited = await rateLimit(request, env, path);
+      if (limited) return fail(429, 'rate limited', cors);
+    }
 
     try {
       /* meta */
@@ -160,7 +204,74 @@ export default {
       }
       const attTx = path.match(/^\/attachments\/by-tx\/([\w-]+)$/);
       if (attTx && request.method === 'GET') {
-        return handleAttachmentList(attTx[1], url, env, cors);    // both auth flows supported
+        return handleAttachmentList(attTx[1], url, env, cors);
+      }
+      const attDel = path.match(/^\/attachment\/(AT-\d{4}-\d{4})$/);
+      if (attDel && request.method === 'DELETE') {
+        return adminGate(request, env, cors, () => deleteAttachment(attDel[1], env, cors));
+      }
+
+      /* Phase 8-A — public seal asset. Render in invoice headers. No token
+         required because the seal is intentionally a published trust mark. */
+      if (path === '/system/seal' && request.method === 'GET') {
+        return serveSeal(env, cors);
+      }
+
+      /* Phase 8-A — system settings (seller info, seal R2 key, reminder
+         thresholds). Single object PATCH/GET. */
+      if (path === '/system-settings' && request.method === 'GET') {
+        return adminGate(request, env, cors, () => getSettings(env, cors));
+      }
+      if (path === '/system-settings' && request.method === 'PATCH') {
+        return adminGate(request, env, cors, () => patchSettings(request, env, cors));
+      }
+
+      /* Phase 8-A — buyer token rotate (revokes old URL, mints new) */
+      const txRotate = path.match(/^\/tx\/([\w-]+)\/rotate-token$/);
+      if (txRotate && request.method === 'POST') {
+        return adminGate(request, env, cors, () => rotateBuyerToken(txRotate[1], env, cors));
+      }
+
+      /* Phase 8-A — doc revision (POST creates a new revision row, marks
+         the old as superseded; the buyer keeps seeing the latest only) */
+      const docRevise = path.match(/^\/doc\/(\w+)\/([\w-]+)\/revise$/);
+      if (docRevise && request.method === 'POST') {
+        return adminGate(request, env, cors, () => reviseDoc(docRevise[1], docRevise[2], request, env, cors));
+      }
+
+      /* Phase 8-B — webhooks CRUD */
+      if (path === '/webhooks' && request.method === 'GET') {
+        return adminGate(request, env, cors, () => listWebhooks(env, cors));
+      }
+      if (path === '/webhooks' && request.method === 'POST') {
+        return adminGate(request, env, cors, () => createWebhook(request, env, cors));
+      }
+      const webhookOne = path.match(/^\/webhooks\/(\d+)$/);
+      if (webhookOne && request.method === 'DELETE') {
+        return adminGate(request, env, cors, () => deleteWebhook(webhookOne[1], env, cors));
+      }
+
+      /* Phase 8-B — manual cron trigger (for testing, also mounted on cron) */
+      if (path === '/cron/run' && request.method === 'POST') {
+        return adminGate(request, env, cors, async () => {
+          const r = await handleScheduled(env, { scheduledTime: Date.now() });
+          return ok({ ok: true, ran: r }, cors);
+        });
+      }
+
+      /* Phase 8-B — stats dashboard */
+      if (path === '/stats' && request.method === 'GET') {
+        return adminGate(request, env, cors, () => getStats(url, env, cors));
+      }
+
+      /* Phase 8-B — CSV import (transactions seed) */
+      if (path === '/import/transactions.csv' && request.method === 'POST') {
+        return adminGate(request, env, cors, () => importTransactionsCsv(request, env, cors));
+      }
+
+      /* Phase 8-B — buyer reject / counter-offer (token-gated) */
+      if (path === '/buyer/reject-quotation' && request.method === 'POST') {
+        return handleBuyerRejectQuotation(request, env, cors);
       }
 
       return fail(404, 'not found', cors);
@@ -261,7 +372,7 @@ async function getTransaction(id, env, cors) {
   try {
     const r = await env.DB.prepare(
       `SELECT id, doc_id, kind, filename, mime_type, size_bytes, uploaded_by, notes, created_at
-         FROM attachments WHERE transaction_id = ? ORDER BY created_at DESC`
+         FROM attachments WHERE transaction_id = ? AND deleted_at IS NULL ORDER BY created_at DESC`
     ).bind(id).all();
     attachments = r.results || [];
   } catch (_) {}
@@ -276,11 +387,14 @@ async function patchTransaction(id, request, env, cors) {
   const cur = await env.DB.prepare(`SELECT * FROM transactions WHERE id = ?`).bind(id).first();
   if (!cur) return fail(404, 'transaction not found', cors);
 
-  /* State machine — allow only declared transitions for status changes */
+  /* State machine — allow declared forward transitions, OR exactly one
+     step backward when `body.revert === true`. Revert is audited
+     separately so the log distinguishes "fix mistake" from progress. */
   if (body.status !== undefined && body.status !== cur.status) {
     const allowed = STATUS_NEXT[cur.status] || [];
-    if (!allowed.includes(body.status)) {
-      return fail(400, `invalid transition ${cur.status} → ${body.status}`, cors);
+    const isRevert = body.revert === true && STATUS_PREV[cur.status] === body.status;
+    if (!allowed.includes(body.status) && !isRevert) {
+      return fail(400, `invalid transition ${cur.status} → ${body.status}` + (STATUS_PREV[cur.status] ? ` (use revert:true to go back to ${STATUS_PREV[cur.status]})` : ''), cors);
     }
   }
 
@@ -296,17 +410,33 @@ async function patchTransaction(id, request, env, cors) {
 
   /* Status transition side effects: audit, buyer email, owner Telegram */
   if (body.status !== undefined && body.status !== cur.status) {
+    const isRevert = body.revert === true;
     await audit(env, {
       transaction_id: id,
-      action: 'tx.status',
+      action: isRevert ? 'tx.status-revert' : 'tx.status',
       from_status: cur.status,
       to_status: body.status,
-      actor: 'admin'
+      actor: 'admin',
+      detail: body.revert_reason || null
     });
-    /* Fire-and-forget fan-out — don't block response on email/telegram delays */
-    fanOutOnStatusChange(env, { ...cur, status: body.status }, cur.status).catch(e => {
-      console.log('fanOut error:', e && e.message);
-    });
+    if (!isRevert) {
+      /* Forward fan-out — buyer email + owner Telegram. Skip on revert
+         because we don't want to spam buyer with "wait, never mind". */
+      fanOutOnStatusChange(env, { ...cur, status: body.status }, cur.status).catch(e => {
+        console.log('fanOut error:', e && e.message);
+      });
+    } else {
+      /* On revert, just notify owner (silent for buyer) */
+      notifyTelegram(env, [
+        '↩️ *Status reverted*',
+        `${id} · ${cur.buyer_company}`,
+        `${cur.status} → ${body.status}`,
+        body.revert_reason ? 'Reason: ' + body.revert_reason : '',
+        `Admin: https://ergsn.net/trade-tx.html?id=${id}`
+      ].filter(Boolean).join('\n')).catch(() => {});
+    }
+    /* Phase 8-B — fire ERP webhooks on every status transition (even revert) */
+    fireWebhooks(env, 'tx.status', { transaction_id: id, from: cur.status, to: body.status, revert: isRevert }).catch(() => {});
   }
 
   return ok({ ok: true }, cors);
@@ -352,6 +482,7 @@ async function createDoc(type, request, env, cors) {
   }
   await env.DB.prepare(`INSERT INTO ${meta.table} (${cols.join(', ')}) VALUES (${phs.join(', ')})`).bind(...vals).run();
   await audit(env, { transaction_id, doc_id: id, action: 'doc.create', detail: type, actor: 'admin' });
+  fireWebhooks(env, 'doc.create', { transaction_id, doc_id: id, type }).catch(() => {});
   return ok({ ok: true, id }, cors);
 }
 
@@ -474,14 +605,16 @@ async function handleBuyerView(url, env, cors) {
      it to build attachment view URLs and POST to /buyer/po + /upload. */
   const docs = {};
   for (const [type, meta] of Object.entries(DOC_TABLES)) {
-    const r = await env.DB.prepare(`SELECT * FROM ${meta.table} WHERE transaction_id = ? ORDER BY created_at`).bind(tx.id).all();
+    /* Buyer sees only the latest revision per doc lineage — superseded
+       rows are admin-only history. */
+    const r = await env.DB.prepare(`SELECT * FROM ${meta.table} WHERE transaction_id = ? AND superseded_at IS NULL ORDER BY created_at`).bind(tx.id).all();
     docs[type] = (r.results || []).map(deserialiseDoc);
   }
   let attachments = [];
   try {
     const r = await env.DB.prepare(
       `SELECT id, doc_id, kind, filename, mime_type, size_bytes, uploaded_by, notes, created_at
-         FROM attachments WHERE transaction_id = ? ORDER BY created_at DESC`
+         FROM attachments WHERE transaction_id = ? AND deleted_at IS NULL ORDER BY created_at DESC`
     ).bind(tx.id).all();
     attachments = r.results || [];
   } catch (_) {}
@@ -867,8 +1000,15 @@ async function sendDocToBuyer(type, id, request, env, cors) {
   let data = {};
   try { data = JSON.parse(doc.data); } catch (_) {}
 
+  /* Load seller settings + resolve seal URL (if uploaded) so the inline
+     email matches the buyer-portal print view. */
+  const settings = await loadSettings(env);
+  const sealUrl = settings.seller_seal_r2_key
+    ? `https://ergsn-trade-docs.ceodon.workers.dev/system/seal`
+    : null;
+
   /* Render the whole document inline — bayer can save email as PDF. */
-  const docInline = renderDocHtml(type, tx, data, id);
+  const docInline = renderDocHtml(type, tx, data, id, settings, sealUrl);
 
   const html = `<p>Dear ${escHtml(tx.buyer_company)},</p>
     <p>${meta_t[0]} <strong>${id}</strong> for transaction <strong>${tx.id}</strong> is now available. The full document is included below — you can also <a href="${docViewUrl}">open it in your portal</a> to print.</p>
@@ -893,8 +1033,11 @@ async function sendDocToBuyer(type, id, request, env, cors) {
 
 /* ───────────── server-side doc renderer ─────────────
    Mirrors scripts/trade-docs.js TD.buildPrintHtml so server-rendered
-   inline emails look identical to the buyer-portal print view. */
-function renderDocHtml(type, tx, data, docId) {
+   inline emails look identical to the buyer-portal print view.
+   `settings` is the result of loadSettings() — seller_biz_number,
+   seller_representative, seller_phone, seller_seal_r2_key. */
+function renderDocHtml(type, tx, data, docId, settings, sealAbsoluteUrl) {
+  settings = settings || {};
   const meta_t = { quotation:['Quotation','견적서'], po:['Purchase Order','발주서'], proforma:['Proforma Invoice','견적송장'], commercial:['Commercial Invoice','상업송장'], packing:['Packing List','포장명세서'] }[type] || ['Document','문서'];
   const items = (data.items || []).map((r, i) => `
     <tr>
@@ -927,7 +1070,12 @@ function renderDocHtml(type, tx, data, docId) {
       ${data.bank_iban ? '<br><b>IBAN:</b> ' + escHtml(data.bank_iban) : ''}
       ${data.bank_beneficiary ? '<br><b>Beneficiary:</b> ' + escHtml(data.bank_beneficiary) : ''}
     </p>`;
-    if (type === 'po')         return data.buyer_ref ? `<p><b>Buyer Ref:</b> ${escHtml(data.buyer_ref)}</p>` : '';
+    if (type === 'po') {
+      const sig = data.buyer_signature && String(data.buyer_signature).startsWith('data:image')
+        ? `<div style="margin-top:8px"><b>Buyer signature:</b> ${data.buyer_signature_name ? escHtml(data.buyer_signature_name) : ''}<br><img src="${escHtml(data.buyer_signature)}" alt="signature" style="max-height:80px;background:#fff;padding:4px;border:1px solid #ddd"></div>`
+        : '';
+      return (data.buyer_ref ? `<p><b>Buyer Ref:</b> ${escHtml(data.buyer_ref)}</p>` : '') + sig;
+    }
     return '';
   })();
   const subtotal     = data.subtotal != null ? data.subtotal : (data.items || []).reduce((s,r) => s + (r.amt||0), 0);
@@ -947,10 +1095,12 @@ function renderDocHtml(type, tx, data, docId) {
       <table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px"><tr>
         <td style="vertical-align:top;width:50%;padding-right:12px">
           <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Seller</div>
-          ERGSN CO., LTD.<br>
-          #503 Susong BD, 12-21, Seoae-ro 5-gil<br>
-          Joong-gu, Seoul 04623, Republic of Korea<br>
-          ergsn.net
+          ${escHtml(SELLER_DEFAULT.name)}<br>
+          ${escHtml(SELLER_DEFAULT.address)}<br>
+          ${settings.seller_biz_number ? '<b>Business Reg. No.:</b> ' + escHtml(settings.seller_biz_number) + '<br>' : ''}
+          ${settings.seller_representative ? '<b>Representative:</b> ' + escHtml(settings.seller_representative) + '<br>' : ''}
+          ${settings.seller_phone ? '<b>Tel:</b> ' + escHtml(settings.seller_phone) + ' &middot; ' : ''}
+          ${escHtml(SELLER_DEFAULT.website)}
         </td>
         <td style="vertical-align:top;width:50%;padding-left:12px">
           <div style="font-weight:700;color:#34d298;text-transform:uppercase;letter-spacing:.1em;font-size:10px;margin-bottom:4px">Buyer</div>
@@ -981,7 +1131,14 @@ function renderDocHtml(type, tx, data, docId) {
         <tr style="font-size:14px;font-weight:700;color:#34d298;border-top:1px solid #0f0f0f"><td>Total</td><td style="text-align:right">${fmtN(total_amount)}</td></tr>
       </table>
       ${data.notes ? `<div style="margin-top:18px;font-size:11px;border-top:1px dashed #999;padding-top:8px"><b>Notes:</b> ${escHtml(data.notes)}</div>` : ''}
-      <div style="margin-top:30px;font-size:10px;color:#666;border-top:1px solid #ddd;padding-top:6px">© 2013 ERGSN CO., LTD. &middot; ergsn.net &middot; Generated ${new Date().toISOString().slice(0,16).replace('T',' ')} UTC</div>
+      <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:flex-end;font-size:10.5px">
+        <div style="color:#444">
+          ${settings.seller_representative ? '<div style="margin-bottom:4px"><b>Authorized Signatory:</b> ' + escHtml(settings.seller_representative) + '</div>' : ''}
+          <div style="border-top:1px solid #888;padding-top:3px;width:200px;color:#888">Signature / 인감</div>
+        </div>
+        ${sealAbsoluteUrl ? '<img src="' + escHtml(sealAbsoluteUrl) + '" alt="ERGSN seal" style="height:88px;width:auto;opacity:.95">' : ''}
+      </div>
+      <div style="margin-top:18px;font-size:10px;color:#666;border-top:1px solid #ddd;padding-top:6px">© 2013 ${escHtml(SELLER_DEFAULT.name)} &middot; ${escHtml(SELLER_DEFAULT.website)} &middot; Generated ${new Date().toISOString().slice(0,16).replace('T',' ')} UTC</div>
     </div>`;
 }
 
@@ -993,28 +1150,49 @@ function fmtN(n, d) {
   return v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
-/* ───────────── Phase E — AI quotation drafter ─────────────
-   Calls Anthropic Claude to draft line items based on RFQ summary +
-   product catalog. Falls back gracefully if ANTHROPIC_API_KEY not configured. */
+/* ───────────── Phase E + 8-A — AI quotation drafter (keyword-filtered catalog) ─────────────
+   Worker fetches data/products.json once (cached 1h on Cloudflare's edge),
+   then runs filterCatalogForAi() to slim the catalog down to ~5 candidate
+   SKUs before sending to Claude. Drops input tokens from ~7.5k to ~600. */
+let _catalogCache = null;
+let _catalogAt = 0;
+async function getCatalog() {
+  /* In-Worker memory cache (per isolate) for 1 hour. */
+  if (_catalogCache && (Date.now() - _catalogAt) < 3_600_000) return _catalogCache;
+  try {
+    const r = await fetch('https://ergsn.net/data/products.json', { cf: { cacheTtl: 3600, cacheEverything: true } });
+    if (!r.ok) return [];
+    const j = await r.json();
+    /* products.json shape: { "$schema":..., "_doc":..., "products": [...] } */
+    const list = Array.isArray(j) ? j : (j.products || []);
+    _catalogCache = list; _catalogAt = Date.now();
+    return list;
+  } catch (_) { return []; }
+}
+
 async function aiDraftQuotation(request, env, cors) {
   if (!env.ANTHROPIC_API_KEY) return fail(503, 'ANTHROPIC_API_KEY not configured on this Worker', cors);
   const body = await safeJson(request);
   if (!body) return fail(400, 'invalid JSON', cors);
-  const { rfq_summary, transaction_id, product_catalog } = body;
+  const { rfq_summary, transaction_id } = body;
   if (!rfq_summary) return fail(400, 'rfq_summary required', cors);
 
-  const sys = `You are a senior trade-desk assistant at ERGSN, a Korean B2B export platform. Given a buyer RFQ summary and (optionally) a product catalog, output a JSON object suitable for prefilling a quotation form. Respond with JSON only — no prose, no markdown fences.
+  /* Server-side catalog filter — see filterCatalogForAi() for heuristics */
+  const fullCatalog = await getCatalog();
+  const candidates  = filterCatalogForAi(fullCatalog, rfq_summary);
+
+  const sys = `You are a senior trade-desk assistant at ERGSN, a Korean B2B export platform. Given a buyer RFQ summary and a short list of candidate SKUs, output a JSON object suitable for prefilling a quotation form. Respond with JSON ONLY — no prose, no markdown fences.
 
 Schema: { "items": [{ "desc": string, "qty": number, "unit": string, "up": number }], "currency": "USD"|"EUR"|"KRW"|"JPY"|"CNY", "notes": string, "valid_until_days": number }
 
 Rules:
-- Match catalog SKUs when the RFQ mentions them; otherwise leave up=0 and add a note "price TBD".
+- Prefer the candidate SKUs; if RFQ mentions an SKU not in the list, still include it (mark up=0 and add note "price TBD").
 - Default unit: "EA". Default currency: "USD". Default valid_until_days: 30.
-- If quantities aren't specified, use 1 and note it.
-- Do not include tax/discount; admin sets those separately.`;
+- If quantities aren't specified, use 1 and add a note saying so.
+- Do not include tax/discount; admin sets those separately.
+- Keep notes concise (under 240 chars).`;
 
-  const userMsg = `RFQ Summary:\n${rfq_summary}\n\n` +
-    (product_catalog ? `Available SKUs (JSON):\n${JSON.stringify(product_catalog).slice(0, 6000)}` : '');
+  const userMsg = `RFQ Summary:\n${rfq_summary}\n\nCandidate SKUs (filtered to top ${candidates.length}):\n${JSON.stringify(candidates)}`;
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1034,13 +1212,19 @@ Rules:
     const j = await r.json();
     if (!r.ok) return fail(502, 'AI error: ' + (j.error && j.error.message || r.status), cors);
     const text = (j.content && j.content[0] && j.content[0].text) || '';
+    /* Tolerate markdown fences just in case */
+    const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
     let parsed;
-    try { parsed = JSON.parse(text); }
-    catch (e) { return fail(502, 'AI returned non-JSON', cors); }
+    try { parsed = JSON.parse(cleaned); }
+    catch (e) { return fail(502, 'AI returned non-JSON: ' + cleaned.slice(0, 200), cors); }
     if (transaction_id) {
-      await audit(env, { transaction_id, action: 'ai.draft-quotation', detail: 'items=' + (parsed.items?.length || 0), actor: 'admin' });
+      await audit(env, {
+        transaction_id, action: 'ai.draft-quotation',
+        detail: `candidates=${candidates.length} items=${parsed.items?.length || 0} input_tokens~=${j.usage?.input_tokens || '?'}`,
+        actor: 'admin'
+      });
     }
-    return ok({ ok: true, draft: parsed }, cors);
+    return ok({ ok: true, draft: parsed, candidates: candidates.length, usage: j.usage || null }, cors);
   } catch (e) {
     return fail(502, 'AI request failed: ' + (e.message || ''), cors);
   }
@@ -1131,11 +1315,14 @@ async function handleUpload(request, env, cors) {
   const kind           = String(form.get('kind') || 'other').trim().toLowerCase();
   const notes          = String(form.get('notes') || '').slice(0, 500);
 
-  /* Buyer can only upload to their own transaction, kind=payment-proof */
+  /* Buyer can only upload to their own transaction, kind=payment-proof.
+     Admin can use any kind including 'seal' (system-wide assets). */
   if (auth.actor === 'buyer') {
     if (!auth.tx || transaction_id !== auth.tx.id) return fail(403, 'wrong transaction', cors);
     if (kind !== 'payment-proof') return fail(403, 'buyer can only upload payment-proof', cors);
   }
+  const VALID_KINDS = new Set(['bl','coa','coo','payment-proof','seal','other']);
+  if (!VALID_KINDS.has(kind)) return fail(400, 'invalid kind', cors);
   if (!transaction_id) return fail(400, 'transaction_id required', cors);
   /* Admin path: ensure tx exists */
   const tx = auth.tx || await env.DB.prepare(`SELECT id, buyer_email, buyer_company FROM transactions WHERE id = ?`).bind(transaction_id).first();
@@ -1156,17 +1343,40 @@ async function handleUpload(request, env, cors) {
     detail: kind + ':' + safeName + ' (' + buf.byteLength + 'b)', actor: auth.actor
   });
 
-  /* Notify owner if buyer uploaded payment proof */
-  if (auth.actor === 'buyer' && kind === 'payment-proof') {
+  /* Owner Telegram alert for every attachment — buyer uploads always
+     trigger; admin uploads trigger only for non-trivial kinds (B/L, COA,
+     COO, payment-proof) since admin obviously knows what they uploaded. */
+  const adminNotableKinds = new Set(['bl', 'coa', 'coo', 'payment-proof']);
+  const shouldAlert = auth.actor === 'buyer' || adminNotableKinds.has(kind);
+  if (shouldAlert) {
+    const emoji = kind === 'payment-proof' ? '💸' : (kind === 'bl' ? '📦' : '📎');
     notifyTelegram(env, [
-      '💸 *Payment proof uploaded*',
+      `${emoji} *Attachment uploaded* (${kind})`,
       `${transaction_id} · ${tx.buyer_company || ''}`,
-      `File: ${safeName} (${(buf.byteLength/1024).toFixed(1)} KB)`,
+      `File: ${safeName} (${(buf.byteLength/1024).toFixed(1)} KB) · by ${auth.actor}`,
       `Admin: https://ergsn.net/trade-tx.html?id=${transaction_id}`
     ].join('\n')).catch(() => {});
   }
 
+  /* Phase 8-B — webhook fan-out */
+  fireWebhooks(env, 'attachment.upload', { transaction_id, attachment_id: id, kind, size: buf.byteLength, by: auth.actor }).catch(() => {});
+
   return ok({ ok: true, id, filename: safeName, size: buf.byteLength }, cors);
+}
+
+async function deleteAttachment(id, env, cors) {
+  if (!env.FILES) return fail(503, 'R2 binding FILES not configured', cors);
+  const att = await env.DB.prepare(`SELECT * FROM attachments WHERE id = ? AND deleted_at IS NULL`).bind(id).first();
+  if (!att) return fail(404, 'not found or already deleted', cors);
+  /* Soft-delete in D1 (keep audit trail) + hard-delete in R2 (free storage) */
+  const now = Date.now();
+  await env.DB.prepare(`UPDATE attachments SET deleted_at = ? WHERE id = ?`).bind(now, id).run();
+  try { await env.FILES.delete(att.r2_key); } catch (_) {}
+  await audit(env, {
+    transaction_id: att.transaction_id, doc_id: att.doc_id, action: 'attachment.delete',
+    detail: att.kind + ':' + att.filename, actor: 'admin'
+  });
+  return ok({ ok: true }, cors);
 }
 
 async function handleFileGet(attId, url, env, cors) {
@@ -1220,9 +1430,423 @@ async function handleAttachmentList(txId, url, env, cors) {
 
   const r = await env.DB.prepare(
     `SELECT id, doc_id, kind, filename, mime_type, size_bytes, uploaded_by, notes, created_at
-       FROM attachments WHERE transaction_id = ? ORDER BY created_at DESC`
+       FROM attachments WHERE transaction_id = ? AND deleted_at IS NULL ORDER BY created_at DESC`
   ).bind(txId).all();
   return ok({ ok: true, items: r.results || [] }, cors);
+}
+
+/* ───────────── Phase 8-A — rate limiting (D1-backed sliding minute) ───────────── */
+
+async function rateLimit(request, env, path) {
+  const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Real-IP') || 'unknown';
+  const minute = Math.floor(Date.now() / 60000);
+  const bucket = `${ip}|${path}|${minute}`;
+  try {
+    /* Atomic upsert; if count exceeds limit we reject */
+    await env.DB.prepare(
+      `INSERT INTO rate_limits (bucket, count, window_start) VALUES (?, 1, ?)
+       ON CONFLICT(bucket) DO UPDATE SET count = count + 1`
+    ).bind(bucket, Date.now()).run();
+    const r = await env.DB.prepare(`SELECT count FROM rate_limits WHERE bucket = ?`).bind(bucket).first();
+    if (r && r.count > RATE_LIMIT_PER_MIN) return true;
+    /* Garbage-collect old buckets occasionally (1 in 50 calls) */
+    if (Math.random() < 0.02) {
+      env.DB.prepare(`DELETE FROM rate_limits WHERE window_start < ?`).bind(Date.now() - 5 * 60_000).run().catch(() => {});
+    }
+  } catch (_) { /* If rate-limit table missing or D1 hiccup, fail-open */ }
+  return false;
+}
+
+/* ───────────── Phase 8-A — system settings ───────────── */
+
+async function loadSettings(env) {
+  const r = await env.DB.prepare(`SELECT key, value FROM system_settings`).all();
+  const out = {};
+  for (const row of (r.results || [])) out[row.key] = row.value || '';
+  return out;
+}
+
+async function getSettings(env, cors) {
+  return ok({ ok: true, settings: await loadSettings(env) }, cors);
+}
+
+async function patchSettings(request, env, cors) {
+  const body = await safeJson(request);
+  if (!body) return fail(400, 'invalid JSON', cors);
+  const allowed = new Set([
+    'seller_biz_number', 'seller_representative', 'seller_phone',
+    'seller_seal_r2_key',
+    'reminder_quote_days', 'reminder_unpaid_days'
+  ]);
+  const now = Date.now();
+  for (const [k, v] of Object.entries(body)) {
+    if (!allowed.has(k)) continue;
+    await env.DB.prepare(
+      `INSERT INTO system_settings (key, value, updated_at) VALUES (?, ?, ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`
+    ).bind(k, String(v == null ? '' : v).slice(0, 1000), now).run();
+  }
+  await audit(env, { action: 'settings.update', actor: 'admin', detail: Object.keys(body).join(',') });
+  return ok({ ok: true }, cors);
+}
+
+async function serveSeal(env, cors) {
+  if (!env.FILES) return fail(503, 'R2 not bound', cors);
+  const settings = await loadSettings(env);
+  const key = settings.seller_seal_r2_key || 'system/seal.png';
+  const obj = await env.FILES.get(key);
+  if (!obj) return fail(404, 'no seal uploaded', cors);
+  const headers = new Headers(cors);
+  headers.set('Content-Type', obj.httpMetadata?.contentType || 'image/png');
+  headers.set('Cache-Control', 'public, max-age=300');
+  return new Response(obj.body, { status: 200, headers });
+}
+
+/* ───────────── Phase 8-A — buyer token rotation ───────────── */
+
+async function rotateBuyerToken(txId, env, cors) {
+  const tx = await env.DB.prepare(`SELECT * FROM transactions WHERE id = ?`).bind(txId).first();
+  if (!tx) return fail(404, 'not found', cors);
+  const newTok = token32();
+  const now = Date.now();
+  await env.DB.prepare(
+    `UPDATE transactions SET buyer_token = ?, buyer_token_rotated_at = ?, updated_at = ? WHERE id = ?`
+  ).bind(newTok, now, now, txId).run();
+  await audit(env, { transaction_id: txId, action: 'tx.token-rotate', actor: 'admin' });
+  return ok({ ok: true, buyer_token: newTok, buyer_url: `https://ergsn.net/trade-buyer.html?t=${newTok}` }, cors);
+}
+
+/* ───────────── Phase 8-A — doc revision ─────────────
+   Creates a new row that supersedes the previous revision. The old row
+   stays in the DB (with `superseded_at` set) so audit + history are
+   preserved. Buyer portal listing filters out superseded rows. */
+async function reviseDoc(type, srcId, request, env, cors) {
+  const meta = DOC_TABLES[type];
+  if (!meta) return fail(400, 'unknown doc type', cors);
+  const src = await env.DB.prepare(`SELECT * FROM ${meta.table} WHERE id = ?`).bind(srcId).first();
+  if (!src) return fail(404, 'source doc not found', cors);
+  const body = await safeJson(request);
+  if (!body || !body.data) return fail(400, 'data required', cors);
+
+  /* Mark the source as superseded, then create a new row with revision++ */
+  const now = Date.now();
+  await env.DB.prepare(`UPDATE ${meta.table} SET superseded_at = ? WHERE id = ?`).bind(now, srcId).run();
+
+  const id = await nextId(env, meta.prefix);
+  const data = body.data;
+  const cols = ['id','transaction_id','data','created_at','updated_at','revision','parent_doc_id'];
+  const vals = [id, src.transaction_id, JSON.stringify(data), now, now, (src.revision || 1) + 1, srcId];
+  const phs  = ['?','?','?','?','?','?','?'];
+  if (['quotation','proforma','commercial'].includes(type)) {
+    cols.push('total_amount','currency'); vals.push(data.total_amount || null, data.currency || null); phs.push('?','?');
+  }
+  if (type === 'quotation')  { cols.push('valid_until'); vals.push(data.valid_until || null); phs.push('?'); }
+  if (type === 'commercial') { cols.push('bl_number','container_no','shipped_at'); vals.push(data.bl_number||null, data.container_no||null, data.shipped_at||null); phs.push('?','?','?'); }
+  if (type === 'packing')    { cols.push('total_weight_kg','total_volume_m3','carton_count'); vals.push(data.total_weight_kg||null, data.total_volume_m3||null, data.carton_count||null); phs.push('?','?','?'); }
+  if (type === 'po')         { cols.push('buyer_signed_at','buyer_signature'); vals.push(data.buyer_signed_at||null, data.buyer_signature||null); phs.push('?','?'); }
+  await env.DB.prepare(`INSERT INTO ${meta.table} (${cols.join(', ')}) VALUES (${phs.join(', ')})`).bind(...vals).run();
+  await audit(env, {
+    transaction_id: src.transaction_id, doc_id: id,
+    action: 'doc.revise', from_status: srcId, to_status: id,
+    detail: `${type} v${(src.revision || 1)} → v${(src.revision || 1) + 1}`,
+    actor: 'admin'
+  });
+  return ok({ ok: true, id, revision: (src.revision || 1) + 1, parent_doc_id: srcId }, cors);
+}
+
+/* ───────────── Phase 8-B — webhooks ───────────── */
+
+async function listWebhooks(env, cors) {
+  const r = await env.DB.prepare(`SELECT id, scope, url, events, enabled, created_at FROM webhooks ORDER BY created_at DESC`).all();
+  return ok({ ok: true, items: r.results || [] }, cors);
+}
+async function createWebhook(request, env, cors) {
+  const body = await safeJson(request);
+  if (!body || !body.url) return fail(400, 'url required', cors);
+  if (!/^https?:\/\//i.test(body.url)) return fail(400, 'url must be http(s)', cors);
+  const now = Date.now();
+  await env.DB.prepare(
+    `INSERT INTO webhooks (scope, url, secret, events, enabled, created_at) VALUES (?, ?, ?, ?, 1, ?)`
+  ).bind(body.scope || 'global', body.url.slice(0, 500), body.secret || null, body.events || 'all', now).run();
+  return ok({ ok: true }, cors);
+}
+async function deleteWebhook(id, env, cors) {
+  await env.DB.prepare(`DELETE FROM webhooks WHERE id = ?`).bind(parseInt(id, 10)).run();
+  return ok({ ok: true }, cors);
+}
+
+/* Fire-and-forget webhook fan-out. Each delivery has a tight 5s timeout
+   so a slow ERP endpoint doesn't block the user-facing response. */
+async function fireWebhooks(env, event, payload) {
+  let hooks;
+  try {
+    const r = await env.DB.prepare(`SELECT * FROM webhooks WHERE enabled = 1`).all();
+    hooks = r.results || [];
+  } catch (_) { return; }
+  if (!hooks.length) return;
+  const body = JSON.stringify({ event, at: Date.now(), payload });
+  for (const h of hooks) {
+    if (h.events !== 'all' && !h.events.split(',').map(s=>s.trim()).includes(event)) continue;
+    /* Optional HMAC signature header */
+    let sig = '';
+    if (h.secret) {
+      try {
+        const key = await crypto.subtle.importKey(
+          'raw', new TextEncoder().encode(h.secret),
+          { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+        );
+        const buf = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(body));
+        sig = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+      } catch (_) {}
+    }
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 5000);
+    fetch(h.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(sig ? { 'X-ERGSN-Signature': sig } : {}),
+        'X-ERGSN-Event': event
+      },
+      body, signal: ctrl.signal
+    }).catch(() => {}).finally(() => clearTimeout(t));
+  }
+}
+
+/* ───────────── Phase 8-B — stats dashboard ─────────────
+   Aggregates for the owner's at-a-glance view. Single round-trip. */
+async function getStats(url, env, cors) {
+  const days = Math.min(parseInt(url.searchParams.get('days') || '90', 10), 365);
+  const since = Date.now() - days * 86_400_000;
+  const [byStatus, byMonth, recent, openValue] = await Promise.all([
+    env.DB.prepare(`SELECT status, COUNT(*) AS n FROM transactions GROUP BY status`).all(),
+    env.DB.prepare(
+      `SELECT strftime('%Y-%m', created_at/1000, 'unixepoch') AS month, COUNT(*) AS n FROM transactions WHERE created_at >= ? GROUP BY month ORDER BY month`
+    ).bind(since).all(),
+    env.DB.prepare(`SELECT id, buyer_company, buyer_country, status, created_at FROM transactions ORDER BY created_at DESC LIMIT 10`).all(),
+    env.DB.prepare(
+      `SELECT SUM(total_amount) AS total, currency FROM proforma_invoices WHERE payment_status != 'paid' AND superseded_at IS NULL GROUP BY currency`
+    ).all()
+  ]);
+  return ok({
+    ok: true,
+    by_status:  byStatus.results || [],
+    by_month:   byMonth.results || [],
+    recent:     recent.results || [],
+    unpaid_value: openValue.results || []
+  }, cors);
+}
+
+/* ───────────── Phase 8-B — CSV import ─────────────
+   Accepts a text/csv body with header `buyer_company,buyer_email,buyer_country,ergsn_partner,notes`.
+   Each row creates a transaction; nothing else. Idempotency via buyer_email
+   uniqueness is NOT enforced (importer's job). */
+async function importTransactionsCsv(request, env, cors) {
+  const text = await request.text();
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  if (lines.length < 2) return fail(400, 'no rows', cors);
+  const header = lines[0].split(',').map(s => s.trim());
+  const idx = (k) => header.indexOf(k);
+  if (idx('buyer_company') < 0 || idx('buyer_email') < 0) return fail(400, 'header must include buyer_company and buyer_email', cors);
+  const created = [];
+  for (let i = 1; i < lines.length && created.length < 500; i++) {
+    const cols = parseCsvLine(lines[i]);
+    const company = cols[idx('buyer_company')];
+    const email   = cols[idx('buyer_email')];
+    if (!company || !email) continue;
+    const id = await nextId(env, 'TX');
+    const now = Date.now();
+    const tok = token32();
+    await env.DB.prepare(
+      `INSERT INTO transactions (id, buyer_company, buyer_email, buyer_country, ergsn_partner, status, buyer_token, notes, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, 'open', ?, ?, ?, ?)`
+    ).bind(
+      id, company, email,
+      idx('buyer_country') >= 0 ? cols[idx('buyer_country')] : null,
+      idx('ergsn_partner') >= 0 ? cols[idx('ergsn_partner')] : null,
+      tok,
+      idx('notes') >= 0 ? cols[idx('notes')] : 'imported',
+      now, now
+    ).run();
+    await audit(env, { transaction_id: id, action: 'tx.import', actor: 'admin' });
+    created.push({ id, buyer_token: tok });
+  }
+  return ok({ ok: true, count: created.length, created }, cors);
+}
+
+function parseCsvLine(line) {
+  const out = [];
+  let cur = '', q = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (q) {
+      if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+      else if (c === '"') q = false;
+      else cur += c;
+    } else {
+      if (c === ',') { out.push(cur); cur = ''; }
+      else if (c === '"') q = true;
+      else cur += c;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
+/* ───────────── Phase 8-B — buyer reject quotation ───────────── */
+
+async function handleBuyerRejectQuotation(request, env, cors) {
+  const body = await safeJson(request);
+  if (!body) return fail(400, 'invalid JSON', cors);
+  const { token, quotation_id, reason } = body;
+  if (!token || !/^[a-f0-9]{32}$/i.test(token)) return fail(400, 'invalid token', cors);
+  const tx = await env.DB.prepare(`SELECT * FROM transactions WHERE buyer_token = ?`).bind(token).first();
+  if (!tx) return fail(404, 'transaction not found', cors);
+  await audit(env, {
+    transaction_id: tx.id, doc_id: quotation_id || null,
+    action: 'quotation.reject', actor: 'buyer',
+    detail: (reason || '').slice(0, 500)
+  });
+  notifyTelegram(env, [
+    '⛔ *Quotation rejected by buyer*',
+    `${tx.id} · ${tx.buyer_company}`,
+    `Quotation: ${quotation_id || '(latest)'}`,
+    `Reason: ${reason || '(not given)'}`,
+    `Admin: https://ergsn.net/trade-tx.html?id=${tx.id}`
+  ].join('\n')).catch(() => {});
+  /* Don't auto-flip status — owner can choose to revise the quote, cancel
+     the transaction, or just talk to the buyer. */
+  return ok({ ok: true }, cors);
+}
+
+/* ───────────── Phase 8-B — Cron scheduled handler ─────────────
+   Sweeps for buyer reminders. Runs once a day per wrangler config. */
+async function handleScheduled(env, event) {
+  const settings = await loadSettings(env);
+  const quoteDays  = parseInt(settings.reminder_quote_days || '3', 10);
+  const unpaidDays = parseInt(settings.reminder_unpaid_days || '7', 10);
+  const now = Date.now();
+  let sentExpiry = 0, sentUnpaid = 0;
+
+  /* Quotations expiring within `quoteDays` days, not yet superseded,
+     transaction still open/quoted, no PO yet */
+  try {
+    const ds = quoteDays * 86_400_000;
+    const r = await env.DB.prepare(
+      `SELECT q.id AS quote_id, q.valid_until, t.id AS tx_id, t.buyer_company, t.buyer_email, t.buyer_token, t.status
+         FROM quotations q
+         JOIN transactions t ON t.id = q.transaction_id
+        WHERE q.superseded_at IS NULL
+          AND q.valid_until IS NOT NULL
+          AND q.valid_until > ?
+          AND q.valid_until <= ?
+          AND t.status IN ('open','quoted')
+          AND t.po_locked_at IS NULL`
+    ).bind(now, now + ds).all();
+    for (const row of (r.results || [])) {
+      const portal = `https://ergsn.net/trade-buyer.html?t=${row.buyer_token}`;
+      const days = Math.max(1, Math.round((row.valid_until - now) / 86_400_000));
+      await sendBuyerEmail(env, {
+        to: row.buyer_email,
+        subject: `ERGSN — your quotation ${row.quote_id} expires in ${days} day${days > 1 ? 's' : ''}`,
+        htmlBody: `<p>Dear ${escHtml(row.buyer_company)},</p>
+          <p>Your quotation <strong>${row.quote_id}</strong> for transaction <strong>${row.tx_id}</strong> is set to expire on <strong>${new Date(row.valid_until).toISOString().slice(0,10)}</strong>.</p>
+          <p>Open your buyer portal to accept the quote with one click: <a href="${portal}">${portal}</a></p>
+          <p>If you'd like a revision (different quantity, alternate model, updated incoterms), reply to this email and our team will issue a fresh version within 1 business day.</p>`,
+        transaction_id: row.tx_id, doc_id: row.quote_id, doc_type: 'quotation-expiry-reminder'
+      });
+      sentExpiry++;
+    }
+  } catch (e) { console.log('quote reminder error:', e && e.message); }
+
+  /* Proformas where status == 'proforma-sent' for >= unpaidDays days */
+  try {
+    const cutoff = now - unpaidDays * 86_400_000;
+    const r = await env.DB.prepare(
+      `SELECT p.id AS pi_id, p.created_at, t.id AS tx_id, t.buyer_company, t.buyer_email, t.buyer_token
+         FROM proforma_invoices p
+         JOIN transactions t ON t.id = p.transaction_id
+        WHERE t.status = 'proforma-sent'
+          AND p.payment_status != 'paid'
+          AND p.superseded_at IS NULL
+          AND p.created_at <= ?`
+    ).bind(cutoff).all();
+    for (const row of (r.results || [])) {
+      const portal = `https://ergsn.net/trade-buyer.html?t=${row.buyer_token}`;
+      await sendBuyerEmail(env, {
+        to: row.buyer_email,
+        subject: `ERGSN — payment reminder for proforma ${row.pi_id}`,
+        htmlBody: `<p>Dear ${escHtml(row.buyer_company)},</p>
+          <p>This is a friendly reminder that proforma invoice <strong>${row.pi_id}</strong> for transaction <strong>${row.tx_id}</strong> remains unpaid.</p>
+          <p>Once payment is received, we will issue your Commercial Invoice and Packing List and proceed with shipment.</p>
+          <p>You can review the proforma and upload your wire transfer slip directly at your portal: <a href="${portal}">${portal}</a></p>
+          <p>If there is anything blocking the payment, just reply to this email — our team is happy to adjust terms or split into deposit + balance.</p>`,
+        transaction_id: row.tx_id, doc_id: row.pi_id, doc_type: 'proforma-unpaid-reminder'
+      });
+      sentUnpaid++;
+    }
+  } catch (e) { console.log('unpaid reminder error:', e && e.message); }
+
+  const summary = `expiry=${sentExpiry} unpaid=${sentUnpaid}`;
+  await env.DB.prepare(
+    `INSERT INTO cron_runs (job, ran_at, ok, notes) VALUES ('reminders', ?, 1, ?)`
+  ).bind(now, summary).run().catch(() => {});
+  if (sentExpiry + sentUnpaid > 0) {
+    notifyTelegram(env, `⏰ *Daily reminder digest*\n${summary}`).catch(() => {});
+  }
+  return summary;
+}
+
+/* ───────────── Phase 8-A — products.json keyword matching for AI draft ─────────────
+   Filters the catalog client-supplies down to ~5 candidates so the AI
+   prompt stays under 1k input tokens (vs ~7.5k if we sent the full file).
+   Match heuristics, in order:
+     1. exact SKU/part-number substring match in the RFQ summary
+     2. sector keyword match
+     3. fall back to one product per active sector (overview) */
+function filterCatalogForAi(catalog, rfqSummary) {
+  if (!Array.isArray(catalog)) return [];
+  const norm = String(rfqSummary || '').toLowerCase();
+  const exact = [];
+  const sectorHits = [];
+  const sectorOverview = new Map();
+
+  for (const p of catalog) {
+    if (!p || !p.id) continue;
+    const id   = String(p.id).toLowerCase();
+    const name = String(p.name || '').toLowerCase();
+    const sec  = String(p.sector || '').toLowerCase();
+    /* 1. exact id/part hit */
+    const idHit = id && norm.includes(id);
+    /* 2. model name token hit (DL-10X, HYGEN, Rosetta, RAY-1 etc.) */
+    const tokens = name.split(/[^a-z0-9]+/).filter(t => t.length >= 4);
+    const nameHit = tokens.some(t => norm.includes(t));
+    /* 3. sector mention */
+    const secHit = sec && (
+      norm.includes(sec.replace(/^k-/, '')) ||
+      norm.includes(sec)
+    );
+    if (idHit || nameHit) exact.push(p);
+    else if (secHit) sectorHits.push(p);
+    if (sec && !sectorOverview.has(sec)) sectorOverview.set(sec, p);
+  }
+  /* dedupe + cap at 5 */
+  const seen = new Set();
+  const picked = [];
+  for (const p of exact.concat(sectorHits)) {
+    if (seen.has(p.id)) continue;
+    seen.add(p.id); picked.push(p);
+    if (picked.length >= 5) break;
+  }
+  /* If none matched, send 1-per-sector as overview (~9 SKUs but compact). */
+  if (!picked.length) for (const p of sectorOverview.values()) picked.push(p);
+  /* Strip heavy fields — keep only what AI actually needs */
+  return picked.map(p => ({
+    id: p.id, name: p.name, sector: p.sector,
+    desc: (p.desc || '').slice(0, 200),
+    price: p.price || null, moq: p.moq || null,
+    incoterms: p.incoterms || null
+  }));
 }
 
 /* ───────────── helpers ───────────── */

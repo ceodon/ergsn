@@ -35,5 +35,11 @@
       "binding":     "FILES",
       "bucket_name": "ergsn-trade-files"
     }
-  ]
+  ],
+  // Cron trigger — runs the reminder job once a day. UTC 18:00 = KST 03:00.
+  // Sweeps quotations expiring soon and unpaid proformas, fires reminder
+  // emails + Telegram digest. See handleScheduled() in the Worker.
+  "triggers": {
+    "crons": ["0 18 * * *"]
+  }
 }

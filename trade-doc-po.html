@@ -57,6 +57,16 @@
       <div><label>Signed By (이름)</label><input id="poSignedBy"></div>
       <div><label>I confirm this Purchase Order</label><input type="checkbox" id="poAgree" style="width:auto"></div>
     </div>
+    <div class="row">
+      <label>Draw your signature (mouse / touch)</label>
+      <div style="background:#fff;border-radius:6px;border:1px solid var(--border);overflow:hidden">
+        <canvas id="poSigCanvas" width="600" height="160" style="display:block;width:100%;height:160px;cursor:crosshair;touch-action:none"></canvas>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button class="btn btn-ghost" type="button" id="sigClearBtn" style="padding:5px 12px;font-size:11px">Clear</button>
+        <span class="small">Required — your drawn signature is stored with the PO.</span>
+      </div>
+    </div>
     <div style="margin-top:1rem">
       <button class="btn btn-primary" id="submitBtn">Submit PO →</button>
       <a class="btn btn-ghost" id="backLink" href="trade-buyer.html">← Back to portal</a>
@@ -85,10 +95,42 @@ TD.apiBuyer(token).then(r => {
   $('info').innerHTML = '<span style="color:#ff8a8a">Load failed: ' + TD.esc(e.message) + '</span>';
 });
 
+/* Signature pad — vanilla canvas, no library */
+function initSigPad(canvas) {
+  const ctx = canvas.getContext('2d');
+  ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#0a0a0a';
+  let drawing = false, hasInk = false;
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+    return { x: x * (canvas.width / r.width), y: y * (canvas.height / r.height) };
+  }
+  function down(e) { drawing = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }
+  function move(e) { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasInk = true; e.preventDefault(); }
+  function up() { drawing = false; }
+  canvas.addEventListener('mousedown', down); canvas.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+  canvas.addEventListener('touchstart', down, { passive: false }); canvas.addEventListener('touchmove', move, { passive: false }); canvas.addEventListener('touchend', up);
+  return {
+    isEmpty: () => !hasInk,
+    clear:   () => { ctx.clearRect(0,0,canvas.width,canvas.height); hasInk = false; },
+    dataUrl: () => canvas.toDataURL('image/png')
+  };
+}
+let sigPad = null;
+function ensureSigPad() {
+  if (sigPad) return sigPad;
+  sigPad = initSigPad(document.getElementById('poSigCanvas'));
+  document.getElementById('sigClearBtn').addEventListener('click', () => sigPad.clear());
+  return sigPad;
+}
+
 async function submit() {
   const t = $('toast'); t.className='toast'; t.textContent='';
   if (!$('poAgree').checked) { t.className='toast err'; t.textContent='Please tick the confirmation checkbox.'; return; }
   if (!$('poSignedBy').value.trim()) { t.className='toast err'; t.textContent='Signature name is required.'; return; }
+  const pad = ensureSigPad();
+  if (pad.isEmpty()) { t.className='toast err'; t.textContent='Please draw your signature in the box.'; return; }
   const items = li.getRows();
   if (!items.some(r => r.desc && r.qty > 0)) { t.className='toast err'; t.textContent='Add at least one line item.'; return; }
   const data = {
@@ -100,7 +142,8 @@ async function submit() {
     subtotal:      items.reduce((s,r)=>s+(r.amt||0),0),
     notes:         $('poNotes').value.trim(),
     buyer_signed_at: Date.now(),
-    buyer_signature: $('poSignedBy').value.trim()
+    buyer_signature_name: $('poSignedBy').value.trim(),
+    buyer_signature: pad.dataUrl()    // base64 PNG of the drawn signature
   };
   data.total_amount = data.subtotal;
   try {
@@ -113,6 +156,7 @@ async function submit() {
 
 document.addEventListener('DOMContentLoaded', () => {
   $('submitBtn').addEventListener('click', submit);
+  ensureSigPad();
 });
 </script>
 <script defer src="scripts/header.js"></script>

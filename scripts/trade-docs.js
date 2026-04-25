@@ -235,7 +235,12 @@ function buildPrintHtml(type, tx, data, docId) {
       ${data.bank_iban ? '<br><b>IBAN:</b> ' + esc(data.bank_iban) : ''}
       ${data.bank_beneficiary ? '<br><b>Beneficiary:</b> ' + esc(data.bank_beneficiary) : ''}
     </p>`;
-    if (type === 'po')         return data.buyer_ref ? `<p><b>Buyer Ref:</b> ${esc(data.buyer_ref)}</p>` : '';
+    if (type === 'po') {
+      const sig = data.buyer_signature && String(data.buyer_signature).startsWith('data:image')
+        ? `<div style="margin-top:8px"><b>Buyer signature:</b> ${data.buyer_signature_name ? esc(data.buyer_signature_name) : ''}<br><img src="${esc(data.buyer_signature)}" alt="signature" style="max-height:80px;background:#fff;padding:4px;border:1px solid #ddd"></div>`
+        : '';
+      return (data.buyer_ref ? `<p><b>Buyer Ref:</b> ${esc(data.buyer_ref)}</p>` : '') + sig;
+    }
     return '';
   })();
   const subtotal     = data.subtotal != null ? data.subtotal : (data.items || []).reduce((s,r) => s + (r.amt||0), 0);

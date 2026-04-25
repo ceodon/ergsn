@@ -82,10 +82,13 @@
         </div>
         <div>
           <label>&nbsp;</label>
-          <div style="display:flex;gap:8px"><button class="btn btn-primary" id="advanceBtn">→ Advance status</button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" id="advanceBtn">→ Advance status</button>
+            <button class="btn btn-ghost" id="revertBtn" type="button" title="Revert one step (e.g. unmark Paid)">↩ Revert one step</button>
+          </div>
         </div>
       </div>
-      <p class="small">Buyer에게 자동 메일 발송, owner Telegram 알림 동시 발생.</p>
+      <p class="small">Advance: buyer에게 자동 메일 + Telegram 알림. Revert: 직전 단계로 1-step 되돌림 (메일 발송 안 함, owner Telegram만).</p>
       <div class="toast" id="statusToast"></div>
     </div>
 
@@ -190,10 +193,14 @@ async function load() {
 
 function renderTxCard() {
   const buyerUrl = 'https://ergsn.net/trade-buyer.html?t=' + (txData.buyer_token || '');
+  const rfqLink = txData.rfq_tracker_id
+    ? '<a href="tracker.html?id=' + encodeURIComponent(txData.rfq_tracker_id) + '" target="_blank" style="color:var(--gold)">' + TD.esc(txData.rfq_tracker_id) + ' ↗</a>'
+    : '<span class="small">-</span>';
   $('metaLine').innerHTML =
     '<span class="status ' + TD.esc(txData.status) + '">' + TD.esc(TD.STATUS_LABELS[txData.status] || txData.status) + '</span> · ' +
     'Created ' + TD.fmtDate(txData.created_at) + ' · ' +
-    'Updated ' + TD.fmtDate(txData.updated_at);
+    'Updated ' + TD.fmtDate(txData.updated_at) +
+    (txData.buyer_token_rotated_at ? ' · <span style="color:var(--warn)">token rotated ' + TD.fmtDate(txData.buyer_token_rotated_at) + '</span>' : '');
   $('txCard').innerHTML = `
     <h2>Buyer</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:var(--white)">
@@ -201,10 +208,22 @@ function renderTxCard() {
       <div><label>Email</label><div>${TD.esc(txData.buyer_email)}</div></div>
       <div><label>Country</label><div>${TD.esc(txData.buyer_country || '-')}</div></div>
       <div><label>ERGSN Partner / Maker</label><div>${TD.esc(txData.ergsn_partner || '-')}</div></div>
-      <div style="grid-column:1/-1"><label>Buyer Portal URL</label><div style="font-size:11.5px"><a href="${TD.esc(buyerUrl)}" target="_blank" style="color:var(--gold)">${TD.esc(buyerUrl)}</a></div></div>
+      <div><label>RFQ Tracker</label><div>${rfqLink}</div></div>
+      <div><label>Locale</label><div>${TD.esc(txData.locale || 'en')}</div></div>
+      <div style="grid-column:1/-1"><label>Buyer Portal URL</label><div style="font-size:11.5px;display:flex;gap:6px;align-items:center"><a href="${TD.esc(buyerUrl)}" target="_blank" style="color:var(--gold);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${TD.esc(buyerUrl)}</a><button class="btn btn-ghost" style="padding:4px 8px;font-size:11px" onclick="rotateToken()">↻ Rotate</button></div></div>
+      ${txData.rfq_summary ? '<div style="grid-column:1/-1"><label>Original RFQ Summary</label><pre style="font-size:11.5px;color:var(--tx-mid);white-space:pre-wrap;background:#0d0d0d;padding:8px;border-radius:6px;margin:0;max-height:120px;overflow:auto">' + TD.esc(txData.rfq_summary) + '</pre></div>' : ''}
       ${txData.notes ? '<div style="grid-column:1/-1"><label>Notes</label><div style="font-size:12.5px;color:var(--tx-mid)">' + TD.esc(txData.notes) + '</div></div>' : ''}
     </div>`;
 }
+
+window.rotateToken = async function() {
+  if (!confirm('Rotate the buyer URL? The old URL will stop working immediately. The buyer will need to be sent the new URL.')) return;
+  try {
+    const r = await TD.apiAdmin('POST', '/tx/' + encodeURIComponent(TX_ID) + '/rotate-token');
+    alert('✓ New URL: ' + r.buyer_url);
+    load();
+  } catch (e) { alert('Rotate failed: ' + e.message); }
+};
 
 const STATUS_ORDER = ['open','quoted','po-received','proforma-sent','paid','commercial-issued','packing-issued','shipped','closed'];
 
@@ -241,6 +260,19 @@ async function advance() {
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
 
+const STATUS_PREV = { quoted:'open','po-received':'quoted','proforma-sent':'po-received',paid:'proforma-sent','commercial-issued':'paid','packing-issued':'commercial-issued',shipped:'packing-issued',closed:'shipped' };
+
+async function revertStatus() {
+  const prev = STATUS_PREV[txData.status];
+  if (!prev) { alert('Cannot revert from ' + txData.status); return; }
+  const reason = prompt('Reverting ' + txData.status + ' → ' + prev + '. Reason (optional):', '');
+  if (reason === null) return;
+  try {
+    await TD.apiAdmin('PATCH', '/tx/' + encodeURIComponent(TX_ID), { status: prev, revert: true, revert_reason: reason });
+    setTimeout(load, 400);
+  } catch (e) { alert('Revert failed: ' + e.message); }
+}
+
 function renderDocs() {
   let html = '';
   ['quotation','po','proforma','commercial','packing'].forEach(type => {
@@ -253,9 +285,10 @@ function renderDocs() {
     html += '</div>';
     if (!list.length) html += '<div class="empty">아직 발급된 ' + meta.title_en + ' 없음.</div>';
     else {
-      html += '<table class="tx"><thead><tr><th>ID</th><th>Date</th><th>Total</th><th>Currency</th><th>Notes</th><th></th></tr></thead><tbody>';
+      html += '<table class="tx"><thead><tr><th>ID</th><th>Rev</th><th>Date</th><th>Total</th><th>Cur</th><th>Notes</th><th></th></tr></thead><tbody>';
       list.forEach(d => {
         const data = d.data || {};
+        const isSuperseded = !!d.superseded_at;
         const buyerUrl = 'trade-doc-view.html?type=' + type + '&id=' + encodeURIComponent(d.id) + '&t=' + (txData.buyer_token || '');
         const editUrl  = 'trade-doc.html?type=' + type + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(d.id);
         /* Quotation expiry visual cue */
@@ -267,19 +300,28 @@ function renderDocs() {
             : ' <span class="small">valid until ' + new Date(data.valid_until).toISOString().slice(0,10) + '</span>';
         }
         let extraBtn = '';
-        if (type === 'proforma' && d.payment_status !== 'paid') {
-          extraBtn = '<a href="javascript:markPaid(\'' + d.id + '\')" style="color:var(--gold)">Mark Paid</a>';
+        if (type === 'proforma' && d.payment_status !== 'paid' && !isSuperseded) {
+          extraBtn = ' · <a href="javascript:markPaid(\'' + d.id + '\')" style="color:var(--gold)">Mark Paid</a>';
         } else if (type === 'proforma' && d.payment_status === 'paid') {
-          extraBtn = '<span class="small" style="color:var(--gold)">✓ paid</span>';
+          extraBtn = ' · <span class="small" style="color:var(--gold)">✓ paid</span>';
         }
         const note = type==='po' && d.buyer_signed_at ? '✓ buyer signed' : (data.notes ? data.notes.slice(0, 60) : '');
-        html += '<tr>';
-        html += '<td><code>' + TD.esc(d.id) + '</code>' + expiryNote + '</td>';
+        const rowStyle = isSuperseded ? ' style="opacity:.5"' : '';
+        const supersededBadge = isSuperseded ? ' <span style="background:rgba(255,255,255,.06);color:var(--tx-lt);padding:1px 6px;border-radius:8px;font-size:10px">superseded</span>' : '';
+        html += '<tr' + rowStyle + '>';
+        html += '<td><code>' + TD.esc(d.id) + '</code>' + supersededBadge + expiryNote + '</td>';
+        html += '<td>v' + (d.revision || 1) + (d.parent_doc_id ? ' <span class="small" title="from ' + TD.esc(d.parent_doc_id) + '">↩</span>' : '') + '</td>';
         html += '<td>' + TD.fmtDate(d.created_at) + '</td>';
         html += '<td class="amt">' + TD.fmt(d.total_amount || data.total_amount) + '</td>';
         html += '<td>' + TD.esc(d.currency || data.currency || '') + '</td>';
         html += '<td>' + TD.esc(note) + '</td>';
-        html += '<td><a href="' + editUrl + '">Edit</a><a href="' + buyerUrl + '" target="_blank">View</a>' + extraBtn + '</td>';
+        html += '<td>';
+        if (!isSuperseded) {
+          html += '<a href="' + editUrl + '">Edit</a> · ';
+          html += '<a href="javascript:reviseDoc(\'' + type + '\',\'' + d.id + '\')" style="color:var(--warn)">Revise</a> · ';
+        }
+        html += '<a href="' + buyerUrl + '" target="_blank">View</a>' + extraBtn;
+        html += '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
@@ -297,6 +339,17 @@ window.markPaid = async function(proformaId) {
   } catch (e) { alert('실패: ' + e.message); }
 };
 
+window.reviseDoc = async function(type, sourceId) {
+  if (!confirm('Create a new revision of ' + sourceId + '? The current version will be marked superseded; bayer portal will show only the new revision.')) return;
+  try {
+    /* Load current doc data, post-revise with same payload — admin then
+       opens the new revision and edits inline. */
+    const r1 = await TD.apiAdmin('GET', '/doc/' + type + '/' + encodeURIComponent(sourceId));
+    const r2 = await TD.apiAdmin('POST', '/doc/' + type + '/' + encodeURIComponent(sourceId) + '/revise', { data: r1.doc.data });
+    location.href = 'trade-doc.html?type=' + type + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(r2.id);
+  } catch (e) { alert('Revise 실패: ' + e.message); }
+};
+
 const KIND_LABEL = { 'bl':'B/L scan', 'coa':'COA', 'coo':'COO', 'payment-proof':'Payment proof', 'other':'Other' };
 
 function renderAttachments() {
@@ -311,12 +364,24 @@ function renderAttachments() {
     html += '<td>' + (a.size_bytes ? (a.size_bytes/1024).toFixed(0) + ' KB' : '') + '</td>';
     html += '<td>' + TD.esc(a.uploaded_by || '') + '</td>';
     html += '<td>' + TD.fmtDate(a.created_at) + '</td>';
-    html += '<td><a href="' + url + '" target="_blank">Download</a></td>';
+    html += '<td><a href="' + url + '" target="_blank">Download</a> · <a href="javascript:deleteAttachment(\'' + TD.esc(a.id) + '\')" style="color:#ff8a8a">Delete</a></td>';
     html += '</tr>';
   });
   html += '</tbody></table>';
   $('attTable').innerHTML = html;
 }
+
+window.deleteAttachment = async function(id) {
+  if (!confirm('Delete attachment ' + id + '? File will be permanently removed from R2.')) return;
+  try {
+    const r = await fetch(TD.API_URL + '/attachment/' + encodeURIComponent(id), {
+      method: 'DELETE', headers: { 'X-Admin-Key': TD.adminKey() }
+    });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    load();
+  } catch (e) { alert('실패: ' + e.message); }
+};
 
 async function uploadFile() {
   const t = $('upToast'); t.className='toast'; t.textContent='';
@@ -410,6 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('cancelTxBtn').addEventListener('click', cancelTx);
   $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.href = 'trade-docs.html'; });
   $('upBtn').addEventListener('click', uploadFile);
+  $('revertBtn').addEventListener('click', revertStatus);
 });
 </script>
 <script defer src="scripts/header.js"></script>

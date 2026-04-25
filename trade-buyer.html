@@ -102,6 +102,7 @@ function render(r) {
     html += '<div class="actions">';
     if (latestQuote) {
       html += '<button class="btn btn-primary" id="acceptQuoteBtn" data-quote="' + TD.esc(latestQuote.id) + '">✓ Accept latest quotation (' + TD.esc(latestQuote.id) + ') →</button>';
+      html += '<button class="btn btn-ghost" id="rejectQuoteBtn" data-quote="' + TD.esc(latestQuote.id) + '" style="border-color:#4a2424;color:#ff8a8a">Reject / Request revision</button>';
     }
     html += '<a class="btn btn-ghost" href="trade-doc-po.html?t=' + encodeURIComponent(token) + '">Or submit a custom Purchase Order</a>';
     html += '</div>';
@@ -146,9 +147,25 @@ function render(r) {
   /* Wire Accept Quotation button if present */
   const acceptBtn = document.getElementById('acceptQuoteBtn');
   if (acceptBtn) acceptBtn.addEventListener('click', () => acceptQuote(acceptBtn.dataset.quote));
+  const rejectBtn = document.getElementById('rejectQuoteBtn');
+  if (rejectBtn) rejectBtn.addEventListener('click', () => rejectQuote(rejectBtn.dataset.quote));
   /* Wire payment-proof upload */
   const ppBtn = document.getElementById('ppUploadBtn');
   if (ppBtn) ppBtn.addEventListener('click', () => uploadPaymentProof(tx.id));
+}
+
+async function rejectQuote(quotationId) {
+  const reason = prompt('Reject quotation ' + quotationId + ' or request a revision. Tell us what to change (price, quantity, model, terms…):');
+  if (reason === null) return;
+  try {
+    const r = await fetch(TD.API_URL + '/buyer/reject-quotation', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, quotation_id: quotationId, reason: (reason || '').trim() })
+    });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    alert('✓ Sent. ERGSN will follow up with a revised quotation or contact you to discuss.');
+  } catch (e) { alert('Reject failed: ' + e.message); }
 }
 
 async function uploadPaymentProof(txId) {
