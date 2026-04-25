@@ -16,7 +16,11 @@
   "compatibility_date": "2026-04-24",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "."
+    "directory": ".",
+    // 404.html is served on any asset miss with HTTP 404 status — proper
+    // signal for crawlers (vs SPA-style 200 fallback). Keep the file
+    // small and chrome-injected so it loads with the same brand shell.
+    "not_found_handling": "404-page"
   },
   "observability": {
     "enabled": true

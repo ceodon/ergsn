@@ -1,16 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/0.9">
+
+  <!-- Homepage — top priority, weekly content shifts as new sectors / products land -->
   <url>
     <loc>https://ergsn.net/</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ergsn.net/images/og-cover.jpg</image:loc>
+      <image:title>ERGSN CO., LTD. — Korea's Trusted Trade Gateway</image:title>
+    </image:image>
+  </url>
+
+  <!-- Sitemap (visual index) -->
+  <url>
+    <loc>https://ergsn.net/sitemap.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Buyer landings -->
+  <url>
+    <loc>https://ergsn.net/buyers-government.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ergsn.net/buyers-healthcare.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ergsn.net/buyers-hospitality.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ergsn.net/kbeauty-latam.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Partner / verification surfaces — bilingual -->
+  <url>
+    <loc>https://ergsn.net/verified-partner.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ergsn.net/verified-partner.html"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ergsn.net/partners-kr.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ergsn.net/"/>
   </url>
   <url>
     <loc>https://ergsn.net/partners-kr.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://ergsn.net/partners-kr.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ergsn.net/verified-partner.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ergsn.net/"/>
   </url>
   <url>
     <loc>https://ergsn.net/partners-tourism.html</loc>
@@ -19,105 +75,94 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ergsn.net/verified-partner.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://ergsn.net/partner-dashboard.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- K-Tourism Asset detail pages -->
+  <url>
+    <loc>https://ergsn.net/stays-sopunghun.html</loc>
+    <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://ergsn.net/buyers-government.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ergsn.net/buyers-healthcare.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ergsn.net/buyers-hospitality.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ergsn.net/kbeauty-latam.html</loc>
+    <loc>https://ergsn.net/stays-soyojae.html</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ergsn.net/stays-sopunghun.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ergsn.net/stays-soyojae.html</loc>
-    <lastmod>2026-04-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ergsn.net/stays-gyeonwujae.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ergsn.net/stays-punggyeonru.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
+
+  <!-- Tools / utility -->
   <url>
     <loc>https://ergsn.net/escrow.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ergsn.net/export-docs.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ergsn.net/trade-mission.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
+
+  <!-- Trend Monthly archive — high-value content, refreshed monthly -->
   <url>
-    <loc>https://ergsn.net/trend-2026-04.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <loc>https://ergsn.net/trend-2026-06.html</loc>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ergsn.net/images/og-cover.jpg</image:loc>
+      <image:title>Korea Trend Monthly — June 2026</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ergsn.net/trend-2026-05.html</loc>
-    <lastmod>2026-04-25</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://ergsn.net/trend-2026-04.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Legal -->
+  <url>
     <loc>https://ergsn.net/privacy.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://ergsn.net/terms.html</loc>
-    <lastmod>2026-04-22</lastmod>
+    <lastmod>2026-04-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+
 </urlset>

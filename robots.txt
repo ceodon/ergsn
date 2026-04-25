@@ -1,8 +1,42 @@
+# ERGSN — robots.txt (canonical)
+# Sitemap: https://ergsn.net/sitemap.xml
+
 User-agent: *
 Allow: /
+
+# RFQ tracker — buyers reach this through email link, no SEO value
 Disallow: /tracker.html
+
+# Internal templates — printed before issuance, no public route
 Disallow: /invoice-template.html
 Disallow: /verified-certificate.html
+
+# Trade-docs admin tools — token / admin-key gated, never public
+Disallow: /trade-docs.html
+Disallow: /trade-tx.html
+Disallow: /trade-doc.html
+Disallow: /trade-doc-po.html
+Disallow: /trade-doc-view.html
+Disallow: /trade-buyer.html
+Disallow: /send-mail.html
+
+# Partner dashboard is token-gated
+Disallow: /partner-dashboard.html
+
+# Service worker / build artefacts / docs folder
+Disallow: /sw.js
 Disallow: /docs/
+
+# Block crawl-budget waste on URL-param sector / rfq / product switches.
+# Canonical anchored variants are already in sitemap.xml.
+Disallow: /*?sector=
+Disallow: /*?rfq=
+Disallow: /*?product=
+
+# Explicit allow for static assets (some crawlers benefit from this)
+Allow: /images/
+Allow: /scripts/
+Allow: /styles/
+Allow: /favicon.svg
 
 Sitemap: https://ergsn.net/sitemap.xml

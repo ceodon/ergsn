@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>Page Not Found (404) — ERGSN CO., LTD.</title>
+<meta name="robots" content="noindex,follow">
+<meta name="description" content="The page you requested doesn't exist on ergsn.net. Use the site map or jump to the homepage to find what you need.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #34d298; --gold-bright: #00ffa1;
+    --white: #ffffff; --tx-mid: #a5a6a7; --tx-lt: #6b7685;
+    --border: #242424; --navy: #0a0a0a; --navy-2: #111418;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--navy);
+    color: var(--tx-mid);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: var(--gold); text-decoration: none; transition: color .15s; }
+  a:hover { color: var(--gold-bright); }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(3rem, 10vh, 6rem) clamp(16px, 4vw, 48px) 4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .err-tag {
+    display: inline-block;
+    margin: 0 0 1rem;
+    padding: 4px 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(52,210,152,.1);
+    border: 1px solid rgba(52,210,152,.3);
+    border-radius: 12px;
+    width: fit-content;
+  }
+  h1 {
+    color: var(--white);
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin: 0 0 .5rem;
+    line-height: 1.05;
+  }
+  .lead {
+    font-size: 16px;
+    color: var(--tx-lt);
+    margin: 0 0 2rem;
+    max-width: 520px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;
+    letter-spacing: .02em;
+  }
+  .btn-primary { background: var(--gold); color: var(--navy); }
+  .btn-primary:hover { background: var(--gold-bright); color: var(--navy); }
+  .btn-ghost { background: transparent; color: var(--tx-mid); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .destinations {
+    background: var(--navy-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+  }
+  .destinations h2 {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0 0 1rem;
+  }
+  .destinations ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .65rem 1.2rem;
+  }
+  @media (max-width: 560px) {
+    .destinations ul { grid-template-columns: 1fr; }
+  }
+  .destinations li { font-size: 13px; }
+  .destinations a { color: var(--white); font-weight: 500; }
+  .destinations a:hover { color: var(--gold); }
+  .destinations small { display: block; font-size: 11px; color: var(--tx-lt); margin-top: 1px; }
+
+  .meta-line {
+    font-size: 11px;
+    color: var(--tx-lt);
+    margin-top: 2.5rem;
+  }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js -->
+<div class="wrap">
+  <span class="err-tag">404 — Not Found</span>
+  <h1>This page didn't make<br>it to port.</h1>
+  <p class="lead">The URL you followed doesn't exist on ergsn.net. The page may have moved, been renamed, or never existed. Try one of the destinations below or jump straight back to the homepage.</p>
+
+  <div class="actions">
+    <a class="btn btn-primary" href="/">← Back to home</a>
+    <a class="btn btn-ghost" href="/sitemap.html">Browse site map</a>
+    <a class="btn btn-ghost" href="/#rfq">Request a quote</a>
+  </div>
+
+  <div class="destinations">
+    <h2>Popular destinations</h2>
+    <ul>
+      <li><a href="/?sector=k-beauty#products">K-Beauty</a><small>16 SKUs · OEM/ODM</small></li>
+      <li><a href="/?sector=k-security#products">K-Security</a><small>DL Series shredders</small></li>
+      <li><a href="/?sector=k-bio#products">K-Bio</a><small>HFF · RAY-1</small></li>
+      <li><a href="/?sector=k-tourism-assets#products">K-Tourism Assets</a><small>Yangpyeong hanok</small></li>
+      <li><a href="/buyers-healthcare.html">Healthcare Procurement</a><small>HIPAA · KFDA</small></li>
+      <li><a href="/buyers-government.html">Government Procurement</a><small>GSA Schedule</small></li>
+      <li><a href="/verified-partner.html">Verified Partner Program</a><small>Partner verification</small></li>
+      <li><a href="/escrow.html">Escrow Service</a><small>1% protected T/T</small></li>
+    </ul>
+  </div>
+
+  <p class="meta-line">If you arrived here from a broken link, please reply to <a href="mailto:ceodon@gmail.com">ceodon@gmail.com</a> with the URL — we'll fix it.</p>
+</div>
+
+<script defer src="scripts/header.js"></script>
+</body>
+</html>
