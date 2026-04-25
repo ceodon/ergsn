@@ -101,7 +101,7 @@ function renderLineItems(container, items, opts) {
       <th>#</th><th>Description</th>
       ${showHs ? '<th>HS Code</th>' : ''}
       <th>Qty</th><th>Unit</th><th>Unit Price</th><th>Amount</th>
-      ${showPack ? '<th>Cartons</th><th>Net kg</th><th>Gross kg</th>' : ''}
+      ${showPack ? '<th>Cartons</th><th>Net kg</th><th>Gross kg</th><th>Dims (LxWxH cm)</th><th>Marks &amp; Nos.</th>' : ''}
       <th></th></tr></thead><tbody></tbody>`;
   container.appendChild(tbl);
   const tbody = tbl.querySelector('tbody');
@@ -130,6 +130,8 @@ function renderLineItems(container, items, opts) {
         <td><input class="ctns" type="number" min="0" value="${esc(it.ctns || '')}"></td>
         <td><input class="nw" type="number" min="0" step="any" value="${esc(it.nw || '')}"></td>
         <td><input class="gw" type="number" min="0" step="any" value="${esc(it.gw || '')}"></td>
+        <td><input class="dims" placeholder="60x40x30" value="${esc(it.dims || '')}"></td>
+        <td><input class="marks" placeholder="ERGSN/SEL/1-N" value="${esc(it.marks || '')}"></td>
       ` : ''}
       <td><button type="button" class="rm">×</button></td>`;
     tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalc));
@@ -148,9 +150,11 @@ function renderLineItems(container, items, opts) {
       };
       if (showHs)   r.hs = tr.querySelector('.hs').value;
       if (showPack) {
-        r.ctns = +tr.querySelector('.ctns').value || 0;
-        r.nw   = +tr.querySelector('.nw').value   || 0;
-        r.gw   = +tr.querySelector('.gw').value   || 0;
+        r.ctns  = +tr.querySelector('.ctns').value || 0;
+        r.nw    = +tr.querySelector('.nw').value   || 0;
+        r.gw    = +tr.querySelector('.gw').value   || 0;
+        r.dims  = tr.querySelector('.dims').value;
+        r.marks = tr.querySelector('.marks').value;
       }
       r.amt = r.qty * r.up;
       rows.push(r);
@@ -208,7 +212,7 @@ function buildPrintHtml(type, tx, data, docId) {
       <td style="text-align:right">${fmt(r.qty, 0)} ${esc(r.unit || '')}</td>
       <td style="text-align:right">${fmt(r.up)}</td>
       <td style="text-align:right">${fmt(r.amt)}</td>
-      ${type==='packing' ? `<td style="text-align:right">${fmt(r.ctns,0)}</td><td style="text-align:right">${fmt(r.nw)}</td><td style="text-align:right">${fmt(r.gw)}</td>` : ''}
+      ${type==='packing' ? `<td style="text-align:right">${fmt(r.ctns,0)}</td><td style="text-align:right">${fmt(r.nw)}</td><td style="text-align:right">${fmt(r.gw)}</td><td>${esc(r.dims || '')}</td><td>${esc(r.marks || '')}</td>` : ''}
     </tr>`).join('');
   const extras = (() => {
     if (type === 'commercial') return `<p>
@@ -273,7 +277,7 @@ function buildPrintHtml(type, tx, data, docId) {
             <th style="padding:6px;text-align:right">Qty</th>
             <th style="padding:6px;text-align:right">Unit Price</th>
             <th style="padding:6px;text-align:right">Amount</th>
-            ${type==='packing' ? '<th>Ctns</th><th>NW</th><th>GW</th>' : ''}
+            ${type==='packing' ? '<th>Ctns</th><th>NW</th><th>GW</th><th>Dims</th><th>Marks</th>' : ''}
           </tr>
         </thead>
         <tbody>${items}</tbody>

@@ -9,8 +9,14 @@
 // Usage:
 //   npx wrangler deploy --config wrangler.trade-docs.jsonc
 //   npx wrangler d1 execute ergsn-trade-docs --remote --config wrangler.trade-docs.jsonc --file migrations/trade-docs/0001_init.sql
-//   npx wrangler secret put ADMIN_KEY    --config wrangler.trade-docs.jsonc
-//   npx wrangler secret put ALLOW_ORIGIN --config wrangler.trade-docs.jsonc
+//   npx wrangler d1 execute ergsn-trade-docs --remote --config wrangler.trade-docs.jsonc --file migrations/trade-docs/0002_audit_and_extras.sql
+//   npx wrangler d1 execute ergsn-trade-docs --remote --config wrangler.trade-docs.jsonc --file migrations/trade-docs/0003_attachments.sql
+//   npx wrangler r2 bucket create ergsn-trade-files
+//   npx wrangler secret put ADMIN_KEY      --config wrangler.trade-docs.jsonc
+//   npx wrangler secret put ALLOW_ORIGIN   --config wrangler.trade-docs.jsonc
+//   npx wrangler secret put TG_BOT         --config wrangler.trade-docs.jsonc   (same value as ergsn-tg)
+//   npx wrangler secret put TG_CHAT        --config wrangler.trade-docs.jsonc   (same value as ergsn-tg)
+//   npx wrangler secret put ANTHROPIC_API_KEY --config wrangler.trade-docs.jsonc  (optional, AI quotation drafter)
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ergsn-trade-docs",
@@ -22,6 +28,12 @@
       "binding":       "DB",
       "database_name": "ergsn-trade-docs",
       "database_id":   "9a3e3579-2458-4710-9ebe-90d49e03f85c"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding":     "FILES",
+      "bucket_name": "ergsn-trade-files"
     }
   ]
 }

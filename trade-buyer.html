@@ -53,8 +53,16 @@ if (!/^[a-f0-9]{32}$/i.test(token)) {
 
 function row(d, type) {
   const meta = TD.DOC_META[type];
+  let badge = '';
+  if (type === 'quotation' && d.valid_until) {
+    if (d.valid_until < Date.now()) {
+      badge = ' <span style="background:rgba(255,107,107,.14);color:#ff8a8a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:700">EXPIRED</span>';
+    } else {
+      badge = ' <span style="font-size:10px;color:var(--tx-lt)">valid until ' + new Date(d.valid_until).toISOString().slice(0,10) + '</span>';
+    }
+  }
   return `<tr>
-    <td><code>${TD.esc(d.id)}</code></td>
+    <td><code>${TD.esc(d.id)}</code>${badge}</td>
     <td>${TD.esc(meta.title_en)}</td>
     <td>${TD.fmtDate(d.created_at)}</td>
     <td>${d.total_amount ? (TD.fmt(d.total_amount) + ' ' + TD.esc(d.currency || '')) : ''}</td>
@@ -99,6 +107,27 @@ function render(r) {
     html += '</div>';
   }
   html += '</div>';
+  /* Attachments + payment-proof upload */
+  const atts = r.attachments || [];
+  html += '<div class="panel"><h2>Files</h2>';
+  if (atts.length) {
+    html += '<table><thead><tr><th>File</th><th>Kind</th><th>Uploaded</th><th></th></tr></thead><tbody>';
+    atts.forEach(a => {
+      const url = TD.API_URL + '/file/' + encodeURIComponent(a.id) + '?t=' + encodeURIComponent(token);
+      const kind = ({ 'bl':'Bill of Lading', 'coa':'COA', 'coo':'Certificate of Origin', 'payment-proof':'Payment proof', 'other':'Other' })[a.kind] || a.kind;
+      html += '<tr><td>' + TD.esc(a.filename) + '</td><td>' + TD.esc(kind) + '</td><td>' + TD.fmtDate(a.created_at) + '</td><td><a href="' + url + '" target="_blank">Download</a></td></tr>';
+    });
+    html += '</tbody></table>';
+  } else {
+    html += '<div class="empty">No files yet.</div>';
+  }
+  html += `<div style="margin-top:1rem;padding:.9rem;border:1px dashed var(--border);border-radius:8px">
+    <p class="small" style="margin:0 0 .5rem;color:var(--tx-mid)">Upload payment proof (wire transfer receipt, bank slip):</p>
+    <input id="ppFile" type="file" accept="application/pdf,image/png,image/jpeg,image/webp" style="font-size:12px;color:var(--tx-mid);background:#0d0d0d;border:1px solid var(--border);padding:6px;border-radius:6px;width:100%">
+    <button class="btn btn-primary" id="ppUploadBtn" style="margin-top:.6rem">Upload Payment Proof</button>
+    <span id="ppMsg" class="small" style="margin-left:.6rem"></span>
+  </div></div>`;
+
   /* ERGSN contact panel — every buyer landing should know who to contact */
   html += `<div class="panel">
     <h2>Need Help?</h2>
@@ -117,6 +146,34 @@ function render(r) {
   /* Wire Accept Quotation button if present */
   const acceptBtn = document.getElementById('acceptQuoteBtn');
   if (acceptBtn) acceptBtn.addEventListener('click', () => acceptQuote(acceptBtn.dataset.quote));
+  /* Wire payment-proof upload */
+  const ppBtn = document.getElementById('ppUploadBtn');
+  if (ppBtn) ppBtn.addEventListener('click', () => uploadPaymentProof(tx.id));
+}
+
+async function uploadPaymentProof(txId) {
+  const f = document.getElementById('ppFile').files[0];
+  const msg = document.getElementById('ppMsg');
+  if (!f) { msg.textContent = 'Pick a file first.'; return; }
+  if (f.size > 12 * 1024 * 1024) { msg.textContent = 'File too large (max 12 MB).'; return; }
+  msg.textContent = 'Uploading…';
+  const fd = new FormData();
+  fd.append('file', f);
+  fd.append('transaction_id', txId);
+  fd.append('kind', 'payment-proof');
+  try {
+    const r = await fetch(TD.API_URL + '/upload', {
+      method: 'POST',
+      headers: { 'X-Buyer-Token': token },
+      body: fd
+    });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    msg.textContent = '✓ Uploaded. ERGSN trade desk has been notified.';
+    setTimeout(() => location.reload(), 1500);
+  } catch (e) {
+    msg.textContent = 'Upload failed: ' + e.message;
+  }
 }
 
 async function acceptQuote(quotationId) {

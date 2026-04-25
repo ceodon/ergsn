@@ -95,6 +95,46 @@
       <div id="docTables"></div>
     </div>
 
+    <!-- Attachments (R2) -->
+    <div class="panel">
+      <h2>Attachments</h2>
+      <div id="attTable"><span class="small">로딩 중…</span></div>
+      <div class="row two" style="margin-top:.6rem">
+        <div>
+          <label>Kind</label>
+          <select id="upKind">
+            <option value="bl">Bill of Lading scan</option>
+            <option value="coa">Certificate of Analysis (COA)</option>
+            <option value="coo">Certificate of Origin</option>
+            <option value="payment-proof">Payment proof</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label>File (≤12 MB · pdf · png · jpg · webp · zip · xlsx · docx · csv)</label>
+          <input id="upFile" type="file">
+        </div>
+      </div>
+      <div class="row two">
+        <div>
+          <label>Linked doc id (optional)</label>
+          <input id="upDocId" placeholder="CI-2026-0001">
+        </div>
+        <div>
+          <label>Notes (optional)</label>
+          <input id="upNotes">
+        </div>
+      </div>
+      <div><button class="btn btn-primary" id="upBtn">Upload</button></div>
+      <div class="toast" id="upToast"></div>
+    </div>
+
+    <!-- Email send history -->
+    <div class="panel">
+      <h2>Email History</h2>
+      <div id="emailList" class="audit"><span class="small">로딩 중…</span></div>
+    </div>
+
     <!-- Audit log -->
     <div class="panel">
       <h2>Audit Log</h2>
@@ -128,17 +168,21 @@ if (!TX_ID) document.body.innerHTML = '<div class="wrap"><h1>Missing ?id</h1></d
 
 function showApp() { $('gate').style.display = 'none'; $('app').style.display = 'block'; load(); }
 
+let attachments = [];
 async function load() {
   $('pageTitle').textContent = 'Transaction ' + TX_ID;
   try {
     const r1 = await TD.apiAdmin('GET', '/tx/' + encodeURIComponent(TX_ID));
     txData = r1.transaction;
+    attachments = r1.attachments || [];
     const r2 = await TD.apiAdmin('GET', '/doc/by-tx/' + encodeURIComponent(TX_ID));
     docs = r2.docs || {};
     renderTxCard();
     renderProgress();
     renderDocs();
+    renderAttachments();
     loadAudit();
+    loadEmailHistory();
   } catch (e) {
     $('app').innerHTML = '<div class="panel" style="color:#ff8a8a">Load failed: ' + TD.esc(e.message) + '</div>';
   }
@@ -214,14 +258,28 @@ function renderDocs() {
         const data = d.data || {};
         const buyerUrl = 'trade-doc-view.html?type=' + type + '&id=' + encodeURIComponent(d.id) + '&t=' + (txData.buyer_token || '');
         const editUrl  = 'trade-doc.html?type=' + type + '&tx=' + encodeURIComponent(TX_ID) + '&id=' + encodeURIComponent(d.id);
+        /* Quotation expiry visual cue */
+        let expiryNote = '';
+        if (type === 'quotation' && data.valid_until) {
+          const expired = data.valid_until < Date.now();
+          expiryNote = expired
+            ? ' <span style="background:rgba(255,107,107,.14);color:#ff8a8a;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:700">EXPIRED</span>'
+            : ' <span class="small">valid until ' + new Date(data.valid_until).toISOString().slice(0,10) + '</span>';
+        }
+        let extraBtn = '';
+        if (type === 'proforma' && d.payment_status !== 'paid') {
+          extraBtn = '<a href="javascript:markPaid(\'' + d.id + '\')" style="color:var(--gold)">Mark Paid</a>';
+        } else if (type === 'proforma' && d.payment_status === 'paid') {
+          extraBtn = '<span class="small" style="color:var(--gold)">✓ paid</span>';
+        }
         const note = type==='po' && d.buyer_signed_at ? '✓ buyer signed' : (data.notes ? data.notes.slice(0, 60) : '');
         html += '<tr>';
-        html += '<td><code>' + TD.esc(d.id) + '</code></td>';
+        html += '<td><code>' + TD.esc(d.id) + '</code>' + expiryNote + '</td>';
         html += '<td>' + TD.fmtDate(d.created_at) + '</td>';
         html += '<td class="amt">' + TD.fmt(d.total_amount || data.total_amount) + '</td>';
         html += '<td>' + TD.esc(d.currency || data.currency || '') + '</td>';
         html += '<td>' + TD.esc(note) + '</td>';
-        html += '<td><a href="' + editUrl + '">Edit</a><a href="' + buyerUrl + '" target="_blank">View</a></td>';
+        html += '<td><a href="' + editUrl + '">Edit</a><a href="' + buyerUrl + '" target="_blank">View</a>' + extraBtn + '</td>';
         html += '</tr>';
       });
       html += '</tbody></table>';
@@ -229,6 +287,72 @@ function renderDocs() {
     html += '</div>';
   });
   $('docTables').innerHTML = html;
+}
+
+window.markPaid = async function(proformaId) {
+  if (!confirm('Mark proforma ' + proformaId + ' as PAID?')) return;
+  try {
+    await TD.apiAdmin('PATCH', '/doc/proforma/' + encodeURIComponent(proformaId), { payment_status: 'paid', paid_at: Date.now() });
+    load();
+  } catch (e) { alert('실패: ' + e.message); }
+};
+
+const KIND_LABEL = { 'bl':'B/L scan', 'coa':'COA', 'coo':'COO', 'payment-proof':'Payment proof', 'other':'Other' };
+
+function renderAttachments() {
+  if (!attachments.length) { $('attTable').innerHTML = '<div class="empty">첨부 없음.</div>'; return; }
+  let html = '<table class="tx"><thead><tr><th>ID</th><th>Kind</th><th>File</th><th>Size</th><th>Uploaded by</th><th>Date</th><th></th></tr></thead><tbody>';
+  attachments.forEach(a => {
+    const url = TD.API_URL + '/file/' + encodeURIComponent(a.id) + '?t=' + (txData.buyer_token || '');
+    html += '<tr>';
+    html += '<td><code>' + TD.esc(a.id) + '</code></td>';
+    html += '<td>' + TD.esc(KIND_LABEL[a.kind] || a.kind) + '</td>';
+    html += '<td>' + TD.esc(a.filename) + (a.notes ? ' <span class="small">— ' + TD.esc(a.notes) + '</span>' : '') + '</td>';
+    html += '<td>' + (a.size_bytes ? (a.size_bytes/1024).toFixed(0) + ' KB' : '') + '</td>';
+    html += '<td>' + TD.esc(a.uploaded_by || '') + '</td>';
+    html += '<td>' + TD.fmtDate(a.created_at) + '</td>';
+    html += '<td><a href="' + url + '" target="_blank">Download</a></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  $('attTable').innerHTML = html;
+}
+
+async function uploadFile() {
+  const t = $('upToast'); t.className='toast'; t.textContent='';
+  const f = $('upFile').files && $('upFile').files[0];
+  if (!f) { t.className='toast err'; t.textContent='파일을 선택하세요.'; return; }
+  const fd = new FormData();
+  fd.append('file', f);
+  fd.append('transaction_id', TX_ID);
+  fd.append('kind', $('upKind').value);
+  if ($('upDocId').value.trim()) fd.append('doc_id', $('upDocId').value.trim());
+  if ($('upNotes').value.trim()) fd.append('notes', $('upNotes').value.trim());
+  try {
+    const r = await fetch(TD.API_URL + '/upload', { method:'POST', headers:{ 'X-Admin-Key': TD.adminKey() }, body: fd });
+    const j = await r.json();
+    if (!r.ok || j.ok === false) throw new Error(j.error || 'HTTP ' + r.status);
+    t.className='toast ok'; t.textContent = '✓ ' + j.id + ' uploaded (' + (j.size/1024).toFixed(0) + ' KB)';
+    $('upFile').value=''; $('upDocId').value=''; $('upNotes').value='';
+    load();
+  } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
+}
+
+async function loadEmailHistory() {
+  try {
+    const r = await TD.apiAdmin('GET', '/email-log/by-tx/' + encodeURIComponent(TX_ID));
+    const items = r.items || [];
+    if (!items.length) { $('emailList').innerHTML = '<span class="small">발송 기록 없음.</span>'; return; }
+    $('emailList').innerHTML = '<ul style="margin:0;padding:0">' + items.map(e =>
+      '<li>' + (e.status==='sent' ? '✓' : '✗') + ' <code>' + TD.esc(e.doc_type || '-') + '</code> ' +
+      (e.doc_id ? '<code>' + TD.esc(e.doc_id) + '</code> ' : '') +
+      '→ ' + TD.esc(e.to_email) + ' · ' + TD.fmtDate(e.created_at) + ' UTC' +
+      (e.detail ? ' <span class="small">— ' + TD.esc(e.detail) + '</span>' : '') +
+      '</li>'
+    ).join('') + '</ul>';
+  } catch (e) {
+    $('emailList').innerHTML = '<span class="small">로드 실패: ' + TD.esc(e.message) + '</span>';
+  }
 }
 
 async function loadAudit() {
@@ -285,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('copyTokenBtn').addEventListener('click', copyToken);
   $('cancelTxBtn').addEventListener('click', cancelTx);
   $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.href = 'trade-docs.html'; });
+  $('upBtn').addEventListener('click', uploadFile);
 });
 </script>
 <script defer src="scripts/header.js"></script>
