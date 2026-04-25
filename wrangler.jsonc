@@ -17,6 +17,13 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".",
+    // Serve .html paths verbatim — disables Workers' default behavior of
+    // stripping `.html` and 307-redirecting `/foo.html` → `/foo`. Naver
+    // Search Advisor verifier doesn't follow redirects on the verification
+    // file, so without this the verification 307 was treated as failure.
+    // Side-benefit: every internal link in the site uses `.html` so this
+    // also removes a needless redirect hop on every public page.
+    "html_handling": "none",
     // 404.html is served on any asset miss with HTTP 404 status — proper
     // signal for crawlers (vs SPA-style 200 fallback). Keep the file
     // small and chrome-injected so it loads with the same brand shell.
