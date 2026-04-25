@@ -42,7 +42,10 @@
     '#ergsnFooter .ef-copy{font-size:11px;color:#8a8b8d;margin:0;line-height:1.9}',
     '#ergsnFooter .ef-copy a{color:#8a8b8d;text-decoration:none}',
     '#ergsnFooter .ef-copy a:hover{color:#cfcfcf}',
-    '#ergsnFooter .ef-copy .ef-mid{margin:0 8px;color:#3a3d40}',
+    /* Keep copyright phrase atomic; allow line breaks only between pairs */
+    '#ergsnFooter .ef-copy .ef-copy-main{white-space:nowrap}',
+    '#ergsnFooter .ef-copy .ef-link{white-space:nowrap}',
+    '#ergsnFooter .ef-copy .ef-mid{margin:0 6px 0 2px;color:#3a3d40}',
     '#ergsnFooter .ef-kr-chip{display:inline-block;padding:1px 6px;margin-right:6px;border:1px solid #34d298;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#34d298;vertical-align:1px}',
     '@media print{#ergsnFooter{display:none !important}}'
   ].join('');
@@ -54,7 +57,7 @@
     try { return (document.documentElement.getAttribute('lang') || '').toLowerCase().indexOf('ko') === 0; }
     catch (_) { return false; }
   })();
-  var KAKAO_LINK = '<span class="ef-mid">·</span><a href="https://pf.kakao.com/_AxowjX" target="_blank" rel="noopener noreferrer">KakaoTalk</a>';
+  var KAKAO_LINK = ' <span class="ef-link"><span class="ef-mid">·</span><a href="https://pf.kakao.com/_AxowjX" target="_blank" rel="noopener noreferrer">KakaoTalk</a></span>';
 
   var MARKUP = (
     '<footer id="ergsnFooter" role="contentinfo">' +
@@ -128,13 +131,13 @@
         '</div>' +
         '<div class="ef-bottom">' +
           '<p class="ef-copy">' +
-            'Copyright &copy; 2013 ERGSN All rights reserved' +
-            '<span class="ef-mid">·</span><a href="privacy.html">Privacy</a>' +
-            '<span class="ef-mid">·</span><a href="terms.html">Terms</a>' +
-            '<span class="ef-mid">·</span><a href="index.html#compliance">Compliance</a>' +
-            '<span class="ef-mid">·</span><a href="sitemap.html">Sitemap</a>' +
-            '<span class="ef-mid">·</span><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a>' +
-            '<span class="ef-mid">·</span><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
+            '<span class="ef-copy-main">Copyright &copy; 2013 ERGSN All rights reserved</span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="privacy.html">Privacy</a></span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="terms.html">Terms</a></span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="index.html#compliance">Compliance</a></span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="sitemap.html">Sitemap</a></span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="https://t.me/ceodon" target="_blank" rel="noopener noreferrer">Telegram</a></span> ' +
+            '<span class="ef-link"><span class="ef-mid">·</span><a href="https://wa.me/821052880006" target="_blank" rel="noopener noreferrer">WhatsApp</a></span>' +
             (IS_KR ? KAKAO_LINK : '') +
           '</p>' +
         '</div>' +
