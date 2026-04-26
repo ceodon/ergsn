@@ -22,6 +22,8 @@ Disallow: /send-mail.html
 
 # Partner dashboard is token-gated
 Disallow: /partner-dashboard.html
+# Admin item analytics — admin-key gated
+Disallow: /admin-analytics.html
 
 # Service worker / build artefacts / docs folder
 Disallow: /sw.js

@@ -299,6 +299,150 @@ export default {
       return j({ ok: true, partners: res.results || [] });
     }
 
+    // GET /admin/item-metrics?range=30 — admin only — aggregates ALL RFQs
+    // by product (model name), sector, country, stage, and time series.
+    // Powers admin-analytics.html (ergsn.net/admin-analytics).
+    if (request.method === 'GET' && path.endsWith('/admin/item-metrics')) {
+      const key = request.headers.get('X-Admin-Key') || '';
+      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const range = Math.max(1, Math.min(365, parseInt(url.searchParams.get('range'), 10) || 30));
+      const since = Date.now() - (range * 86400000);
+      const prevSince = since - (range * 86400000);
+
+      // Build product → sector lookup from partners table (one model can map
+      // to one sector via the owning partner). Models without a mapped
+      // partner are bucketed under 'Other'.
+      const partnerRows = await env.RFQ.prepare('SELECT product_ids, sector FROM partners').all();
+      const productSector = {};
+      for (const p of (partnerRows.results || [])) {
+        const sec = (p.sector || 'Other').trim();
+        const ids = String(p.product_ids || '').split(',').map(s => s.trim()).filter(Boolean);
+        for (const id of ids) productSector[id.toUpperCase()] = sec;
+      }
+      // Hardcoded fallback for known model prefixes (covers products without
+      // a partner row yet — DL = K-Security, HYGEN = K-Energy, etc.).
+      function sectorFor(model) {
+        const u = String(model).toUpperCase();
+        if (productSector[u]) return productSector[u];
+        if (u.startsWith('DL-'))      return 'K-Security';
+        if (u.startsWith('HYGEN'))    return 'K-Energy';
+        if (u.startsWith('ROSETTA'))  return 'K-Bio';
+        if (u.startsWith('RAY-'))     return 'K-Bio';
+        if (u.startsWith('DDELL'))    return 'K-Beauty';
+        if (u.startsWith('K-TOUR'))   return 'K-Tourism Assets';
+        return 'Other';
+      }
+
+      // Pull current + previous window so we can compute deltas.
+      const rowsRes = await env.RFQ.prepare('SELECT id, stage, createdAt, submission FROM rfq WHERE createdAt >= ?1 ORDER BY createdAt DESC').bind(prevSince).all();
+      const rows = rowsRes.results || [];
+
+      const productAgg  = {};                      // model → { count, stages, top_country, last_at, sector }
+      const sectorAgg   = {};                      // sector → { count, products: Set }
+      const countryAgg  = {};                      // country → count
+      const stageAgg    = { received: 0, reviewed: 0, quoted: 0, in_production: 0, shipped: 0, closed: 0 };
+      const tierAgg     = {};                      // tier → count
+      const dailySeries = {};                      // YYYY-MM-DD → count
+      const recent      = [];
+      let currentCount = 0, prevCount = 0;
+
+      for (const r of rows) {
+        let s = {};
+        try { s = JSON.parse(r.submission || '{}'); } catch { continue; }
+        const isCurrent = r.createdAt >= since;
+        if (!isCurrent) { prevCount++; continue; }
+        currentCount++;
+
+        const ctry = (s._server && s._server.cf_country) || s.country || '';
+        if (ctry) countryAgg[ctry] = (countryAgg[ctry] || 0) + 1;
+        if (stageAgg[r.stage] !== undefined) stageAgg[r.stage]++;
+        const tier = s.tier || 'Unqualified';
+        tierAgg[tier] = (tierAgg[tier] || 0) + 1;
+        const d = new Date(r.createdAt).toISOString().slice(0, 10);
+        dailySeries[d] = (dailySeries[d] || 0) + 1;
+
+        const models = Array.isArray(s.models) ? s.models : [];
+        const mappedSectors = new Set();
+        for (const m of models) {
+          const mu = String(m).toUpperCase();
+          const sec = sectorFor(m);
+          mappedSectors.add(sec);
+          if (!productAgg[mu]) {
+            productAgg[mu] = { model: m, count: 0, stages: { received:0, reviewed:0, quoted:0, in_production:0, shipped:0, closed:0 }, countries: {}, last_at: 0, sector: sec };
+          }
+          const a = productAgg[mu];
+          a.count++;
+          if (a.stages[r.stage] !== undefined) a.stages[r.stage]++;
+          if (ctry) a.countries[ctry] = (a.countries[ctry] || 0) + 1;
+          if (r.createdAt > a.last_at) a.last_at = r.createdAt;
+        }
+        for (const sec of mappedSectors) {
+          if (!sectorAgg[sec]) sectorAgg[sec] = { count: 0, products: new Set() };
+          sectorAgg[sec].count++;
+          for (const m of models) sectorAgg[sec].products.add(String(m).toUpperCase());
+        }
+
+        if (recent.length < 20) {
+          recent.push({
+            id: r.id,
+            stage: r.stage,
+            createdAt: r.createdAt,
+            country: ctry || 'Unknown',
+            company: s.company || '',
+            email: s.email || '',
+            tier: s.tier || '',
+            models: models,
+            qty: s.qty || '',
+            incoterms: s.incoterms || ''
+          });
+        }
+      }
+
+      // Reshape product → array sorted by count
+      const byProduct = Object.values(productAgg).map(a => ({
+        model: a.model,
+        sector: a.sector,
+        count: a.count,
+        stages: a.stages,
+        last_at: a.last_at,
+        top_country: Object.entries(a.countries).sort((x, y) => y[1] - x[1])[0]?.[0] || ''
+      })).sort((x, y) => y.count - x.count);
+
+      const bySector = Object.entries(sectorAgg).map(([sector, v]) => ({
+        sector,
+        count: v.count,
+        products: v.products.size
+      })).sort((x, y) => y.count - x.count);
+
+      const byCountry = Object.entries(countryAgg).sort((a, b) => b[1] - a[1])
+        .slice(0, 12).map(([code, count]) => ({ code, count }));
+
+      const series = [];
+      for (let i = range - 1; i >= 0; i--) {
+        const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10);
+        series.push({ date: d, count: dailySeries[d] || 0 });
+      }
+
+      return j({
+        ok: true,
+        range_days: range,
+        generated_at: Date.now(),
+        kpis: {
+          total_rfqs: currentCount,
+          prev_total_rfqs: prevCount,
+          unique_products: byProduct.length,
+          unique_countries: byCountry.length,
+          stage_counts: stageAgg,
+          tier_counts: tierAgg
+        },
+        by_product: byProduct,
+        by_sector: bySector,
+        by_country: byCountry,
+        daily_series: series,
+        recent_rfqs: recent
+      });
+    }
+
     return new Response('Not found', { status: 404, headers });
   }
 };

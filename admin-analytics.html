@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://ergsn-trade-docs.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>Admin Analytics — Item-level RFQ Logs · ERGSN</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --gold: #c8932a; --green: #15d78a; --red: #e06a6a; --warn: #e0a83f;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
+    --bg: #0a0a0a; --bg-2: #141414; --bg-3: #1a1a1a; --border: #2a2a2a;
+    --fd: 'DM Serif Display', 'Times New Roman', serif;
+    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.6; }
+  a { color: var(--gold); text-decoration: none; } a:hover { text-decoration: underline; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 2rem clamp(16px,4vw,48px) 4rem; }
+  .pill { display: inline-block; margin: 0 0 .8rem; padding: 4px 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--green); background: rgba(21,215,138,.1); border: 1px solid rgba(21,215,138,.3); border-radius: 12px; }
+  h1 { font-family: var(--fd); font-size: clamp(28px,4vw,40px); font-weight: 800; color: var(--white); line-height: 1.15; margin: 0 0 .3rem; }
+  .sub { color: var(--tx-lt); font-size: 14px; margin-bottom: 1.4rem; }
+  .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 1.6rem; }
+  .toolbar label { font-size: 11px; color: var(--tx-lt); letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+  .toolbar select, .toolbar input { background: var(--bg-2); border: 1px solid var(--border); color: var(--white); padding: 8px 12px; border-radius: 6px; font: inherit; font-size: 13px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; border: 0; text-decoration: none; }
+  .btn-gold { background: var(--gold); color: #0a0a0a; }
+  .btn-ghost { background: transparent; color: var(--tx-mid); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .gate { max-width: 480px; margin: 4rem auto; padding: 2rem; background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; }
+  .gate h2 { font-family: var(--fd); font-size: 20px; color: var(--white); margin: 0 0 .4rem; }
+  .gate p { font-size: 13px; color: var(--tx-lt); margin: 0 0 1.4rem; }
+  .gate input { width: 100%; padding: 10px 12px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px; color: var(--white); font: inherit; outline: none; margin-bottom: 1rem; }
+  .gate input:focus { border-color: var(--gold); }
+  .gate button { width: 100%; padding: 10px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 14px; margin-bottom: 1.6rem; }
+  .kpi-card { padding: 18px 20px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; }
+  .kpi-label { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; margin-bottom: 8px; }
+  .kpi-val { font-family: var(--fd); font-size: 28px; font-weight: 800; color: var(--white); line-height: 1; letter-spacing: -.01em; }
+  .kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+  .kpi-delta.up { color: var(--green); } .kpi-delta.down { color: var(--red); } .kpi-delta.flat { color: var(--tx-lt); }
+
+  .panel-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 1.6rem; }
+  @media (max-width: 860px) { .panel-grid { grid-template-columns: 1fr; } }
+  .panel { padding: 22px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 12px; overflow: hidden; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; gap: 10px; flex-wrap: wrap; }
+  .panel-title { font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--white); }
+  .panel-hint { font-size: 11px; color: var(--tx-lt); letter-spacing: .08em; text-transform: uppercase; }
+  .chart { display: flex; align-items: flex-end; gap: 4px; height: 160px; padding: 10px 0; border-bottom: 1px solid #252525; }
+  .chart-bar { flex: 1; background: linear-gradient(180deg, var(--gold) 0%, #8a6818 100%); min-height: 4px; border-radius: 3px 3px 0 0; position: relative; }
+  .chart-bar:hover { background: var(--green); }
+  .chart-bar::after { content: attr(data-v); position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--white); background: var(--bg-3); padding: 2px 6px; border-radius: 4px; opacity: 0; pointer-events: none; transition: opacity .15s; white-space: nowrap; }
+  .chart-bar:hover::after { opacity: 1; }
+  .chart-x { display: flex; justify-content: space-between; font-size: 10px; color: var(--tx-lt); margin-top: 8px; padding: 0 2px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th, table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #252525; }
+  table th { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; }
+  table td { color: var(--tx-hi); vertical-align: top; }
+  table td.r { text-align: right; }
+  table td .small { font-size: 11px; color: var(--tx-lt); }
+  table.compact th, table.compact td { padding: 6px 6px; font-size: 12.5px; }
+
+  .stage-pill { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .stage-pill.received      { background: rgba(255,255,255,.06); color: var(--tx-mid); }
+  .stage-pill.reviewed      { background: rgba(255,255,255,.08); color: var(--tx-hi); }
+  .stage-pill.quoted        { background: rgba(200,147,42,.18); color: var(--gold); }
+  .stage-pill.in_production { background: rgba(224,168,63,.18); color: var(--warn); }
+  .stage-pill.shipped       { background: rgba(21,215,138,.16); color: var(--green); }
+  .stage-pill.closed        { background: rgba(21,215,138,.25); color: var(--green); }
+
+  .country-list { list-style: none; padding: 0; margin: 0; }
+  .country-list li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #252525; font-size: 13px; }
+  .country-list li:last-child { border-bottom: 0; }
+  .country-flag { font-size: 18px; flex-shrink: 0; }
+  .country-name { flex: 1; color: var(--tx-hi); }
+  .country-count { font-family: var(--fd); font-weight: 800; color: var(--gold); font-size: 15px; }
+
+  .sector-row { display: grid; grid-template-columns: 130px 1fr 60px 60px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed #252525; font-size: 13px; }
+  .sector-row:last-child { border-bottom: 0; }
+  .sector-bar-wrap { background: var(--bg-3); border-radius: 20px; height: 8px; overflow: hidden; }
+  .sector-bar { height: 100%; background: linear-gradient(90deg, var(--green), var(--gold)); border-radius: 20px; transition: width .5s; }
+  .sector-count { font-family: var(--fd); font-weight: 700; color: var(--white); text-align: right; font-size: 14px; }
+  .sector-products { color: var(--tx-lt); font-size: 11px; text-align: right; }
+
+  .err { background: rgba(224,107,107,.12); border: 1px solid rgba(224,107,107,.3); color: #ff8a8a; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; }
+  .empty { color: var(--tx-lt); font-style: italic; padding: 1rem; text-align: center; font-size: 13px; }
+</style>
+</head>
+<body>
+<!-- Shared ERGSN header is injected via scripts/header.js -->
+<div class="wrap">
+
+  <!-- Admin gate (sessionStorage admin key) -->
+  <div class="gate" id="gate">
+    <h2>Admin Analytics</h2>
+    <p>RFQ tracker의 모든 거래를 아이템(모델 SKU) · 섹터 · 국가 · 단계별로 집계해 보여줍니다. ADMIN_KEY가 필요합니다.</p>
+    <input type="password" id="adminKeyInput" placeholder="X-Admin-Key" autocomplete="off">
+    <button class="btn btn-gold" id="gateBtn">진입 →</button>
+    <div class="err" id="gateErr" style="display:none"></div>
+  </div>
+
+  <!-- App -->
+  <div id="app" style="display:none">
+    <p class="pill">Owner Tool · Admin Only</p>
+    <h1>아이템별 RFQ 분석</h1>
+    <p class="sub" id="metaLine">Loading…</p>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <label>기간</label>
+      <select id="rangeSel">
+        <option value="7">7일</option>
+        <option value="30" selected>30일</option>
+        <option value="90">90일</option>
+        <option value="180">180일</option>
+        <option value="365">1년</option>
+      </select>
+      <label>섹터 필터</label>
+      <select id="sectorSel"><option value="">전체</option></select>
+      <button class="btn btn-ghost" id="reloadBtn">⟳ Reload</button>
+      <button class="btn btn-ghost" id="csvBtn">↓ CSV (by_product)</button>
+      <a class="btn btn-ghost" href="trade-docs.html" style="margin-left:auto">← Trade Docs</a>
+      <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+    </div>
+
+    <!-- KPI row -->
+    <div class="kpi-grid" id="kpiRow"></div>
+
+    <!-- Daily series chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">일별 RFQ 추이</p>
+        <span class="panel-hint">hover bars · 0 channel filtered out</span>
+      </div>
+      <div class="chart" id="dailyChart"></div>
+      <div class="chart-x" id="dailyXAxis"></div>
+    </div>
+
+    <!-- Sector breakdown + Top countries -->
+    <div class="panel-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <p class="panel-title">섹터별 RFQ</p>
+          <span class="panel-hint">model 매핑: partners + prefix fallback</span>
+        </div>
+        <div id="sectorList"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <p class="panel-title">상위 국가</p>
+          <span class="panel-hint">CF country 기준</span>
+        </div>
+        <ul class="country-list" id="countryList"></ul>
+      </div>
+    </div>
+
+    <!-- Per-product table -->
+    <div class="panel" style="margin-bottom:1.6rem">
+      <div class="panel-head">
+        <p class="panel-title">아이템(모델)별 분석</p>
+        <span class="panel-hint">RFQ count desc</span>
+      </div>
+      <div style="overflow:auto">
+        <table id="productTable">
+          <thead><tr>
+            <th>모델</th><th>섹터</th><th class="r">총 RFQ</th>
+            <th>단계 breakdown</th><th>Top country</th><th>최근 RFQ</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent RFQs (admin sees PII) -->
+    <div class="panel">
+      <div class="panel-head">
+        <p class="panel-title">최근 RFQ</p>
+        <span class="panel-hint">최대 20건 · admin 전용 PII 노출</span>
+      </div>
+      <div style="overflow:auto">
+        <table class="compact" id="recentTable">
+          <thead><tr>
+            <th>RFQ ID</th><th>날짜</th><th>회사</th><th>이메일</th><th>국가</th><th>tier</th><th>모델</th><th>수량</th><th>인코텀즈</th><th>단계</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="sub" style="margin-top:2rem;font-size:11.5px">
+      ※ 데이터 출처: cloudflare-worker-rfq <code>/admin/item-metrics</code>. 매 호출 시 실시간 집계.
+      섹터 매핑은 partners 테이블 product_ids 우선, 없으면 모델명 prefix(DL- / HYGEN / Rosetta / RAY- / DDELL / K-TOUR…).
+    </p>
+  </div>
+</div>
+
+<script>
+const RFQ_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+const SS_KEY = 'ergsn_admin_key';
+
+const $ = (id) => document.getElementById(id);
+let lastData = null;
+
+function adminKey() { try { return sessionStorage.getItem(SS_KEY) || ''; } catch (_) { return ''; } }
+function setAdminKey(k) { try { sessionStorage.setItem(SS_KEY, k); } catch (_) {} }
+function clearAdminKey() { try { sessionStorage.removeItem(SS_KEY); } catch (_) {} }
+function esc(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(ms) { return ms ? new Date(ms).toISOString().slice(0,10) : ''; }
+function fmtN(n) { return Number(n || 0).toLocaleString('en-US'); }
+const FLAG = (cc) => {
+  if (!cc || cc.length !== 2) return '🌐';
+  return String.fromCodePoint(...cc.toUpperCase().split('').map(c => 0x1F1A5 + c.charCodeAt(0)));
+};
+
+async function fetchMetrics() {
+  const range = $('rangeSel').value;
+  const r = await fetch(RFQ_URL + '/admin/item-metrics?range=' + encodeURIComponent(range), {
+    headers: { 'X-Admin-Key': adminKey() }
+  });
+  const data = await r.json();
+  if (r.status === 401) { clearAdminKey(); throw new Error('unauthorized'); }
+  if (!r.ok || data.ok === false) throw new Error(data.error || 'HTTP ' + r.status);
+  return data;
+}
+
+async function tryGate() {
+  const k = $('adminKeyInput').value.trim();
+  if (!k) return;
+  setAdminKey(k);
+  try {
+    await fetchMetrics();
+    showApp();
+  } catch (e) {
+    clearAdminKey();
+    $('gateErr').style.display = 'block';
+    $('gateErr').textContent = '❌ ' + e.message;
+  }
+}
+
+async function showApp() {
+  $('gate').style.display = 'none';
+  $('app').style.display = 'block';
+  await reload();
+}
+
+async function reload() {
+  $('metaLine').textContent = 'Loading…';
+  try {
+    lastData = await fetchMetrics();
+    render(lastData);
+  } catch (e) {
+    $('metaLine').innerHTML = '<span style="color:#ff8a8a">실패: ' + esc(e.message) + '</span>';
+  }
+}
+
+function render(data) {
+  const k = data.kpis;
+  const range = data.range_days;
+  $('metaLine').innerHTML = 'Period: last ' + range + ' days · generated ' + new Date(data.generated_at).toLocaleString();
+
+  /* KPI cards */
+  const delta = (cur, prev) => {
+    const diff = cur - prev;
+    const pct = prev ? Math.round((diff / prev) * 100) : 0;
+    const cls = diff > 0 ? 'up' : diff < 0 ? 'down' : 'flat';
+    const arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '–';
+    return '<p class="kpi-delta ' + cls + '">' + arrow + ' ' + Math.abs(diff) + ' (' + (pct >= 0 ? '+' : '') + pct + '%) vs prev</p>';
+  };
+  $('kpiRow').innerHTML =
+    '<div class="kpi-card"><p class="kpi-label">총 RFQ</p><p class="kpi-val">' + fmtN(k.total_rfqs) + '</p>' + delta(k.total_rfqs, k.prev_total_rfqs) + '</div>' +
+    '<div class="kpi-card"><p class="kpi-label">고유 아이템(모델)</p><p class="kpi-val">' + fmtN(k.unique_products) + '</p><p class="kpi-delta flat">개</p></div>' +
+    '<div class="kpi-card"><p class="kpi-label">고유 국가</p><p class="kpi-val">' + fmtN(k.unique_countries) + '</p><p class="kpi-delta flat">개국</p></div>' +
+    '<div class="kpi-card"><p class="kpi-label">완료 거래 (closed/shipped)</p><p class="kpi-val">' + fmtN((k.stage_counts.closed || 0) + (k.stage_counts.shipped || 0)) + '</p><p class="kpi-delta flat">' + (k.stage_counts.quoted || 0) + ' quoted</p></div>';
+
+  /* Sector dropdown population */
+  const sectorSel = $('sectorSel');
+  const cur = sectorSel.value;
+  sectorSel.innerHTML = '<option value="">전체</option>' + data.by_sector.map(s =>
+    '<option value="' + esc(s.sector) + '"' + (cur === s.sector ? ' selected' : '') + '>' + esc(s.sector) + ' (' + s.count + ')</option>'
+  ).join('');
+
+  /* Daily chart */
+  const chart = $('dailyChart');
+  const xAxis = $('dailyXAxis');
+  const series = data.daily_series;
+  const max = Math.max(1, ...series.map(d => d.count));
+  chart.innerHTML = series.map(d => {
+    const h = Math.max(2, Math.round((d.count / max) * 100));
+    return '<div class="chart-bar" style="height:' + h + '%" data-v="' + d.date + ': ' + d.count + ' RFQ"></div>';
+  }).join('');
+  xAxis.innerHTML = '<span>' + series[0].date + '</span><span>' + series[Math.floor(series.length/2)].date + '</span><span>' + series[series.length-1].date + '</span>';
+
+  /* Sector list */
+  const totalForSectors = data.by_sector.reduce((s, x) => s + x.count, 0) || 1;
+  $('sectorList').innerHTML = data.by_sector.length
+    ? data.by_sector.map(s => {
+        const w = Math.round((s.count / totalForSectors) * 100);
+        return '<div class="sector-row">'
+             + '<span>' + esc(s.sector) + '</span>'
+             + '<div class="sector-bar-wrap"><div class="sector-bar" style="width:' + w + '%"></div></div>'
+             + '<span class="sector-count">' + s.count + '</span>'
+             + '<span class="sector-products">' + s.products + ' SKU</span>'
+             + '</div>';
+      }).join('')
+    : '<div class="empty">데이터 없음.</div>';
+
+  /* Country list */
+  $('countryList').innerHTML = data.by_country.length
+    ? data.by_country.map(c => '<li><span class="country-flag">' + FLAG(c.code) + '</span><span class="country-name">' + esc(c.code) + '</span><span class="country-count">' + c.count + '</span></li>').join('')
+    : '<li class="empty">데이터 없음.</li>';
+
+  /* Per-product table — apply sector filter */
+  const sectorFilter = sectorSel.value;
+  const filtered = sectorFilter ? data.by_product.filter(p => p.sector === sectorFilter) : data.by_product;
+  const tbody = $('productTable').querySelector('tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">' + (sectorFilter ? '해당 섹터 데이터 없음.' : 'RFQ 없음.') + '</td></tr>';
+  } else {
+    tbody.innerHTML = filtered.map(p => {
+      const stages = Object.entries(p.stages).filter(([, n]) => n > 0)
+        .map(([s, n]) => '<span class="stage-pill ' + s + '">' + s.replace('_',' ') + ' ' + n + '</span>')
+        .join(' ') || '<span class="small">—</span>';
+      return '<tr>'
+           + '<td><strong style="color:var(--white)">' + esc(p.model) + '</strong></td>'
+           + '<td>' + esc(p.sector) + '</td>'
+           + '<td class="r" style="font-family:var(--fd);font-weight:700;color:var(--gold)">' + p.count + '</td>'
+           + '<td>' + stages + '</td>'
+           + '<td>' + (p.top_country ? FLAG(p.top_country) + ' ' + esc(p.top_country) : '<span class="small">—</span>') + '</td>'
+           + '<td><span class="small">' + fmtDate(p.last_at) + '</span></td>'
+           + '</tr>';
+    }).join('');
+  }
+
+  /* Recent RFQs */
+  const recentBody = $('recentTable').querySelector('tbody');
+  if (!data.recent_rfqs.length) {
+    recentBody.innerHTML = '<tr><td colspan="10" class="empty">최근 RFQ 없음.</td></tr>';
+  } else {
+    recentBody.innerHTML = data.recent_rfqs.map(r => '<tr>'
+      + '<td><a href="tracker.html?id=' + encodeURIComponent(r.id) + '" target="_blank"><code>' + esc(r.id) + '</code></a></td>'
+      + '<td>' + fmtDate(r.createdAt) + '</td>'
+      + '<td>' + esc(r.company || '—') + '</td>'
+      + '<td>' + esc(r.email || '—') + '</td>'
+      + '<td>' + FLAG(r.country) + ' ' + esc(r.country) + '</td>'
+      + '<td>' + esc(r.tier) + '</td>'
+      + '<td><span class="small">' + esc((r.models || []).join(', ')) + '</span></td>'
+      + '<td>' + esc(r.qty) + '</td>'
+      + '<td>' + esc(r.incoterms) + '</td>'
+      + '<td><span class="stage-pill ' + r.stage + '">' + r.stage.replace('_',' ') + '</span></td>'
+      + '</tr>').join('');
+  }
+}
+
+function downloadCsv() {
+  if (!lastData) return;
+  const rows = lastData.by_product;
+  const header = ['model','sector','count','received','reviewed','quoted','in_production','shipped','closed','top_country','last_rfq_date'];
+  const csv = [header.join(',')].concat(rows.map(p => [
+    p.model, p.sector, p.count,
+    p.stages.received||0, p.stages.reviewed||0, p.stages.quoted||0, p.stages.in_production||0, p.stages.shipped||0, p.stages.closed||0,
+    p.top_country || '', fmtDate(p.last_at)
+  ].map(v => {
+    const s = String(v == null ? '' : v);
+    return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }).join(','))).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ergsn-item-metrics-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (adminKey()) showApp();
+  $('gateBtn').addEventListener('click', tryGate);
+  $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
+  $('rangeSel').addEventListener('change', reload);
+  $('sectorSel').addEventListener('change', () => render(lastData));
+  $('reloadBtn').addEventListener('click', reload);
+  $('csvBtn').addEventListener('click', downloadCsv);
+  $('logoutBtn').addEventListener('click', () => { clearAdminKey(); location.reload(); });
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>
