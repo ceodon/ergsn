@@ -1,0 +1,27 @@
+// ERGSN RFQ Tracker Worker config — separate from the site / mail /
+// trade-docs configs so `wrangler deploy --config wrangler.rfq.jsonc`
+// ships ONLY the rfq-tracker worker.
+//
+// Usage:
+//   npx wrangler deploy --config wrangler.rfq.jsonc
+//   npx wrangler secret put ADMIN_KEY    --config wrangler.rfq.jsonc
+//   npx wrangler secret put ALLOW_ORIGIN --config wrangler.rfq.jsonc
+//
+// Find database_id at: dash.cloudflare.com → Workers & Pages → D1 →
+//   ergsn-rfq → "Database ID" (top of page). Replace below if it
+//   doesn't match (the placeholder is the value used by the
+//   ergsn-rfq-tracker worker that's already live in production).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ergsn-rfq-tracker",
+  "main": "cloudflare-worker-rfq.js",
+  "compatibility_date": "2026-04-24",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding":       "RFQ",
+      "database_name": "ergsn-rfq",
+      "database_id":   "REPLACE-WITH-YOUR-D1-DATABASE-ID"
+    }
+  ]
+}
