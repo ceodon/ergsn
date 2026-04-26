@@ -21,7 +21,7 @@
     {
       "binding":       "RFQ",
       "database_name": "ergsn-rfq",
-      "database_id":   "REPLACE-WITH-YOUR-D1-DATABASE-ID"
+      "database_id":   "a4143eae-7a77-4680-9395-ced92a47c3da"
     }
   ]
 }
