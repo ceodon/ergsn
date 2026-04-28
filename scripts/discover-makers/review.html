@@ -164,11 +164,15 @@
   .actions button.bn-products { background: var(--navy); border-color: var(--navy); color: var(--gold); }
   .actions button.bn-promote { background: #d8f6e8; border-color: #34d298; color: #0d5c39; }
   .actions button.bn-promote:hover { background: #34d298; color: #0f1110; }
+  .actions .sec-cell { margin-left: auto; padding: 5px 10px; border: 1px dashed var(--line); border-radius: 6px; background: #fafaf6; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--muted); font-weight: 600; }
+  .actions .sec-cell:hover { background: #fff; color: #333; border-color: #aaa; border-style: solid; }
   .notes { width: 100%; min-height: 38px; resize: vertical; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-family: inherit; font-size: 12px; }
   .empty { padding: 40px; text-align: center; color: var(--muted); }
   .saving { font-size: 11px; color: var(--muted); }
   .saving.ok { color: var(--verified); }
   .saving.err { color: var(--rejected); }
+  /* Lazy-mount placeholder (virtual scrolling): full card swaps in on viewport entry */
+  .card-pending { min-height: 360px; display: flex; align-items: flex-start; padding: 14px; color: var(--muted); font-size: 13px; background: var(--card-bg); border: 1px dashed var(--line); border-radius: 10px; word-break: break-word; }
 
   /* Products modal */
   .modal-back { position: fixed; inset: 0; background: rgba(10, 31, 68, 0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
@@ -490,6 +494,37 @@ function filtered() {
   });
 }
 
+// Lazy-mount IntersectionObserver — keep one instance for the whole page.
+// Swaps placeholders for real cards when they enter (viewport + 600px margin)
+// so the initial paint is cheap regardless of total maker count.
+let _io = null;
+function getIO() {
+  if (_io) return _io;
+  _io = new IntersectionObserver((entries) => {
+    for (const ent of entries) {
+      if (!ent.isIntersecting) continue;
+      const ph = ent.target;
+      if (ph.dataset.lazy !== '1') continue;
+      const id = ph.dataset.id;
+      const m = allMakers.find(x => x.id === id);
+      if (!m) { _io.unobserve(ph); continue; }
+      const real = card(m);
+      ph.replaceWith(real);
+      _io.unobserve(ph);
+    }
+  }, { rootMargin: '600px 0px' });
+  return _io;
+}
+
+function placeholder(m) {
+  const el = document.createElement('div');
+  el.className = 'card card-pending';
+  el.dataset.id = m.id;
+  el.dataset.lazy = '1';
+  el.textContent = m.legalName || m.displayName || m.homepageHost || m.id;
+  return el;
+}
+
 function render() {
   const list = filtered();
   $('stat').textContent = `${list.length} of ${allMakers.length}`;
@@ -500,7 +535,12 @@ function render() {
     grid.innerHTML = '<div class="empty">No matching entries.</div>';
     return;
   }
-  for (const m of list) grid.appendChild(card(m));
+  const io = getIO();
+  const frag = document.createDocumentFragment();
+  for (const m of list) frag.appendChild(placeholder(m));
+  grid.appendChild(frag);
+  // Observe after attach so initial intersection check picks up the viewport
+  grid.querySelectorAll('.card-pending').forEach(p => io.observe(p));
 }
 
 function renderStats() {
@@ -588,9 +628,7 @@ function card(m) {
       <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;">
         <input type="checkbox" class="contract-chk"${contract ? ' checked' : ''}> 📝계약
       </label>
-      <select class="sec-sel">
-        ${SECTORS.map(s => `<option value="${s}"${s === m.sector ? ' selected' : ''}>${s}</option>`).join('')}
-      </select>
+      <button type="button" class="sec-cell" title="Click to change sector">${esc(m.sector)}</button>
       <span class="saving"></span>
     </div>
   `;
@@ -605,7 +643,18 @@ function card(m) {
       b.addEventListener('click', () => save(el, m, { status: act }));
     }
   });
-  el.querySelector('.sec-sel').addEventListener('change', e => save(el, m, { sector: e.target.value }));
+  // Sector dropdown is lazy: a placeholder button until clicked, then a real
+  // <select> is created in-place. Avoids 180×12 = 2,160 option DOM nodes
+  // when many cards are mounted at once.
+  el.querySelector('.sec-cell').addEventListener('click', () => {
+    const cell = el.querySelector('.sec-cell');
+    const sel = document.createElement('select');
+    sel.className = 'sec-sel';
+    sel.innerHTML = SECTORS.map(s => `<option value="${s}"${s === m.sector ? ' selected' : ''}>${s}</option>`).join('');
+    sel.addEventListener('change', e => save(el, m, { sector: e.target.value }));
+    cell.replaceWith(sel);
+    sel.focus();
+  }, { once: true });
   el.querySelector('.notes').addEventListener('change', e => save(el, m, { notes: e.target.value }));
   el.querySelector('.contract-chk').addEventListener('change', e => save(el, m, { contractSigned: e.target.checked }));
   return el;
