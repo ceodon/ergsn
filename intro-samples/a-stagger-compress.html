@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ERGSN intro — Sample A · Stagger → Compress</title>
+<style>
+  :root {
+    --navy: #0f0f0f;
+    --green: #34d298;
+    --steel: #a7a7a7;
+    --grad-silver: linear-gradient(320deg, #a8a8a6 15%, #c2c0c0 48%, #f9f8f6 64%, #d4d4d4 76%, #7f7f7f 88%);
+    --grad-green:  linear-gradient(84deg, #00bf79 42%, #00ffa1 81%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+    background: var(--navy);
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── Intro overlay ─────────────────────────────────────────────────── */
+  .intro {
+    position: fixed; inset: 0;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity 0.55s ease;
+  }
+  .intro.done { opacity: 0; pointer-events: none; }
+
+  .line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.55ch;
+    row-gap: 0.18em;
+    font-size: clamp(18px, 4.6vw, 56px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 0 16px;
+    max-width: 100vw;
+    transition: column-gap 0.7s cubic-bezier(.65,0,.35,1), row-gap 0.7s cubic-bezier(.65,0,.35,1), letter-spacing 0.7s cubic-bezier(.65,0,.35,1);
+  }
+  .line.compressed { column-gap: 0; row-gap: 0; letter-spacing: 0.12em; flex-wrap: nowrap; }
+
+  .word {
+    display: inline-flex;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .word.in { opacity: 1; transform: translateY(0); }
+
+  .L {
+    background: var(--grad-silver);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-kerning: none;
+    transition: background 0.6s ease, color 0.6s ease;
+  }
+  .word:first-child .L {
+    background: var(--grad-green);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .r {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 30ch;
+    color: #888;
+    transition: max-width 0.7s cubic-bezier(.7,0,.3,1), opacity 0.45s ease;
+    font-weight: 600;
+  }
+  .compressed .r { max-width: 0; opacity: 0; }
+
+  .amp {
+    color: #555;
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity 0.45s ease, max-width 0.6s cubic-bezier(.7,0,.3,1);
+    max-width: 2ch;
+    overflow: hidden;
+    display: inline-block;
+  }
+  .amp.in { opacity: 1; }
+  .compressed .amp { max-width: 0; opacity: 0; }
+
+  .skip-hint {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    color: var(--steel); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0; transition: opacity 0.4s ease 0.6s;
+    z-index: 101; pointer-events: none;
+  }
+  .intro:not(.done) .skip-hint { opacity: 0.7; }
+
+  /* ── Home stub (under the intro) ───────────────────────────────────── */
+  .home {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 80px 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: #fff;
+  }
+  .home .logo {
+    font-size: clamp(34px, 5vw, 60px);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-kerning: none;
+  }
+  .home .logo .e {
+    background: var(--grad-green); -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .home .logo .s {
+    background: var(--grad-silver); -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .home .tagline { color: var(--steel); margin-top: 14px; font-size: 14px; letter-spacing: 0.04em; }
+  .home .placeholder { margin-top: 36px; padding: 14px 22px; border: 1px dashed rgba(255,255,255,.18); border-radius: 8px; color: #777; font-size: 12px; }
+
+  .controls {
+    position: fixed; top: 14px; right: 14px;
+    display: flex; gap: 8px; z-index: 5;
+  }
+  .controls a, .controls button {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #ddd; font-size: 11px; padding: 5px 11px; border-radius: 5px;
+    text-decoration: none; cursor: pointer; font-family: inherit; letter-spacing: 0.06em;
+  }
+  .controls a:hover, .controls button:hover { border-color: var(--green); color: var(--green); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro { display: none; }
+  }
+
+  /* Mobile / narrow tablet — let phrase wrap onto 2-3 lines, soften gaps */
+  @media (max-width: 640px) {
+    .line { font-size: clamp(17px, 6.2vw, 26px); column-gap: 0.4ch; padding: 0 12px; }
+    .home .logo { font-size: clamp(30px, 11vw, 44px); }
+    .home .tagline { font-size: 12px; padding: 0 16px; }
+    .controls { top: 10px; right: 10px; }
+    .controls a, .controls button { padding: 6px 10px; }
+  }
+  @media (max-width: 380px) {
+    .line { font-size: clamp(15px, 6.5vw, 22px); }
+  }
+  /* Landscape phones — keep intro readable in short viewport */
+  @media (max-height: 480px) and (orientation: landscape) {
+    .line { font-size: clamp(16px, 4.5vh, 32px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="line" id="line">
+    <span class="word"><span class="L">E</span><span class="r">levate</span></span>
+    <span class="amp" id="amp">&amp;</span>
+    <span class="word"><span class="L">R</span><span class="r">each</span></span>
+    <span class="word"><span class="L">G</span><span class="r">lobal</span></span>
+    <span class="word"><span class="L">S</span><span class="r">ourcing</span></span>
+    <span class="word"><span class="L">N</span><span class="r">etwork</span></span>
+  </div>
+  <div class="skip-hint">click or ESC to skip</div>
+</div>
+
+<main class="home">
+  <div class="logo"><span class="e">E</span><span class="s">R</span><span class="s">G</span><span class="s">S</span><span class="s">N</span></div>
+  <div class="tagline">Elevate &amp; Reach Global Sourcing Network · Korea's Trusted Trade Gateway</div>
+  <div class="placeholder">⌧ Home content (real index.html slots in here)</div>
+</main>
+
+<div class="controls">
+  <button id="replay">↻ Replay</button>
+  <a href="index.html">← Compare</a>
+</div>
+
+<script>
+(() => {
+  const intro = document.getElementById('intro');
+  const line  = document.getElementById('line');
+  const words = document.querySelectorAll('.word');
+  const amp   = document.getElementById('amp');
+
+  function play() {
+    intro.classList.remove('done');
+    line.classList.remove('compressed');
+    words.forEach(w => w.classList.remove('in'));
+    amp.classList.remove('in');
+
+    // 1) Stagger words in
+    words.forEach((w, i) => {
+      const target = w === words[0] ? 0 : (w === words[1] ? 200 : i * 150);
+      setTimeout(() => w.classList.add('in'), target);
+    });
+    setTimeout(() => amp.classList.add('in'), 130);
+
+    // 2) Compress at ~1.0s
+    setTimeout(() => line.classList.add('compressed'), 1000);
+
+    // 3) Fade out at ~1.7s
+    setTimeout(() => intro.classList.add('done'), 1700);
+  }
+
+  function skip() { intro.classList.add('done'); }
+
+  intro.addEventListener('click', skip);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') skip(); });
+  document.getElementById('replay').addEventListener('click', play);
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    intro.classList.add('done');
+  } else {
+    play();
+  }
+})();
+</script>
+</body>
+</html>

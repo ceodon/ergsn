@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ERGSN intro — Sample C · Backdrop Type</title>
+<style>
+  :root {
+    --navy: #0f0f0f;
+    --green: #34d298;
+    --steel: #a7a7a7;
+    --grad-silver: linear-gradient(320deg, #a8a8a6 15%, #c2c0c0 48%, #f9f8f6 64%, #d4d4d4 76%, #7f7f7f 88%);
+    --grad-green:  linear-gradient(84deg, #00bf79 42%, #00ffa1 81%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", sans-serif;
+    background: var(--navy);
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── Intro overlay ─────────────────────────────────────────────────── */
+  .intro {
+    position: fixed; inset: 0;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity 0.55s ease;
+    overflow: hidden;
+  }
+  .intro.done { opacity: 0; pointer-events: none; }
+
+  /* Backdrop = the long phrase shown huge at low opacity */
+  .backdrop {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: none;
+    text-align: center;
+    padding: 0 4vw;
+  }
+  .backdrop .ph {
+    font-size: clamp(28px, 7vw, 96px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(.65,0,.35,1);
+    font-kerning: none;
+  }
+  .backdrop .ph.in { opacity: 0.07; transform: translateY(0); }
+  .backdrop .ph.fade { opacity: 0; }
+
+  /* Logo on top, sharp */
+  .logo-final {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 0.7s ease, transform 0.85s cubic-bezier(.65,0,.35,1);
+  }
+  .logo-final.in { opacity: 1; transform: scale(1); }
+
+  .logo-final .mark {
+    font-size: clamp(40px, 7.5vw, 92px);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-kerning: none;
+    line-height: 1;
+  }
+  .logo-final .e {
+    background: var(--grad-green);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .logo-final .s {
+    background: var(--grad-silver);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .logo-final .tag {
+    text-align: center; margin-top: 14px;
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--steel);
+    opacity: 0;
+    transition: opacity 0.5s ease 0.2s;
+  }
+  .logo-final.in .tag { opacity: 1; }
+
+  .skip-hint {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    color: var(--steel); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0; transition: opacity 0.4s ease 0.6s;
+    z-index: 101; pointer-events: none;
+  }
+  .intro:not(.done) .skip-hint { opacity: 0.7; }
+
+  /* ── Home stub ─────────────────────────────────────────────────────── */
+  .home {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 80px 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: #fff;
+  }
+  .home .logo {
+    font-size: clamp(34px, 5vw, 60px);
+    font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; font-kerning: none;
+  }
+  .home .logo .e { background: var(--grad-green); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .home .logo .s { background: var(--grad-silver); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .home .tagline { color: var(--steel); margin-top: 14px; font-size: 14px; letter-spacing: 0.04em; }
+  .home .placeholder { margin-top: 36px; padding: 14px 22px; border: 1px dashed rgba(255,255,255,.18); border-radius: 8px; color: #777; font-size: 12px; }
+
+  .controls {
+    position: fixed; top: 14px; right: 14px;
+    display: flex; gap: 8px; z-index: 5;
+  }
+  .controls a, .controls button {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #ddd; font-size: 11px; padding: 5px 11px; border-radius: 5px;
+    text-decoration: none; cursor: pointer; font-family: inherit; letter-spacing: 0.06em;
+  }
+  .controls a:hover, .controls button:hover { border-color: var(--green); color: var(--green); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro { display: none; }
+  }
+
+  /* Mobile — backdrop two-line phrase shrinks; logo retains presence */
+  @media (max-width: 640px) {
+    .backdrop .ph { font-size: clamp(22px, 8.5vw, 42px); padding: 0 12px; }
+    .logo-final .mark { font-size: clamp(36px, 12vw, 56px); }
+    .logo-final .tag { font-size: 10px; letter-spacing: 0.16em; padding: 0 16px; }
+    .home .logo { font-size: clamp(30px, 11vw, 44px); }
+    .home .tagline { font-size: 12px; padding: 0 16px; }
+    .controls { top: 10px; right: 10px; }
+    .controls a, .controls button { padding: 6px 10px; }
+  }
+  /* Very narrow phones — break to 3+ lines if needed */
+  @media (max-width: 380px) {
+    .backdrop .ph { font-size: clamp(20px, 9vw, 36px); }
+  }
+  /* Landscape phones — keep backdrop within visible height */
+  @media (max-height: 480px) and (orientation: landscape) {
+    .backdrop .ph { font-size: clamp(18px, 6.5vh, 36px); }
+    .logo-final .mark { font-size: clamp(30px, 9vh, 56px); }
+  }
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="backdrop">
+    <div class="ph" id="ph">Elevate &amp; Reach<br>Global Sourcing Network</div>
+  </div>
+  <div class="logo-final" id="logoFinal">
+    <div class="mark"><span class="e">E</span><span class="s">R</span><span class="s">G</span><span class="s">S</span><span class="s">N</span></div>
+    <div class="tag">Korea's Trusted Trade Gateway</div>
+  </div>
+  <div class="skip-hint">click or ESC to skip</div>
+</div>
+
+<main class="home">
+  <div class="logo"><span class="e">E</span><span class="s">R</span><span class="s">G</span><span class="s">S</span><span class="s">N</span></div>
+  <div class="tagline">Elevate &amp; Reach Global Sourcing Network · Korea's Trusted Trade Gateway</div>
+  <div class="placeholder">⌧ Home content (real index.html slots in here)</div>
+</main>
+
+<div class="controls">
+  <button id="replay">↻ Replay</button>
+  <a href="index.html">← Compare</a>
+</div>
+
+<script>
+(() => {
+  const intro = document.getElementById('intro');
+  const ph    = document.getElementById('ph');
+  const logoF = document.getElementById('logoFinal');
+
+  function play() {
+    intro.classList.remove('done');
+    ph.classList.remove('in', 'fade');
+    logoF.classList.remove('in');
+
+    // 1) Backdrop type fades up to 7% opacity
+    setTimeout(() => ph.classList.add('in'), 50);
+
+    // 2) Logo scales/fades in over the backdrop
+    setTimeout(() => logoF.classList.add('in'), 350);
+
+    // 3) Backdrop fades to 0
+    setTimeout(() => ph.classList.add('fade'), 1100);
+
+    // 4) Whole overlay fades out
+    setTimeout(() => intro.classList.add('done'), 1700);
+  }
+
+  function skip() { intro.classList.add('done'); }
+
+  intro.addEventListener('click', skip);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') skip(); });
+  document.getElementById('replay').addEventListener('click', play);
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    intro.classList.add('done');
+  } else {
+    play();
+  }
+})();
+</script>
+</body>
+</html>

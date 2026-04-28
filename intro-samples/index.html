@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ERGSN intro samples — comparison</title>
+<style>
+  :root {
+    --navy: #0f0f0f;
+    --green: #34d298;
+    --green-light: #00ffa1;
+    --steel: #a7a7a7;
+    --line: rgba(255,255,255,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100vh; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--navy);
+    color: #fff;
+    padding: 60px 24px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (max-width: 640px) {
+    body { padding: 36px 16px; }
+    h1 { font-size: 24px; }
+    .sub { font-size: 13px; }
+    .grid { gap: 14px; }
+    .card { padding: 18px 18px 14px; }
+    .card h2 { font-size: 17px; }
+    .card a { font-size: 12px; padding: 10px 12px; }
+  }
+  h1 {
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+  }
+  .sub { color: var(--steel); margin: 0 0 40px; font-size: 14px; }
+  .grid {
+    display: grid;
+    gap: 18px;
+    max-width: 1080px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin: 0 auto;
+  }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 22px 18px;
+    background: rgba(255,255,255,.02);
+    transition: border-color .2s, transform .2s, background .2s;
+  }
+  .card:hover { border-color: var(--green); background: rgba(52,210,152,.04); transform: translateY(-2px); }
+  .badge {
+    display: inline-block;
+    background: var(--green);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 4px;
+  }
+  .card h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 14px 0 8px;
+  }
+  .card p { color: var(--steel); font-size: 13px; line-height: 1.6; margin: 0 0 16px; }
+  .card .tags { font-size: 11px; color: var(--steel); margin: 0 0 18px; }
+  .card .tags span { display: inline-block; padding: 2px 7px; background: rgba(255,255,255,.06); border-radius: 4px; margin-right: 6px; }
+  .card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .card a {
+    flex: 1;
+    text-align: center;
+    padding: 9px 14px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: background .15s;
+  }
+  .card a.primary { background: var(--green); color: var(--navy); }
+  .card a.primary:hover { background: var(--green-light); }
+  .card a.secondary { background: transparent; color: var(--green); border: 1px solid var(--green); }
+  .card a.secondary:hover { background: rgba(52,210,152,.1); }
+  .footer-note {
+    max-width: 1080px;
+    margin: 50px auto 0;
+    color: var(--steel);
+    font-size: 12px;
+    line-height: 1.7;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+  }
+  .footer-note code { background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 3px; color: #fff; }
+</style>
+</head>
+<body>
+
+<div style="max-width:1080px;margin:0 auto 36px;">
+  <h1>ERGSN intro samples</h1>
+  <p class="sub">Three takes on the <em>"Elevate &amp; Reach Global Sourcing Network → ERGSN"</em> reveal. Click <strong>Preview</strong> to view the motion. Append <code>?intro=1</code> to replay on revisit.</p>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <span class="badge">Sample A</span>
+    <h2>Stagger → Compress</h2>
+    <p>Five words fade in horizontally at 150 ms intervals. Trailing letters dissolve while the leading letters slide together to form ERGSN.</p>
+    <div class="tags"><span>1.8 s</span><span>direct</span><span>typographic</span></div>
+    <div class="actions">
+      <a class="primary" href="a-stagger-compress.html?intro=1">▶ Preview</a>
+      <a class="secondary" href="a-stagger-compress.html" target="_blank">↗ Open in tab</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">Sample B</span>
+    <h2>Vertical Stack → Dissolve</h2>
+    <p>Words appear stacked vertically, each leading letter highlighted in green. Stack dissolves and the ERGSN wordmark fades in horizontally.</p>
+    <div class="tags"><span>2.0 s</span><span>cinematic</span><span>brand reveal</span></div>
+    <div class="actions">
+      <a class="primary" href="b-vertical-stack.html?intro=1">▶ Preview</a>
+      <a class="secondary" href="b-vertical-stack.html" target="_blank">↗ Open in tab</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="badge">Sample C</span>
+    <h2>Backdrop Type</h2>
+    <p>The full phrase appears as a large background watermark at low opacity; the ERGSN logo crisply fades in over it. Backdrop fades out, logo remains.</p>
+    <div class="tags"><span>1.6 s</span><span>minimalist</span><span>GC Corp tone</span></div>
+    <div class="actions">
+      <a class="primary" href="c-backdrop-type.html?intro=1">▶ Preview</a>
+      <a class="secondary" href="c-backdrop-type.html" target="_blank">↗ Open in tab</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  <strong>Common spec.</strong>
+  ESC or click skips the intro · <code>prefers-reduced-motion</code> auto-skips ·
+  After-intro shows a placeholder home stub for layout context · once committed,
+  intro fires only on first visit per session (sessionStorage flag) — <code>?intro=1</code>
+  forces replay for testing. Brand colors match site (<code>#0f0f0f</code> bg, <code>#34d298</code> green, silver gradient on RGSN, green gradient on E).
+</div>
+
+</body>
+</html>
