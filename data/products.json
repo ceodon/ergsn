@@ -12,16 +12,30 @@
       "desc": "A sample entry illustrating every field the build pipeline consumes. `active: false` hides the entry from the live grid; flip to true to publish. Specs / features / tags are arrays; img path is relative to site root.",
       "img": "images/products/sample.jpg",
       "specs": [
-        ["Category", "Template / Placeholder"],
-        ["Origin", "Republic of Korea"],
-        ["Lead Time", "Sample — not for production"]
+        [
+          "Category",
+          "Template / Placeholder"
+        ],
+        [
+          "Origin",
+          "Republic of Korea"
+        ],
+        [
+          "Lead Time",
+          "Sample — not for production"
+        ]
       ],
       "features": [
         "Placeholder bullet 1 — demonstrates the features array",
         "Placeholder bullet 2 — replace with real value propositions"
       ],
-      "tags": ["tech"],
-      "scale": ["s", "m"],
+      "tags": [
+        "tech"
+      ],
+      "scale": [
+        "s",
+        "m"
+      ],
       "moq": 1,
       "leadMin": 4,
       "leadMax": 6,
@@ -31,7 +45,6 @@
       "cardTag": "Template",
       "matchDesc": "Placeholder row — shown by AI Partner Match when active=true."
     },
-
     {
       "id": "ddell-dewy-glow-cushion",
       "sector": "k-beauty",
@@ -42,11 +55,26 @@
       "desc": "Long-wear dewy-finish cushion foundation from DD'ELL, manufactured by COSMEDIQUE Co., Ltd. Buildable coverage, hydrating formula suitable for normal-to-dry skin. OEM/ODM-ready — custom shades and packaging available at MOQ 1,000 per SKU.",
       "img": "images/products/ddell-dewy-glow-cushion.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup — Cushion Pact"],
-        ["Finish", "Dewy / Luminous"],
-        ["Retail MSRP", "USD 36"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup — Cushion Pact"
+        ],
+        [
+          "Finish",
+          "Dewy / Luminous"
+        ],
+        [
+          "Retail MSRP",
+          "USD 36"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Dewy luminous finish — ideal for normal-to-dry skin",
@@ -54,8 +82,14 @@
         "OEM/ODM custom shade and packaging available",
         "Korean-manufactured under COSMEDIQUE since 1985"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -73,11 +107,26 @@
       "desc": "Firming line-lift cushion foundation from DD'ELL. Combines peptide complex with buildable coverage for a sculpted, age-defying finish. Manufactured by COSMEDIQUE Co., Ltd. under Korean cosmetic safety standards (CGMP).",
       "img": "images/products/ddell-line-lift-cushion.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup — Cushion Pact"],
-        ["Finish", "Semi-matte / Lifting"],
-        ["Retail MSRP", "USD 36"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup — Cushion Pact"
+        ],
+        [
+          "Finish",
+          "Semi-matte / Lifting"
+        ],
+        [
+          "Retail MSRP",
+          "USD 36"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Peptide-enhanced lifting formula",
@@ -85,8 +134,14 @@
         "CGMP-compliant Korean manufacturing",
         "OEM/ODM private-label ready at MOQ 1,000"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -104,11 +159,26 @@
       "desc": "Makeup primer designed to blur pores and create a smooth canvas for foundation. Silicone-based matrix delivers immediate pore-filling effect. From DD'ELL, made by COSMEDIQUE Co., Ltd.",
       "img": "images/products/ddell-filter-primer-zeropore.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup — Primer / Base"],
-        ["Texture", "Silicone gel-cream"],
-        ["Retail MSRP", "USD 26"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup — Primer / Base"
+        ],
+        [
+          "Texture",
+          "Silicone gel-cream"
+        ],
+        [
+          "Retail MSRP",
+          "USD 26"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Instant pore-blurring optical effect",
@@ -116,8 +186,14 @@
         "Oil-control for long-wear makeup",
         "OEM/ODM-ready at MOQ 1,000 per SKU"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -135,11 +211,26 @@
       "desc": "Rich hydrating cream designed as a makeup base — locks moisture, improves foundation adhesion, and extends wear time. Manufactured by COSMEDIQUE Co., Ltd. under Korean CGMP standards.",
       "img": "images/products/ddell-setup-creame.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup Base / Moisturizer"],
-        ["Texture", "Rich cream"],
-        ["Retail MSRP", "USD 28"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup Base / Moisturizer"
+        ],
+        [
+          "Texture",
+          "Rich cream"
+        ],
+        [
+          "Retail MSRP",
+          "USD 28"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Deep hydration — improves foundation adhesion",
@@ -147,8 +238,14 @@
         "Suitable for normal-to-dry skin",
         "OEM/ODM customisation at MOQ 1,000"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -166,11 +263,26 @@
       "desc": "Daily-wear radiance cream from DD'ELL that delivers an immediate luminous finish. Blends skincare hydration with a subtle light-reflecting pigment complex for a healthy-glow look, on its own or under makeup.",
       "img": "images/products/ddell-glowup-cream.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Skincare / Glow Cream"],
-        ["Texture", "Lightweight cream"],
-        ["Retail MSRP", "USD 28"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Skincare / Glow Cream"
+        ],
+        [
+          "Texture",
+          "Lightweight cream"
+        ],
+        [
+          "Retail MSRP",
+          "USD 28"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Light-reflecting radiance complex",
@@ -178,8 +290,14 @@
         "Works solo or as makeup primer",
         "OEM/ODM-ready with private-label packaging"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -197,11 +315,26 @@
       "desc": "Setting mist specifically formulated to keep makeup intact under face masks. Quick-drying, non-sticky finish — prevents transfer and oxidation during extended wear. From DD'ELL, by COSMEDIQUE Co., Ltd.",
       "img": "images/products/ddell-mask-defense.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup Fixer / Setting Mist"],
-        ["Format", "Pump mist spray"],
-        ["Retail MSRP", "USD 16"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup Fixer / Setting Mist"
+        ],
+        [
+          "Format",
+          "Pump mist spray"
+        ],
+        [
+          "Retail MSRP",
+          "USD 16"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Mask-proof makeup lock technology",
@@ -209,8 +342,14 @@
         "Anti-transfer and anti-oxidation",
         "OEM/ODM with private-label fragrance options"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -228,11 +367,26 @@
       "desc": "Setting mist from DD'ELL that finishes makeup with a dewy, hydrated glow. Fine-atomising pump delivers an even micro-mist with no alcohol drag. Made by COSMEDIQUE Co., Ltd. in Seoul.",
       "img": "images/products/ddell-fixer-dewy-glow.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Makeup Fixer / Setting Mist"],
-        ["Finish", "Dewy / Luminous"],
-        ["Retail MSRP", "USD 16"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Makeup Fixer / Setting Mist"
+        ],
+        [
+          "Finish",
+          "Dewy / Luminous"
+        ],
+        [
+          "Retail MSRP",
+          "USD 16"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Locks in a dewy glow finish",
@@ -240,8 +394,14 @@
         "Fine micro-mist atomiser",
         "OEM/ODM options for volume and scent"
       ],
-      "tags": ["retail", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -259,11 +419,26 @@
       "desc": "High-concentration EGF (Epidermal Growth Factor) ampoule from DD'ELL. Targets cellular turnover, skin barrier repair, and fine-line reduction. Manufactured by COSMEDIQUE Co., Ltd. — a biomedical cosmetic specialist.",
       "img": "images/products/ddell-egf-ampoule.jpg",
       "specs": [
-        ["Brand", "DD'ELL"],
-        ["Category", "Skincare / Advanced Ampoule"],
-        ["Key Actives", "Epidermal Growth Factor (EGF)"],
-        ["Retail MSRP", "USD 76"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DD'ELL"
+        ],
+        [
+          "Category",
+          "Skincare / Advanced Ampoule"
+        ],
+        [
+          "Key Actives",
+          "Epidermal Growth Factor (EGF)"
+        ],
+        [
+          "Retail MSRP",
+          "USD 76"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "High-potency EGF for cellular renewal",
@@ -271,8 +446,15 @@
         "Dermatologically tested formulation",
         "OEM/ODM available with MOQ 1,000"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -280,7 +462,6 @@
       "cardTag": "DD'ELL · EGF",
       "matchDesc": "EGF repair ampoule · DD'ELL · MOQ 1,000"
     },
-
     {
       "id": "demed-vitamin-c-ampoule",
       "sector": "k-beauty",
@@ -291,12 +472,30 @@
       "desc": "Dermatological Vitamin C brightening ampoule from DEMED (est. 1985). 7ml × 5 ampoules format; fast-absorbing formula targets dull tone, pigmentation, and uneven texture. Manufactured by COSMEDIQUE Co., Ltd. under 39+ years of Korean cosmetic R&D.",
       "img": "images/products/demed-vitamin-c-ampoule.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Ampoule"],
-        ["Volume", "7 ml × 5 EA"],
-        ["Key Actives", "Vitamin C (Ascorbyl derivatives)"],
-        ["Retail MSRP", "USD 133.20"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "7 ml × 5 EA"
+        ],
+        [
+          "Key Actives",
+          "Vitamin C (Ascorbyl derivatives)"
+        ],
+        [
+          "Retail MSRP",
+          "USD 133.20"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Brightening — targets dullness and pigmentation",
@@ -304,8 +503,15 @@
         "Sealed single-use vials preserve ingredient stability",
         "OEM/ODM available at MOQ 1,000 per SKU"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -323,12 +529,30 @@
       "desc": "High-concentration collagen ampoule in a generous 30 ml pump bottle — suitable for daily face + neck application. From DEMED (1985), a dermatological cosmetic brand manufactured by COSMEDIQUE Co., Ltd.",
       "img": "images/products/demed-collagen-ampoule-30ml.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Ampoule"],
-        ["Volume", "30 ml"],
-        ["Key Actives", "Hydrolysed collagen peptides"],
-        ["Retail MSRP", "USD 57.72"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "30 ml"
+        ],
+        [
+          "Key Actives",
+          "Hydrolysed collagen peptides"
+        ],
+        [
+          "Retail MSRP",
+          "USD 57.72"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Firming and elasticity support via collagen peptides",
@@ -336,8 +560,15 @@
         "Lightweight, fast-absorbing texture",
         "OEM/ODM-ready with custom packaging"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -355,12 +586,30 @@
       "desc": "5-pack of single-use 7 ml collagen ampoules for intensive weekly treatment. Sealed vials preserve peptide integrity. Manufactured by COSMEDIQUE Co., Ltd. — premium dermatological cosmetics since 1985.",
       "img": "images/products/demed-collagen-ampoule-7ml.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Ampoule"],
-        ["Volume", "7 ml × 5 EA"],
-        ["Key Actives", "Hydrolysed collagen peptides"],
-        ["Retail MSRP", "USD 133.20"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "7 ml × 5 EA"
+        ],
+        [
+          "Key Actives",
+          "Hydrolysed collagen peptides"
+        ],
+        [
+          "Retail MSRP",
+          "USD 133.20"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Intensive single-use 5-pack treatment",
@@ -368,8 +617,15 @@
         "Firming and elasticity support",
         "OEM/ODM with private-label vial branding"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -387,12 +643,30 @@
       "desc": "Soothing ampoule featuring multi-molecular-weight hyaluronic acid for layered hydration. Calms sensitised skin while restoring moisture barrier. From DEMED by COSMEDIQUE Co., Ltd.",
       "img": "images/products/demed-hyaluronic-soothing-ampoule.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Ampoule"],
-        ["Volume", "7 ml × 5 EA"],
-        ["Key Actives", "Multi-weight Hyaluronic Acid"],
-        ["Retail MSRP", "USD 125.80"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "7 ml × 5 EA"
+        ],
+        [
+          "Key Actives",
+          "Multi-weight Hyaluronic Acid"
+        ],
+        [
+          "Retail MSRP",
+          "USD 125.80"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Layered hydration with multi-weight HA",
@@ -400,8 +674,15 @@
         "Moisture-barrier repair",
         "OEM/ODM-ready at MOQ 1,000"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -419,12 +700,30 @@
       "desc": "Intensive brightening ampoule targeting uneven tone, melanin over-production, and post-inflammatory pigmentation. 5 single-use vials for concentrated weekly treatment. From DEMED, manufactured by COSMEDIQUE Co., Ltd.",
       "img": "images/products/demed-brightening-ampoule.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Ampoule"],
-        ["Volume", "7 ml × 5 EA"],
-        ["Key Actives", "Niacinamide + Vitamin C complex"],
-        ["Retail MSRP", "USD 133.20"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "7 ml × 5 EA"
+        ],
+        [
+          "Key Actives",
+          "Niacinamide + Vitamin C complex"
+        ],
+        [
+          "Retail MSRP",
+          "USD 133.20"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Targets melanin over-production and PIH",
@@ -432,8 +731,15 @@
         "Sealed vials preserve active stability",
         "OEM/ODM with custom active concentrations"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -451,12 +757,30 @@
       "desc": "Advanced spicule-technology ampoule from DEMED. Marine spicules create micro-channels that drive peptide actives deeper into the skin — clinical-grade home-care targeting fine lines and texture. Made by COSMEDIQUE Co., Ltd.",
       "img": "images/products/demed-spicule-peptide-300.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Advanced Dermatological Ampoule"],
-        ["Volume", "7 ml × 5 EA"],
-        ["Technology", "Marine spicule delivery + peptides"],
-        ["Retail MSRP", "USD 125.80"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Advanced Dermatological Ampoule"
+        ],
+        [
+          "Volume",
+          "7 ml × 5 EA"
+        ],
+        [
+          "Technology",
+          "Marine spicule delivery + peptides"
+        ],
+        [
+          "Retail MSRP",
+          "USD 125.80"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Marine spicule micro-channel delivery",
@@ -464,8 +788,15 @@
         "Clinical-grade home-care formulation",
         "OEM/ODM technology licensing available"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -483,12 +814,30 @@
       "desc": "Extra-rich moisture cream from DEMED's dermatological M-series. Targets very dry, dehydrated, or post-procedure skin with barrier-repair ceramides and occlusives. 50g jar. Manufactured by COSMEDIQUE Co., Ltd.",
       "img": "images/products/demed-extra-intense-moisture-cream-m8.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Moisture Cream"],
-        ["Volume", "50 g"],
-        ["Series", "M-series [M8]"],
-        ["Retail MSRP", "USD 72.52"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Moisture Cream"
+        ],
+        [
+          "Volume",
+          "50 g"
+        ],
+        [
+          "Series",
+          "M-series [M8]"
+        ],
+        [
+          "Retail MSRP",
+          "USD 72.52"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Intensive barrier-repair formulation",
@@ -496,8 +845,15 @@
         "Suitable for post-procedure / compromised skin",
         "OEM/ODM formulation tiers M1–M8 available"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,
@@ -513,12 +869,30 @@
       "sub": "Classic Hanok Stay · 25-pyeong (~83 m²)",
       "desc": "25-pyeong traditional stand-alone hanok unit at Yangpyeong Soohyang The Hanok — accommodates 4 standard / 6 max guests. Each unit features a hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered to long-term investors.",
       "specs": [
-        ["Floor Area", "25 pyeong (~83 m²)"],
-        ["Capacity", "4 standard / 6 max"],
-        ["Units", "3 identical (Rooms 1·2·3)"],
-        ["Amenities", "Hinoki cypress room · Full kitchen · Free WiFi"],
-        ["Location", "Yangpyeong, Gyeonggi-do"],
-        ["Share Program", "Annual gujwa-bunyang fractional share"]
+        [
+          "Floor Area",
+          "25 pyeong (~83 m²)"
+        ],
+        [
+          "Capacity",
+          "4 standard / 6 max"
+        ],
+        [
+          "Units",
+          "3 identical (Rooms 1·2·3)"
+        ],
+        [
+          "Amenities",
+          "Hinoki cypress room · Full kitchen · Free WiFi"
+        ],
+        [
+          "Location",
+          "Yangpyeong, Gyeonggi-do"
+        ],
+        [
+          "Share Program",
+          "Annual gujwa-bunyang fractional share"
+        ]
       ],
       "features": [
         "Stand-alone 25-pyeong traditional hanok unit",
@@ -526,8 +900,13 @@
         "Three identical units operable independently",
         "Annual fractional share (gujwa-bunyang) ownership available"
       ],
-      "tags": ["hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "maker": "Yangpyeong Soohyang The Hanok",
       "cardTag": "Classic Hanok Stay · 25-pyeong",
       "matchDesc": "Classic 25-pyeong hanok unit · Yangpyeong · 4 std / 6 max · annual share"
@@ -540,12 +919,30 @@
       "sub": "Premium Hanok Stay · 30-pyeong (~99 m²)",
       "desc": "30-pyeong premium stand-alone hanok unit at Yangpyeong Soohyang The Hanok — accommodates 4 standard / 8 max guests. Larger footprint with hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered.",
       "specs": [
-        ["Floor Area", "30 pyeong (~99 m²)"],
-        ["Capacity", "4 standard / 8 max"],
-        ["Units", "3 identical (Rooms 1·2·3)"],
-        ["Amenities", "Hinoki cypress room · Full kitchen · Free WiFi"],
-        ["Location", "Yangpyeong, Gyeonggi-do"],
-        ["Share Program", "Annual gujwa-bunyang fractional share"]
+        [
+          "Floor Area",
+          "30 pyeong (~99 m²)"
+        ],
+        [
+          "Capacity",
+          "4 standard / 8 max"
+        ],
+        [
+          "Units",
+          "3 identical (Rooms 1·2·3)"
+        ],
+        [
+          "Amenities",
+          "Hinoki cypress room · Full kitchen · Free WiFi"
+        ],
+        [
+          "Location",
+          "Yangpyeong, Gyeonggi-do"
+        ],
+        [
+          "Share Program",
+          "Annual gujwa-bunyang fractional share"
+        ]
       ],
       "features": [
         "Premium 30-pyeong stand-alone hanok with larger footprint",
@@ -553,8 +950,13 @@
         "Three identical units operable independently",
         "Annual fractional share (gujwa-bunyang) ownership available"
       ],
-      "tags": ["hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "maker": "Yangpyeong Soohyang The Hanok",
       "cardTag": "Premium Hanok Stay · 30-pyeong",
       "matchDesc": "Premium 30-pyeong hanok unit · Yangpyeong · 4 std / 8 max · annual share"
@@ -567,12 +969,30 @@
       "sub": "Pet-Friendly Hanok · 25-pyeong (~83 m²)",
       "desc": "25-pyeong pet-friendly stand-alone hanok unit at Yangpyeong Soohyang The Hanok — dogs welcome. Accommodates 4 standard / 6 max guests with hinoki cypress room, full kitchen, and free WiFi. Two identical units available (Rooms 1·2). Annual gujwa-bunyang fractional share ownership program offered.",
       "specs": [
-        ["Floor Area", "25 pyeong (~83 m²)"],
-        ["Capacity", "4 standard / 6 max"],
-        ["Units", "2 identical (Rooms 1·2)"],
-        ["Pet Policy", "Dogs welcome"],
-        ["Location", "Yangpyeong, Gyeonggi-do"],
-        ["Share Program", "Annual gujwa-bunyang fractional share"]
+        [
+          "Floor Area",
+          "25 pyeong (~83 m²)"
+        ],
+        [
+          "Capacity",
+          "4 standard / 6 max"
+        ],
+        [
+          "Units",
+          "2 identical (Rooms 1·2)"
+        ],
+        [
+          "Pet Policy",
+          "Dogs welcome"
+        ],
+        [
+          "Location",
+          "Yangpyeong, Gyeonggi-do"
+        ],
+        [
+          "Share Program",
+          "Annual gujwa-bunyang fractional share"
+        ]
       ],
       "features": [
         "Pet-friendly 25-pyeong stand-alone hanok (dogs welcome)",
@@ -580,8 +1000,13 @@
         "Two identical units operable independently",
         "Annual fractional share (gujwa-bunyang) ownership available"
       ],
-      "tags": ["hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "maker": "Yangpyeong Soohyang The Hanok",
       "cardTag": "Pet-Friendly Hanok · 25-pyeong",
       "matchDesc": "Pet-friendly 25-pyeong hanok · Yangpyeong · 4 std / 6 max · dogs welcome"
@@ -594,12 +1019,30 @@
       "sub": "Premium Pet-Friendly Hanok · 30-pyeong (~99 m²)",
       "desc": "30-pyeong premium pet-friendly stand-alone hanok unit at Yangpyeong Soohyang The Hanok — dogs welcome. Accommodates 4 standard / 8 max guests with hinoki cypress room, full kitchen, and free WiFi. Three identical units available (Rooms 1·2·3). Annual gujwa-bunyang fractional share ownership program offered.",
       "specs": [
-        ["Floor Area", "30 pyeong (~99 m²)"],
-        ["Capacity", "4 standard / 8 max"],
-        ["Units", "3 identical (Rooms 1·2·3)"],
-        ["Pet Policy", "Dogs welcome"],
-        ["Location", "Yangpyeong, Gyeonggi-do"],
-        ["Share Program", "Annual gujwa-bunyang fractional share"]
+        [
+          "Floor Area",
+          "30 pyeong (~99 m²)"
+        ],
+        [
+          "Capacity",
+          "4 standard / 8 max"
+        ],
+        [
+          "Units",
+          "3 identical (Rooms 1·2·3)"
+        ],
+        [
+          "Pet Policy",
+          "Dogs welcome"
+        ],
+        [
+          "Location",
+          "Yangpyeong, Gyeonggi-do"
+        ],
+        [
+          "Share Program",
+          "Annual gujwa-bunyang fractional share"
+        ]
       ],
       "features": [
         "Premium pet-friendly 30-pyeong stand-alone hanok (dogs welcome)",
@@ -607,8 +1050,13 @@
         "Three identical units operable independently",
         "Annual fractional share (gujwa-bunyang) ownership available"
       ],
-      "tags": ["hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "maker": "Yangpyeong Soohyang The Hanok",
       "cardTag": "Premium Pet-Friendly · 30-pyeong",
       "matchDesc": "Premium pet-friendly 30-pyeong hanok · Yangpyeong · 4 std / 8 max · dogs welcome"
@@ -622,16 +1070,46 @@
       "desc": "Dermaceutical face cream positioned in the K-Bio biotech-skincare category. Brand owned by Iho Biotech Co., Ltd. (Seoul, Republic of Korea) and manufactured by Esthemiga. Tube format, net 100 ml (approximately 100 g), formulated for direct topical application. Full INCI ingredient list and any functional-cosmetic certifications are shared by the brand owner under NDA — request via RFQ for buyer-side due diligence and OEM / private-label terms.",
       "img": "images/products/ray1-bio-cream.jpg",
       "specs": [
-        ["Brand", "RAY-1"],
-        ["Category", "Dermaceutical Face Cream"],
-        ["Volume", "100 ml (~100 g)"],
-        ["Format", "Squeeze tube"],
-        ["Manufacturer", "Esthemiga"],
-        ["Brand Owner", "Iho Biotech Co., Ltd."],
-        ["Origin", "Republic of Korea"],
-        ["Shelf Life", "24 months from MFG · PAO 12 months"],
-        ["Usage", "Direct topical application"],
-        ["Full INCI", "Available from brand owner on request (NDA)"]
+        [
+          "Brand",
+          "RAY-1"
+        ],
+        [
+          "Category",
+          "Dermaceutical Face Cream"
+        ],
+        [
+          "Volume",
+          "100 ml (~100 g)"
+        ],
+        [
+          "Format",
+          "Squeeze tube"
+        ],
+        [
+          "Manufacturer",
+          "Esthemiga"
+        ],
+        [
+          "Brand Owner",
+          "Iho Biotech Co., Ltd."
+        ],
+        [
+          "Origin",
+          "Republic of Korea"
+        ],
+        [
+          "Shelf Life",
+          "24 months from MFG · PAO 12 months"
+        ],
+        [
+          "Usage",
+          "Direct topical application"
+        ],
+        [
+          "Full INCI",
+          "Available from brand owner on request (NDA)"
+        ]
       ],
       "features": [
         "Dermaceutical face cream — K-Bio biotech-skincare positioning",
@@ -641,8 +1119,15 @@
         "Shelf life: 24 months from manufacture / 12 months PAO after opening",
         "OEM / private-label and export terms negotiable via RFQ"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "maker": "Iho Biotech Co., Ltd.",
       "cardTag": "K-Bio · Dermaceutical · RAY-1",
       "matchDesc": "RAY-1 Bio Cream dermaceutical · Iho Biotech · 100 ml tube"
@@ -657,11 +1142,26 @@
       "desc": "Recently-released ceramide-rich toner from DEMED. First-step hydration that primes the barrier for subsequent actives. Dermatologically formulated, manufactured by COSMEDIQUE Co., Ltd. under CGMP Korean standards.",
       "img": "images/products/demed-wonder-ceramid-toner.jpg",
       "specs": [
-        ["Brand", "DEMED (est. 1985)"],
-        ["Category", "Dermatological Toner"],
-        ["Key Actives", "Ceramide NP complex"],
-        ["Release", "2024 New Release"],
-        ["Manufacturer", "COSMEDIQUE Co., Ltd."]
+        [
+          "Brand",
+          "DEMED (est. 1985)"
+        ],
+        [
+          "Category",
+          "Dermatological Toner"
+        ],
+        [
+          "Key Actives",
+          "Ceramide NP complex"
+        ],
+        [
+          "Release",
+          "2024 New Release"
+        ],
+        [
+          "Manufacturer",
+          "COSMEDIQUE Co., Ltd."
+        ]
       ],
       "features": [
         "Ceramide-forward barrier support",
@@ -669,8 +1169,15 @@
         "Primes skin for subsequent ampoules / creams",
         "OEM/ODM-ready with custom fragrance / pH"
       ],
-      "tags": ["retail", "healthcare", "hospitality"],
-      "scale": ["m", "l"],
+      "tags": [
+        "retail",
+        "healthcare",
+        "hospitality"
+      ],
+      "scale": [
+        "m",
+        "l"
+      ],
       "moq": 1000,
       "leadMin": 4,
       "leadMax": 6,

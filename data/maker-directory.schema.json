@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERGSN Maker Directory Entry",
+  "description": "One Korean manufacturer prospect with at least one homepage URL (Korean and/or English). Generated and updated by scripts/discover-makers/. Each entry's status field tracks where it sits in the funnel: raw → verified → contacted → onboarded (or rejected).",
+  "type": "object",
+  "required": ["id", "homepageHost", "discoveredAt", "status", "sources"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Stable lowercase slug, derived from homepageHost minus TLD (e.g. 'cosmax-com'). Never change after first save — used for dedup."
+    },
+    "legalName": { "type": "string", "description": "Full legal company name as it appears on the corporate site / About page (Romanised when given)." },
+    "displayName": { "type": "string", "description": "Short brand/display name for tables and UI." },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "k-security", "k-tech", "k-energy", "k-bio", "k-beauty",
+        "k-culture-goods", "k-franchise", "k-smart-living", "k-tourism-assets",
+        "uncategorised"
+      ],
+      "description": "Best-guess ERGSN sector. 'uncategorised' until manual review."
+    },
+    "subCategory": { "type": "string", "description": "Optional within-sector grouping (e.g. cosmetics-OEM, CCTV-DVR). Free-form for now." },
+    "homepageHost": { "type": "string", "description": "Bare host of the canonical homepage, lowercase, no port, no www. (e.g. 'cosmax.com'). Dedup key." },
+    "koreanHomepageUrl": { "type": "string", "format": "uri", "description": "Best Korean-language homepage URL (often the root)." },
+    "englishHomepageUrl": { "type": "string", "format": "uri", "description": "Best English-language homepage URL — may be the same host /en/ subpath, en.host subdomain, or a separate host." },
+    "englishDetectedBy": {
+      "type": "string",
+      "enum": ["html-lang", "hreflang", "en-subpath", "en-subdomain", "lang-toggle-link", "content-heuristic", "manual"],
+      "description": "How the English homepage was identified. Sets confidence — manual = highest."
+    },
+    "headquartersCountry": { "type": "string", "description": "ISO-3166 alpha-2 (default 'KR' for this directory) — captured to filter out non-Korean false positives." },
+    "headquartersCity": { "type": "string" },
+    "headquartersAddress": { "type": "string" },
+    "businessType": {
+      "type": "string",
+      "enum": ["manufacturer", "manufacturer-trader", "trader-only", "service-provider", "unclear"],
+      "description": "Filter for 'manufacturer' / 'manufacturer-trader' — others are deprioritised. 'unclear' until verification step."
+    },
+    "exportSignals": {
+      "type": "array",
+      "description": "Free-text signals that the company exports (e.g. 'Incoterms mentioned', 'tradeKorea profile', 'KOTRA certified'). Used to rank.",
+      "items": { "type": "string" }
+    },
+    "structuredDataHints": {
+      "type": "object",
+      "description": "Raw extraction artefacts so we can re-parse later without re-fetching.",
+      "properties": {
+        "jsonLdTypes": { "type": "array", "items": { "type": "string" } },
+        "ogSiteName": { "type": "string" },
+        "metaDescription": { "type": "string" },
+        "htmlLangAttr": { "type": "string" }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "description": "Contact points harvested from the homepage / contact page. Mirrors data/maker-contacts.json's contact dict so onboarded makers can be promoted into that registry without remapping.",
+      "properties": {
+        "email": { "type": "string", "description": "Primary email; usually overseas@ / sales@ / global@." },
+        "tel": { "type": "string", "description": "Primary phone — international form preferred (e.g. +82-2-...)." },
+        "fax": { "type": "string" },
+        "whatsapp": { "type": "string", "description": "WhatsApp number in international form (e.g. +82-10-...)." },
+        "kakaoTalk": { "type": "string", "description": "KakaoTalk ID or channel handle." },
+        "line": { "type": "string" },
+        "wechat": { "type": "string" },
+        "skype": { "type": "string" },
+        "telegram": { "type": "string" }
+      }
+    },
+    "social": {
+      "type": "object",
+      "properties": {
+        "instagram": { "type": "string", "format": "uri" },
+        "facebook": { "type": "string", "format": "uri" },
+        "linkedin": { "type": "string", "format": "uri" },
+        "youtube": { "type": "string", "format": "uri" },
+        "kakaoChannel": { "type": "string", "format": "uri" }
+      }
+    },
+    "businessHours": { "type": "string", "description": "e.g. 'Mon-Fri 09:00-18:00 KST'." },
+    "factoryAddress": { "type": "string", "description": "Distinct from headquartersAddress; many Korean SMEs publish both." },
+    "contactPageUrl": { "type": "string", "format": "uri", "description": "Direct URL to the maker's /contact page (used as a richer source than the homepage when LLM-fetched)." },
+    "sources": {
+      "type": "array",
+      "description": "Where this maker was discovered. Multiple entries when re-discovered from a different seed — useful trust signal.",
+      "items": {
+        "type": "object",
+        "required": ["seed", "discoveredAt"],
+        "properties": {
+          "seed": { "type": "string", "description": "Seed identifier — e.g. 'manual:k-beauty-known-list', 'search:brave', 'directory:ec21', 'directory:gobizkorea'." },
+          "seedQuery": { "type": "string", "description": "The query / category / page that surfaced this maker, for reproducibility." },
+          "discoveredAt": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["raw", "verified", "pending", "contacted", "onboarded", "rejected"],
+      "description": "Funnel state. raw = freshly discovered, no human review. verified = LLM/heuristic + human OK. pending = revisit. contacted = outreach sent. onboarded = at least one product registered. rejected = manual exclude."
+    },
+    "contractSigned": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the maker has signed a partner contract with ERGSN. Used to filter onboarded vs contracted relationships in the maker review UI."
+    },
+    "contractDate": { "type": "string", "format": "date", "description": "When the contract was marked signed in the UI." },
+    "rejectedReason": { "type": "string", "description": "If status=rejected, why — keep so future seed runs don't re-add." },
+    "discoveredAt": { "type": "string", "format": "date", "description": "First-seen date." },
+    "lastVerifiedAt": { "type": "string", "format": "date" },
+    "lastFetchedAt": { "type": "string", "format": "date-time" },
+    "notes": { "type": "string" }
+  }
+}

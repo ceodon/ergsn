@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ERGSN — Maker Review</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.svg">
+<style>
+  :root {
+    --navy: #111418;          /* ergsn.net main nav background */
+    --gold: #34d298;          /* ergsn.net brand green (kept name for legacy var refs) */
+    --gold-light: #00ffa1;
+    --bg: #f7f7f5;
+    --card-bg: #fff;
+    --line: #e6e6e0;
+    --muted: #6b6b6b;
+    --raw: #888;
+    --verified: #2a7d3f;
+    --pending: #b58a00;
+    --rejected: #b03030;
+    --contacted: #1e63b8;
+    --onboarded: #5e2db8;
+    --eh-nav-h: 56px;
+  }
+  * { box-sizing: border-box; }
+  /* Reserve space for the vertical scrollbar even when the page is short.
+     Without this, filtering / typing in search shrinks the result set,
+     hides the scrollbar, and the viewport widens — the whole grid
+     re-flows visibly. scrollbar-gutter:stable keeps the gutter always
+     present (Chrome 94+, Firefox 97+). */
+  html { scrollbar-gutter: stable; overflow-y: scroll; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: #1a1a1a; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+
+  /* ─── ERGSN wordmark — used inline in .review-bar h1 (kerning policy) ─ */
+  .eh-logo-mark { font-family: inherit; font-size: 22px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; line-height: 1; background: linear-gradient(320deg, #a8a8a6 15%, #c2c0c0 48%, #f9f8f6 64%, #d4d4d4 76%, #7f7f7f 88%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-kerning: none; font-feature-settings: "kern" 0; -webkit-font-feature-settings: "kern" 0; vertical-align: -1px; margin-right: 6px; }
+  .eh-logo-mark .eh-e { background: linear-gradient(84deg, #00bf79 42%, #00ffa1 81%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* ─── Review-mode sub-toolbar — wrapped in .sticky-top so review-bar +
+        filter toolbar lock together at the top while scrolling cards. ─── */
+  .sticky-top { position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .review-bar { background: linear-gradient(180deg, #1a1f26, #111418); color: #fff; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; align-items: flex-start; gap: 18px; flex-wrap: wrap; }
+  .review-bar .h-left { flex: 1; min-width: 250px; }
+  .review-bar .h1 { font-weight: 700; letter-spacing: .04em; font-size: 15px; }
+  .review-bar .h1 .gold { color: #34d298; }
+  .review-bar .h-sub { font-size: 12px; opacity: .65; margin-top: 2px; }
+  .review-bar .h-sub code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: #ccc; }
+  .crawl select, .crawl input[type="number"] { padding: 3px 6px; border: 1px solid #2a323b; border-radius: 5px; background: #181c22; color: #fff; font-size: 12px; }
+  .crawl label { display: flex; align-items: center; gap: 4px; }
+  .crawl button { padding: 4px 10px; border-radius: 6px; border: 1px solid #34d298; background: #34d298; color: #0f1110; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .crawl button:hover:not(:disabled) { background: #00ffa1; }
+  .crawl button:disabled { opacity: 0.4; cursor: not-allowed; background: #2a323b; border-color: #2a323b; color: #888; }
+  .crawl button.bn-add-maker { background: transparent; color: #34d298; border-color: #34d298; }
+  .crawl button.bn-add-maker:hover { background: #34d298; color: #0f1110; }
+  .crawl .cr-status { color: #34d298; margin-left: 4px; max-width: 360px; }
+  .crawl .cr-status a { color: #34d298; text-decoration: underline; cursor: pointer; }
+
+  /* Add-maker mini modal — distinct from the product discovery modal */
+  .am-back { position: fixed; inset: 0; background: rgba(10, 31, 68, 0.55); display: none; align-items: center; justify-content: center; z-index: 110; padding: 20px; }
+  .am-back.open { display: flex; }
+  .am-card { background: #fff; border-radius: 10px; width: 100%; max-width: 460px; box-shadow: 0 20px 50px rgba(0,0,0,.3); display: flex; flex-direction: column; }
+  .am-head { padding: 12px 16px; background: var(--navy); color: #fff; border-radius: 10px 10px 0 0; display: flex; align-items: center; gap: 10px; }
+  .am-head h2 { margin: 0; font-size: 14px; flex: 1; }
+  .am-head .close { background: transparent; border: 1px solid #44567c; color: #fff; padding: 3px 8px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+  .am-body { padding: 16px; display: grid; gap: 10px; font-size: 13px; }
+  .am-body label { display: grid; gap: 3px; font-weight: 600; color: #333; }
+  .am-body label .req { color: #b03030; }
+  .am-body input[type="text"], .am-body input[type="url"], .am-body select, .am-body textarea {
+    padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; font-family: inherit; font-size: 13px; font-weight: 400; color: #1a1a1a; }
+  .am-body textarea { min-height: 50px; resize: vertical; }
+  .am-body .am-checkbox { display: flex; align-items: center; gap: 6px; font-weight: normal; }
+  .am-foot { padding: 10px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; }
+  .am-foot button { padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; font-weight: 600; }
+  .am-foot button.am-cancel { background: #fff; border: 1px solid var(--line); color: #555; }
+  .am-foot button.am-submit { background: #34d298; border: 1px solid #34d298; color: #0f1110; }
+  .am-foot button.am-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .am-foot .am-msg { flex: 1; font-size: 12px; align-self: center; color: var(--muted); }
+  .am-foot .am-msg.err { color: var(--rejected); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); align-items: center; }
+  .toolbar label { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .toolbar select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; background: #fff; font-family: inherit; }
+  .toolbar .stat { margin-left: auto; color: var(--muted); font-size: 11px; align-self: center; }
+  .toolbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
+
+  /* Search box sits on the same bottom row as stats pills — stats on the
+     left, search box right-aligned. .bottom-row wrapper forces the wrap. */
+  .bottom-row { flex-basis: 100%; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+  .bottom-row .stats-bar { flex: 1 1 auto; padding: 0; min-width: 0; }
+  /* Search field — single outer box matching .crawl chrome. Input is
+     borderless / transparent so only one frame shows, just like .crawl.
+     overflow:hidden + input flex:1 1 0 + width:0 keep the box from
+     growing past its 380px slot when the user types a long query. */
+  .review-search { flex: 0 1 380px; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; line-height: 1.3; color: #ccc; font-size: 12px; }
+  .review-search:focus-within { border-color: rgba(52,210,152,.6); }
+  .review-search .icon { flex: 0 0 auto; color: #34d298; font-size: 13px; }
+  .review-search input { flex: 1 1 0; width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: inherit; font-size: 12px; min-width: 0; padding: 0; line-height: 1.3; }
+  .review-search input::placeholder { color: rgba(255,255,255,.4); }
+  .review-search .clear { flex: 0 0 auto; background: transparent; border: 0; color: rgba(255,255,255,.5); cursor: pointer; padding: 0 2px; font-size: 14px; line-height: 1; display: none; }
+  .review-search .clear:hover { color: #fff; }
+  .review-search.has-q .clear { display: inline; }
+  .review-search .clear:hover { color: #fff; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; padding: 16px 20px 60px; }
+  .card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card h2 { margin: 0; font-size: 16px; line-height: 1.25; word-break: break-word; }
+  .card h2 .display { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 6px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; line-height: 1.5; font-weight: 600; }
+  .b-status-raw { background: #efefef; color: var(--raw); }
+  .b-status-verified { background: #e0f2e6; color: var(--verified); }
+  .b-status-pending { background: #fbf2d6; color: var(--pending); }
+  .b-status-rejected { background: #f6dede; color: var(--rejected); }
+  .b-status-contacted { background: #dde9f7; color: var(--contacted); }
+  .b-status-onboarded { background: #ebdef7; color: var(--onboarded); }
+  .b-contract { background: #d8f6e8; color: #0d5c39; border: 1px dashed #34d298; }
+  .b-counts { background: #f5f5f5; color: #444; font-weight: normal; }
+  .b-counts .reg { color: var(--verified); font-weight: 700; }
+  .b-counts .cand { color: var(--contacted); font-weight: 700; }
+  .b-origin-existing { background: #efe3f6; color: #5e2db8; }
+  .b-origin-discovered { background: #d6eaff; color: #1e63b8; }
+  .b-promoted { background: #e0f2e6; color: var(--verified); border: 1px solid #b9d9c2; }
+  .b-new { background: #ffe8a8; color: #6b4a00; font-weight: 800; animation: pulse-new 2s ease-out 1; }
+  @keyframes pulse-new { 0% { box-shadow: 0 0 0 0 rgba(201,166,107,.6); } 100% { box-shadow: 0 0 0 8px rgba(201,166,107,0); } }
+
+  /* Stats counter inline in review-bar */
+  .stats-bar { display: flex; flex-wrap: wrap; gap: 10px; padding: 6px 0 0 0; font-size: 11px; color: rgba(255,255,255,.7); }
+  .stats-bar .pill { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: 3px 9px; cursor: pointer; transition: background .15s, border-color .15s; }
+  .stats-bar .pill:hover { background: rgba(52,210,152,.15); border-color: rgba(52,210,152,.4); color: #fff; }
+  .stats-bar .pill .n { color: #34d298; font-weight: 700; margin-right: 3px; }
+  .stats-bar .pill.active { background: #34d298; border-color: #34d298; color: #0f1110; }
+  .stats-bar .pill.active .n { color: #0f1110; }
+  .b-sector { background: var(--navy); color: var(--gold); }
+  .b-biz-manufacturer { background: #e0f2e6; color: var(--verified); }
+  .b-biz-manufacturer-trader { background: #e6f0fa; color: var(--contacted); }
+  .b-biz-trader-only { background: #fbf2d6; color: var(--pending); }
+  .b-biz-service-provider { background: #efe3f6; color: var(--onboarded); }
+  .b-biz-unclear { background: #efefef; color: var(--muted); }
+  .b-en { background: #efe3d6; color: #8a5a1f; }
+  .b-noen { background: #f6e0e0; color: #b03030; }
+  .links { font-size: 12px; word-break: break-all; }
+  .links a { color: var(--navy); text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .links .lbl { color: var(--muted); margin-right: 4px; }
+  .meta { font-size: 12px; color: var(--muted); display: grid; gap: 2px; }
+  .signals { font-size: 12px; color: #444; max-height: 80px; overflow: auto; padding: 6px 8px; background: #fafaf6; border-radius: 6px; }
+  .signals span { display: inline-block; margin: 1px 4px 1px 0; padding: 1px 6px; border-radius: 4px; background: #efefe6; }
+  .contact { font-size: 12px; padding: 6px 8px; background: #f6f8fc; border: 1px solid #e0e6f0; border-radius: 6px; display: grid; gap: 3px; }
+  .contact .row { display: flex; gap: 6px; align-items: center; word-break: break-all; }
+  .contact .row .ico { width: 18px; flex: 0 0 18px; text-align: center; }
+  .contact a { color: var(--navy); text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
+  .contact .empty { color: var(--muted); font-style: italic; }
+  .social { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; padding: 0 4px; }
+  .social a { color: var(--navy); text-decoration: none; }
+  .social a:hover { text-decoration: underline; }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--line); }
+  .actions button { padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 12px; cursor: pointer; font-weight: 600; }
+  .actions button.bn-verify { background: #f0faf3; border-color: #b9d9c2; color: var(--verified); }
+  .actions button.bn-pending { background: #fdf6df; border-color: #e2cc7e; color: var(--pending); }
+  .actions button.bn-reject { background: #fcecec; border-color: #e2b9b9; color: var(--rejected); }
+  .actions button.bn-raw { background: #f5f5f5; border-color: #ddd; color: var(--raw); }
+  .actions button:hover { filter: brightness(.96); }
+  .actions select { padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; background: #fff; margin-left: auto; }
+  .actions button.bn-products { background: var(--navy); border-color: var(--navy); color: var(--gold); }
+  .actions button.bn-promote { background: #d8f6e8; border-color: #34d298; color: #0d5c39; }
+  .actions button.bn-promote:hover { background: #34d298; color: #0f1110; }
+  .notes { width: 100%; min-height: 38px; resize: vertical; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font-family: inherit; font-size: 12px; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); }
+  .saving { font-size: 11px; color: var(--muted); }
+  .saving.ok { color: var(--verified); }
+  .saving.err { color: var(--rejected); }
+
+  /* Products modal */
+  .modal-back { position: fixed; inset: 0; background: rgba(10, 31, 68, 0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .modal-back.open { display: flex; }
+  .modal-card { background: #fff; border-radius: 12px; width: 100%; max-width: 1100px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,.3); overflow: hidden; }
+  .modal-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; background: var(--navy); color: #fff; }
+  .modal-head h2 { margin: 0; font-size: 15px; flex: 1; }
+  .modal-head .close { background: transparent; border: 1px solid #44567c; color: #fff; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  .modal-meta { padding: 10px 18px; background: #fafaf6; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); display: grid; gap: 4px; }
+  .modal-meta a { color: var(--navy); }
+  .modal-body { padding: 16px 18px; overflow-y: auto; flex: 1; }
+  .modal-loading { padding: 32px; text-align: center; color: var(--muted); }
+  .modal-loading .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid #ddd; border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .pcard { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
+  .pcard .img { width: 100%; aspect-ratio: 4/3; background: #f3f3ee no-repeat center / contain; border-bottom: 1px solid var(--line); }
+  .pcard .body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .pcard h3 { margin: 0; font-size: 14px; line-height: 1.3; word-break: break-word; }
+  .pcard .desc { font-size: 12px; color: #555; max-height: 60px; overflow: hidden; }
+  .pcard .pmeta { font-size: 11px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+  .pcard .url { font-size: 11px; word-break: break-all; }
+  .pcard .url a { color: var(--navy); }
+  .pcard .pactions { display: flex; gap: 6px; padding: 8px 12px; border-top: 1px dashed var(--line); align-items: center; }
+  .pcard .pactions button { padding: 4px 8px; border-radius: 5px; font-size: 11px; cursor: pointer; font-weight: 600; border: 1px solid var(--line); background: #fff; }
+  .pcard .pactions button.bn-save { background: #f0faf3; border-color: #b9d9c2; color: var(--verified); }
+  .pcard .pactions button.bn-discard { background: #fcecec; border-color: #e2b9b9; color: var(--rejected); }
+  .pcard .pstatus { margin-left: auto; font-size: 10px; padding: 2px 6px; border-radius: 999px; font-weight: 600; }
+  .pcard.s-saved .pstatus { background: #e0f2e6; color: var(--verified); }
+  .pcard.s-discarded .pstatus { background: #f6dede; color: var(--rejected); }
+  .pcard.s-registered .pstatus { background: #ebdef7; color: var(--onboarded); }
+  .pcard.s-discarded { opacity: 0.55; }
+  .pcard.s-registered { border-color: #34d298; box-shadow: 0 0 0 2px rgba(52,210,152,.15); }
+  .pcard.s-registered .pactions button.bn-register, .pcard.s-registered .pactions button.bn-save { display: none; }
+  .pcard:not(.s-registered) .pactions button.bn-unregister { display: none; }
+  .pcard .pactions button.bn-register { background: #d8f6e8; border-color: #34d298; color: #0d5c39; }
+  .pcard .pactions button.bn-unregister { background: #f6dede; border-color: #d0a0a0; color: var(--rejected); }
+  .modal-section-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+  .errlist { margin-top: 16px; padding: 10px 12px; background: #fdf6f0; border: 1px solid #f0d0a8; border-radius: 8px; font-size: 12px; color: #a05a00; display: grid; gap: 4px; }
+</style>
+</head>
+<body>
+
+<div class="sticky-top">
+<div class="review-bar">
+  <div class="h-left">
+    <div class="h1"><a href="https://ergsn.net/" target="_blank" rel="noopener" style="text-decoration:none;"><span class="eh-logo-mark"><span class="eh-e">E</span><span>R</span><span>G</span><span>S</span><span>N</span></span></a> Maker Review</div>
+    <div class="h-sub">Approve or reject discovered Korean manufacturers — selections persist to <code>data/maker-directory.json</code> on this PC.</div>
+  </div>
+  <div class="crawl">
+    <label>Mode
+      <select id="cr-mode">
+        <option value="discover">discover (new makers)</option>
+        <option value="enrich">enrich (refill fields)</option>
+      </select>
+    </label>
+    <label>Seed
+      <select id="cr-seed">
+        <option value="search">search (Tavily)</option>
+        <option value="manual">manual</option>
+      </select>
+    </label>
+    <label>Sector
+      <select id="cr-sector">
+        <option value="__all__">all sectors</option>
+      </select>
+    </label>
+    <label id="cr-refresh-wrap" style="display:none;">
+      <input type="checkbox" id="cr-refresh"> refresh (re-do all)
+    </label>
+    <label>Max
+      <input type="number" id="cr-max" value="200" min="1" max="500" style="width: 60px;">
+    </label>
+    <button id="cr-run">+ Crawl</button>
+    <button id="am-open" class="bn-add-maker" type="button" title="Add a known maker manually (skips auto-discovery)">+ Add maker</button>
+    <span class="cr-status" id="cr-status"></span>
+  </div>
+  <div class="bottom-row">
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="review-search" id="search-box">
+      <span class="icon">🔎</span>
+      <input id="f-q" placeholder="search name / host / city…" autocomplete="off">
+      <button class="clear" id="f-q-clear" title="Clear" type="button">×</button>
+    </div>
+  </div>
+</div>
+
+<div class="am-back" id="am-modal">
+  <div class="am-card">
+    <div class="am-head">
+      <h2>Add maker manually</h2>
+      <button type="button" class="close" onclick="closeAddMaker()">Close</button>
+    </div>
+    <div class="am-body">
+      <label>Legal name <span class="req">*</span>
+        <input type="text" id="am-legalName" placeholder="e.g. ERGSN CO., LTD." maxlength="200" required>
+      </label>
+      <label>Homepage URL
+        <input type="url" id="am-homepage" placeholder="https://example.com/" maxlength="500">
+      </label>
+      <label>Sector
+        <select id="am-sector"></select>
+      </label>
+      <label>Status
+        <select id="am-status">
+          <option value="verified">verified</option>
+          <option value="pending">pending</option>
+          <option value="contacted">contacted</option>
+          <option value="onboarded" selected>onboarded</option>
+          <option value="raw">raw</option>
+        </select>
+      </label>
+      <label class="am-checkbox">
+        <input type="checkbox" id="am-contract"> 📝 contract signed
+      </label>
+      <label>Notes
+        <textarea id="am-notes" placeholder="optional context (factory location, contact name, etc.)" maxlength="500"></textarea>
+      </label>
+    </div>
+    <div class="am-foot">
+      <span class="am-msg" id="am-msg"></span>
+      <button type="button" class="am-cancel" onclick="closeAddMaker()">Cancel</button>
+      <button type="button" class="am-submit" id="am-submit">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <label>Sector
+    <select id="f-sector">
+      <option value="">all</option>
+    </select>
+  </label>
+  <label>Status
+    <select id="f-status">
+      <option value="">all</option>
+      <option value="raw" selected>raw</option>
+      <option value="verified">verified</option>
+      <option value="pending">pending</option>
+      <option value="rejected">rejected</option>
+      <option value="contacted">contacted</option>
+      <option value="onboarded">onboarded</option>
+    </select>
+  </label>
+  <label>Contract
+    <select id="f-contract">
+      <option value="">all</option>
+      <option value="yes">signed</option>
+      <option value="no">unsigned</option>
+    </select>
+  </label>
+  <label>Business
+    <select id="f-biz">
+      <option value="">all</option>
+      <option value="manufacturer">manufacturer</option>
+      <option value="manufacturer-trader">mfg-trader</option>
+      <option value="trader-only">trader</option>
+      <option value="service-provider">service</option>
+      <option value="unclear">unclear</option>
+    </select>
+  </label>
+  <label>Products
+    <select id="f-hasprod">
+      <option value="">all</option>
+      <option value="reg">registered ≥1</option>
+      <option value="cand">candidates ≥1</option>
+      <option value="any">any ≥1</option>
+      <option value="none">none</option>
+    </select>
+  </label>
+  <span class="sep"></span>
+  <label>Origin
+    <select id="f-origin">
+      <option value="">all</option>
+      <option value="existing">existing</option>
+      <option value="discovered">discovered</option>
+    </select>
+  </label>
+  <label>Discovered
+    <select id="f-recent">
+      <option value="">any time</option>
+      <option value="today">today</option>
+      <option value="7d">7 days</option>
+      <option value="30d">30 days</option>
+    </select>
+  </label>
+  <span class="sep"></span>
+  <label>English
+    <select id="f-en">
+      <option value="">all</option>
+      <option value="yes">EN ✓</option>
+      <option value="no">no EN</option>
+    </select>
+  </label>
+  <span class="stat" id="stat"></span>
+</div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal-back" id="modal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="m-title">Products</h2>
+      <button class="close" onclick="closeModal()">Close</button>
+    </div>
+    <div class="modal-meta" id="m-meta"></div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+
+<script>
+const SECTORS = ['k-security','k-tech','k-energy','k-bio','k-beauty','k-culture-goods','k-franchise','k-smart-living','k-tourism-assets','uncategorised'];
+
+let allMakers = [];
+
+function $(id) { return document.getElementById(id); }
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+function digits(s) { return String(s || '').replace(/[^\d+]/g, ''); }
+
+function contactBlock(m) {
+  const c = m.contact || {};
+  const rows = [];
+  if (c.email)   rows.push(`<div class="row"><span class="ico">📧</span><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`);
+  if (c.tel)     rows.push(`<div class="row"><span class="ico">📞</span><a href="tel:${esc(digits(c.tel))}">${esc(c.tel)}</a></div>`);
+  if (c.fax)     rows.push(`<div class="row"><span class="ico">📠</span>${esc(c.fax)}</div>`);
+  if (c.whatsapp) {
+    const w = digits(c.whatsapp).replace(/^\+/, '');
+    rows.push(`<div class="row"><span class="ico">💬</span><a href="https://wa.me/${esc(w)}" target="_blank" rel="noopener">WhatsApp · ${esc(c.whatsapp)}</a></div>`);
+  }
+  if (c.kakaoTalk) rows.push(`<div class="row"><span class="ico">💛</span>KakaoTalk · ${esc(c.kakaoTalk)}</div>`);
+  if (c.line)     rows.push(`<div class="row"><span class="ico">💚</span>LINE · ${esc(c.line)}</div>`);
+  if (c.wechat)   rows.push(`<div class="row"><span class="ico">🟩</span>WeChat · ${esc(c.wechat)}</div>`);
+  if (c.skype)    rows.push(`<div class="row"><span class="ico">🟦</span>Skype · ${esc(c.skype)}</div>`);
+  if (c.telegram) rows.push(`<div class="row"><span class="ico">✈️</span>Telegram · ${esc(c.telegram)}</div>`);
+  if (m.contactPageUrl) rows.push(`<div class="row"><span class="ico">🔗</span><a href="${esc(m.contactPageUrl)}" target="_blank" rel="noopener">contact page</a></div>`);
+  if (rows.length === 0) {
+    return `<div class="contact"><div class="empty">no contact extracted yet — open EN site → /contact and add manually, or re-run enrich</div></div>`;
+  }
+  return `<div class="contact">${rows.join('')}</div>`;
+}
+
+function socialBlock(m) {
+  const s = m.social || {};
+  const links = [];
+  if (s.instagram) links.push(`<a href="${esc(s.instagram)}" target="_blank" rel="noopener">📷 Instagram</a>`);
+  if (s.facebook)  links.push(`<a href="${esc(s.facebook)}" target="_blank" rel="noopener">📘 Facebook</a>`);
+  if (s.linkedin)  links.push(`<a href="${esc(s.linkedin)}" target="_blank" rel="noopener">💼 LinkedIn</a>`);
+  if (s.youtube)   links.push(`<a href="${esc(s.youtube)}" target="_blank" rel="noopener">▶️ YouTube</a>`);
+  if (s.kakaoChannel) links.push(`<a href="${esc(s.kakaoChannel)}" target="_blank" rel="noopener">💛 KakaoCh</a>`);
+  if (links.length === 0) return '';
+  return `<div class="social">${links.join('')}</div>`;
+}
+
+function fillSectorFilter() {
+  const sel = $('f-sector');
+  for (const s of SECTORS) {
+    const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
+  }
+}
+
+async function loadMakers() {
+  const r = await fetch('/api/makers'); const data = await r.json();
+  allMakers = data.makers || [];
+  render();
+}
+
+// Local-date formatter (avoids the UTC drift of toISOString().slice(0,10)
+// — KST is UTC+9 so a request at KST 02:00 would otherwise see UTC's "yesterday").
+function localDateIso(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function todayLocalIso() { return localDateIso(new Date()); }
+function daysAgoIso(n) {
+  const d = new Date(); d.setDate(d.getDate() - n);
+  return localDateIso(d);
+}
+
+function filtered() {
+  const sec = $('f-sector').value;
+  const st = $('f-status').value;
+  const biz = $('f-biz').value;
+  const en = $('f-en').value;
+  const ct = $('f-contract').value;
+  const hp = $('f-hasprod').value;
+  const og = $('f-origin').value;
+  const rc = $('f-recent').value;
+  const q = $('f-q').value.trim().toLowerCase();
+  const today = todayLocalIso();
+  const cut7 = daysAgoIso(7);
+  const cut30 = daysAgoIso(30);
+  return allMakers.filter(m => {
+    if (sec && m.sector !== sec) return false;
+    if (st && (m.status || 'raw') !== st) return false;
+    if (biz && (m.businessType || 'unclear') !== biz) return false;
+    if (en === 'yes' && !m.englishHomepageUrl) return false;
+    if (en === 'no' && m.englishHomepageUrl) return false;
+    if (ct === 'yes' && !m.contractSigned) return false;
+    if (ct === 'no' && m.contractSigned) return false;
+    const c = m._counts || { registered: 0, candidates: 0 };
+    if (hp === 'reg' && !c.registered) return false;
+    if (hp === 'cand' && !c.candidates) return false;
+    if (hp === 'any' && !c.registered && !c.candidates) return false;
+    if (hp === 'none' && (c.registered || c.candidates)) return false;
+    if (og && (m._origin || 'discovered') !== og) return false;
+    if (rc) {
+      const d = m.discoveredAt || '';
+      if (rc === 'today' && d !== today) return false;
+      if (rc === '7d' && d < cut7) return false;
+      if (rc === '30d' && d < cut30) return false;
+    }
+    if (q) {
+      const blob = (m.legalName + ' ' + m.displayName + ' ' + m.homepageHost + ' ' + (m.headquartersCity || '')).toLowerCase();
+      if (!blob.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render() {
+  const list = filtered();
+  $('stat').textContent = `${list.length} of ${allMakers.length}`;
+  renderStats();
+  const grid = $('grid');
+  grid.innerHTML = '';
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="empty">No matching entries.</div>';
+    return;
+  }
+  for (const m of list) grid.appendChild(card(m));
+}
+
+function renderStats() {
+  const today = todayLocalIso();
+  const cut7 = daysAgoIso(7);
+  const ex = allMakers.filter(m => m._origin === 'existing').length;
+  const di = allMakers.filter(m => m._origin === 'discovered').length;
+  const t  = allMakers.filter(m => m.discoveredAt === today).length;
+  const w  = allMakers.filter(m => (m.discoveredAt || '') >= cut7).length;
+  const og = $('f-origin').value;
+  const rc = $('f-recent').value;
+  const html = `
+    <span class="pill ${og === '' && rc === '' ? 'active' : ''}" data-act="all">All <span class="n">${allMakers.length}</span></span>
+    <span class="pill ${og === 'existing' ? 'active' : ''}" data-act="existing">🏠 Existing <span class="n">${ex}</span></span>
+    <span class="pill ${og === 'discovered' ? 'active' : ''}" data-act="discovered">🔍 Discovered <span class="n">${di}</span></span>
+    <span class="pill ${rc === '7d' ? 'active' : ''}" data-act="7d">Last 7 days <span class="n">${w}</span></span>
+    <span class="pill ${rc === 'today' ? 'active' : ''}" data-act="today">Today <span class="n">${t}</span></span>
+  `;
+  const bar = $('stats-bar');
+  bar.innerHTML = html;
+  bar.querySelectorAll('.pill').forEach(p => p.addEventListener('click', () => applyStatsFilter(p.dataset.act)));
+}
+
+function applyStatsFilter(act) {
+  // Reset both filters first so pills behave like radio
+  $('f-origin').value = '';
+  $('f-recent').value = '';
+  if (act === 'existing' || act === 'discovered') $('f-origin').value = act;
+  else if (act === 'today' || act === '7d' || act === '30d') $('f-recent').value = act;
+  // 'all' clears both
+  render();
+}
+
+function card(m) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.dataset.id = m.id;
+
+  const status = m.status || 'raw';
+  const biz = m.businessType || 'unclear';
+  const enUrl = m.englishHomepageUrl || '';
+  const koUrl = m.koreanHomepageUrl || '';
+  const contract = !!m.contractSigned;
+  const counts = m._counts || { registered: 0, candidates: 0, saved: 0, discarded: 0 };
+
+  const signals = (m.exportSignals || []).map(s => `<span>${esc(s)}</span>`).join('');
+
+  el.innerHTML = `
+    <h2>${esc(m.legalName || m.displayName || m.homepageHost)}<span class="display">${esc(m.legalName ? (m.displayName || '') : '')}</span></h2>
+    <div class="badges">
+      <span class="badge b-sector">${esc(m.sector)}</span>
+      <span class="badge b-status-${esc(status)}">${esc(status)}</span>
+      <span class="badge b-biz-${esc(biz)}">${esc(biz)}</span>
+      <span class="badge ${enUrl ? 'b-en' : 'b-noen'}">${enUrl ? 'EN ✓' : 'no EN'}</span>
+      ${contract ? '<span class="badge b-contract">📝 contract</span>' : ''}
+      ${m._promoted ? '<span class="badge b-promoted">📋 in contacts</span>' : ''}
+      <span class="badge b-origin-${esc(m._origin || 'discovered')}">${m._origin === 'existing' ? '🏠 existing' : '🔍 discovered'}</span>
+      ${m.discoveredAt === todayLocalIso() && m._origin === 'discovered' ? '<span class="badge b-new">NEW</span>' : ''}
+      ${(counts.registered || counts.candidates) ? `<span class="badge b-counts"><span class="reg">${counts.registered}</span> reg · <span class="cand">${counts.candidates}</span> cand</span>` : ''}
+    </div>
+    <div class="links">
+      ${enUrl ? `<div><span class="lbl">EN</span><a href="${esc(enUrl)}" target="_blank" rel="noopener">${esc(enUrl)}</a></div>` : ''}
+      ${koUrl ? `<div><span class="lbl">KO</span><a href="${esc(koUrl)}" target="_blank" rel="noopener">${esc(koUrl)}</a></div>` : ''}
+      <div><span class="lbl">host</span>${esc(m.homepageHost)}</div>
+    </div>
+    <div class="meta">
+      ${m.headquartersCity || m.headquartersCountry ? `<div>📍 ${esc([m.headquartersCity, m.headquartersCountry].filter(Boolean).join(', '))}</div>` : ''}
+      ${m.headquartersAddress ? `<div>HQ · ${esc(m.headquartersAddress)}</div>` : ''}
+      ${m.factoryAddress ? `<div>Factory · ${esc(m.factoryAddress)}</div>` : ''}
+      ${m.subCategory ? `<div>📂 ${esc(m.subCategory)}</div>` : ''}
+      ${m.businessHours ? `<div>🕘 ${esc(m.businessHours)}</div>` : ''}
+      ${(m.sources || []).map(s => `<div>↳ ${esc(s.seed)} · ${esc(s.discoveredAt)}</div>`).join('')}
+    </div>
+    ${contactBlock(m)}
+    ${socialBlock(m)}
+    ${signals ? `<div class="signals">${signals}</div>` : ''}
+    <textarea class="notes" placeholder="notes (optional)…">${esc(m.notes || '')}</textarea>
+    <div class="actions">
+      <button class="bn-verify" data-act="verified">✓ Verify</button>
+      <button class="bn-pending" data-act="pending">⏸ Pending</button>
+      <button class="bn-reject" data-act="rejected">✕ Reject</button>
+      <button class="bn-raw" data-act="raw">↺ Raw</button>
+      <button class="bn-products" data-act="products">→ Products</button>
+      <button class="bn-promote" data-act="promote" title="Push this maker into data/maker-contacts.json + Telegram alert">📋 Promote</button>
+      <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;">
+        <input type="checkbox" class="contract-chk"${contract ? ' checked' : ''}> 📝계약
+      </label>
+      <select class="sec-sel">
+        ${SECTORS.map(s => `<option value="${s}"${s === m.sector ? ' selected' : ''}>${s}</option>`).join('')}
+      </select>
+      <span class="saving"></span>
+    </div>
+  `;
+
+  el.querySelectorAll('button[data-act]').forEach(b => {
+    const act = b.dataset.act;
+    if (act === 'products') {
+      b.addEventListener('click', () => openProductsModal(m));
+    } else if (act === 'promote') {
+      b.addEventListener('click', () => promoteMaker(el, m));
+    } else {
+      b.addEventListener('click', () => save(el, m, { status: act }));
+    }
+  });
+  el.querySelector('.sec-sel').addEventListener('change', e => save(el, m, { sector: e.target.value }));
+  el.querySelector('.notes').addEventListener('change', e => save(el, m, { notes: e.target.value }));
+  el.querySelector('.contract-chk').addEventListener('change', e => save(el, m, { contractSigned: e.target.checked }));
+  return el;
+}
+
+async function save(el, m, patch) {
+  const saving = el.querySelector('.saving');
+  saving.textContent = 'saving…'; saving.className = 'saving';
+  try {
+    const r = await fetch('/api/makers/' + encodeURIComponent(m.id), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch)
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'unknown');
+    Object.assign(m, d.entry);
+    // If contract was just signed, the server auto-promoted to contacts +
+    // sent Telegram. Reflect that in the local card state.
+    if (d.promoted) m._promoted = true;
+    let extra = '';
+    if (d.promoted) extra += ' · 📋 ' + d.promoted;
+    if (d.notified) extra += d.notified.ok ? ' · 📨 sent' : ' · 📨 fail';
+    saving.textContent = 'saved' + extra; saving.className = 'saving ok';
+    // Re-render only this card to reflect new badge colors etc.
+    const fresh = card(m);
+    el.replaceWith(fresh);
+    // If filter would now exclude this card, render() to drop it
+    const stFilter = $('f-status').value;
+    if (stFilter && (m.status !== stFilter)) render();
+  } catch (e) {
+    saving.textContent = 'error: ' + e.message; saving.className = 'saving err';
+  }
+}
+
+async function promoteMaker(el, m) {
+  const saving = el.querySelector('.saving');
+  saving.textContent = 'promoting…'; saving.className = 'saving';
+  try {
+    const r = await fetch('/api/makers/' + encodeURIComponent(m.id) + '/promote', { method: 'POST' });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    m._promoted = true;
+    const tg = d.notified && d.notified.ok ? '📨 sent' : '📨 fail';
+    saving.textContent = `📋 ${d.action} · ${tg}`; saving.className = 'saving ok';
+    const fresh = card(m); el.replaceWith(fresh);
+  } catch (e) {
+    saving.textContent = 'promote error: ' + e.message; saving.className = 'saving err';
+  }
+}
+
+['f-sector', 'f-status', 'f-biz', 'f-en', 'f-contract', 'f-hasprod', 'f-origin', 'f-recent'].forEach(id => $(id).addEventListener('change', render));
+$('f-q').addEventListener('input', () => {
+  $('search-box').classList.toggle('has-q', $('f-q').value.length > 0);
+  render();
+});
+$('f-q-clear').addEventListener('click', () => {
+  $('f-q').value = '';
+  $('search-box').classList.remove('has-q');
+  $('f-q').focus();
+  render();
+});
+
+fillSectorFilter();
+fillCrawlSectorOptions();
+fillAddMakerSectorOptions();
+loadMakers();
+wireCrawl();
+wireAddMaker();
+
+// ─── Add maker manually ──────────────────────────────────────────────────────
+
+function fillAddMakerSectorOptions() {
+  const sel = document.getElementById('am-sector');
+  for (const s of SECTORS) {
+    const o = document.createElement('option'); o.value = s; o.textContent = s;
+    sel.appendChild(o);
+  }
+}
+
+function wireAddMaker() {
+  document.getElementById('am-open').addEventListener('click', openAddMaker);
+  document.getElementById('am-submit').addEventListener('click', submitAddMaker);
+  document.getElementById('am-modal').addEventListener('click', e => { if (e.target.id === 'am-modal') closeAddMaker(); });
+}
+
+function openAddMaker() {
+  document.getElementById('am-legalName').value = '';
+  document.getElementById('am-homepage').value = '';
+  document.getElementById('am-sector').value = 'uncategorised';
+  document.getElementById('am-status').value = 'onboarded';
+  document.getElementById('am-contract').checked = false;
+  document.getElementById('am-notes').value = '';
+  document.getElementById('am-msg').textContent = '';
+  document.getElementById('am-msg').className = 'am-msg';
+  document.getElementById('am-modal').classList.add('open');
+  document.getElementById('am-legalName').focus();
+}
+
+function closeAddMaker() {
+  document.getElementById('am-modal').classList.remove('open');
+}
+
+async function submitAddMaker() {
+  const body = {
+    legalName: document.getElementById('am-legalName').value.trim(),
+    homepageUrl: document.getElementById('am-homepage').value.trim(),
+    sector: document.getElementById('am-sector').value,
+    status: document.getElementById('am-status').value,
+    contractSigned: document.getElementById('am-contract').checked,
+    notes: document.getElementById('am-notes').value.trim()
+  };
+  if (!body.legalName) {
+    const m = document.getElementById('am-msg'); m.textContent = 'Legal name is required.'; m.className = 'am-msg err'; return;
+  }
+  const submitBtn = document.getElementById('am-submit');
+  submitBtn.disabled = true;
+  document.getElementById('am-msg').textContent = 'saving…';
+  try {
+    const r = await fetch('/api/makers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    closeAddMaker();
+    loadMakers();
+  } catch (e) {
+    const m = document.getElementById('am-msg'); m.textContent = 'error: ' + e.message; m.className = 'am-msg err';
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
+// ─── Crawl panel ─────────────────────────────────────────────────────────────
+
+function fillCrawlSectorOptions() {
+  const sel = $('cr-sector');
+  for (const s of SECTORS.filter(x => x !== 'uncategorised')) {
+    const o = document.createElement('option'); o.value = s; o.textContent = s;
+    sel.appendChild(o);
+  }
+}
+
+function wireCrawl() {
+  $('cr-mode').addEventListener('change', () => {
+    const mode = $('cr-mode').value;
+    $('cr-refresh-wrap').style.display = mode === 'enrich' ? 'flex' : 'none';
+    refreshCrawlButton();
+  });
+  $('cr-seed').addEventListener('change', refreshCrawlButton);
+  $('cr-run').addEventListener('click', startCrawlJob);
+  refreshLimits();
+  setInterval(refreshLimits, 30000);
+}
+
+let aiState = { exceeded: false };
+
+async function refreshLimits() {
+  try {
+    const r = await fetch('/api/limits');
+    const d = await r.json();
+    aiState = (d && d.ai) || { exceeded: false };
+  } catch (_) { /* ignore — keep prior state */ }
+  refreshCrawlButton();
+}
+
+function modeUsesLLM(mode, seed) {
+  // enrich always uses CF Workers AI. discover-products uses it too (but
+  // that's per-maker from the modal). The Crawl panel only kicks discover
+  // (Tavily) or enrich (LLM), so:
+  return mode === 'enrich';
+}
+
+function refreshCrawlButton() {
+  const btn = $('cr-run');
+  if (crawlPolling) {
+    btn.disabled = true;
+    btn.textContent = '… running';
+    btn.title = 'A crawl is already running';
+    return;
+  }
+  const mode = $('cr-mode').value;
+  const seed = $('cr-seed').value;
+  if (modeUsesLLM(mode, seed) && aiState.exceeded) {
+    btn.disabled = true;
+    btn.textContent = 'Limit';
+    const reset = aiState.resetsAt ? new Date(aiState.resetsAt).toLocaleString() : 'tomorrow';
+    btn.title = `${aiState.reason || 'AI quota exceeded'} — resets ${reset}`;
+  } else {
+    btn.disabled = false;
+    btn.textContent = '+ Crawl';
+    btn.title = '';
+  }
+}
+
+let crawlPolling = false;
+
+async function startCrawlJob() {
+  if (crawlPolling) { alert('A crawl is already running. Wait for it to finish.'); return; }
+  const seed = $('cr-seed').value;
+  const sector = $('cr-sector').value;
+  const mode = $('cr-mode').value;
+  const refresh = $('cr-refresh').checked;
+  const max = parseInt($('cr-max').value, 10) || 200;
+
+  $('cr-status').textContent = 'starting…';
+  crawlPolling = true;
+  refreshCrawlButton();
+  try {
+    const r = await fetch('/api/crawl/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seed, sector, mode, refresh, max })
+    });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'start failed');
+    pollCrawl(d.jobId);
+  } catch (e) {
+    $('cr-status').textContent = 'error: ' + e.message;
+    crawlPolling = false;
+    refreshCrawlButton();
+  }
+}
+
+async function pollCrawl(jobId) {
+  let firstTick = true;
+  const tick = async () => {
+    try {
+      const r = await fetch('/api/crawl/' + encodeURIComponent(jobId));
+      const d = await r.json();
+      if (!d.ok) throw new Error(d.error || 'poll failed');
+      const j = d.job;
+      const lastLine = j.lines.length ? j.lines[j.lines.length - 1].slice(0, 60) : '';
+      const c = j.counts || {};
+      const summary = j.mode === 'enrich'
+        ? `enriched ${c.enriched}, failed ${c.enrichFailed}, updated ${c.updated}`
+        : `fetched ${c.fetched}, EN ${c.en}, +${c.added} new, ${c.updated} updated`;
+      if (j.status === 'running') {
+        $('cr-status').innerHTML = `▶ ${esc(j.mode)}/${esc(j.seed)}/${esc(j.sector === '__all__' ? 'all' : j.sector)} · ${j.lines.length} lines · ${summary}`;
+        setTimeout(tick, 3000);
+      } else {
+        crawlPolling = false;
+        const code = j.status === 'done' ? '✓' : '✗';
+        const newCount = c.added || 0;
+        const todayLink = newCount > 0
+          ? ` · <a onclick="$('f-recent').value='today';$('f-origin').value='discovered';loadMakers()">show ${newCount} new</a>`
+          : '';
+        $('cr-status').innerHTML = `${code} ${esc(j.status)} · ${summary}${todayLink} · <a onclick="loadMakers()">reload all</a>`;
+        // Auto-reload the maker grid so new entries appear
+        loadMakers();
+        // Re-check AI quota — this job may have just exhausted it
+        refreshLimits();
+      }
+    } catch (e) {
+      $('cr-status').textContent = 'poll error: ' + e.message;
+      crawlPolling = false;
+      refreshCrawlButton();
+    }
+    firstTick = false;
+  };
+  tick();
+}
+
+// ─── Products modal ──────────────────────────────────────────────────────────
+
+let currentMaker = null;
+
+function closeModal() {
+  $('modal').classList.remove('open');
+  currentMaker = null;
+}
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target.id === 'modal') closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+async function openProductsModal(maker) {
+  currentMaker = maker;
+  $('m-title').textContent = `Products — ${maker.legalName || maker.displayName || maker.homepageHost}`;
+  const srcUrl = maker.englishHomepageUrl || maker.koreanHomepageUrl;
+  $('m-meta').innerHTML = `
+    ${srcUrl ? `<div>↳ Source: <a href="${esc(srcUrl)}" target="_blank" rel="noopener">${esc(srcUrl)}</a></div>` : '<div>↳ No source URL (synced from products.json)</div>'}
+    <div>
+      <button class="close" id="m-discover" style="background:var(--gold);color:var(--navy);border-color:var(--gold);">→ Discover from website</button>
+      &nbsp;Discovers via Cloudflare Workers AI (~10-30s).
+    </div>
+  `;
+  $('m-body').innerHTML = `<div class="modal-loading">Loading existing products…</div>`;
+  $('modal').classList.add('open');
+
+  // First load existing combined view (no LLM call)
+  await loadAndRenderModal(maker.id);
+
+  // Wire up the explicit Discover button so the LLM call only fires when wanted
+  const dbtn = document.getElementById('m-discover');
+  if (dbtn) dbtn.addEventListener('click', () => discoverAndRender(maker.id));
+}
+
+async function loadAndRenderModal(makerId) {
+  try {
+    const r = await fetch(`/api/maker-products/${encodeURIComponent(makerId)}`);
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'load failed');
+    renderCombined(d);
+  } catch (e) {
+    $('m-body').innerHTML = `<div class="errlist"><div>Load failed: ${esc(e.message)}</div></div>`;
+  }
+}
+
+async function discoverAndRender(makerId) {
+  $('m-body').innerHTML = `<div class="modal-loading"><span class="spinner"></span>Discovering products via Workers AI…</div>`;
+  try {
+    const r = await fetch(`/api/makers/${encodeURIComponent(makerId)}/discover-products`, { method: 'POST' });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'discovery failed');
+    // Reload combined view (server has now upserted new candidates)
+    await loadAndRenderModal(makerId);
+    if (d.errors && d.errors.length) {
+      const errsEl = document.createElement('div');
+      errsEl.className = 'errlist';
+      errsEl.innerHTML = '<strong>Discovery notes:</strong>' + d.errors.map(e => `<div>· ${esc(e.stage)}${e.url ? ' (' + esc(e.url) + ')' : ''}: ${esc(e.error)}</div>`).join('');
+      $('m-body').appendChild(errsEl);
+    }
+  } catch (e) {
+    $('m-body').innerHTML = `<div class="errlist"><div>Discovery failed: ${esc(e.message)}</div></div>`;
+  }
+}
+
+function renderCombined(d) {
+  const registered = (d.registered || []).slice();
+  const candidates = (d.candidates || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+
+  let html = '';
+
+  // Registered (live on ergsn.net) — gold border, [Unregister] action
+  html += `<div class="modal-section-title">Registered on ergsn.net (${registered.length})</div>`;
+  if (registered.length === 0) {
+    html += `<div class="empty" style="padding:14px;">No products from this maker are live on ergsn.net yet.</div>`;
+  } else {
+    html += `<div class="pgrid">`;
+    for (const p of registered) html += registeredCardHtml(p);
+    html += `</div>`;
+  }
+
+  // Candidates from discovery
+  html += `<div class="modal-section-title" style="margin-top:18px;">Candidates from discovery (${candidates.length})</div>`;
+  if (candidates.length === 0) {
+    html += `<div class="empty" style="padding:14px;">No discovery candidates yet. Click "→ Discover from website" above to scan the maker's site.</div>`;
+  } else {
+    html += `<div class="pgrid">`;
+    for (const p of candidates) html += candidateCardHtml(p);
+    html += `</div>`;
+  }
+
+  $('m-body').innerHTML = html;
+  $('m-body').querySelectorAll('.pcard.kind-cand').forEach(card => {
+    const id = card.dataset.id;
+    card.querySelector('.bn-save').addEventListener('click', () => patchProduct(card, id, 'saved'));
+    card.querySelector('.bn-discard').addEventListener('click', () => patchProduct(card, id, 'discarded'));
+    const reg = card.querySelector('.bn-register');
+    if (reg) reg.addEventListener('click', () => registerProduct(card, id));
+  });
+  $('m-body').querySelectorAll('.pcard.kind-reg').forEach(card => {
+    const id = card.dataset.id;
+    card.querySelector('.bn-unregister').addEventListener('click', () => unregisterProduct(card, id));
+  });
+}
+
+function candidateCardHtml(p) {
+  const img = p.imageUrl ? `style="background-image:url('${esc(p.imageUrl).replace(/'/g, "\\'")}')"` : 'style="background:#f3f3ee"';
+  const status = p.status || 'candidate';
+  return `
+    <div class="pcard kind-cand s-${esc(status)}" data-id="${esc(p.id)}">
+      <div class="img" ${img}></div>
+      <div class="body">
+        <h3>${esc(p.name)}</h3>
+        ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ''}
+        <div class="pmeta">
+          ${p.priceText ? `<span>💲 ${esc(p.priceText)}</span>` : ''}
+          ${p.moqText ? `<span>📦 ${esc(p.moqText)}</span>` : ''}
+        </div>
+        <div class="url"><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a></div>
+      </div>
+      <div class="pactions">
+        <button class="bn-save">✓ Save</button>
+        <button class="bn-register">→ Register</button>
+        <button class="bn-discard">✕ Discard</button>
+        <span class="pstatus">${esc(status)}</span>
+      </div>
+    </div>
+  `;
+}
+
+function registeredCardHtml(p) {
+  const img = p.img ? `style="background-image:url('${esc(p.img).replace(/'/g, "\\'")}')"` : 'style="background:#f3f3ee"';
+  return `
+    <div class="pcard kind-reg s-registered" data-id="${esc(p.id)}">
+      <div class="img" ${img}></div>
+      <div class="body">
+        <h3>${esc(p.model || p.id)}</h3>
+        ${p.sub ? `<div class="desc">${esc(p.sub)}</div>` : ''}
+        <div class="pmeta">
+          ${p.part ? `<span>🔢 ${esc(p.part)}</span>` : ''}
+          ${p.moq ? `<span>📦 MOQ ${esc(p.moq)}</span>` : ''}
+          ${(p.priceLow != null || p.priceHigh != null) ? `<span>💲 $${p.priceLow || '?'}–$${p.priceHigh || '?'}</span>` : ''}
+        </div>
+        ${p.sourceUrl ? `<div class="url"><a href="${esc(p.sourceUrl)}" target="_blank" rel="noopener">source</a></div>` : ''}
+      </div>
+      <div class="pactions">
+        <button class="bn-unregister">✕ Unregister</button>
+        <span class="pstatus">live · ${esc(p.id)}</span>
+      </div>
+    </div>
+  `;
+}
+
+async function registerProduct(card, id) {
+  const btn = card.querySelector('.bn-register');
+  const statusEl = card.querySelector('.pstatus');
+  if (btn) { btn.disabled = true; btn.textContent = '… extracting…'; }
+  if (statusEl) { statusEl.textContent = 'fetching detail · LLM · image'; }
+  try {
+    const r = await fetch('/api/products/' + encodeURIComponent(id) + '/register', { method: 'POST' });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    const p = d.product || {};
+    const lines = [
+      `Registered: ${p.model}`,
+      `id: ${p.id}    sector: ${p.sector}`,
+      '',
+      `LLM enrichment: ${d.enriched ? '✓ specs/features/price extracted' : '✗ skeleton only (LLM failed)'}`,
+      `Image:          ${d.images.saved}/${d.images.tried} downloaded ${d.images.primary ? '(' + d.images.primary + ')' : ''}`,
+      '',
+      `Filled fields:`,
+      `  specs:    ${p.specs.length}`,
+      `  features: ${p.features.length}`,
+      `  tags:     ${p.tags.join(', ') || '—'}`,
+      `  scale:    ${p.scale.join(', ') || '—'}`,
+      `  cardTag:  ${p.cardTag || '—'}`,
+      `  moq:      ${p.moq || '—'}`,
+      `  lead:     ${p.leadMin || '?'}–${p.leadMax || '?'} weeks`,
+      `  price:    $${p.priceLow || '?'}–$${p.priceHigh || '?'}`,
+      '',
+      `Next: edit data/products.json if needed → npm run build:products → git push`
+    ];
+    if (d.errors && d.errors.length) {
+      lines.push('', 'Notes:');
+      for (const e of d.errors) lines.push('  · ' + e.stage + ': ' + e.error);
+    }
+    alert(lines.join('\n'));
+    if (currentMaker) await loadAndRenderModal(currentMaker.id);
+    loadMakers();
+    refreshLimits();
+  } catch (e) {
+    alert('register failed: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = '→ Register'; }
+    if (statusEl) { statusEl.textContent = 'candidate'; }
+  }
+}
+
+async function unregisterProduct(card, productJsonId) {
+  if (!confirm('Remove "' + (card.querySelector('h3').textContent) + '" from data/products.json?\nYou will need to run npm run build:products to push the change to ergsn.net.')) return;
+  const r = await fetch('/api/registered/' + encodeURIComponent(productJsonId) + '/unregister', { method: 'POST' });
+  const d = await r.json();
+  if (!d.ok) { alert('unregister failed: ' + d.error); return; }
+  if (currentMaker) await loadAndRenderModal(currentMaker.id);
+  loadMakers();
+}
+
+async function patchProduct(card, id, status) {
+  const r = await fetch('/api/products/' + encodeURIComponent(id), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  });
+  const d = await r.json();
+  if (!d.ok) { alert('save failed: ' + d.error); return; }
+  // Re-render this card with new status
+  card.classList.remove('s-candidate', 's-saved', 's-discarded', 's-registered');
+  card.classList.add('s-' + status);
+  card.querySelector('.pstatus').textContent = status;
+}
+</script>
+
+</body>
+</html>

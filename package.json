@@ -8,7 +8,9 @@
     "build:css":      "esbuild styles/app.entry.css  --bundle --minify --outfile=dist/app.css",
     "build":          "npm run build:products && npm run build:js && npm run build:css",
     "process:images": "node scripts/process-images.js",
-    "extract:pdf":    "node scripts/extract-from-pdf.js"
+    "extract:pdf":    "node scripts/extract-from-pdf.js",
+    "discover:makers": "node scripts/discover-makers/discover.js",
+    "review:makers":   "node scripts/discover-makers/review-server.js"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

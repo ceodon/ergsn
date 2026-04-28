@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERGSN Product Candidate",
+  "description": "One product surfaced from a maker's website. Lives in data/product-candidates.json until reviewed; saved candidates are later transformed into data/products.json rows by hand or a follow-up tool.",
+  "type": "object",
+  "required": ["id", "makerId", "name", "url", "discoveredAt", "status"],
+  "properties": {
+    "id": { "type": "string", "description": "Stable slug — sha-1 of makerId + url, truncated to 12 chars." },
+    "makerId": { "type": "string", "description": "Foreign key into data/maker-directory.json[].id." },
+    "name": { "type": "string", "description": "Product name as extracted from the page." },
+    "url": { "type": "string", "format": "uri", "description": "Product detail page URL on the maker's site." },
+    "imageUrl": { "type": "string", "format": "uri", "description": "Best image URL (hero / thumbnail) discovered for the product." },
+    "description": { "type": "string", "description": "Short blurb (≤300 chars) extracted from the page." },
+    "priceText": { "type": "string", "description": "Price string verbatim if present (currency mixed)." },
+    "moqText": { "type": "string", "description": "MOQ verbatim text if present." },
+    "discoveredFrom": { "type": "string", "format": "uri", "description": "The catalog/listing page where this product was found." },
+    "discoveredAt": { "type": "string", "format": "date" },
+    "status": {
+      "type": "string",
+      "enum": ["candidate", "saved", "discarded", "registered"],
+      "description": "candidate (just discovered) → saved (passed first review) → registered (added to data/products.json) OR discarded."
+    },
+    "notes": { "type": "string" }
+  }
+}
