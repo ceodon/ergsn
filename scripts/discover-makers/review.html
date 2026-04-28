@@ -160,6 +160,19 @@
   .actions button.bn-reject { background: #fcecec; border-color: #e2b9b9; color: var(--rejected); }
   .actions button.bn-raw { background: #f5f5f5; border-color: #ddd; color: var(--raw); }
   .actions button:hover { filter: brightness(.96); }
+  /* Active = matches the maker's current status. Filled fg + ring so the
+     selected option is unmistakable at a glance. */
+  .actions button.is-active { color: #fff; box-shadow: 0 0 0 2px currentColor inset, 0 0 0 2px rgba(0,0,0,.06); font-weight: 800; }
+  .actions button.bn-verify.is-active { background: var(--verified); border-color: var(--verified); }
+  .actions button.bn-verify.is-active::before { content: '● '; }
+  .actions button.bn-pending.is-active { background: var(--pending); border-color: var(--pending); }
+  .actions button.bn-pending.is-active::before { content: '● '; }
+  .actions button.bn-reject.is-active { background: var(--rejected); border-color: var(--rejected); }
+  .actions button.bn-reject.is-active::before { content: '● '; }
+  .actions button.bn-raw.is-active { background: #777; border-color: #777; }
+  .actions button.bn-raw.is-active::before { content: '● '; }
+  .actions button.bn-promote.is-active { background: #34d298; border-color: #34d298; color: #0f1110; }
+  .actions button.bn-promote.is-active::before { content: '✓ '; }
   .actions select { padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; background: #fff; margin-left: auto; }
   .actions button.bn-products { background: var(--navy); border-color: var(--navy); color: var(--gold); }
   .actions button.bn-promote { background: #d8f6e8; border-color: #34d298; color: #0d5c39; }
@@ -619,12 +632,12 @@ function card(m) {
     ${signals ? `<div class="signals">${signals}</div>` : ''}
     <textarea class="notes" placeholder="notes (optional)…">${esc(m.notes || '')}</textarea>
     <div class="actions">
-      <button class="bn-verify" data-act="verified">✓ Verify</button>
-      <button class="bn-pending" data-act="pending">⏸ Pending</button>
-      <button class="bn-reject" data-act="rejected">✕ Reject</button>
-      <button class="bn-raw" data-act="raw">↺ Raw</button>
+      <button class="bn-verify${status === 'verified' ? ' is-active' : ''}" data-act="verified">✓ Verify</button>
+      <button class="bn-pending${status === 'pending' ? ' is-active' : ''}" data-act="pending">⏸ Pending</button>
+      <button class="bn-reject${status === 'rejected' ? ' is-active' : ''}" data-act="rejected">✕ Reject</button>
+      <button class="bn-raw${status === 'raw' ? ' is-active' : ''}" data-act="raw">↺ Raw</button>
       <button class="bn-products" data-act="products">→ Products</button>
-      <button class="bn-promote" data-act="promote" title="Push this maker into data/maker-contacts.json + Telegram alert">📋 Promote</button>
+      <button class="bn-promote${m._promoted ? ' is-active' : ''}" data-act="promote" title="${m._promoted ? 'Already in data/maker-contacts.json' : 'Push this maker into data/maker-contacts.json + Telegram alert'}">📋 Promote</button>
       <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;">
         <input type="checkbox" class="contract-chk"${contract ? ' checked' : ''}> 📝계약
       </label>
