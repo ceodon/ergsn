@@ -129,6 +129,10 @@
   .stats-bar .pill .n { color: #34d298; font-weight: 700; margin-right: 3px; }
   .stats-bar .pill.active { background: #34d298; border-color: #34d298; color: #0f1110; }
   .stats-bar .pill.active .n { color: #0f1110; }
+  .stats-bar .pill.ai-quota { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); color: #fff; cursor: default; font-weight: 600; }
+  .stats-bar .pill.ai-quota:hover { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); }
+  .stats-bar .pill.ai-quota.exhausted { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); color: #ffb4b4; }
+  .stats-bar .pill.ai-quota.exhausted:hover { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); }
   .b-sector { background: var(--navy); color: var(--gold); }
   .b-biz-manufacturer { background: #e0f2e6; color: var(--verified); }
   .b-biz-manufacturer-trader { background: #e6f0fa; color: var(--contacted); }
@@ -257,7 +261,7 @@
       <input type="checkbox" id="cr-refresh"> refresh (re-do all)
     </label>
     <label>Max
-      <input type="number" id="cr-max" value="200" min="1" max="500" style="width: 60px;">
+      <input type="number" id="cr-max" value="1000" min="1" max="10000" step="100" style="width: 70px;">
     </label>
     <button id="cr-run">+ Crawl</button>
     <button id="am-open" class="bn-add-maker" type="button" title="Add a known maker manually (skips auto-discovery)">+ Add maker</button>
@@ -556,6 +560,14 @@ function render() {
   grid.querySelectorAll('.card-pending').forEach(p => io.observe(p));
 }
 
+// CF Workers AI free tier = 10,000 Neurons/day. We surface a countdown pill
+// that approximates remaining budget. aiUsage is filled by /api/limits poll
+// (refreshLimits) which the server tracks per-UTC-day across enrich/discover/
+// register paths. Neurons-per-call isn't published by CF so we approximate
+// with a per-call factor; the existing aiState.exceeded boolean is the
+// authoritative block when CF actually returns 429.
+const AI_QUOTA_DAILY = 10000;
+
 function renderStats() {
   const today = todayLocalIso();
   const cut7 = daysAgoIso(7);
@@ -565,7 +577,21 @@ function renderStats() {
   const w  = allMakers.filter(m => (m.discoveredAt || '') >= cut7).length;
   const og = $('f-origin').value;
   const rc = $('f-recent').value;
+  // AI quota pill — pulls from aiState (refreshed by refreshLimits)
+  const used = aiState && aiState.estimatedNeuronsToday ? aiState.estimatedNeuronsToday : 0;
+  const calls = aiState && aiState.callsToday ? aiState.callsToday : 0;
+  const tokens = aiState && aiState.tokensToday ? aiState.tokensToday : 0;
+  const left = Math.max(0, AI_QUOTA_DAILY - used);
+  const pct = Math.min(100, Math.round((used / AI_QUOTA_DAILY) * 100));
+  const aiTitle = aiState && aiState.exceeded
+    ? `CF blocked: ${aiState.reason || 'quota exhausted'} · resets ${aiState.resetsAt ? new Date(aiState.resetsAt).toLocaleString() : 'tomorrow'}`
+    : `CF Workers AI free tier — ${calls.toLocaleString()} calls / ~${tokens.toLocaleString()} tokens today (Neuron count is approximate; CF blocks at the real wall)`;
+  const aiCls = aiState && aiState.exceeded ? 'pill ai-quota exhausted' : 'pill ai-quota';
+  const aiTxt = aiState && aiState.exceeded
+    ? `🚫 AI quota exhausted (0 / ${AI_QUOTA_DAILY.toLocaleString()})`
+    : `🤖 AI: ~${used.toLocaleString()} / ${AI_QUOTA_DAILY.toLocaleString()} <span class="n">${left.toLocaleString()} left</span> · ${pct}%`;
   const html = `
+    <span class="${aiCls}" title="${esc(aiTitle)}">${aiTxt}</span>
     <span class="pill ${og === '' && rc === '' ? 'active' : ''}" data-act="all">All <span class="n">${allMakers.length}</span></span>
     <span class="pill ${og === 'existing' ? 'active' : ''}" data-act="existing">🏠 Existing <span class="n">${ex}</span></span>
     <span class="pill ${og === 'discovered' ? 'active' : ''}" data-act="discovered">🔍 Discovered <span class="n">${di}</span></span>
@@ -574,7 +600,7 @@ function renderStats() {
   `;
   const bar = $('stats-bar');
   bar.innerHTML = html;
-  bar.querySelectorAll('.pill').forEach(p => p.addEventListener('click', () => applyStatsFilter(p.dataset.act)));
+  bar.querySelectorAll('.pill[data-act]').forEach(p => p.addEventListener('click', () => applyStatsFilter(p.dataset.act)));
 }
 
 function applyStatsFilter(act) {
@@ -834,6 +860,10 @@ async function refreshLimits() {
     aiState = (d && d.ai) || { exceeded: false };
   } catch (_) { /* ignore — keep prior state */ }
   refreshCrawlButton();
+  // Re-render the stats bar so the AI-quota pill reflects fresh numbers
+  if (typeof renderStats === 'function' && typeof allMakers !== 'undefined' && Array.isArray(allMakers)) {
+    renderStats();
+  }
 }
 
 function modeUsesLLM(mode, seed) {
@@ -904,9 +934,15 @@ async function pollCrawl(jobId) {
       const j = d.job;
       const lastLine = j.lines.length ? j.lines[j.lines.length - 1].slice(0, 60) : '';
       const c = j.counts || {};
+      // Per-job countdown — when a max was set, show how many candidates
+      // remain to be processed in this run.
+      const target = Number.isFinite(Number(j.max)) && Number(j.max) > 0 ? Number(j.max) : null;
+      const processedNow = j.mode === 'enrich' ? (c.enriched + c.enrichFailed) : c.fetched;
+      const remainingNow = target ? Math.max(0, target - processedNow) : null;
+      const countdown = target ? ` · target ${target.toLocaleString()} · <b>${remainingNow.toLocaleString()} left</b>` : '';
       const summary = j.mode === 'enrich'
-        ? `enriched ${c.enriched}, failed ${c.enrichFailed}, updated ${c.updated}`
-        : `fetched ${c.fetched}, EN ${c.en}, +${c.added} new, ${c.updated} updated`;
+        ? `enriched ${c.enriched}, failed ${c.enrichFailed}, updated ${c.updated}${countdown}`
+        : `fetched ${c.fetched}, EN ${c.en}, +${c.added} new, ${c.updated} updated${countdown}`;
       if (j.status === 'running') {
         $('cr-status').innerHTML = `▶ ${esc(j.mode)}/${esc(j.seed)}/${esc(j.sector === '__all__' ? 'all' : j.sector)} · ${j.lines.length} lines · ${summary}`;
         setTimeout(tick, 3000);

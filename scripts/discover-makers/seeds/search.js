@@ -37,7 +37,7 @@
  */
 
 const ENDPOINT = 'https://api.tavily.com/search';
-const RESULTS_PER_QUERY = 10;
+const RESULTS_PER_QUERY = 20; // Tavily max — wider net per credit
 const PER_QUERY_DELAY_MS = 600;
 
 // Sites that are never a manufacturer's own homepage — dropped at the
@@ -57,43 +57,75 @@ const HOST_BLACKLIST = new Set([
 
 const HOST_BLACKLIST_SUFFIX = ['.go.kr', '.gov']; // government / aggregator domains
 
+// Each sector has BOTH English and Korean-language queries. Korean queries
+// surface manufacturers whose only public site is Korean — these are valid
+// candidates because the verify pipeline records koreanHomepageUrl, and the
+// downstream LLM enrich/extract steps translate Korean source text into
+// English when registering products.
 const QUERIES = {
   'k-beauty': [
     'Korean cosmetics OEM manufacturer English homepage',
-    'Korean skincare brand ODM export site:.kr OR site:.com'
+    'Korean skincare brand ODM export site:.kr OR site:.com',
+    '한국 화장품 제조사 OEM ODM',
+    '한국 스킨케어 브랜드 수출 제조업체',
+    '한국 색조화장품 제조 회사'
   ],
   'k-bio': [
     'Korean medical device manufacturer English homepage',
-    'Korean biotech pharmaceutical company export site:.kr OR site:.com'
+    'Korean biotech pharmaceutical company export site:.kr OR site:.com',
+    '한국 의료기기 제조사',
+    '한국 바이오 제약회사 수출',
+    '한국 진단키트 제조업체'
   ],
   'k-security': [
     'Korean CCTV manufacturer English homepage',
-    'Korean access control biometric manufacturer English'
+    'Korean access control biometric manufacturer English',
+    '한국 CCTV 제조사 수출',
+    '한국 출입통제 생체인식 제조업체',
+    '한국 보안솔루션 제조회사'
   ],
   'k-energy': [
     'Korean battery manufacturer English homepage',
-    'Korean solar inverter ESS manufacturer English export'
+    'Korean solar inverter ESS manufacturer English export',
+    '한국 배터리 제조사 수출',
+    '한국 태양광 인버터 ESS 제조업체',
+    '한국 에너지저장장치 제조사'
   ],
   'k-smart-living': [
     'Korean home appliance manufacturer English homepage',
-    'Korean kitchen appliance air purifier manufacturer English'
+    'Korean kitchen appliance air purifier manufacturer English',
+    '한국 가전 제조사 수출',
+    '한국 주방가전 공기청정기 제조업체',
+    '한국 스마트홈 제조회사'
   ],
   'k-tech': [
     'Korean semiconductor manufacturer English homepage',
-    'Korean electronics components manufacturer English export'
+    'Korean electronics components manufacturer English export',
+    '한국 반도체 제조사',
+    '한국 전자부품 제조업체 수출',
+    '한국 디스플레이 제조회사'
   ],
   'k-culture-goods': [
     'Korean hanbok manufacturer English homepage',
     'Korean ceramics pottery brand English export',
-    'Korean hanji paper traditional craft manufacturer English'
+    'Korean hanji paper traditional craft manufacturer English',
+    '한국 한복 제조사',
+    '한국 도자기 브랜드 수출',
+    '한국 한지 전통공예 제조업체'
   ],
   'k-franchise': [
     'Korean franchise food brand English homepage',
-    'Korean restaurant cafe franchise English export'
+    'Korean restaurant cafe franchise English export',
+    '한국 프랜차이즈 본사 수출',
+    '한국 외식 카페 프랜차이즈 마스터',
+    '한국 식품 프랜차이즈 해외진출'
   ],
   'k-tourism-assets': [
     'Korean hotel resort English homepage',
-    'Korean traditional hanok stay English booking'
+    'Korean traditional hanok stay English booking',
+    '한국 호텔 리조트 운영사',
+    '한국 한옥스테이 예약',
+    '한국 관광 숙박업소'
   ]
 };
 

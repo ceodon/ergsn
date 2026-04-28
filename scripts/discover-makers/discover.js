@@ -173,6 +173,15 @@ async function runEnrichMode({ sector, allSectors, dryRun, max, refresh }) {
     if (result.usage) {
       totalInputTokens += (result.usage.input_tokens || 0);
       totalOutputTokens += (result.usage.output_tokens || 0);
+      // Per-call AI usage line — review-server.js parses this incrementally
+      // to update the daily-quota countdown without waiting for the final
+      // summary line.
+      // eslint-disable-next-line no-console
+      console.log(`ai-call: in=${result.usage.input_tokens || 0} out=${result.usage.output_tokens || 0}`);
+    } else {
+      // Even without usage data, count the call so the budget reflects it.
+      // eslint-disable-next-line no-console
+      console.log('ai-call: in=0 out=0');
     }
 
     const merged = applyEnrichment(entry, result.enriched);

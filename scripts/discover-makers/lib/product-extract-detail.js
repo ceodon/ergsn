@@ -45,7 +45,15 @@ const SYSTEM = [
   '- "matchDesc" is a one-line spec snippet for AI Partner Match results (≤80 chars). Example: "3.5 Hp · 35 FPM · NEMA L5-30P".',
   '- "longDesc" is a paragraph (2-4 sentences) for the product modal body.',
   '- "sub" is the one-line subtitle shown on the card and modal header (≤90 chars).',
-  '- If a field is not visible on the page, return empty array [] for arrays, "" for strings, 0 for numbers. Do NOT guess.'
+  '- If a field is not visible on the page, return empty array [] for arrays, "" for strings, 0 for numbers. Do NOT guess.',
+  '',
+  'Language rule (CRITICAL — source may be Korean, output must be English):',
+  '- ALL string values you return MUST be in natural English. The source detail page is often Korean — translate spec labels and values, feature bullets, sub, longDesc, cardTag, and matchDesc into clear English.',
+  '- Examples of label translation: "치수" → "Dimensions", "재질" → "Material", "전원" → "Power", "정격전압" → "Rated voltage", "보증기간" → "Warranty".',
+  '- Numeric values keep their original units; just translate the unit name to English where applicable ("220V 60Hz", "30kg", "5 years warranty").',
+  '- Standard certification codes (CE, FDA, ISO 9001, KC, RoHS, FCC) stay verbatim.',
+  '- For descriptive prose (longDesc, sub, matchDesc), write idiomatic B2B English, not literal word-for-word translation.',
+  '- Never return Hangul characters in any string field.'
 ].join('\n');
 
 function htmlToText(html) {
@@ -216,7 +224,8 @@ async function callWorkersAi(html, url) {
   if (typeof r.response === 'string') text = r.response;
   else if (r.response && typeof r.response === 'object') text = JSON.stringify(r.response);
   else text = '';
-  return sanitiseOutput(safeParseJson(text));
+  const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
+  return { extracted: sanitiseOutput(safeParseJson(text)), usage };
 }
 
 /**
@@ -229,16 +238,23 @@ async function extractProductDetail(productUrl) {
   const errors = [];
   const fetched = await politeFetch(productUrl);
   if (!fetched.ok) {
-    return { extracted: null, imageUrls: [], finalUrl: productUrl, errors: [{ stage: 'fetch', error: fetched.error || `HTTP ${fetched.status}` }] };
+    return { extracted: null, imageUrls: [], finalUrl: productUrl, errors: [{ stage: 'fetch', error: fetched.error || `HTTP ${fetched.status}` }], aiCalls: [] };
   }
 
   const imageUrls = extractImageUrls(fetched.text, fetched.finalUrl || productUrl, 3);
 
-  let extracted;
-  try { extracted = await callWorkersAi(fetched.text, fetched.finalUrl || productUrl); }
-  catch (e) { errors.push({ stage: 'llm', error: e.message }); extracted = null; }
+  let extracted = null;
+  const aiCalls = [];
+  try {
+    const { extracted: ext, usage } = await callWorkersAi(fetched.text, fetched.finalUrl || productUrl);
+    extracted = ext;
+    aiCalls.push({ usage });
+  } catch (e) {
+    aiCalls.push({ usage: null, failed: true });
+    errors.push({ stage: 'llm', error: e.message });
+  }
 
-  return { extracted, imageUrls, finalUrl: fetched.finalUrl || productUrl, errors };
+  return { extracted, imageUrls, finalUrl: fetched.finalUrl || productUrl, errors, aiCalls };
 }
 
 module.exports = { extractProductDetail, extractImageUrls, htmlToText };

@@ -163,7 +163,13 @@ const PRODUCT_LIST_SYSTEM = [
   '- Maximum 12 products per response. Skip duplicates.',
   '- Skip menu items, blog posts, news entries, "about us", contact pages.',
   '- The "url" field MUST be the product detail URL (absolute or root-relative). Do not invent URLs.',
-  '- "imageUrl" is the product\'s thumbnail/hero image URL if visible in the listing markup.'
+  '- "imageUrl" is the product\'s thumbnail/hero image URL if visible in the listing markup.',
+  '',
+  'Language rule (CRITICAL — source may be Korean, output must be English):',
+  '- All STRING values you return MUST be written in natural English. The source page is often Korean — translate descriptive prose into clear English.',
+  '- For product names, prefer the official English brand/model if shown on the page; otherwise translate the descriptive Korean name (e.g. "프리미엄 한방 샴푸" → "Premium Korean Herbal Shampoo"). For proper-noun product line names that have no English equivalent, transliterate Hangul to Latin using Revised Romanization. Never return raw Hangul characters.',
+  '- "description", "priceText", "moqText" must all be in English. Numeric values (₩, KRW) may stay in their original currency tokens.',
+  '- The "url" and "imageUrl" stay verbatim — do not translate URLs.'
 ].join('\n');
 
 async function llmExtractProducts(pageUrl, html) {
@@ -211,8 +217,9 @@ async function llmExtractProducts(pageUrl, html) {
     const jm = text.match(/\{[\s\S]*\}/);
     parsed = jm ? JSON.parse(jm[0]) : null;
   } catch { parsed = null; }
-  if (!parsed || !Array.isArray(parsed.products)) return [];
-  return parsed.products.map(p => ({
+  const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
+  if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage };
+  const products = parsed.products.map(p => ({
     name: String(p.name || '').trim().slice(0, 200),
     url: String(p.url || '').trim().slice(0, 500),
     imageUrl: String(p.imageUrl || '').trim().slice(0, 500),
@@ -220,6 +227,7 @@ async function llmExtractProducts(pageUrl, html) {
     priceText: String(p.priceText || '').trim().slice(0, 80),
     moqText: String(p.moqText || '').trim().slice(0, 80)
   })).filter(p => p.name && p.url);
+  return { products, usage };
 }
 
 function makeId(makerId, url) {
@@ -267,6 +275,7 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
   // 3. For each candidate page, ask the LLM to extract products
   const products = [];
   const productSeen = new Set();
+  const aiCalls = [];
   for (const c of candidates) {
     const r = await politeFetch(c.url);
     if (!r.ok) {
@@ -274,8 +283,11 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
       continue;
     }
     let extracted;
-    try { extracted = await llmExtractProducts(r.finalUrl || c.url, r.text); }
-    catch (e) { errors.push({ stage: 'llm', url: c.url, error: e.message }); continue; }
+    try {
+      const llmRes = await llmExtractProducts(r.finalUrl || c.url, r.text);
+      aiCalls.push({ usage: llmRes.usage });
+      extracted = llmRes.products;
+    } catch (e) { aiCalls.push({ usage: null, failed: true }); errors.push({ stage: 'llm', url: c.url, error: e.message }); continue; }
     for (const p of extracted) {
       const absUrl = abs(p.url, r.finalUrl || c.url);
       if (!absUrl) continue;
@@ -302,7 +314,8 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
   return {
     catalogPages: candidates,
     products,
-    errors
+    errors,
+    aiCalls
   };
 }
 

@@ -71,6 +71,42 @@ let crawlSeq = 0;
 // 24 hours later (CF's free-tier resets daily).
 const aiState = { exceededAt: 0, reason: '' };
 
+// Daily AI usage counter (per UTC day). The UI surfaces this as a countdown
+// so the user can see how much of the 10,000-Neuron daily budget remains.
+// CF doesn't return Neurons-per-call, only token usage; we approximate
+// Neurons by NEURONS_PER_CALL (calibrated below). The aiState.exceeded
+// boolean above is the authoritative block — this counter is for
+// situational awareness, not enforcement.
+const AI_DAILY_BUDGET_NEURONS = 10000;
+// Each Llama-3.1-8B call on Workers AI consumes roughly 2-5 Neurons depending
+// on prompt + completion size. We use 3 as a conservative midpoint. If the
+// counter says "0 left" while CF still allows, the boolean below stays false;
+// if CF blocks earlier than the counter expects, the boolean flips and the
+// pill turns red regardless of the counter.
+const NEURONS_PER_CALL = 3;
+const aiUsage = { dayKey: '', calls: 0, tokens: 0 };
+
+function utcDayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function rollAiUsageIfNewDay() {
+  const k = utcDayKey();
+  if (aiUsage.dayKey !== k) {
+    aiUsage.dayKey = k;
+    aiUsage.calls = 0;
+    aiUsage.tokens = 0;
+  }
+}
+
+function noteAiCall(usage) {
+  rollAiUsageIfNewDay();
+  aiUsage.calls += 1;
+  if (usage && typeof usage === 'object') {
+    aiUsage.tokens += (usage.input_tokens || 0) + (usage.output_tokens || 0);
+  }
+}
+
 function isAiQuotaError(text) {
   if (!text) return false;
   return /you have used up your daily free allocation/i.test(text)
@@ -147,6 +183,11 @@ function startCrawl({ seed, sector, mode, refresh, max }) {
       if ((m = line.match(/summary:\s*(\d+)\s*enriched\s*·\s*(\d+)\s*failed/i))) {
         job.counts.enriched = parseInt(m[1], 10);
         job.counts.enrichFailed = parseInt(m[2], 10);
+      }
+      // Subprocess emits one `ai-call: in=N out=M` per LLM request — sum into
+      // the daily counter so the UI countdown reflects in-flight enrich runs.
+      if ((m = line.match(/^ai-call:\s*in=(\d+)\s+out=(\d+)/i))) {
+        noteAiCall({ input_tokens: parseInt(m[1], 10), output_tokens: parseInt(m[2], 10) });
       }
     }
   };
@@ -419,6 +460,8 @@ const server = http.createServer(async (req, res) => {
       const result = await discoverForMaker(maker);
       // Reflect AI quota errors so the UI disables LLM-based actions
       for (const err of (result.errors || [])) noteAiState(err.error || '');
+      // Bump the daily AI usage counter so the countdown pill stays accurate
+      for (const call of (result.aiCalls || [])) noteAiCall(call.usage);
       // Persist newly-found candidates so they survive page reload
       if (result.products.length) productPersistence.upsertMany(result.products);
       // Always include the merged "live" product list for this maker
@@ -430,9 +473,17 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // AI-quota snapshot for the UI
+  // AI-quota snapshot for the UI — boolean exceeded state PLUS the daily
+  // approximate counter so the front-end can render the countdown pill.
   if (req.method === 'GET' && url.pathname === '/api/limits') {
-    return sendJson(res, 200, { ok: true, ai: aiQuotaSnapshot() });
+    rollAiUsageIfNewDay();
+    const snap = aiQuotaSnapshot();
+    snap.callsToday = aiUsage.calls;
+    snap.tokensToday = aiUsage.tokens;
+    snap.estimatedNeuronsToday = aiUsage.calls * NEURONS_PER_CALL;
+    snap.budget = AI_DAILY_BUDGET_NEURONS;
+    snap.dayKey = aiUsage.dayKey;
+    return sendJson(res, 200, { ok: true, ai: snap });
   }
 
   // List products for one maker (used to refresh UI after re-discovery / status change)
@@ -489,6 +540,8 @@ const server = http.createServer(async (req, res) => {
       extractErrors = det.errors || [];
       // also reflect any AI quota error so the UI updates the limit pill
       for (const er of extractErrors) noteAiState(er.error || '');
+      // Count this LLM call against the daily AI budget
+      for (const call of (det.aiCalls || [])) noteAiCall(call.usage);
       var imageUrls = det.imageUrls || [];
     } catch (e) {
       noteAiState(e.message || '');
@@ -580,7 +633,7 @@ const server = http.createServer(async (req, res) => {
       if (!sectors.includes(sector)) return sendJson(res, 400, { ok: false, error: 'bad sector' });
     }
     const refresh = mode === 'enrich' ? !!body.refresh : false;
-    const max = Number.isFinite(Number(body.max)) ? Math.max(1, Math.min(500, Number(body.max))) : null;
+    const max = Number.isFinite(Number(body.max)) ? Math.max(1, Math.min(10000, Number(body.max))) : null;
     const job = startCrawl({ seed, sector, mode, refresh, max });
     return sendJson(res, 200, { ok: true, jobId: job.id });
   }
