@@ -471,6 +471,15 @@ const server = http.createServer(async (req, res) => {
       if (result.droppedDead > 0) {
         result.errors.push({ stage: 'hygiene', error: `dropped ${result.droppedDead} URL(s) that 404'd or returned a "not found" body` });
       }
+      if (result.imagesPairedFromHtml > 0) {
+        result.errors.push({ stage: 'info', error: `paired ${result.imagesPairedFromHtml} image(s) from catalog HTML` });
+      }
+      if (result.imagesFromOg > 0) {
+        result.errors.push({ stage: 'info', error: `pulled ${result.imagesFromOg} og:image(s) from detail pages` });
+      }
+      if (result.droppedImageDead > 0) {
+        result.errors.push({ stage: 'hygiene', error: `cleared ${result.droppedImageDead} imageUrl(s) whose HEAD response wasn't image/*` });
+      }
       // Persist newly-found candidates so they survive page reload
       if (result.products.length) productPersistence.upsertMany(result.products);
       // Always include the merged "live" product list for this maker

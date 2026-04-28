@@ -57,6 +57,77 @@ function collectAnchors(html) {
 }
 
 /**
+ * Walk the HTML and build a map: anchor href → nearest <img src> in the
+ * source. Tries two strategies:
+ *
+ *   1) Nested — <a href><img src></a>. Strong signal, used first.
+ *   2) Proximal — for anchors with no nested img, scan ±PROX_BYTES around
+ *      the anchor's position in the source for the closest <img src>.
+ *      This catches the very common card layout: <li><img><a></a></li>.
+ *
+ * Filters out logos / sprites / icons by URL pattern + width hint.
+ * Cross-host img is OK (CDNs are common).
+ *
+ * Returns Map<absoluteHref, absoluteImgSrc>.
+ */
+function pairAnchorImages(html, baseUrl, PROX_BYTES = 600) {
+  const map = new Map();
+
+  function isProductImage(src, tag) {
+    if (!src || src.toLowerCase().startsWith('data:')) return false;
+    if (/icon|sprite|logo|spinner|favicon|loading|spacer|bg[-_.]|background/i.test(src)) return false;
+    const widthM = (tag || '').match(/\bwidth\s*=\s*["']?(\d+)/i);
+    if (widthM && parseInt(widthM[1], 10) < 80) return false;
+    return true;
+  }
+  function abs(href) { try { return new URL(href, baseUrl).href.replace(/#.*$/, ''); } catch { return ''; } }
+
+  // 1) Index every <img src> by its byte position in the HTML
+  const imgPositions = []; // [{pos, src, tag}]
+  const imgRe = /<img\b([^>]*?)\bsrc\s*=\s*["']([^"']+)["']([^>]*)\/?>/gi;
+  let im;
+  while ((im = imgRe.exec(html))) {
+    const tag = im[0];
+    const src = im[2];
+    if (!isProductImage(src, tag)) continue;
+    const a = abs(src);
+    if (!a) continue;
+    imgPositions.push({ pos: im.index, src: a });
+  }
+
+  // 2) Walk every anchor and try nested first, then proximity lookup
+  const re = /<a\b[^>]*\bhref\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let m;
+  while ((m = re.exec(html))) {
+    const href = m[1];
+    const aPos = m.index;
+    const aLen = m[0].length;
+    const inner = m[2];
+    const absHref = abs(href);
+    if (!absHref) continue;
+    if (map.has(absHref)) continue; // first match wins
+
+    // Strategy 1: nested <img>
+    const nestedM = inner.match(/<img\b([^>]*?)\bsrc\s*=\s*["']([^"']+)["']([^>]*)\/?>/i);
+    if (nestedM && isProductImage(nestedM[2], nestedM[0])) {
+      const a = abs(nestedM[2]);
+      if (a) { map.set(absHref, a); continue; }
+    }
+
+    // Strategy 2: proximity — closest img within ±PROX_BYTES
+    let best = null;
+    let bestDist = Infinity;
+    for (const ip of imgPositions) {
+      const dist = Math.min(Math.abs(ip.pos - aPos), Math.abs(ip.pos - (aPos + aLen)));
+      if (dist > PROX_BYTES) continue;
+      if (dist < bestDist) { bestDist = dist; best = ip; }
+    }
+    if (best) map.set(absHref, best.src);
+  }
+  return map;
+}
+
+/**
  * Build the structured anchor list the LLM is allowed to choose from when
  * picking product URLs. This is the fix for URL hallucination — earlier
  * the model only saw stripped text and invented .asp paths that 404'd.
@@ -202,6 +273,7 @@ const PRODUCT_LIST_SYSTEM = [
   '- The "url" field for every product MUST be EXACTLY one of the "href" values from the <ANCHORS> list, copied verbatim character-for-character. No edits, no slug changes, no extension changes (.html ↔ .asp ↔ .php), no trailing-slash adjustments.',
   '- If you cannot find an anchor whose text or href clearly corresponds to a product mentioned in <PAGE>, OMIT that product. Better to skip than to invent a URL.',
   '- Do NOT invent URLs. Do NOT modify URLs. Any product whose url you cannot ground in <ANCHORS> will be dropped by the caller.',
+  '- "imageUrl": ALWAYS return "" (empty string). The caller pairs images to products from the page HTML directly — your role is just to identify products by name and url.',
   '',
   'Language rule (CRITICAL — source may be Korean, output must be English):',
   '- All STRING values you return MUST be written in natural English. The source page is often Korean — translate descriptive prose into clear English.',
@@ -220,6 +292,12 @@ async function llmExtractProducts(pageUrl, html) {
   // here — anything else is treated as hallucinated and dropped post-hoc.
   const anchors = collectStructuredAnchors(html, pageUrl);
   const allowedUrls = new Set(anchors.map(a => a.href));
+  // Pair anchors with images at the HTML level (not via LLM). Earlier we
+  // tried passing an IMAGES allow-list to the model but the prompt grew past
+  // Llama-3.1-8B's 8k context and the call returned 0 products. Direct
+  // <a><img></a> proximity matching gives us a guaranteed-real image URL
+  // for every anchor that has one — no hallucination possible.
+  const anchorImages = pairAnchorImages(html, pageUrl);
   // Trim visible-text budget so we have headroom for the anchor JSON in the prompt.
   const slim = htmlToText(html).slice(0, 5000);
 
@@ -238,7 +316,7 @@ async function llmExtractProducts(pageUrl, html) {
     slim,
     '</PAGE>',
     '',
-    'Return the JSON object now. Every product\'s "url" MUST be a verbatim copy of one of the "href" values from <ANCHORS>.'
+    'Return the JSON object now. Every product\'s "url" MUST be a verbatim copy of one of the "href" values from <ANCHORS>. Set "imageUrl" to "".'
   ].join('\n');
   const body = {
     messages: [
@@ -272,12 +350,13 @@ async function llmExtractProducts(pageUrl, html) {
     parsed = jm ? JSON.parse(jm[0]) : null;
   } catch { parsed = null; }
   const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
-  if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage, droppedHallucinated: 0 };
+  if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage, droppedHallucinated: 0, imagesPairedFromHtml: 0 };
   let droppedHallucinated = 0;
+  let imagesPairedFromHtml = 0;
   const products = parsed.products.map(p => ({
     name: String(p.name || '').trim().slice(0, 200),
     url: String(p.url || '').trim().slice(0, 500),
-    imageUrl: String(p.imageUrl || '').trim().slice(0, 500),
+    imageUrl: '',
     description: String(p.description || '').trim().slice(0, 300),
     priceText: String(p.priceText || '').trim().slice(0, 80),
     moqText: String(p.moqText || '').trim().slice(0, 80)
@@ -287,8 +366,14 @@ async function llmExtractProducts(pageUrl, html) {
     // the LLM inventing .asp / .html slugs that 404 in real life.
     if (!allowedUrls.has(p.url)) { droppedHallucinated += 1; return false; }
     return true;
+  }).map(p => {
+    // Pair the product with its image directly from the HTML — no LLM
+    // involvement, no hallucination possible.
+    const paired = anchorImages.get(p.url);
+    if (paired) { p.imageUrl = paired; imagesPairedFromHtml += 1; }
+    return p;
   });
-  return { products, usage, droppedHallucinated };
+  return { products, usage, droppedHallucinated, imagesPairedFromHtml };
 }
 
 function makeId(makerId, url) {
@@ -338,6 +423,7 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
   const productSeen = new Set();
   const aiCalls = [];
   let totalHallucinated = 0;
+  let totalImagesPairedFromHtml = 0;
   for (const c of candidates) {
     const r = await politeFetch(c.url);
     if (!r.ok) {
@@ -350,6 +436,7 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
       aiCalls.push({ usage: llmRes.usage });
       extracted = llmRes.products;
       totalHallucinated += llmRes.droppedHallucinated || 0;
+      totalImagesPairedFromHtml += llmRes.imagesPairedFromHtml || 0;
     } catch (e) { aiCalls.push({ usage: null, failed: true }); errors.push({ stage: 'llm', url: c.url, error: e.message }); continue; }
     for (const p of extracted) {
       const absUrl = abs(p.url, r.finalUrl || c.url);
@@ -374,19 +461,21 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
     }
   }
 
-  // 4. Liveness probe — even URLs that came from the page's own anchors can
-  // 404 (CMS publishes the link before the detail page exists, or the page
-  // returns HTTP 200 with a "PAGE NOT FOUND" body, like Suprema does). Drop
-  // anything that doesn't look like a real product page so we never hand
-  // the user a candidate they can't register against.
+  // 4. Liveness probe + og:image grab — we're already fetching the detail
+  // page to verify it's not a 404 body, so harvest the og:image at the
+  // same time. og:image is the most reliable image source on virtually
+  // every product page (every CMS sets it for social previews) and beats
+  // the catalog-page proximity match on accuracy.
   const live = [];
   let droppedDead = 0;
+  let ogPaired = 0;
   for (const p of products) {
     const probe = await politeFetch(p.url);
     if (!probe.ok) { droppedDead += 1; continue; }
+    const html = probe.text || '';
     // Strip the visible text and detect server-rendered "not found" pages
     // that still respond with HTTP 200 (very common in old ASP/PHP CMS).
-    const text = String(probe.text || '')
+    const text = html
       .replace(/<script[\s\S]*?<\/script>/gi, ' ')
       .replace(/<style[\s\S]*?<\/style>/gi, ' ')
       .replace(/<[^>]+>/g, ' ')
@@ -396,7 +485,43 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
       droppedDead += 1;
       continue;
     }
+    // og:image — try BOTH attribute orders, then fall back to twitter:image
+    const og = html.match(/<meta[^>]+property\s*=\s*["']og:image["'][^>]+content\s*=\s*["']([^"']+)/i)
+            || html.match(/<meta[^>]+content\s*=\s*["']([^"']+)["'][^>]+property\s*=\s*["']og:image["']/i)
+            || html.match(/<meta[^>]+name\s*=\s*["']twitter:image["'][^>]+content\s*=\s*["']([^"']+)/i);
+    if (og && og[1]) {
+      try {
+        const ogAbs = new URL(og[1], probe.finalUrl || p.url).href.replace(/#.*$/, '');
+        // og:image wins over the catalog-page proximity guess
+        p.imageUrl = ogAbs;
+        ogPaired += 1;
+      } catch { /* keep paired image if any */ }
+    }
     live.push(p);
+  }
+
+  // 5. Image content-type probe — even imageUrl values that came from the
+  // page's own <img src> can resolve to a 404 HTML body if the CMS lists
+  // a stale path. HEAD probe each non-empty imageUrl and clear it (don't
+  // drop the product) when the response isn't actually image/*.
+  let droppedImageDead = 0;
+  for (const p of live) {
+    if (!p.imageUrl) continue;
+    try {
+      const probe = await fetch(p.imageUrl, {
+        method: 'HEAD',
+        headers: { 'User-Agent': 'ERGSN-research/1.0 (+https://ergsn.net)' },
+        redirect: 'follow'
+      });
+      const ct = probe.headers.get('content-type') || '';
+      if (!probe.ok || !ct.toLowerCase().startsWith('image/')) {
+        p.imageUrl = '';
+        droppedImageDead += 1;
+      }
+    } catch {
+      p.imageUrl = '';
+      droppedImageDead += 1;
+    }
   }
 
   return {
@@ -405,7 +530,10 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
     errors,
     aiCalls,
     droppedHallucinated: totalHallucinated,
-    droppedDead
+    droppedDead,
+    imagesPairedFromHtml: totalImagesPairedFromHtml,
+    imagesFromOg: ogPaired,
+    droppedImageDead
   };
 }
 

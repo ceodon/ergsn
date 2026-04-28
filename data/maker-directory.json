@@ -8278,51 +8278,6 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
-      "id": "supremainc-com",
-      "legalName": "Suprema",
-      "displayName": "Suprema",
-      "sector": "k-security",
-      "homepageHost": "supremainc.com",
-      "koreanHomepageUrl": "https://supremainc.com/",
-      "englishHomepageUrl": "https://www.supremainc.com/en/main.asp",
-      "englishDetectedBy": "hreflang",
-      "headquartersCountry": "KR",
-      "headquartersAddress": "",
-      "businessType": "manufacturer",
-      "exportSignals": [
-        "Global/English",
-        "Korea/한국어",
-        "German/Deutsch",
-        "France/français",
-        "Latam/español",
-        "Japan/日本語"
-      ],
-      "structuredDataHints": {
-        "jsonLdTypes": [
-          "Organization",
-          "WebSite"
-        ],
-        "ogSiteName": "Suprema",
-        "metaDescription": "AI 기반 통합보안 플랫폼과 생체인증 솔루션을 제공하는 글로벌 보안 리더",
-        "htmlLangAttr": "ko"
-      },
-      "contact": {
-        "email": "",
-        "tel": ""
-      },
-      "sources": [
-        {
-          "seed": "search:tavily",
-          "seedQuery": "Korean access control biometric manufacturer English",
-          "discoveredAt": "2026-04-27"
-        }
-      ],
-      "status": "verified",
-      "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:47:13.443Z",
-      "lastVerifiedAt": "2026-04-28"
-    },
-    {
       "id": "suvastika-com",
       "legalName": "su-vastika Systems Pvt. Ltd.",
       "displayName": "Su-vastika",
