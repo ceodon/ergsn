@@ -57,6 +57,39 @@ function collectAnchors(html) {
 }
 
 /**
+ * Build the structured anchor list the LLM is allowed to choose from when
+ * picking product URLs. This is the fix for URL hallucination — earlier
+ * the model only saw stripped text and invented .asp paths that 404'd.
+ *
+ * Filters out non-product anchors (mailto/tel/js/fragments/asset files,
+ * cross-host) and dedups by absolute URL (post-fragment / post-query).
+ * Caps at MAX_ANCHORS to keep the prompt small.
+ */
+function collectStructuredAnchors(html, baseUrl, MAX_ANCHORS = 80) {
+  const seen = new Set();
+  const out = [];
+  const raw = collectAnchors(html);
+  for (const a of raw) {
+    if (!a.href) continue;
+    const lower = a.href.toLowerCase();
+    if (lower.startsWith('mailto:') || lower.startsWith('tel:') || lower.startsWith('javascript:')) continue;
+    if (lower.startsWith('#')) continue;
+    if (/\.(jpg|jpeg|png|gif|svg|webp|pdf|zip|css|js|ico|mp4|woff2?)(\?|$)/i.test(lower)) continue;
+    let abs;
+    try { abs = new URL(a.href, baseUrl).href; } catch { continue; }
+    if (!sameHost(abs, baseUrl)) continue;
+    abs = abs.replace(/#.*$/, ''); // strip fragments only — preserve query for product variants
+    if (seen.has(abs)) continue;
+    seen.add(abs);
+    const text = (a.text || '').slice(0, 120);
+    if (!text || text.length < 2) continue;
+    out.push({ href: abs, text });
+    if (out.length >= MAX_ANCHORS) break;
+  }
+  return out;
+}
+
+/**
  * From the maker's homepage HTML, find up to N candidate catalog pages.
  *
  * Score each anchor:
@@ -153,7 +186,8 @@ const PRODUCT_LIST_SCHEMA = {
 
 const PRODUCT_LIST_SYSTEM = [
   'You extract product listings from a manufacturer\'s website.',
-  'Read the supplied HTML excerpt and return ONLY a JSON object: {"products":[ ... ]}.',
+  'You will receive an <ANCHORS> block (a JSON array of {href,text} pairs collected from the page) and a <PAGE> block (the visible text).',
+  'Return ONLY a JSON object: {"products":[ ... ]}.',
   '',
   'Rules:',
   '- Output JSON only. No prose, no markdown fences.',
@@ -162,8 +196,12 @@ const PRODUCT_LIST_SYSTEM = [
   '- If a field is not stated on the page, use an empty string ("").',
   '- Maximum 12 products per response. Skip duplicates.',
   '- Skip menu items, blog posts, news entries, "about us", contact pages.',
-  '- The "url" field MUST be the product detail URL (absolute or root-relative). Do not invent URLs.',
   '- "imageUrl" is the product\'s thumbnail/hero image URL if visible in the listing markup.',
+  '',
+  'URL rule (CRITICAL — must be obeyed):',
+  '- The "url" field for every product MUST be EXACTLY one of the "href" values from the <ANCHORS> list, copied verbatim character-for-character. No edits, no slug changes, no extension changes (.html ↔ .asp ↔ .php), no trailing-slash adjustments.',
+  '- If you cannot find an anchor whose text or href clearly corresponds to a product mentioned in <PAGE>, OMIT that product. Better to skip than to invent a URL.',
+  '- Do NOT invent URLs. Do NOT modify URLs. Any product whose url you cannot ground in <ANCHORS> will be dropped by the caller.',
   '',
   'Language rule (CRITICAL — source may be Korean, output must be English):',
   '- All STRING values you return MUST be written in natural English. The source page is often Korean — translate descriptive prose into clear English.',
@@ -178,7 +216,12 @@ async function llmExtractProducts(pageUrl, html) {
   if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID missing in .env');
   if (!apiToken) throw new Error('CLOUDFLARE_AI_TOKEN missing in .env');
 
-  const slim = htmlToText(html).slice(0, 8000);
+  // Build the structured anchor allow-list. The model must pick urls from
+  // here — anything else is treated as hallucinated and dropped post-hoc.
+  const anchors = collectStructuredAnchors(html, pageUrl);
+  const allowedUrls = new Set(anchors.map(a => a.href));
+  // Trim visible-text budget so we have headroom for the anchor JSON in the prompt.
+  const slim = htmlToText(html).slice(0, 5000);
 
   // Workers AI is generous but stay polite to be a good citizen
   const gap = lastLlmAt + MIN_LLM_GAP_MS - Date.now();
@@ -186,10 +229,21 @@ async function llmExtractProducts(pageUrl, html) {
   lastLlmAt = Date.now();
 
   const url = `${ACCOUNT_BASE}/${encodeURIComponent(accountId)}/ai/run/${DEFAULT_MODEL}`;
+  const userMsg = [
+    `<ANCHORS count="${anchors.length}">`,
+    JSON.stringify(anchors),
+    '</ANCHORS>',
+    '',
+    `<PAGE url="${pageUrl.replace(/"/g, '&quot;')}">`,
+    slim,
+    '</PAGE>',
+    '',
+    'Return the JSON object now. Every product\'s "url" MUST be a verbatim copy of one of the "href" values from <ANCHORS>.'
+  ].join('\n');
   const body = {
     messages: [
       { role: 'system', content: PRODUCT_LIST_SYSTEM },
-      { role: 'user', content: `<PAGE url="${pageUrl.replace(/"/g, '&quot;')}">\n${slim}\n</PAGE>\n\nReturn the JSON object now.` }
+      { role: 'user', content: userMsg }
     ],
     max_tokens: 1500,
     temperature: 0.1,
@@ -218,7 +272,8 @@ async function llmExtractProducts(pageUrl, html) {
     parsed = jm ? JSON.parse(jm[0]) : null;
   } catch { parsed = null; }
   const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
-  if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage };
+  if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage, droppedHallucinated: 0 };
+  let droppedHallucinated = 0;
   const products = parsed.products.map(p => ({
     name: String(p.name || '').trim().slice(0, 200),
     url: String(p.url || '').trim().slice(0, 500),
@@ -226,8 +281,14 @@ async function llmExtractProducts(pageUrl, html) {
     description: String(p.description || '').trim().slice(0, 300),
     priceText: String(p.priceText || '').trim().slice(0, 80),
     moqText: String(p.moqText || '').trim().slice(0, 80)
-  })).filter(p => p.name && p.url);
-  return { products, usage };
+  })).filter(p => {
+    if (!p.name || !p.url) return false;
+    // Allow only URLs that came verbatim from the page's anchors. This catches
+    // the LLM inventing .asp / .html slugs that 404 in real life.
+    if (!allowedUrls.has(p.url)) { droppedHallucinated += 1; return false; }
+    return true;
+  });
+  return { products, usage, droppedHallucinated };
 }
 
 function makeId(makerId, url) {
@@ -276,6 +337,7 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
   const products = [];
   const productSeen = new Set();
   const aiCalls = [];
+  let totalHallucinated = 0;
   for (const c of candidates) {
     const r = await politeFetch(c.url);
     if (!r.ok) {
@@ -287,6 +349,7 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
       const llmRes = await llmExtractProducts(r.finalUrl || c.url, r.text);
       aiCalls.push({ usage: llmRes.usage });
       extracted = llmRes.products;
+      totalHallucinated += llmRes.droppedHallucinated || 0;
     } catch (e) { aiCalls.push({ usage: null, failed: true }); errors.push({ stage: 'llm', url: c.url, error: e.message }); continue; }
     for (const p of extracted) {
       const absUrl = abs(p.url, r.finalUrl || c.url);
@@ -311,11 +374,38 @@ async function discoverForMaker(maker, { perPageLimit = 12, maxCatalogPages = 3 
     }
   }
 
+  // 4. Liveness probe — even URLs that came from the page's own anchors can
+  // 404 (CMS publishes the link before the detail page exists, or the page
+  // returns HTTP 200 with a "PAGE NOT FOUND" body, like Suprema does). Drop
+  // anything that doesn't look like a real product page so we never hand
+  // the user a candidate they can't register against.
+  const live = [];
+  let droppedDead = 0;
+  for (const p of products) {
+    const probe = await politeFetch(p.url);
+    if (!probe.ok) { droppedDead += 1; continue; }
+    // Strip the visible text and detect server-rendered "not found" pages
+    // that still respond with HTTP 200 (very common in old ASP/PHP CMS).
+    const text = String(probe.text || '')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ').trim();
+    if (text.length < 200) { droppedDead += 1; continue; }
+    if (/page not found|404 not found|the requested page was not found/i.test(text.slice(0, 400))) {
+      droppedDead += 1;
+      continue;
+    }
+    live.push(p);
+  }
+
   return {
     catalogPages: candidates,
-    products,
+    products: live,
     errors,
-    aiCalls
+    aiCalls,
+    droppedHallucinated: totalHallucinated,
+    droppedDead
   };
 }
 

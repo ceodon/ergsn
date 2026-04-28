@@ -46,6 +46,8 @@ const SYSTEM = [
   '- "longDesc" is a paragraph (2-4 sentences) for the product modal body.',
   '- "sub" is the one-line subtitle shown on the card and modal header (≤90 chars).',
   '- If a field is not visible on the page, return empty array [] for arrays, "" for strings, 0 for numbers. Do NOT guess.',
+  '- NEVER emit placeholder values like "Not specified", "N/A", "unknown", "TBD", "—", "none". If a spec value would be one of those, omit the entire {label,value} row from the specs array. If the page has no spec table at all, return specs:[].',
+  '- "scale" must contain at most 2 buckets. If you would otherwise pick all four (s/m/l/xl), it means you can\'t actually tell — return scale:[] instead.',
   '',
   'Language rule (CRITICAL — source may be Korean, output must be English):',
   '- ALL string values you return MUST be in natural English. The source detail page is often Korean — translate spec labels and values, feature bullets, sub, longDesc, cardTag, and matchDesc into clear English.',
@@ -139,6 +141,11 @@ function safeParseJson(text) {
   try { return JSON.parse(m[0]); } catch { return null; }
 }
 
+// LLM placeholder values to reject — when the page has no spec table, the
+// model sometimes returns rows like {label:"Dimensions", value:"Not specified"}
+// instead of an empty array. Drop those rows so the catalog row stays clean.
+const PLACEHOLDER_VALUES = /^(?:not specified|n\/?a|unknown|tbd|tba|—|-|null|undefined|none|n\.a\.)$/i;
+
 function sanitiseOutput(o) {
   if (!o || typeof o !== 'object') return null;
   const str = (k, max = 240) => typeof o[k] === 'string' ? o[k].trim().slice(0, max) : '';
@@ -149,20 +156,27 @@ function sanitiseOutput(o) {
     ? o.specs
         .filter(s => s && typeof s === 'object' && s.label && s.value)
         .map(s => [String(s.label).trim().slice(0, 60), String(s.value).trim().slice(0, 160)])
+        .filter(([, v]) => v && !PLACEHOLDER_VALUES.test(v))
         .slice(0, 8)
     : [];
 
   const features = Array.isArray(o.features)
-    ? o.features.filter(f => typeof f === 'string').map(f => f.trim().slice(0, 100)).filter(Boolean).slice(0, 6)
+    ? o.features.filter(f => typeof f === 'string').map(f => f.trim().slice(0, 100))
+        .filter(f => f && !PLACEHOLDER_VALUES.test(f))
+        .slice(0, 6)
     : [];
 
   const tags = Array.isArray(o.tags)
     ? o.tags.filter(t => typeof t === 'string' && ALLOWED_TAGS.includes(t.toLowerCase())).map(t => t.toLowerCase()).slice(0, 3)
     : [];
 
-  const scale = Array.isArray(o.scale)
-    ? o.scale.filter(s => typeof s === 'string' && ALLOWED_SCALE.includes(s.toLowerCase())).map(s => s.toLowerCase()).slice(0, 4)
+  // Cap scale at 2 (matches the system prompt). When the model picks all four
+  // buckets it usually means it ignored the rule — better to record nothing
+  // than to record a meaningless "all sizes" signal.
+  const scaleRaw = Array.isArray(o.scale)
+    ? o.scale.filter(s => typeof s === 'string' && ALLOWED_SCALE.includes(s.toLowerCase())).map(s => s.toLowerCase())
     : [];
+  const scale = scaleRaw.length >= 4 ? [] : scaleRaw.slice(0, 2);
 
   return {
     sub: str('sub', 90),

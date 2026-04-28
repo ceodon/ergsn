@@ -462,6 +462,15 @@ const server = http.createServer(async (req, res) => {
       for (const err of (result.errors || [])) noteAiState(err.error || '');
       // Bump the daily AI usage counter so the countdown pill stays accurate
       for (const call of (result.aiCalls || [])) noteAiCall(call.usage);
+      // Surface URL hygiene stats to the UI as informational errors so the
+      // user understands why the candidate count may be lower than the LLM
+      // claimed (we silently drop hallucinated and dead URLs).
+      if (result.droppedHallucinated > 0) {
+        result.errors.push({ stage: 'hygiene', error: `dropped ${result.droppedHallucinated} hallucinated URL(s) not in page anchors` });
+      }
+      if (result.droppedDead > 0) {
+        result.errors.push({ stage: 'hygiene', error: `dropped ${result.droppedDead} URL(s) that 404'd or returned a "not found" body` });
+      }
       // Persist newly-found candidates so they survive page reload
       if (result.products.length) productPersistence.upsertMany(result.products);
       // Always include the merged "live" product list for this maker
