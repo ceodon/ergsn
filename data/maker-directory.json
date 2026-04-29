@@ -81,9 +81,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:53.577Z"
+      "lastFetchedAt": "2026-04-29T21:32:53.577Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "ajupress-com",
@@ -151,7 +152,7 @@
       "id": "alphasquare-co-kr",
       "legalName": "알파스퀘어",
       "displayName": "알파스퀘어(AlphaSquare)",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "alphasquare.co.kr",
       "koreanHomepageUrl": "https://alphasquare.co.kr/",
       "englishHomepageUrl": "",
@@ -183,9 +184,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:34:50.287Z"
+      "lastFetchedAt": "2026-04-29T21:34:50.287Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "andopen-co-kr",
@@ -610,9 +612,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:45.533Z"
+      "lastFetchedAt": "2026-04-29T21:29:45.533Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "bhcchicken-global",
@@ -935,9 +938,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:34:09.656Z"
+      "lastFetchedAt": "2026-04-29T21:34:09.656Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "bosch-home-co-kr",
@@ -969,9 +973,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:25.788Z"
+      "lastFetchedAt": "2026-04-29T21:29:25.788Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "business-live-co-uk",
@@ -1279,9 +1284,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:03.503Z"
+      "lastFetchedAt": "2026-04-29T21:33:03.503Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "cosmax-com",
@@ -1817,9 +1823,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:28:57.726Z"
+      "lastFetchedAt": "2026-04-29T21:28:57.726Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "daewoolife-com",
@@ -1851,15 +1858,16 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:58.386Z"
+      "lastFetchedAt": "2026-04-29T21:29:58.386Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "dbpia-co-kr",
       "legalName": "DBpia",
       "displayName": "DBpia",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "dbpia.co.kr",
       "koreanHomepageUrl": "https://dbpia.co.kr/",
       "englishHomepageUrl": "",
@@ -1885,9 +1893,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:02.184Z"
+      "lastFetchedAt": "2026-04-29T21:31:02.184Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "dentium-com",
@@ -1982,9 +1991,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:58.492Z"
+      "lastFetchedAt": "2026-04-29T21:29:58.492Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "digi-joho-com",
@@ -2040,7 +2050,7 @@
       "id": "donga-com",
       "legalName": "",
       "displayName": "동아일보",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "donga.com",
       "koreanHomepageUrl": "https://www.donga.com/",
       "englishHomepageUrl": "https://www.donga.com/en/",
@@ -2066,9 +2076,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:12.528Z"
+      "lastFetchedAt": "2026-04-29T21:30:12.528Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "doosan-com",
@@ -2263,9 +2274,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:43.521Z"
+      "lastFetchedAt": "2026-04-29T21:32:43.521Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "ekjtech-com",
@@ -2884,7 +2896,7 @@
       "id": "engine-roa-ai",
       "legalName": "로아AI",
       "displayName": "로아AI",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "engine.roa.ai",
       "koreanHomepageUrl": "https://engine.roa.ai/",
       "englishHomepageUrl": "",
@@ -2910,9 +2922,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:00.254Z"
+      "lastFetchedAt": "2026-04-29T21:35:00.254Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "english-visitkorea-or-kr",
@@ -3049,9 +3062,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:10.141Z"
+      "lastFetchedAt": "2026-04-29T21:35:10.141Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "export-business-gov-au",
@@ -3132,9 +3146,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:42.377Z"
+      "lastFetchedAt": "2026-04-29T21:30:42.377Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "franchise-daegee-com",
@@ -3390,9 +3405,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "rejected",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:34.461Z"
+      "lastFetchedAt": "2026-04-29T21:29:34.461Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "goqual-com",
@@ -3426,9 +3442,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:43.495Z"
+      "lastFetchedAt": "2026-04-29T21:35:43.495Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "haatzmall-com",
@@ -3460,9 +3477,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:59.711Z"
+      "lastFetchedAt": "2026-04-29T21:33:59.711Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "hafele-co-kr",
@@ -3494,9 +3512,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:12.296Z"
+      "lastFetchedAt": "2026-04-29T21:29:12.296Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "hanatour-com",
@@ -3600,7 +3619,7 @@
       "id": "hankyung-com",
       "legalName": "한국경제",
       "displayName": "한국경제",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "hankyung.com",
       "koreanHomepageUrl": "https://www.hankyung.com/",
       "englishHomepageUrl": "",
@@ -3628,9 +3647,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:38.484Z"
+      "lastFetchedAt": "2026-04-29T21:31:38.484Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "hanmi-co-kr",
@@ -4242,9 +4262,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:39.784Z"
+      "lastFetchedAt": "2026-04-29T21:33:39.784Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "hugel-co-kr",
@@ -4418,9 +4439,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:32.346Z"
+      "lastFetchedAt": "2026-04-29T21:29:32.346Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "investkorea-org",
@@ -4748,9 +4770,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:23.479Z"
+      "lastFetchedAt": "2026-04-29T21:32:23.479Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kashi-or-kr",
@@ -4782,9 +4805,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:34:40.020Z"
+      "lastFetchedAt": "2026-04-29T21:34:40.020Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kayak-co-kr",
@@ -5168,7 +5192,7 @@
       "id": "kita-net",
       "legalName": "한국무역협회",
       "displayName": "한국무역협회",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "kita.net",
       "koreanHomepageUrl": "https://kita.net/",
       "englishHomepageUrl": "",
@@ -5194,9 +5218,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:48.367Z"
+      "lastFetchedAt": "2026-04-29T21:31:48.367Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kmda-ebook-com",
@@ -5354,9 +5379,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "rejected",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:34:30.128Z"
+      "lastFetchedAt": "2026-04-29T21:34:30.128Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kolmar-co-kr",
@@ -5884,7 +5910,7 @@
       "id": "ksure-or-kr",
       "legalName": "한국무역보험공사",
       "displayName": "INTRO | K-SURE 한국무역보험공사",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "ksure.or.kr",
       "koreanHomepageUrl": "https://ksure.or.kr/",
       "englishHomepageUrl": "",
@@ -5912,9 +5938,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:32.434Z"
+      "lastFetchedAt": "2026-04-29T21:30:32.434Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kt-com",
@@ -6187,9 +6214,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:07.017Z"
+      "lastFetchedAt": "2026-04-29T21:29:07.017Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "lge-co-kr",
@@ -6392,9 +6420,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:17.846Z"
+      "lastFetchedAt": "2026-04-29T21:33:17.846Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "lottehotel-com",
@@ -6556,7 +6585,7 @@
       "id": "m-ekn-kr",
       "legalName": "에너지경제신문",
       "displayName": "에너지경제신문",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "m.ekn.kr",
       "koreanHomepageUrl": "https://m.ekn.kr/",
       "englishHomepageUrl": "",
@@ -6582,9 +6611,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:12.239Z"
+      "lastFetchedAt": "2026-04-29T21:30:12.239Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "m-huborn-biz-co-kr",
@@ -6616,9 +6646,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:33.473Z"
+      "lastFetchedAt": "2026-04-29T21:32:33.473Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "m-winiaaid-com",
@@ -6650,9 +6681,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:49.742Z"
+      "lastFetchedAt": "2026-04-29T21:33:49.742Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "magic-com-vn",
@@ -6691,9 +6723,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "rejected",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:30.021Z"
+      "lastFetchedAt": "2026-04-29T21:29:30.021Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "medenvoyglobal-com",
@@ -6946,12 +6979,13 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "verified",
+      "status": "onboarded",
       "contractSigned": false,
       "contractDate": "",
       "discoveredAt": "2026-04-29",
       "lastFetchedAt": "2026-04-29T07:41:15.218Z",
-      "notes": "E-commerce site for Cuchen products (rice cookers, induction, etc.). Use this for product discovery instead of en.cuchen.com brochure site."
+      "notes": "E-commerce site for Cuchen products (rice cookers, induction, etc.). Use this for product discovery instead of en.cuchen.com brochure site.",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mfg-ergsn-k-energy",
@@ -7058,6 +7092,42 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T15:19:34.390Z",
       "notes": "2D → 3D stereoscopic conversion · inline catalog on index.html (not in data/products.json). 김우진 대표",
+      "lastVerifiedAt": "2026-04-29"
+    },
+    {
+      "id": "mfg-hejhome-goqual",
+      "legalName": "Hejhome (Goqual)",
+      "displayName": "Hejhome (Goqual)",
+      "sector": "k-smart-living",
+      "homepageHost": "hej.life",
+      "koreanHomepageUrl": "https://hej.life/",
+      "englishHomepageUrl": "https://hej.life/",
+      "englishDetectedBy": "manual",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "manufacturer",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {},
+      "social": {},
+      "sources": [
+        {
+          "seed": "manual:add-ui",
+          "seedQuery": "",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "onboarded",
+      "contractSigned": false,
+      "contractDate": "",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T23:17:57.593Z",
+      "notes": "D2C product site for Goqual smart-home brand. Use this for product discovery ? goqual.com is corporate-only.",
       "lastVerifiedAt": "2026-04-29"
     },
     {
@@ -7279,7 +7349,7 @@
       "id": "mk-co-kr",
       "legalName": "매일경제",
       "displayName": "매일경제",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "mk.co.kr",
       "koreanHomepageUrl": "https://www.mk.co.kr/",
       "englishHomepageUrl": "https://www.mk.co.kr/en/",
@@ -7308,9 +7378,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:48.730Z"
+      "lastFetchedAt": "2026-04-29T21:31:48.730Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mkenergycn-com",
@@ -7426,7 +7497,7 @@
       "id": "mordorintelligence-kr",
       "legalName": "Mordor Intelligence",
       "displayName": "Mordor Intelligence",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "mordorintelligence.kr",
       "koreanHomepageUrl": "https://www.mordorintelligence.kr/",
       "englishHomepageUrl": "",
@@ -7454,15 +7525,16 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:59.289Z"
+      "lastFetchedAt": "2026-04-29T21:31:59.289Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mt-co-kr",
       "legalName": "머니투데이",
       "displayName": "머니투데이",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "mt.co.kr",
       "koreanHomepageUrl": "https://www.mt.co.kr/",
       "englishHomepageUrl": "",
@@ -7492,9 +7564,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:10.764Z"
+      "lastFetchedAt": "2026-04-29T21:31:10.764Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mulberrypaperandmore-com",
@@ -7658,7 +7731,7 @@
       "id": "namu-wiki",
       "legalName": "나무위키",
       "displayName": "나무위키",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "namu.wiki",
       "koreanHomepageUrl": "https://namu.wiki/",
       "englishHomepageUrl": "https://en.namu.wiki/w/%EB%82%98%EB%AC%B4%EC%9C%84%ED%82%A4:%EB%8C%80%EB%AC%B8",
@@ -7684,9 +7757,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:34:19.002Z"
+      "lastFetchedAt": "2026-04-29T21:34:19.002Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "nativekorean-com",
@@ -8050,9 +8124,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "rejected",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:00.453Z"
+      "lastFetchedAt": "2026-04-29T21:32:00.453Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "olansichina-com",
@@ -8084,9 +8159,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:47.943Z"
+      "lastFetchedAt": "2026-04-29T21:29:47.943Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "osstem-com",
@@ -8237,9 +8313,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "rejected",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:31.590Z"
+      "lastFetchedAt": "2026-04-29T21:29:31.590Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "pcbtok-com",
@@ -8569,9 +8646,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:29:33.288Z"
+      "lastFetchedAt": "2026-04-29T21:29:33.288Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "s1-co-kr",
@@ -9127,7 +9205,7 @@
       "id": "seoulfn-com",
       "legalName": "서울파이낸스",
       "displayName": "서울파이낸스",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "seoulfn.com",
       "koreanHomepageUrl": "https://www.seoulfn.com/",
       "englishHomepageUrl": "",
@@ -9153,9 +9231,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:31:19.322Z"
+      "lastFetchedAt": "2026-04-29T21:31:19.322Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "seoulsemicon-com",
@@ -9621,15 +9700,16 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:20.011Z"
+      "lastFetchedAt": "2026-04-29T21:35:20.011Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "smartcity-kaia-re-kr",
       "legalName": "",
       "displayName": "",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "smartcity.kaia.re.kr",
       "koreanHomepageUrl": "https://smartcity.kaia.re.kr/",
       "englishHomepageUrl": "",
@@ -9655,15 +9735,16 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:41.940Z"
+      "lastFetchedAt": "2026-04-29T21:35:41.940Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "smartfarmkorea-net",
       "legalName": "",
       "displayName": "스마트팜코리아",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "smartfarmkorea.net",
       "koreanHomepageUrl": "https://smartfarmkorea.net/",
       "englishHomepageUrl": "",
@@ -9689,9 +9770,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:35:53.394Z"
+      "lastFetchedAt": "2026-04-29T21:35:53.394Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "solareastbess-com",
@@ -9761,9 +9843,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:32:43.576Z"
+      "lastFetchedAt": "2026-04-29T21:32:43.576Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "sourcesecurity-com",
@@ -10421,9 +10504,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "verified",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:33:14.763Z"
+      "lastFetchedAt": "2026-04-29T21:33:14.763Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "walkerhill-com",
@@ -10501,9 +10585,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:28:42.361Z"
+      "lastFetchedAt": "2026-04-29T21:28:42.361Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "winix-com",
@@ -10551,7 +10636,7 @@
       "id": "yna-co-kr",
       "legalName": "연합뉴스",
       "displayName": "연합뉴스",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "yna.co.kr",
       "koreanHomepageUrl": "https://www.yna.co.kr/",
       "englishHomepageUrl": "https://en.yna.co.kr/",
@@ -10581,15 +10666,16 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:12.395Z"
+      "lastFetchedAt": "2026-04-29T21:30:12.395Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "youthdaily-co-kr",
       "legalName": "",
       "displayName": "청년일보",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "youthdaily.co.kr",
       "koreanHomepageUrl": "https://youthdaily.co.kr/",
       "englishHomepageUrl": "",
@@ -10615,9 +10701,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:52.287Z"
+      "lastFetchedAt": "2026-04-29T21:30:52.287Z",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "yuhan-co-kr",
@@ -10749,7 +10836,7 @@
       "id": "zongdaifu-cn",
       "legalName": "",
       "displayName": "",
-      "sector": "k-smart-living",
+      "sector": "uncategorised",
       "homepageHost": "zongdaifu.cn",
       "koreanHomepageUrl": "https://zongdaifu.cn/",
       "englishHomepageUrl": "",
@@ -10775,9 +10862,10 @@
           "discoveredAt": "2026-04-29"
         }
       ],
-      "status": "raw",
+      "status": "pending",
       "discoveredAt": "2026-04-29",
-      "lastFetchedAt": "2026-04-29T21:30:22.516Z"
+      "lastFetchedAt": "2026-04-29T21:30:22.516Z",
+      "lastVerifiedAt": "2026-04-29"
     }
   ]
 }

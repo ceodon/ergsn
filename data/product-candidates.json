@@ -497,6 +497,45 @@
       "status": "discarded"
     },
     {
+      "id": "8a2e93a7c753",
+      "makerId": "mfg-cuchen-mall",
+      "name": "Golden Dual Pro 6-Person Rice Cooker",
+      "url": "https://www.cuchenmall.co.kr/shop/new_product2.php",
+      "imageUrl": "https://www.cuchenmall.co.kr/_skin/sowon_kor_renewal/asset/img/prd/golden_detail.png",
+      "description": "Golden Dual Pro model rice cooker for 6 servings",
+      "priceText": "",
+      "moqText": "",
+      "discoveredFrom": "https://www.cuchenmall.co.kr/shop/new_product.php",
+      "discoveredAt": "2026-04-29",
+      "status": "registered"
+    },
+    {
+      "id": "215502019f43",
+      "makerId": "mfg-hejhome-goqual",
+      "name": "AI Smart Home Camera",
+      "url": "https://hej.life/product/detail.html?product_no=352",
+      "imageUrl": "https://hej.life/web/product/big/202506/39abd9cec58df732929964257dfab6b5.png",
+      "description": "AI-powered smart home camera",
+      "priceText": "",
+      "moqText": "",
+      "discoveredFrom": "https://hej.life/product/search.html?keyword=%ED%99%88%EC%B9%B4%EB%A9%94%EB%9D%BC",
+      "discoveredAt": "2026-04-29",
+      "status": "registered"
+    },
+    {
+      "id": "5335534c702a",
+      "makerId": "mfg-hejhome-goqual",
+      "name": "New Product Launch High-Capacity Travel Adapter",
+      "url": "https://hej.life/product/detail.html?product_no=401",
+      "imageUrl": "https://hej.life/web/product/big/202511/70ba68a04126b40c63524588e056d58c.jpg",
+      "description": "High-capacity travel adapter",
+      "priceText": "",
+      "moqText": "",
+      "discoveredFrom": "https://hej.life/product/search.html?keyword=%ED%99%88%EC%B9%B4%EB%A9%94%EB%9D%BC",
+      "discoveredAt": "2026-04-29",
+      "status": "registered"
+    },
+    {
       "id": "117bceecb4e7",
       "makerId": "suprema-co-kr",
       "name": "Embedded Modules",
