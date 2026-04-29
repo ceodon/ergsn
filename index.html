@@ -127,7 +127,7 @@
             <li><a href="#products" onclick="switchSector('k-tourism-assets');return true"><span class="ds-name">K-Tourism Assets <span class="ds-tag">Active</span></span><span class="ds-desc">Yangpyeong hanok · share ownership</span></a></li>
             <li><a href="#products" onclick="switchSector('k-culture-goods');return true"><span class="ds-name">K-Culture Goods <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">K-pop merch · crafts · fashion</span></a></li>
             <li><a href="#products" onclick="switchSector('k-franchise');return true"><span class="ds-name">K-Franchise <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">F&amp;B · retail · service concepts</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag">Active</span></span><span class="ds-desc">Hejhome AI camera · Cuchen rice cooker · 3 SKUs</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
           </ul>
         </li>
         <li class="nav-dropdown">
@@ -205,7 +205,7 @@
       <li><a href="#products" onclick="switchSector('k-tourism-assets');closeMenu()">K-Tourism Assets (Active · Hanok)</a></li>
       <li><a href="#products" onclick="switchSector('k-culture-goods');closeMenu()">K-Culture Goods (Sourcing)</a></li>
       <li><a href="#products" onclick="switchSector('k-franchise');closeMenu()">K-Franchise (Sourcing)</a></li>
-      <li><a href="#products" onclick="switchSector('k-smart-living');closeMenu()">K-Smart Living (Active)</a></li>
+      <li><a href="#products" onclick="switchSector('k-smart-living');closeMenu()">K-Smart Living (Sourcing)</a></li>
     </ul>
   </details>
   <details>
@@ -346,8 +346,8 @@
       <button class="sector-tab" data-sector="k-franchise" onclick="switchSector('k-franchise')">
         K-Franchise <span class="st-tag">Soon</span>
       </button>
-      <button class="sector-tab is-active-sector" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
-        K-Smart Living <span class="st-tag">Active</span>
+      <button class="sector-tab" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
+        K-Smart Living <span class="st-tag">Soon</span>
       </button>
     </div>
 
@@ -2246,9 +2246,8 @@ const SECTORS = {
     desc: 'Verified Korean F&B, café, retail, and service franchise concepts — turnkey brand licensing, operations playbooks, and territory-exclusive master-franchise opportunities.'
   },
   'k-smart-living': {
-    active: true,
-    gridId: 'ksmartlivingGrid',
-    tag: 'K-Smart Living · Connected Home',
+    active: false,
+    tag: 'K-Smart Living',
     title: 'Connected Home & Lifestyle',
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><circle cx="12" cy="15" r="2"/></svg>',
     title2: 'K-Smart Living Sector',
