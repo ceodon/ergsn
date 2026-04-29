@@ -5683,7 +5683,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:50:33.167Z",
       "social": {
@@ -5693,7 +5693,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "megagen-com",
@@ -6435,7 +6435,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:50:32.356Z",
       "social": {
@@ -6445,7 +6445,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "newmaxbattery-co-kr",
