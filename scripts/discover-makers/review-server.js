@@ -211,6 +211,22 @@ function startCrawl({ seed, sector, mode, refresh, max }) {
         job.counts.fetched = parseInt(m[1], 10);
         job.counts.en = parseInt(m[2], 10);
       }
+      // Per-URL progress lines emitted by discover.js. Format examples:
+      //   [12/73] EN(html-lang)          https://...
+      //   [13/73] no-EN                  https://...
+      //   [14/73] FAIL(HTTP 404)         https://...
+      // Updating the counters incrementally lets the UI countdown reflect
+      // real progress instead of staying at 0/0 until the final summary.
+      if ((m = line.match(/^\s*\[\s*(\d+)\s*\/\s*(\d+)\s*\]\s+(EN|no-EN|FAIL)/i))) {
+        const idx = parseInt(m[1], 10);
+        const tag = m[3].toUpperCase();
+        if (tag === 'FAIL') job.counts.failed = (job.counts.failed || 0) + 1;
+        else {
+          // EN or no-EN both count as a successful fetch
+          job.counts.fetched = idx - (job.counts.failed || 0);
+          if (tag === 'EN') job.counts.en = (job.counts.en || 0) + 1;
+        }
+      }
       if ((m = line.match(/summary:\s*(\d+)\s*enriched\s*·\s*(\d+)\s*failed/i))) {
         job.counts.enriched = parseInt(m[1], 10);
         job.counts.enrichFailed = parseInt(m[2], 10);

@@ -52,6 +52,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "airmade-co-kr",
+      "legalName": "에어메이드 공식 홈페이지",
+      "displayName": "에어메이드 공식 홈페이지",
+      "sector": "k-smart-living",
+      "homepageHost": "airmade.co.kr",
+      "koreanHomepageUrl": "https://airmade.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "에어메이드 공식 홈페이지",
+        "metaDescription": "에어메이드는 생활가전 제품의 기획, 제조, 유통, A/S까지 전 과정을 직접 책임지는 국내 대표 생활가전 브랜드입니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:53.577Z"
+    },
+    {
       "id": "ajupress-com",
       "legalName": "AJU PRESS",
       "displayName": "AJU PRESS",
@@ -112,6 +146,46 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "alphasquare-co-kr",
+      "legalName": "알파스퀘어",
+      "displayName": "알파스퀘어(AlphaSquare)",
+      "sector": "k-smart-living",
+      "homepageHost": "alphasquare.co.kr",
+      "koreanHomepageUrl": "https://alphasquare.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "서울특별시 관악구 남부순환로 1698 캐모빌딩 3층, 관악구, 서울특별시, 08782, KR",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "WebPage",
+          "WebSite",
+          "Organization",
+          "Brand",
+          "SoftwareApplication"
+        ],
+        "ogSiteName": "알파스퀘어(AlphaSquare)",
+        "metaDescription": "투자에 필요한 모든 것을 기기의 제약없이 단 한 곳에서 이용 가능! 차세대 트레이딩 플랫폼 알파스퀘어. 실시간 투자정보부터 다양한 발굴분석까지 기존과는 전혀 다른 새로운 투자환경을 경험해 보세요.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:34:50.287Z"
     },
     {
       "id": "andopen-co-kr",
@@ -488,13 +562,57 @@
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:11.969Z",
+      "lastFetchedAt": "2026-04-29T21:28:40.060Z",
       "headquartersCity": "Seoul",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "bestofkorea-com",
+      "legalName": "Best of Korea",
+      "displayName": "Best of Korea",
+      "sector": "k-smart-living",
+      "homepageHost": "bestofkorea.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://bestofkorea.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "WebPage",
+          "ImageObject",
+          "BreadcrumbList",
+          "WebSite"
+        ],
+        "ogSiteName": "Best of Korea",
+        "metaDescription": "Best of Korea (BoK) is a celebration of the Korean American diaspora. Our mission is to shine a light on the best in Korean culture, entertainment, lifestyle, and achievement.",
+        "htmlLangAttr": "en-us"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:45.533Z"
     },
     {
       "id": "bhcchicken-global",
@@ -788,6 +906,74 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "boralkorea-com",
+      "legalName": "",
+      "displayName": "보랄 시그니처 공식 홈페이지",
+      "sector": "k-smart-living",
+      "homepageHost": "boralkorea.com",
+      "koreanHomepageUrl": "https://boralkorea.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "독일의 실질적이고 견고한 디자인의 기준에 맞춰 제작된 보랄의 제품을 만나보세요.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:34:09.656Z"
+    },
+    {
+      "id": "bosch-home-co-kr",
+      "legalName": "",
+      "displayName": "보쉬 가전: 연륜있는 품질, 신뢰성, 정확성",
+      "sector": "k-smart-living",
+      "homepageHost": "bosch-home.co.kr",
+      "koreanHomepageUrl": "https://www.bosch-home.co.kr/",
+      "englishHomepageUrl": "https://www.bosch-home.co.kr/en/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "요리, 설거지, 빨래, 냉장, 요리준비와 커피 만들기: 당신은 보쉬 가전의 품질과 신뢰성, 정확성을 사랑하게 될 것입니다.",
+        "htmlLangAttr": "ko-kr"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:25.788Z"
+    },
+    {
       "id": "business-live-co-uk",
       "legalName": "Business Live",
       "displayName": "Business Live",
@@ -982,14 +1168,7 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
@@ -1001,11 +1180,16 @@
           "seed": "search:tavily",
           "seedQuery": "Korean restaurant cafe franchise English export",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:51:42.429Z",
+      "lastFetchedAt": "2026-04-29T21:30:02.299Z",
       "social": {
         "instagram": "",
         "facebook": "",
@@ -1064,6 +1248,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "clair-kr",
+      "legalName": "",
+      "displayName": "클레어 공기청정기",
+      "sector": "k-smart-living",
+      "homepageHost": "clair.kr",
+      "koreanHomepageUrl": "https://clair.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "장나라의 공기청정기, 각방마다 클레어!",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:03.503Z"
     },
     {
       "id": "cosmax-com",
@@ -1217,25 +1435,23 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "verified",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:51.557Z",
+      "lastFetchedAt": "2026-04-29T21:29:59.009Z",
       "social": {
         "instagram": "",
         "facebook": "",
@@ -1486,25 +1702,23 @@
       },
       "contact": {
         "email": "",
-        "tel": "1-800-88-8181",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": "1-800-88-8181"
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:26.619Z",
+      "lastFetchedAt": "2026-04-29T21:29:23.627Z",
       "contactPageUrl": "https://www.cuckoo.com.my/",
       "social": {
         "instagram": "",
@@ -1543,25 +1757,23 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:27.498Z",
+      "lastFetchedAt": "2026-04-29T21:28:58.288Z",
       "subCategory": "Rice Cookers",
       "social": {
         "instagram": "",
@@ -1571,6 +1783,111 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "daewooelectronics-com",
+      "legalName": "Daewoo",
+      "displayName": "Daewoo",
+      "sector": "k-smart-living",
+      "homepageHost": "daewooelectronics.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://www.daewooelectronics.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite"
+        ],
+        "ogSiteName": "Daewoo",
+        "metaDescription": "",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:28:57.726Z"
+    },
+    {
+      "id": "daewoolife-com",
+      "legalName": "",
+      "displayName": "",
+      "sector": "k-smart-living",
+      "homepageHost": "daewoolife.com",
+      "koreanHomepageUrl": "https://daewoolife.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "POSCO DAEWOO is a representative ‘Global Integrated Corporation’ that consistently builds its company by implementing core values as ‘The Excellent People,’ ‘Creative Challenge’ and‘Reliability and Cooperation’ in various business fields including international trade,investment & project organizing and resources development.",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:58.386Z"
+    },
+    {
+      "id": "dbpia-co-kr",
+      "legalName": "DBpia",
+      "displayName": "DBpia",
+      "sector": "k-smart-living",
+      "homepageHost": "dbpia.co.kr",
+      "koreanHomepageUrl": "https://dbpia.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "DBpia",
+        "metaDescription": "DBpia는 국내 우수 학술기관이 발행한 저널과 논문을 제공하고 있습니다. 연구자에게 꼭 맞는 콘텐츠와 서비스를 한 곳에서 만나보세요.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:02.184Z"
     },
     {
       "id": "dentium-com",
@@ -1636,6 +1953,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "dhautonex-co-kr",
+      "legalName": "DHAUTONEX",
+      "displayName": "DHAUTONEX",
+      "sector": "k-smart-living",
+      "homepageHost": "dhautonex.co.kr",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://dhautonex.co.kr/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "DHAUTONEX",
+        "metaDescription": "Dayou Plus aims at becoming the best company that leads the future through a pioneering spirit that widens the horizon of the transmission and network equipment industry, and through continuous growth.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:58.492Z"
+    },
+    {
       "id": "digi-joho-com",
       "legalName": "digi-joho JAPAN Living & Working",
       "displayName": "digi-joho JAPAN Living & Working",
@@ -1684,6 +2035,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "donga-com",
+      "legalName": "",
+      "displayName": "동아일보",
+      "sector": "k-smart-living",
+      "homepageHost": "donga.com",
+      "koreanHomepageUrl": "https://www.donga.com/",
+      "englishHomepageUrl": "https://www.donga.com/en/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "대한민국을 대표하는 정론지 동아일보는 디지털 창인 동아닷컴과 함께 공정하고 정확한 뉴스로 독자 여러분과 더 나은 미래를 만들어 나가겠습니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:12.528Z"
     },
     {
       "id": "doosan-com",
@@ -1745,7 +2130,7 @@
       "id": "dotradeex-com",
       "legalName": "Dotrade, Inc. #B2B Discover Korean brands OEM, ODM, Private Label, R&amp;D Manufacturers",
       "displayName": "Dotrade, Inc. #B2B Discover Korean brands OEM, ODM, Private Label, R&amp;D Manufacturers",
-      "sector": "uncategorised",
+      "sector": "k-smart-living",
       "homepageHost": "dotradeex.com",
       "koreanHomepageUrl": "",
       "englishHomepageUrl": "https://dotradeex.com/",
@@ -1771,26 +2156,24 @@
         "htmlLangAttr": "en"
       },
       "contact": {
-        "email": "export@dotradeex.com",
-        "tel": "+82 2 1234 5678",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "email": "",
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:50.931Z",
+      "lastFetchedAt": "2026-04-29T21:29:36.408Z",
       "contactPageUrl": "https://dotradeex.com/contact-us",
       "social": {
         "instagram": "",
@@ -1849,6 +2232,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "edkcorpor-cafe24-com",
+      "legalName": "디케이",
+      "displayName": "디케이",
+      "sector": "k-smart-living",
+      "homepageHost": "edkcorpor.cafe24.com",
+      "koreanHomepageUrl": "https://edkcorpor.cafe24.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "디케이",
+        "metaDescription": "쾌적하고 깨끗한 생활을 위한 스마트 가전이 한 곳에! 디케이 주식회사",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:43.521Z"
     },
     {
       "id": "ekjtech-com",
@@ -1998,11 +2415,16 @@
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:36.552Z",
+      "lastFetchedAt": "2026-04-29T21:29:21.368Z",
       "lastVerifiedAt": "2026-04-29"
     },
     {
@@ -2313,25 +2735,23 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "verified",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:13.586Z",
+      "lastFetchedAt": "2026-04-29T21:28:40.572Z",
       "contactPageUrl": "https://en.vovokr.com/",
       "social": {
         "instagram": "",
@@ -2461,6 +2881,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "engine-roa-ai",
+      "legalName": "로아AI",
+      "displayName": "로아AI",
+      "sector": "k-smart-living",
+      "homepageHost": "engine.roa.ai",
+      "koreanHomepageUrl": "https://engine.roa.ai/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "로아AI",
+        "metaDescription": "기업 정보, 트렌드 키워드 및 산업 뉴스, 재무 현황, 분석이 필요한 비즈니스 플랫폼",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:00.254Z"
+    },
+    {
       "id": "english-visitkorea-or-kr",
       "legalName": "VISITKOREA - Imagine Your Korea",
       "displayName": "VISITKOREA - Imagine Your Korea",
@@ -2564,6 +3018,42 @@
       "lastVerifiedAt": "2026-04-29"
     },
     {
+      "id": "enterprise-kt-com",
+      "legalName": "KT 엔터프라이즈",
+      "displayName": "KT Enterprise",
+      "sector": "k-smart-living",
+      "homepageHost": "enterprise.kt.com",
+      "koreanHomepageUrl": "https://enterprise.kt.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization"
+        ],
+        "ogSiteName": "",
+        "metaDescription": "KT 기업고객 사이트 KT Enterprise입니다. AI, Big Data, Cloud의 앞선 기술과 기업 유무선 통신의 전문성으로 대한민국 기업의 디지털 혁신을 함께 합니다. 디지털 트랜스포메이션 파트너, KT Enterprise",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:10.141Z"
+    },
+    {
       "id": "export-business-gov-au",
       "legalName": "",
       "displayName": "Go Global Toolkit",
@@ -2611,6 +3101,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "eyard-net",
+      "legalName": "",
+      "displayName": "이야드 - 철강B2B",
+      "sector": "k-smart-living",
+      "homepageHost": "eyard.net",
+      "koreanHomepageUrl": "https://eyard.net/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "이야드, 철강유통의 새로운 패러다임",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:42.377Z"
     },
     {
       "id": "franchise-daegee-com",
@@ -2837,6 +3361,144 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "goldsupplier-com",
+      "legalName": "",
+      "displayName": "Verified China Suppliers & Manufacturers – Reliable B2B Marketplace | GoldSupplier.com",
+      "sector": "k-smart-living",
+      "homepageHost": "goldsupplier.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://www.goldsupplier.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "GoldSupplier.com connects global importers to verified Chinese suppliers and manufacturers. Source quality products, get competitive quotes, and trade with confidence on our reliable B2B marketplace. Your trusted partner in China trade.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:34.461Z"
+    },
+    {
+      "id": "goqual-com",
+      "legalName": "GOQUAL",
+      "displayName": "GOQUAL",
+      "sector": "k-smart-living",
+      "homepageHost": "goqual.com",
+      "koreanHomepageUrl": "https://goqual.com/",
+      "englishHomepageUrl": "https://goqual.com/en",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Person"
+        ],
+        "ogSiteName": "GOQUAL",
+        "metaDescription": "IoT 기술로 삶을 더 가치있게.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:43.495Z"
+    },
+    {
+      "id": "haatzmall-com",
+      "legalName": "",
+      "displayName": "공기질 관리 기업, 하츠",
+      "sector": "k-smart-living",
+      "homepageHost": "haatzmall.com",
+      "koreanHomepageUrl": "https://haatzmall.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:59.711Z"
+    },
+    {
+      "id": "hafele-co-kr",
+      "legalName": "Häfele",
+      "displayName": "Häfele",
+      "sector": "k-smart-living",
+      "homepageHost": "hafele.co.kr",
+      "koreanHomepageUrl": "https://www.hafele.co.kr/",
+      "englishHomepageUrl": "https://www.hafele.co.kr/en/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "Häfele",
+        "metaDescription": "헤펠레코리아는 가구피팅, 건축하드웨어 및 전자 제어 시스템을 공급하는 글로벌 기업입니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:12.296Z"
+    },
+    {
       "id": "hanatour-com",
       "legalName": "",
       "displayName": "하나투어 : 꿈꾸는 대로, 펼쳐지다",
@@ -2933,6 +3595,42 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "hankyung-com",
+      "legalName": "한국경제",
+      "displayName": "한국경제",
+      "sector": "k-smart-living",
+      "homepageHost": "hankyung.com",
+      "koreanHomepageUrl": "https://www.hankyung.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "NewsMediaOrganization"
+        ],
+        "ogSiteName": "한국경제",
+        "metaDescription": "한국경제는 글로벌 시장 흐름과 국내 경제, 산업, 부동산, 테크, 문화 뉴스를 제공하며, AI와 데이터 분석을 통해 독자들에게 통찰력있는 정보를 전달합니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:38.484Z"
     },
     {
       "id": "hanmi-co-kr",
@@ -3415,26 +4113,24 @@
         "htmlLangAttr": "en-us"
       },
       "contact": {
-        "email": "inquiry@hisoair.com",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "email": "",
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:38.212Z",
+      "lastFetchedAt": "2026-04-29T21:29:33.514Z",
       "subCategory": "indoor air quality solutions",
       "social": {
         "instagram": "",
@@ -3515,6 +4211,40 @@
       "lastFetchedAt": "2026-04-27T10:31:43.905Z",
       "headquartersCity": "서울특별시 중구",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "hsgmall-kr",
+      "legalName": "",
+      "displayName": "hsgmall - 주방 생활 가전 주방 생활용품 전문 쇼핑몰 함성몰",
+      "sector": "k-smart-living",
+      "homepageHost": "hsgmall.kr",
+      "koreanHomepageUrl": "https://hsgmall.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:39.784Z"
     },
     {
       "id": "hugel-co-kr",
@@ -3659,6 +4389,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "international-gorenje-com",
+      "legalName": "",
+      "displayName": "gorenje-int | Homepage",
+      "sector": "k-smart-living",
+      "homepageHost": "international.gorenje.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://international.gorenje.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "Gorenje Group is a leading European home appliance manufacturer supplying superiorly designed and technologically perfected appliances that simplify the lives of users in 90 countries around the globe.",
+        "htmlLangAttr": "en_en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:32.346Z"
+    },
+    {
       "id": "investkorea-org",
       "legalName": "",
       "displayName": "InvestKOREA",
@@ -3744,26 +4508,24 @@
         "htmlLangAttr": "en-us"
       },
       "contact": {
-        "email": "info@iprowinpower.com",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "email": "",
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "rejected",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:47.419Z",
+      "lastFetchedAt": "2026-04-29T21:29:44.052Z",
       "social": {
         "instagram": "",
         "facebook": "",
@@ -3955,6 +4717,74 @@
       "lastFetchedAt": "2026-04-27T11:50:29.147Z",
       "headquartersCity": "Seoul",
       "lastVerifiedAt": "2026-04-29"
+    },
+    {
+      "id": "kaca-or-kr",
+      "legalName": "한국공기청정협회",
+      "displayName": "한국공기청정협회",
+      "sector": "k-smart-living",
+      "homepageHost": "kaca.or.kr",
+      "koreanHomepageUrl": "https://kaca.or.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "한국공기청정협회",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:23.479Z"
+    },
+    {
+      "id": "kashi-or-kr",
+      "legalName": "",
+      "displayName": "",
+      "sector": "k-smart-living",
+      "homepageHost": "kashi.or.kr",
+      "koreanHomepageUrl": "https://kashi.or.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:34:40.020Z"
     },
     {
       "id": "kayak-co-kr",
@@ -4207,11 +5037,16 @@
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:23.592Z",
+      "lastFetchedAt": "2026-04-29T21:28:52.349Z",
       "lastVerifiedAt": "2026-04-28"
     },
     {
@@ -4328,6 +5163,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "kita-net",
+      "legalName": "한국무역협회",
+      "displayName": "한국무역협회",
+      "sector": "k-smart-living",
+      "homepageHost": "kita.net",
+      "koreanHomepageUrl": "https://kita.net/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "한국무역협회",
+        "metaDescription": "한국무역협회 무역 통상정보, 회원/업무지원, 무역통계, 협회안내 등 서비스 안내.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:48.367Z"
     },
     {
       "id": "kmda-ebook-com",
@@ -4449,6 +5318,47 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "ko-innolead-net",
+      "legalName": "심천  이놀리드  지능형  주식회사  주식회사",
+      "displayName": "심천  이놀리드  지능형  주식회사  주식회사",
+      "sector": "k-smart-living",
+      "homepageHost": "ko.innolead.net",
+      "koreanHomepageUrl": "https://ko.innolead.net/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "CN",
+      "headquartersAddress": "중국 선전시 룽화 구 관란 다푸 11호 펑롱 판 하이테크 파크 F 빌딩. 우편번호:518110, CN",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "WebPage",
+          "ImageObject",
+          "BreadcrumbList",
+          "WebSite",
+          "Organization",
+          "Brand"
+        ],
+        "ogSiteName": "심천  이놀리드  지능형  주식회사  주식회사",
+        "metaDescription": "Innolead Hardware Electronic Limited: 우리는 중국의 선도적인 RFID 골프 공, 스마트 홈, 방열판, 다이 캐스팅, 자동차 키 제조업체 및 공급업체 중 하나로 잘 알려져 있습니다. 우리 공장에서 고품질 맞춤형 제품을 구입하십시오. 좋은 서비스와 경쟁력 있는 가격을 사용할 수 있습니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:34:30.128Z"
+    },
+    {
       "id": "kolmar-co-kr",
       "legalName": "KOLMAR KOREA",
       "displayName": "한국콜마",
@@ -4545,14 +5455,7 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
@@ -4564,11 +5467,16 @@
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:47.666Z",
+      "lastFetchedAt": "2026-04-29T21:29:40.266Z",
       "social": {
         "instagram": "",
         "facebook": "",
@@ -4973,6 +5881,42 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "ksure-or-kr",
+      "legalName": "한국무역보험공사",
+      "displayName": "INTRO | K-SURE 한국무역보험공사",
+      "sector": "k-smart-living",
+      "homepageHost": "ksure.or.kr",
+      "koreanHomepageUrl": "https://ksure.or.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization"
+        ],
+        "ogSiteName": "",
+        "metaDescription": "무역투자보험기관, 무역 및 해외투자 촉진, 공적 무역 신용제도 운영, 무역보험, 신용보증, 신용정보서비스, 채권추심서비스 등 안내",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:32.434Z"
+    },
+    {
       "id": "kt-com",
       "legalName": "주식회사 케이티",
       "displayName": "KT",
@@ -5214,6 +6158,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "lg-co-kr",
+      "legalName": "",
+      "displayName": "LG",
+      "sector": "k-smart-living",
+      "homepageHost": "lg.co.kr",
+      "koreanHomepageUrl": "https://www.lg.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "LG의 공식 홈페이지입니다. LG의 비전, CI, 계열사, LG사이언스파크, 경영현황, 연혁, CSR, 신제품 소식, 광고, 홍보영상 등의 다양한 정보를 제공합니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:07.017Z"
+    },
+    {
       "id": "lge-co-kr",
       "legalName": "LG전자",
       "displayName": "LG전자",
@@ -5383,6 +6361,42 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "locknlock-com",
+      "legalName": "",
+      "displayName": "LocknLock | 락앤락과 함께하는 건강한 주방생활",
+      "sector": "k-smart-living",
+      "homepageHost": "locknlock.com",
+      "koreanHomepageUrl": "https://locknlock.com/",
+      "englishHomepageUrl": "https://locknlock.com/eng/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Person"
+        ],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:17.846Z"
+    },
+    {
       "id": "lottehotel-com",
       "legalName": "LOTTE HOTELS & RESORTS",
       "displayName": "LOTTE HOTELS & RESORTS",
@@ -5537,6 +6551,149 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "m-ekn-kr",
+      "legalName": "에너지경제신문",
+      "displayName": "에너지경제신문",
+      "sector": "k-smart-living",
+      "homepageHost": "m.ekn.kr",
+      "koreanHomepageUrl": "https://m.ekn.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "에너지경제신문",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:12.239Z"
+    },
+    {
+      "id": "m-huborn-biz-co-kr",
+      "legalName": "생활환경가전전문 (주)휴본",
+      "displayName": "생활환경가전전문 (주)휴본",
+      "sector": "k-smart-living",
+      "homepageHost": "m.huborn-biz.co.kr",
+      "koreanHomepageUrl": "https://m.huborn-biz.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "생활환경가전전문 (주)휴본",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:33.473Z"
+    },
+    {
+      "id": "m-winiaaid-com",
+      "legalName": "",
+      "displayName": "큐에이드(구 위니아에이드)",
+      "sector": "k-smart-living",
+      "homepageHost": "m.winiaaid.com",
+      "koreanHomepageUrl": "https://m.winiaaid.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "큐에이드서비스, 위니아서비스, 위니아전자(구 대우전자)서비스, 애플공인서비스, 가전세척서비스, 대행사업(물류, 설치/배송, 서비스, 전화상담), 큐밍, AIDON, 위니아24크린샵",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:49.742Z"
+    },
+    {
+      "id": "magic-com-vn",
+      "legalName": "Buheung",
+      "displayName": "Magic Vietnam",
+      "sector": "k-smart-living",
+      "homepageHost": "magic.com.vn",
+      "koreanHomepageUrl": "https://magic.com.vn/",
+      "englishHomepageUrl": "https://magic.com.vn/?lang=en",
+      "englishDetectedBy": "hreflang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization",
+          "WebSite",
+          "ImageObject",
+          "WebPage",
+          "Person",
+          "Article"
+        ],
+        "ogSiteName": "Magic Vietnam",
+        "metaDescription": "Tại Magic, chúng tôi tin rằng sức khỏe bắt đầu từ căn bếp. Mỗi bữa ăn, mỗi ly nước, mỗi thao tác trong gian bếp đều có thể trở thành nguồn năng lượng tích cực",
+        "htmlLangAttr": "vi-vn"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:30.021Z"
     },
     {
       "id": "medenvoyglobal-com",
@@ -6119,6 +7276,43 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "mk-co-kr",
+      "legalName": "매일경제",
+      "displayName": "매일경제",
+      "sector": "k-smart-living",
+      "homepageHost": "mk.co.kr",
+      "koreanHomepageUrl": "https://www.mk.co.kr/",
+      "englishHomepageUrl": "https://www.mk.co.kr/en/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "WebSite",
+          "Organization"
+        ],
+        "ogSiteName": "매일경제",
+        "metaDescription": "매일경제는 초일류국가로 도약할 수 있는 국가적 비전을 선도하며 지식강국의 내일을 위해 새로운 비전과 패러다임을 제시하고 있습니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:48.730Z"
+    },
+    {
       "id": "mkenergycn-com",
       "legalName": "MK Energy",
       "displayName": "MK Energy | Energy Storage Battery Manufacturer | OEM/ODM",
@@ -6227,6 +7421,80 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T10:32:29.058Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "mordorintelligence-kr",
+      "legalName": "Mordor Intelligence",
+      "displayName": "Mordor Intelligence",
+      "sector": "k-smart-living",
+      "homepageHost": "mordorintelligence.kr",
+      "koreanHomepageUrl": "https://www.mordorintelligence.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "11th Floor, Rajapushpa Summit, Nanakramguda Rd, Financial District, Gachibowli, Hyderabad, Telangana, 500032, IN",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization"
+        ],
+        "ogSiteName": "Mordor Intelligence",
+        "metaDescription": "Mordor Intelligence™는 전 세계 모든 규모의 기업에 가장 심층적이고 고품질의 시장 조사 보고서를 제공합니다. 우리 분석가 팀은 100개가 넘는 산업 분야의 시장을 추적합니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "info@mordorintelligence.com",
+        "tel": "+1-617-765-2493"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:59.289Z"
+    },
+    {
+      "id": "mt-co-kr",
+      "legalName": "머니투데이",
+      "displayName": "머니투데이",
+      "sector": "k-smart-living",
+      "homepageHost": "mt.co.kr",
+      "koreanHomepageUrl": "https://www.mt.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "NewsMediaOrganization",
+          "WebSite",
+          "BreadcrumbList"
+        ],
+        "ogSiteName": "머니투데이",
+        "metaDescription": "머니투데이는 경제, 증권, 기업 등 실시간 뉴스부터 정치, 사회, 문화에 이르기까지 다양한 분야의 깊이 있는 분석과 신뢰할 수 있는 정보를 제공합니다. 빠르고 정확한 보도로 대한민국 대표 종합경제미디어의 역할을 충실히 수행하며, 독자에게 가치 있는 뉴스를 전달합니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:10.764Z"
     },
     {
       "id": "mulberrypaperandmore-com",
@@ -6385,6 +7653,40 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "namu-wiki",
+      "legalName": "나무위키",
+      "displayName": "나무위키",
+      "sector": "k-smart-living",
+      "homepageHost": "namu.wiki",
+      "koreanHomepageUrl": "https://namu.wiki/",
+      "englishHomepageUrl": "https://en.namu.wiki/w/%EB%82%98%EB%AC%B4%EC%9C%84%ED%82%A4:%EB%8C%80%EB%AC%B8",
+      "englishDetectedBy": "en-subdomain",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "나무위키",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:34:19.002Z"
     },
     {
       "id": "nativekorean-com",
@@ -6690,26 +7992,24 @@
         "htmlLangAttr": "en-us"
       },
       "contact": {
-        "email": "daniel@olansgz.com",
-        "tel": "+86 15915736889",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "email": "",
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:42.912Z",
+      "lastFetchedAt": "2026-04-29T21:29:40.079Z",
       "subCategory": "water purifier",
       "social": {
         "instagram": "",
@@ -6719,6 +8019,74 @@
         "kakaoChannel": ""
       },
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "olansi-net",
+      "legalName": "",
+      "displayName": "Olansi Healthcare Co., Ltd-Buy Top Air Purifiers &amp; Hydrogen Water Makers",
+      "sector": "k-smart-living",
+      "homepageHost": "olansi.net",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://www.olansi.net/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "Guangzhou Olansi Healthcare is a professional home, room, portable, desktop air purifier, hydrogen water bottle, machine, water maker manufacturer from China.",
+        "htmlLangAttr": "en-us"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:00.453Z"
+    },
+    {
+      "id": "olansichina-com",
+      "legalName": "",
+      "displayName": "Olansi Air Purifier - China Hepa UVC Air Purifier Home Air Cleaner Manufacturer",
+      "sector": "k-smart-living",
+      "homepageHost": "olansichina.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://www.olansichina.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "Olansi, best air purifier manufacturer in China, household, room &amp; indoor air purifier factory, air purifier for home, uvc air purifier covid, hepa air cleaner, 15+ years OEM/ODM experience.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:47.943Z"
     },
     {
       "id": "osstem-com",
@@ -6838,6 +8206,40 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T10:32:46.861Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "pcbasic-com",
+      "legalName": "",
+      "displayName": "China PCBA Manufacturer | Shenzhen PCB Assembly Factory",
+      "sector": "k-smart-living",
+      "homepageHost": "pcbasic.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://pcbasic.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "As a leading Shenzhen PCBA manufacturer and pcb design company in China, PCBasic provides you with professional PCBA production and custom pcb design service.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:31.590Z"
     },
     {
       "id": "pcbtok-com",
@@ -7136,6 +8538,40 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T10:28:36.197Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "rinnai-com",
+      "legalName": "Rinnai Global",
+      "displayName": "Rinnai Global",
+      "sector": "k-smart-living",
+      "homepageHost": "rinnai.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://rinnai.com/en",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "Rinnai Global",
+        "metaDescription": "Rinnai Corporation global site. This site provides information about Rinnai, focusing on its global network and products, including kitchens and bathrooms.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:29:33.288Z"
     },
     {
       "id": "s1-co-kr",
@@ -7494,25 +8930,23 @@
       },
       "contact": {
         "email": "",
-        "tel": "",
-        "fax": "",
-        "whatsapp": "",
-        "kakaoTalk": "",
-        "line": "",
-        "wechat": "",
-        "skype": "",
-        "telegram": ""
+        "tel": ""
       },
       "sources": [
         {
           "seed": "search:tavily",
           "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean kitchen appliance air purifier manufacturer English",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:51.214Z",
+      "lastFetchedAt": "2026-04-29T21:29:48.042Z",
       "social": {
         "instagram": "",
         "facebook": "",
@@ -7690,6 +9124,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "seoulfn-com",
+      "legalName": "서울파이낸스",
+      "displayName": "서울파이낸스",
+      "sector": "k-smart-living",
+      "homepageHost": "seoulfn.com",
+      "koreanHomepageUrl": "https://www.seoulfn.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "서울파이낸스",
+        "metaDescription": "2002년 창간 종합경제지. 은행, 증권, 보험, 2금융, 자본시장, 재테크, IT, 가상화폐, 외환, 채권, 오피니언.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:31:19.322Z"
+    },
+    {
       "id": "seoulsemicon-com",
       "legalName": "Seoul Semiconductor",
       "displayName": "Main | Seoul Semiconductor",
@@ -7821,11 +9289,16 @@
           "seed": "search:tavily",
           "seedQuery": "Korean home appliance manufacturer English homepage",
           "discoveredAt": "2026-04-27"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
         }
       ],
       "status": "pending",
       "discoveredAt": "2026-04-27",
-      "lastFetchedAt": "2026-04-27T11:48:12.759Z",
+      "lastFetchedAt": "2026-04-29T21:28:41.294Z",
       "headquartersCity": "Seoul",
       "lastVerifiedAt": "2026-04-28"
     },
@@ -8119,6 +9592,108 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "sktsmarthome-com",
+      "legalName": "",
+      "displayName": "누구 스마트홈",
+      "sector": "k-smart-living",
+      "homepageHost": "sktsmarthome.com",
+      "koreanHomepageUrl": "https://sktsmarthome.com/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:20.011Z"
+    },
+    {
+      "id": "smartcity-kaia-re-kr",
+      "legalName": "",
+      "displayName": "",
+      "sector": "k-smart-living",
+      "homepageHost": "smartcity.kaia.re.kr",
+      "koreanHomepageUrl": "https://smartcity.kaia.re.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:41.940Z"
+    },
+    {
+      "id": "smartfarmkorea-net",
+      "legalName": "",
+      "displayName": "스마트팜코리아",
+      "sector": "k-smart-living",
+      "homepageHost": "smartfarmkorea.net",
+      "koreanHomepageUrl": "https://smartfarmkorea.net/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 스마트홈 제조회사",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:35:53.394Z"
+    },
+    {
       "id": "solareastbess-com",
       "legalName": "SolarEast (Luoyang) Energy Storage Technology Co., Ltd.",
       "displayName": "SolarEast (Luoyang) Energy Storage Technology Co., Ltd.",
@@ -8155,6 +9730,40 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:47:57.752Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "sotoplus-co-kr",
+      "legalName": "SOTOPLUS 공기청정기",
+      "displayName": "SOTOPLUS 공기청정기",
+      "sector": "k-smart-living",
+      "homepageHost": "sotoplus.co.kr",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://sotoplus.co.kr/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "SOTOPLUS 공기청정기",
+        "metaDescription": "SOTOPLUS는 최고 수준의 공기 살균 및 정화 시스템을 설계하고 제조하기 위해 노력하고 있습니다. 함께 건강한 공기를 만들어갑니다.",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:32:43.576Z"
     },
     {
       "id": "sourcesecurity-com",
@@ -8783,6 +10392,40 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "votokorea-com",
+      "legalName": "",
+      "displayName": "보토",
+      "sector": "k-smart-living",
+      "homepageHost": "votokorea.com",
+      "koreanHomepageUrl": "https://votokorea.com/",
+      "englishHomepageUrl": "https://votokorea.com/en/",
+      "englishDetectedBy": "en-subpath",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "생활가전, 주방가전, 스마트기기, 노트북, 태블릿PC, 음향기기 등 다양한 제품 정보 및 서비스",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 주방가전 공기청정기 제조업체",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:33:14.763Z"
+    },
+    {
       "id": "walkerhill-com",
       "legalName": "WALKERHILL HOTELS & RESORTS",
       "displayName": "워커힐 호텔 | WALKERHILL HOTELS &amp; RESORTS",
@@ -8827,6 +10470,42 @@
       "lastVerifiedAt": "2026-04-28"
     },
     {
+      "id": "weshopfromkorea-com",
+      "legalName": "Korea Expert Guide",
+      "displayName": "We Shop From Korea - Korean Online Shopping Directory - Wholesale &amp; Retail | Korea Expert Guide",
+      "sector": "k-smart-living",
+      "homepageHost": "weshopfromkorea.com",
+      "koreanHomepageUrl": "",
+      "englishHomepageUrl": "https://weshopfromkorea.com/",
+      "englishDetectedBy": "html-lang",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "Organization"
+        ],
+        "ogSiteName": "",
+        "metaDescription": "Korea shopping directory for international buyers. Online shopping is fun and easy with the Korea shop list. We list only the top online shops in Kore...",
+        "htmlLangAttr": "en"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "Korean home appliance manufacturer English homepage",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:28:42.361Z"
+    },
+    {
       "id": "winix-com",
       "legalName": "",
       "displayName": "위닉스",
@@ -8867,6 +10546,78 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T10:29:09.834Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "yna-co-kr",
+      "legalName": "연합뉴스",
+      "displayName": "연합뉴스",
+      "sector": "k-smart-living",
+      "homepageHost": "yna.co.kr",
+      "koreanHomepageUrl": "https://www.yna.co.kr/",
+      "englishHomepageUrl": "https://en.yna.co.kr/",
+      "englishDetectedBy": "hreflang",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [
+          "WebSite",
+          "NewsMediaOrganization",
+          "BreadcrumbList"
+        ],
+        "ogSiteName": "연합뉴스",
+        "metaDescription": "연합뉴스는 새로운 시대에 걸맞은 멀티미디어 콘텐츠로 다양한 상품, 다양한 뉴스를 생산하고 있습니다.",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:12.395Z"
+    },
+    {
+      "id": "youthdaily-co-kr",
+      "legalName": "",
+      "displayName": "청년일보",
+      "sector": "k-smart-living",
+      "homepageHost": "youthdaily.co.kr",
+      "koreanHomepageUrl": "https://youthdaily.co.kr/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "청년을 위한 청년일보, 정치, 정책, 경제, 사회, 문화 등 기사 제공",
+        "htmlLangAttr": "ko"
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:52.287Z"
     },
     {
       "id": "yuhan-co-kr",
@@ -8993,6 +10744,40 @@
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:47:12.619Z",
       "lastVerifiedAt": "2026-04-28"
+    },
+    {
+      "id": "zongdaifu-cn",
+      "legalName": "",
+      "displayName": "",
+      "sector": "k-smart-living",
+      "homepageHost": "zongdaifu.cn",
+      "koreanHomepageUrl": "https://zongdaifu.cn/",
+      "englishHomepageUrl": "",
+      "englishDetectedBy": "",
+      "headquartersCountry": "",
+      "headquartersAddress": "",
+      "businessType": "unclear",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {
+        "email": "",
+        "tel": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "한국 가전 제조사 수출",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T21:30:22.516Z"
     }
   ]
 }
