@@ -127,7 +127,7 @@
             <li><a href="#products" onclick="switchSector('k-tourism-assets');return true"><span class="ds-name">K-Tourism Assets <span class="ds-tag">Active</span></span><span class="ds-desc">Yangpyeong hanok · share ownership</span></a></li>
             <li><a href="#products" onclick="switchSector('k-culture-goods');return true"><span class="ds-name">K-Culture Goods <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">K-pop merch · crafts · fashion</span></a></li>
             <li><a href="#products" onclick="switchSector('k-franchise');return true"><span class="ds-name">K-Franchise <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">F&amp;B · retail · service concepts</span></a></li>
-            <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag soon">Sourcing</span></span><span class="ds-desc">Appliances · wellness · lifestyle</span></a></li>
+            <li><a href="#products" onclick="switchSector('k-smart-living');return true"><span class="ds-name">K-Smart Living <span class="ds-tag">Active</span></span><span class="ds-desc">CUCHEN Smart Kitchen · 18 SKUs</span></a></li>
           </ul>
         </li>
         <li class="nav-dropdown">
@@ -346,8 +346,8 @@
       <button class="sector-tab" data-sector="k-franchise" onclick="switchSector('k-franchise')">
         K-Franchise <span class="st-tag">Soon</span>
       </button>
-      <button class="sector-tab" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
-        K-Smart Living <span class="st-tag">Soon</span>
+      <button class="sector-tab is-active-sector" data-sector="k-smart-living" onclick="switchSector('k-smart-living')">
+        K-Smart Living <span class="st-tag">Active</span>
       </button>
     </div>
 
@@ -667,6 +667,9 @@
 
     <!-- K-Beauty product grid: populated by scripts/products-catalog.js from data/products.json -->
     <div class="product-grid" id="kbeautyGrid" style="display:none"></div>
+
+    <!-- K-Smart Living product grid: populated by scripts/products-catalog.js from data/products.json -->
+    <div class="product-grid" id="ksmartlivingGrid" style="display:none"></div>
 
     <!-- K-Tourism Assets product grid: Yangpyeong Soohyang The Hanok property -->
     <div class="product-grid" id="ktourismGrid" style="display:none">

@@ -2003,7 +2003,7 @@
       "status": "verified",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:48:36.552Z",
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "en-ekwangjuyo-com",
@@ -2049,7 +2049,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "onboarded",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:50:44.864Z",
       "contactPageUrl": "https://en.ekwangjuyo.com/contact-us/",
@@ -2060,7 +2060,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "en-hankookcosmo-co-kr",
@@ -2263,7 +2263,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:50:31.273Z",
       "headquartersCity": "Seoul",
@@ -2275,7 +2275,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "en-vovokr-com",
@@ -2499,7 +2499,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:52:49.802Z",
       "social": {
@@ -2509,7 +2509,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "english-visitseoul-net",
@@ -2551,7 +2551,7 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:52:48.619Z",
       "social": {
@@ -2561,7 +2561,7 @@
         "youtube": "",
         "kakaoChannel": ""
       },
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "export-business-gov-au",
@@ -3950,11 +3950,11 @@
           "discoveredAt": "2026-04-27"
         }
       ],
-      "status": "verified",
+      "status": "pending",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T11:50:29.147Z",
       "headquartersCity": "Seoul",
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "kayak-co-kr",
@@ -5760,6 +5760,41 @@
       "status": "onboarded",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T14:04:05.749Z"
+    },
+    {
+      "id": "mfg-cuchen-mall",
+      "legalName": "Cuchen Mall",
+      "displayName": "Cuchen Mall",
+      "sector": "k-smart-living",
+      "homepageHost": "cuchenmall.co.kr",
+      "koreanHomepageUrl": "https://www.cuchenmall.co.kr/",
+      "englishHomepageUrl": "https://www.cuchenmall.co.kr/",
+      "englishDetectedBy": "manual",
+      "headquartersCountry": "KR",
+      "headquartersAddress": "",
+      "businessType": "manufacturer",
+      "exportSignals": [],
+      "structuredDataHints": {
+        "jsonLdTypes": [],
+        "ogSiteName": "",
+        "metaDescription": "",
+        "htmlLangAttr": ""
+      },
+      "contact": {},
+      "social": {},
+      "sources": [
+        {
+          "seed": "manual:add-ui",
+          "seedQuery": "",
+          "discoveredAt": "2026-04-29"
+        }
+      ],
+      "status": "verified",
+      "contractSigned": false,
+      "contractDate": "",
+      "discoveredAt": "2026-04-29",
+      "lastFetchedAt": "2026-04-29T07:41:15.218Z",
+      "notes": "E-commerce site for Cuchen products (rice cookers, induction, etc.). Use this for product discovery instead of en.cuchen.com brochure site."
     },
     {
       "id": "mfg-ergsn-k-energy",

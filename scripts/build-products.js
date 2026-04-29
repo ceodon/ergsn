@@ -111,6 +111,7 @@ function sectorGridId(key) {
     'k-energy':         'kenergyGrid',
     'k-bio':            'kbioGrid',
     'k-beauty':         'kbeautyGrid',
+    'k-smart-living':   'ksmartlivingGrid',
     'k-tourism-assets': 'ktourismGrid'
     /* Non-active sectors don't have a grid yet — cards for them are held
        back until the sector goes active and gets a grid id. */
@@ -222,6 +223,7 @@ function main() {
     '    "k-energy":         "kenergyGrid",',
     '    "k-bio":            "kbioGrid",',
     '    "k-beauty":         "kbeautyGrid",',
+    '    "k-smart-living":   "ksmartlivingGrid",',
     '    "k-tourism-assets": "ktourismGrid"',
     '  };',
     '  var SUB_CATEGORY_ORDER = ' + JSON.stringify(SUB_CATEGORY_ORDER, null, 2) + ';',

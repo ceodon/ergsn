@@ -79,7 +79,15 @@
   .am-foot .am-msg.err { color: var(--rejected); }
   .toolbar { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); align-items: center; }
   .toolbar label { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-  .toolbar select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; background: #fff; font-family: inherit; }
+  .toolbar select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; background: #fff; font-family: inherit; transition: border-color .15s, background .15s, color .15s, box-shadow .15s; }
+  /* "Filter applied" highlight — green pill when the dropdown value is
+     anything other than its initial default. Lets the user scan the toolbar
+     and immediately see which filters are narrowing the result. */
+  .toolbar select.active-filter { background: #34d298; border-color: #00b07c; color: #0f1110; font-weight: 700; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
+  .toolbar select.active-filter:hover { background: #00ffa1; }
+  .toolbar label:has(select.active-filter) { color: #00875f; }
+  .review-search.active-filter { border-color: #00b07c; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
+  .review-search.active-filter input { color: #0f1110; font-weight: 600; }
   .toolbar .stat { margin-left: auto; color: var(--muted); font-size: 11px; align-self: center; }
   .toolbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
 
@@ -610,6 +618,7 @@ function applyStatsFilter(act) {
   if (act === 'existing' || act === 'discovered') $('f-origin').value = act;
   else if (act === 'today' || act === '7d' || act === '30d') $('f-recent').value = act;
   // 'all' clears both
+  if (typeof refreshFilterChrome === 'function') refreshFilterChrome();
   render();
 }
 
@@ -745,17 +754,45 @@ async function promoteMaker(el, m) {
   }
 }
 
-['f-sector', 'f-status', 'f-biz', 'f-en', 'f-contract', 'f-hasprod', 'f-origin', 'f-recent'].forEach(id => $(id).addEventListener('change', render));
+// Each filter's default value — anything else means "narrowing applied",
+// which paints the dropdown green. f-status defaults to "raw" because
+// that's the selected option in the markup; everything else defaults to
+// the empty-string "all".
+const FILTER_DEFAULTS = {
+  'f-sector': '', 'f-status': 'raw', 'f-biz': '', 'f-en': '',
+  'f-contract': '', 'f-hasprod': '', 'f-origin': '', 'f-recent': ''
+};
+
+function refreshFilterChrome() {
+  for (const id of Object.keys(FILTER_DEFAULTS)) {
+    const sel = $(id);
+    if (!sel) continue;
+    sel.classList.toggle('active-filter', sel.value !== FILTER_DEFAULTS[id]);
+  }
+  // Search box uses its own wrapper for the chrome
+  const sb = $('search-box');
+  if (sb) sb.classList.toggle('active-filter', $('f-q').value.length > 0);
+}
+
+['f-sector', 'f-status', 'f-biz', 'f-en', 'f-contract', 'f-hasprod', 'f-origin', 'f-recent'].forEach(id => {
+  $(id).addEventListener('change', () => { refreshFilterChrome(); render(); });
+});
 $('f-q').addEventListener('input', () => {
   $('search-box').classList.toggle('has-q', $('f-q').value.length > 0);
+  refreshFilterChrome();
   render();
 });
 $('f-q-clear').addEventListener('click', () => {
   $('f-q').value = '';
   $('search-box').classList.remove('has-q');
   $('f-q').focus();
+  refreshFilterChrome();
   render();
 });
+
+// Initial paint — f-status starts at "raw" (its default) so it shouldn't
+// be green on first load; the others start blank → also not green.
+refreshFilterChrome();
 
 fillSectorFilter();
 fillCrawlSectorOptions();
@@ -951,7 +988,7 @@ async function pollCrawl(jobId) {
         const code = j.status === 'done' ? '✓' : '✗';
         const newCount = c.added || 0;
         const todayLink = newCount > 0
-          ? ` · <a onclick="$('f-recent').value='today';$('f-origin').value='discovered';loadMakers()">show ${newCount} new</a>`
+          ? ` · <a onclick="$('f-recent').value='today';$('f-origin').value='discovered';refreshFilterChrome();loadMakers()">show ${newCount} new</a>`
           : '';
         $('cr-status').innerHTML = `${code} ${esc(j.status)} · ${summary}${todayLink} · <a onclick="loadMakers()">reload all</a>`;
         // Auto-reload the maker grid so new entries appear
