@@ -98,10 +98,11 @@
   .bottom-row { flex-basis: 100%; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
   .bottom-row .stats-bar { flex: 1 1 auto; padding: 0; min-width: 0; flex-wrap: wrap; }
   /* Search field — compact pill that joins the stats-bar inline flow.
-     Prior 380px slot is too wide once 3 quota pills are added; 200px
-     fits the typical "filter by name" use case while still showing
-     ~24 chars of typed text. Input is borderless / transparent inside. */
-  .review-search { flex: 0 0 auto; width: 200px; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 3px 9px; line-height: 1.3; color: #ccc; font-size: 11px; height: 26px; }
+     `flex: 1 1 200px` lets it grow into whatever space is left on its
+     row (so the right edge lines up with the Add-maker line above)
+     while still folding back to a 200px-ish pill when the row is
+     packed with stats / quota pills. Input is borderless / transparent. */
+  .review-search { flex: 1 1 200px; min-width: 200px; max-width: 100%; box-sizing: border-box; overflow: hidden; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 3px 9px; line-height: 1.3; color: #ccc; font-size: 11px; height: 26px; }
   .review-search:focus-within { border-color: rgba(52,210,152,.6); }
   .review-search .icon { flex: 0 0 auto; color: #34d298; font-size: 13px; }
   .review-search input { flex: 1 1 0; width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: inherit; font-size: 12px; min-width: 0; padding: 0; line-height: 1.3; }
