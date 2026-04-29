@@ -20,6 +20,7 @@
 const crypto = require('crypto');
 const { politeFetch } = require('./fetch');
 const { extractAll } = require('./extract-hints');
+const { isCfQuotaError, callAnthropicWithSchema } = require('./llm-fallback');
 
 const ACCOUNT_BASE = 'https://api.cloudflare.com/client/v4/accounts';
 const DEFAULT_MODEL = '@cf/meta/llama-3.1-8b-instruct';
@@ -333,23 +334,55 @@ async function llmExtractProducts(pageUrl, html) {
     headers: { 'Authorization': `Bearer ${apiToken}`, 'Content-Type': 'application/json', 'User-Agent': 'ERGSN-research/1.0 (+https://ergsn.net)' },
     body: JSON.stringify(body)
   });
+  let parsed = null;
+  let usage = { input_tokens: 0, output_tokens: 0 };
+  let quotaFellBack = false;
   if (!res.ok) {
     const eb = await res.text().catch(() => '');
-    throw new Error(`Workers AI ${res.status}: ${eb.slice(0, 200)}`);
+    const errMsg = `Workers AI ${res.status}: ${eb.slice(0, 200)}`;
+    if (isCfQuotaError(errMsg)) {
+      const fb = await callAnthropicWithSchema({
+        system: PRODUCT_LIST_SYSTEM,
+        user: userMsg,
+        schema: PRODUCT_LIST_SCHEMA,
+        maxTokens: 1500
+      });
+      parsed = fb.parsed;
+      usage = fb.usage;
+      quotaFellBack = true;
+    } else {
+      throw new Error(errMsg);
+    }
   }
-  const data = await res.json();
-  if (data.success === false) throw new Error(`Workers AI error: ${JSON.stringify(data.errors).slice(0, 200)}`);
-  let text;
-  const r = data.result || {};
-  if (typeof r.response === 'string') text = r.response;
-  else if (r.response && typeof r.response === 'object') text = JSON.stringify(r.response);
-  else text = '';
-  let parsed;
-  try {
-    const jm = text.match(/\{[\s\S]*\}/);
-    parsed = jm ? JSON.parse(jm[0]) : null;
-  } catch { parsed = null; }
-  const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
+  if (!quotaFellBack) {
+    const data = await res.json();
+    if (data.success === false) {
+      const errMsg = `Workers AI error: ${JSON.stringify(data.errors).slice(0, 200)}`;
+      if (isCfQuotaError(errMsg)) {
+        const fb = await callAnthropicWithSchema({
+          system: PRODUCT_LIST_SYSTEM,
+          user: userMsg,
+          schema: PRODUCT_LIST_SCHEMA,
+          maxTokens: 1500
+        });
+        parsed = fb.parsed;
+        usage = fb.usage;
+      } else {
+        throw new Error(errMsg);
+      }
+    } else {
+      let text;
+      const r = data.result || {};
+      if (typeof r.response === 'string') text = r.response;
+      else if (r.response && typeof r.response === 'object') text = JSON.stringify(r.response);
+      else text = '';
+      try {
+        const jm = text.match(/\{[\s\S]*\}/);
+        parsed = jm ? JSON.parse(jm[0]) : null;
+      } catch { parsed = null; }
+      usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
+    }
+  }
   if (!parsed || !Array.isArray(parsed.products)) return { products: [], usage, droppedHallucinated: 0, imagesPairedFromHtml: 0 };
   let droppedHallucinated = 0;
   let imagesPairedFromHtml = 0;

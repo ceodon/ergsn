@@ -165,8 +165,16 @@ async function searchOnce(query, apiKey) {
   });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
+    // Per-query usage line — review-server.js parses this incrementally to
+    // update the Tavily monthly-quota counter even on failed requests.
+    // Tavily charges 1 credit per accepted query (a 4xx response from a
+    // bad-shape body still counts toward the daily limit on some plans).
+    // eslint-disable-next-line no-console
+    console.log(`tavily-call: status=${res.status}`);
     throw new Error(`Tavily ${res.status}: ${body.slice(0, 200)}`);
   }
+  // eslint-disable-next-line no-console
+  console.log(`tavily-call: status=200`);
   const data = await res.json();
   const results = Array.isArray(data.results) ? data.results : [];
   return results.map(r => ({ url: r.url, title: r.title || '', description: r.content || '' }));

@@ -18,6 +18,7 @@
  */
 
 const { politeFetch } = require('./fetch');
+const { isCfQuotaError, callAnthropicWithSchema } = require('./llm-fallback');
 
 const ACCOUNT_BASE = 'https://api.cloudflare.com/client/v4/accounts';
 const DEFAULT_MODEL = '@cf/meta/llama-3.1-8b-instruct';
@@ -229,17 +230,29 @@ async function callWorkersAi(html, url) {
   });
   if (!res.ok) {
     const eb = await res.text().catch(() => '');
-    throw new Error(`Workers AI ${res.status}: ${eb.slice(0, 220)}`);
+    const errMsg = `Workers AI ${res.status}: ${eb.slice(0, 220)}`;
+    if (isCfQuotaError(errMsg)) {
+      const fb = await callAnthropicWithSchema({ system: SYSTEM, user: userMsg, schema: RESPONSE_SCHEMA, maxTokens: 1500 });
+      return { extracted: sanitiseOutput(fb.parsed), usage: fb.usage, source: fb.source };
+    }
+    throw new Error(errMsg);
   }
   const data = await res.json();
-  if (data.success === false) throw new Error(`Workers AI error: ${JSON.stringify(data.errors).slice(0, 220)}`);
+  if (data.success === false) {
+    const errMsg = `Workers AI error: ${JSON.stringify(data.errors).slice(0, 220)}`;
+    if (isCfQuotaError(errMsg)) {
+      const fb = await callAnthropicWithSchema({ system: SYSTEM, user: userMsg, schema: RESPONSE_SCHEMA, maxTokens: 1500 });
+      return { extracted: sanitiseOutput(fb.parsed), usage: fb.usage, source: fb.source };
+    }
+    throw new Error(errMsg);
+  }
   const r = data.result || {};
   let text;
   if (typeof r.response === 'string') text = r.response;
   else if (r.response && typeof r.response === 'object') text = JSON.stringify(r.response);
   else text = '';
   const usage = r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : { input_tokens: 0, output_tokens: 0 };
-  return { extracted: sanitiseOutput(safeParseJson(text)), usage };
+  return { extracted: sanitiseOutput(safeParseJson(text)), usage, source: 'cf-workers-ai' };
 }
 
 /**

@@ -575,6 +575,10 @@ function render() {
 // with a per-call factor; the existing aiState.exceeded boolean is the
 // authoritative block when CF actually returns 429.
 const AI_QUOTA_DAILY = 10000;
+// Tavily Researcher tier = 1,000 credits/month free, 1 credit per query.
+// Reset on the gregorian 1st (UTC). Tracked monthly by the server.
+const TAVILY_QUOTA_MONTHLY = 1000;
+let tavilyState = { callsThisMonth: 0, budget: TAVILY_QUOTA_MONTHLY };
 
 function renderStats() {
   const today = todayLocalIso();
@@ -598,8 +602,24 @@ function renderStats() {
   const aiTxt = aiState && aiState.exceeded
     ? `🚫 AI quota exhausted (0 / ${AI_QUOTA_DAILY.toLocaleString()})`
     : `🤖 AI: ~${used.toLocaleString()} / ${AI_QUOTA_DAILY.toLocaleString()} <span class="n">${left.toLocaleString()} left</span> · ${pct}%`;
+  // Tavily quota pill — monthly counter, mirrors AI pill chrome
+  const tUsed = tavilyState && tavilyState.callsThisMonth ? tavilyState.callsThisMonth : 0;
+  const tLeft = Math.max(0, TAVILY_QUOTA_MONTHLY - tUsed);
+  const tPct = Math.min(100, Math.round((tUsed / TAVILY_QUOTA_MONTHLY) * 100));
+  const tResetsAt = tavilyState && tavilyState.resetsAt ? new Date(tavilyState.resetsAt) : null;
+  const tTitle = `Tavily Researcher tier — ${tUsed.toLocaleString()} / ${TAVILY_QUOTA_MONTHLY.toLocaleString()} queries this month. Resets ${tResetsAt ? tResetsAt.toLocaleDateString() : 'on the 1st'}.`;
+  const tCls = tLeft === 0 ? 'pill ai-quota exhausted' : 'pill ai-quota';
+  const tTxt = tLeft === 0
+    ? `🚫 Tavily quota exhausted (0 / ${TAVILY_QUOTA_MONTHLY.toLocaleString()})`
+    : `🔍 Tavily: ${tUsed.toLocaleString()} / ${TAVILY_QUOTA_MONTHLY.toLocaleString()} <span class="n">${tLeft.toLocaleString()} left</span> · ${tPct}%`;
+  // Resend pill — passive reminder. Real counter lives in the ergsn-mail
+  // Worker (separate process), not here. Click to open Resend dashboard.
+  const rTxt = `📧 Resend: 3,000/mo · 100/day (check dashboard)`;
+  const rTitle = `Resend free tier — 3,000 emails / month + 100 / day. Local server doesn't track these (mail is sent by the ergsn-mail Worker). Click to open Resend dashboard.`;
   const html = `
     <span class="${aiCls}" title="${esc(aiTitle)}">${aiTxt}</span>
+    <span class="${tCls}" title="${esc(tTitle)}">${tTxt}</span>
+    <a class="pill ai-quota" target="_blank" rel="noopener" href="https://resend.com/emails" title="${esc(rTitle)}" style="text-decoration:none;color:inherit;">${rTxt}</a>
     <span class="pill ${og === '' && rc === '' ? 'active' : ''}" data-act="all">All <span class="n">${allMakers.length}</span></span>
     <span class="pill ${og === 'existing' ? 'active' : ''}" data-act="existing">🏠 Existing <span class="n">${ex}</span></span>
     <span class="pill ${og === 'discovered' ? 'active' : ''}" data-act="discovered">🔍 Discovered <span class="n">${di}</span></span>
@@ -895,6 +915,7 @@ async function refreshLimits() {
     const r = await fetch('/api/limits');
     const d = await r.json();
     aiState = (d && d.ai) || { exceeded: false };
+    tavilyState = (d && d.tavily) || { callsThisMonth: 0, budget: TAVILY_QUOTA_MONTHLY };
   } catch (_) { /* ignore — keep prior state */ }
   refreshCrawlButton();
   // Re-render the stats bar so the AI-quota pill reflects fresh numbers

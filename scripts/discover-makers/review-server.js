@@ -116,6 +116,28 @@ function noteAiCall(usage) {
   }
 }
 
+// Tavily search quota — 1,000 credits / month free (Researcher tier). Each
+// query consumes one credit regardless of result count. We track per
+// gregorian month (UTC) so the counter ticks back to zero on the 1st.
+const TAVILY_MONTHLY_BUDGET = 1000;
+const tavilyUsage = { monthKey: '', calls: 0, callsOk: 0, callsFail: 0 };
+function utcMonthKey() { return new Date().toISOString().slice(0, 7); /* YYYY-MM */ }
+function rollTavilyIfNewMonth() {
+  const k = utcMonthKey();
+  if (tavilyUsage.monthKey !== k) {
+    tavilyUsage.monthKey = k;
+    tavilyUsage.calls = 0;
+    tavilyUsage.callsOk = 0;
+    tavilyUsage.callsFail = 0;
+  }
+}
+function noteTavilyCall(status) {
+  rollTavilyIfNewMonth();
+  tavilyUsage.calls += 1;
+  if (status >= 200 && status < 300) tavilyUsage.callsOk += 1;
+  else tavilyUsage.callsFail += 1;
+}
+
 function isAiQuotaError(text) {
   if (!text) return false;
   return /you have used up your daily free allocation/i.test(text)
@@ -197,6 +219,10 @@ function startCrawl({ seed, sector, mode, refresh, max }) {
       // the daily counter so the UI countdown reflects in-flight enrich runs.
       if ((m = line.match(/^ai-call:\s*in=(\d+)\s+out=(\d+)/i))) {
         noteAiCall({ input_tokens: parseInt(m[1], 10), output_tokens: parseInt(m[2], 10) });
+      }
+      // seeds/search.js emits `tavily-call: status=N` — sum into monthly quota
+      if ((m = line.match(/^tavily-call:\s*status=(\d+)/i))) {
+        noteTavilyCall(parseInt(m[1], 10));
       }
     }
   };
@@ -544,13 +570,28 @@ const server = http.createServer(async (req, res) => {
   // approximate counter so the front-end can render the countdown pill.
   if (req.method === 'GET' && url.pathname === '/api/limits') {
     rollAiUsageIfNewDay();
+    rollTavilyIfNewMonth();
     const snap = aiQuotaSnapshot();
     snap.callsToday = aiUsage.calls;
     snap.tokensToday = aiUsage.tokens;
     snap.estimatedNeuronsToday = aiUsage.calls * NEURONS_PER_CALL;
     snap.budget = AI_DAILY_BUDGET_NEURONS;
     snap.dayKey = aiUsage.dayKey;
-    return sendJson(res, 200, { ok: true, ai: snap });
+    const tavily = {
+      callsThisMonth: tavilyUsage.calls,
+      callsOk: tavilyUsage.callsOk,
+      callsFail: tavilyUsage.callsFail,
+      budget: TAVILY_MONTHLY_BUDGET,
+      monthKey: tavilyUsage.monthKey,
+      // 1st of next month (UTC). The UI shows this as a countdown reset hint.
+      resetsAt: (function () {
+        const d = new Date();
+        d.setUTCMonth(d.getUTCMonth() + 1, 1);
+        d.setUTCHours(0, 0, 0, 0);
+        return d.toISOString();
+      })()
+    };
+    return sendJson(res, 200, { ok: true, ai: snap, tavily });
   }
 
   // List products for one maker (used to refresh UI after re-discovery / status change)

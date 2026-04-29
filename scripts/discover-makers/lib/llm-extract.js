@@ -35,6 +35,8 @@ const DEFAULT_MODEL = '@cf/meta/llama-3.1-8b-instruct';
 const MIN_GAP_MS = 800;        // Workers AI is generous, but stay polite
 const RETRY_AFTER_MS = 4000;
 
+const { isCfQuotaError, callAnthropicWithSchema } = require('./llm-fallback');
+
 let lastCallAt = 0;
 
 const SYSTEM = [
@@ -273,12 +275,45 @@ async function enrich({ url, hints, html }, { model = DEFAULT_MODEL, maxTokens =
   }
   if (!res.ok) {
     const errBody = await res.text().catch(() => '');
-    throw new Error(`Workers AI ${res.status}: ${errBody.slice(0, 220)}`);
+    const errMsg = `Workers AI ${res.status}: ${errBody.slice(0, 220)}`;
+    // Quota-exhausted? Fall back to Anthropic Haiku 4.5 with the same
+    // schema. Anthropic is paid so we only reach for it on quota errors,
+    // never as the primary path.
+    if (isCfQuotaError(errMsg)) {
+      const fb = await callAnthropicWithSchema({
+        system: SYSTEM,
+        user: userMsg,
+        schema: { type: 'object', properties: props, required: requiredKeys },
+        maxTokens
+      });
+      return {
+        enriched: sanitiseLlmOutput(fb.parsed),
+        usage: fb.usage,
+        raw: JSON.stringify(fb.parsed),
+        source: fb.source
+      };
+    }
+    throw new Error(errMsg);
   }
   const data = await res.json();
   // Workers AI shape: { result: { response: '<json text>' or {...} }, success, errors }
   if (data.success === false) {
-    throw new Error(`Workers AI error: ${JSON.stringify(data.errors || data).slice(0, 220)}`);
+    const errMsg = `Workers AI error: ${JSON.stringify(data.errors || data).slice(0, 220)}`;
+    if (isCfQuotaError(errMsg)) {
+      const fb = await callAnthropicWithSchema({
+        system: SYSTEM,
+        user: userMsg,
+        schema: { type: 'object', properties: props, required: requiredKeys },
+        maxTokens
+      });
+      return {
+        enriched: sanitiseLlmOutput(fb.parsed),
+        usage: fb.usage,
+        raw: JSON.stringify(fb.parsed),
+        source: fb.source
+      };
+    }
+    throw new Error(errMsg);
   }
   const r = data.result || {};
   let text;
@@ -289,7 +324,8 @@ async function enrich({ url, hints, html }, { model = DEFAULT_MODEL, maxTokens =
   return {
     enriched: parsed,
     usage: r.usage ? { input_tokens: r.usage.prompt_tokens || 0, output_tokens: r.usage.completion_tokens || 0 } : null,
-    raw: text
+    raw: text,
+    source: 'cf-workers-ai'
   };
 }
 
