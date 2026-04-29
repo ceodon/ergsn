@@ -572,7 +572,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/security-products-lineup.asp",
       "discoveredAt": "2026-04-28",
-      "status": "registered"
+      "status": "discarded"
     },
     {
       "id": "3af2fc1ae40d",
@@ -585,7 +585,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/security-products-lineup.asp",
       "discoveredAt": "2026-04-28",
-      "status": "candidate"
+      "status": "discarded"
     },
     {
       "id": "6a860797bbac",
@@ -689,7 +689,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/eol_notice-list.asp",
       "discoveredAt": "2026-04-28",
-      "status": "registered"
+      "status": "discarded"
     },
     {
       "id": "93eaae19f9a1",
@@ -741,7 +741,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/security-products-lineup.asp",
       "discoveredAt": "2026-04-28",
-      "status": "registered"
+      "status": "discarded"
     },
     {
       "id": "cba9ec59b851",
@@ -767,7 +767,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/product_selector.asp",
       "discoveredAt": "2026-04-28",
-      "status": "candidate"
+      "status": "discarded"
     },
     {
       "id": "da60644d1907",
@@ -793,7 +793,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/eol_notice-list.asp",
       "discoveredAt": "2026-04-28",
-      "status": "registered"
+      "status": "discarded"
     },
     {
       "id": "e83569ae8e2c",
@@ -806,7 +806,7 @@
       "moqText": "",
       "discoveredFrom": "https://www.supremainc.com/en/hardware/product_selector.asp",
       "discoveredAt": "2026-04-28",
-      "status": "candidate"
+      "status": "discarded"
     }
   ]
 }
