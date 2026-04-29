@@ -5794,7 +5794,8 @@
       "contractDate": "2026-04-27",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T15:19:34.390Z",
-      "notes": "HYGEN Generator · 4 configurations · inline catalog on index.html (not in data/products.json)."
+      "notes": "HYGEN Generator · 4 configurations · inline catalog on index.html (not in data/products.json). 이태형 회장",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mfg-ergsn-k-security",
@@ -5864,7 +5865,8 @@
       "contractDate": "2026-04-27",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T15:19:34.390Z",
-      "notes": "2D → 3D stereoscopic conversion · inline catalog on index.html (not in data/products.json)."
+      "notes": "2D → 3D stereoscopic conversion · inline catalog on index.html (not in data/products.json). 김우진 대표",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mfg-iho-biotech-co-ltd",
@@ -5898,7 +5900,8 @@
       "lastFetchedAt": "2026-04-27T14:04:05.749Z",
       "contractSigned": true,
       "contractDate": "2026-04-27",
-      "lastVerifiedAt": "2026-04-27"
+      "lastVerifiedAt": "2026-04-29",
+      "notes": "김홍수 회장"
     },
     {
       "id": "mfg-microbe-k-bio",
@@ -5933,7 +5936,8 @@
       "contractDate": "2026-04-27",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T15:19:34.390Z",
-      "notes": "Rosetta Plus HFF (manufacturer) — co-product with ERGSN · inline catalog on index.html (not in data/products.json)."
+      "notes": "Rosetta Plus HFF (manufacturer) — co-product with ERGSN · inline catalog on index.html (not in data/products.json). 이준혁 회장",
+      "lastVerifiedAt": "2026-04-29"
     },
     {
       "id": "mfg-yangpyeong-soohyang-the-hanok",
@@ -8275,7 +8279,8 @@
       "status": "onboarded",
       "discoveredAt": "2026-04-27",
       "lastFetchedAt": "2026-04-27T10:28:05.382Z",
-      "lastVerifiedAt": "2026-04-28"
+      "lastVerifiedAt": "2026-04-29",
+      "notes": "PR@suprema.co.kr, korea@suprema.co.kr"
     },
     {
       "id": "suvastika-com",

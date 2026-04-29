@@ -53,7 +53,16 @@ const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const DISCOVER_JS = path.join(REPO_ROOT, 'scripts', 'discover-makers', 'discover.js');
 
 const PORT = Number(process.env.REVIEW_PORT) || 5174;
-const HOST = '127.0.0.1';
+// Auth model:
+//   - REVIEW_TOKEN unset → localhost-only, no token required (single-machine
+//     dev workflow, the original behaviour).
+//   - REVIEW_TOKEN set   → bind 0.0.0.0 (LAN reachable + works behind a
+//     Cloudflare Tunnel), and require the token on every request. First
+//     visit comes via /?t=<token> which sets a cookie; subsequent requests
+//     in the same browser ride the cookie.
+const TOKEN = String(process.env.REVIEW_TOKEN || '').trim();
+const HOST = process.env.REVIEW_HOST || (TOKEN ? '0.0.0.0' : '127.0.0.1');
+const COOKIE_NAME = 'ergsn_review_token';
 const HTML_PATH = path.resolve(__dirname, 'review.html');
 const FAVICON_PATH = path.resolve(REPO_ROOT, 'favicon.svg');
 const ALLOWED_STATUS = new Set(['raw', 'verified', 'pending', 'rejected', 'contacted', 'onboarded']);
@@ -246,14 +255,50 @@ function parseBody(req) {
   });
 }
 
-const server = http.createServer(async (req, res) => {
-  // Only accept connections from this machine. Belt-and-braces beyond bind addr.
-  const remote = req.socket.remoteAddress;
-  if (remote && remote !== '127.0.0.1' && remote !== '::1' && remote !== '::ffff:127.0.0.1') {
-    res.writeHead(403); res.end('forbidden'); return;
-  }
+function isLocalhost(remote) {
+  return remote === '127.0.0.1' || remote === '::1' || remote === '::ffff:127.0.0.1';
+}
 
+function readCookie(req, name) {
+  const raw = req.headers.cookie || '';
+  const m = raw.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]+)'));
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+const server = http.createServer(async (req, res) => {
+  const remote = req.socket.remoteAddress;
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+
+  // Auth gate.
+  //   No TOKEN configured → localhost-only (legacy mode).
+  //   TOKEN configured    → every request needs it via ?t= or cookie.
+  if (!TOKEN) {
+    if (!isLocalhost(remote)) { res.writeHead(403); res.end('forbidden'); return; }
+  } else {
+    const queryT = url.searchParams.get('t') || '';
+    const cookieT = readCookie(req, COOKIE_NAME);
+    const provided = queryT || cookieT;
+    if (provided !== TOKEN) {
+      res.writeHead(401, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('Unauthorized — append ?t=<token> to the URL on first visit.');
+      return;
+    }
+    // First-visit token in URL → set cookie + redirect to clean URL so the
+    // token disappears from the address bar / browser history.
+    if (queryT && req.method === 'GET' && !cookieT) {
+      url.searchParams.delete('t');
+      const cleanPath = url.pathname + (url.search ? url.search : '');
+      // 30-day cookie. HttpOnly so JS can't read it; SameSite=Lax for normal
+      // navigation; no Secure so it works over http on LAN (the Tunnel side
+      // is HTTPS terminated at Cloudflare's edge before reaching us).
+      res.writeHead(302, {
+        'Location': cleanPath,
+        'Set-Cookie': `${COOKIE_NAME}=${encodeURIComponent(TOKEN)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=2592000`
+      });
+      res.end();
+      return;
+    }
+  }
 
   if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/review.html')) {
     return serveHtml(res);
@@ -282,11 +327,15 @@ const server = http.createServer(async (req, res) => {
       candByMaker.set(c.makerId, list);
     }
     // Origin = where the maker first entered the directory.
-    //   existing  — products.json sync, owner-known sync, manual + Add maker UI
-    //   discovered — manual seed list, search seed (Tavily)
+    //   existing  — products.json sync, owner-known sync, manual + Add maker UI,
+    //               OR has at least one live product in data/products.json
+    //               (a maker with a real catalog row belongs on the existing
+    //               side regardless of how they were first discovered)
+    //   discovered — search/manual seed and no products yet
     function classifyOrigin(m) {
       const seed = (m.sources && m.sources[0] && m.sources[0].seed) || '';
       if (seed === 'products.json' || seed === 'owner-known' || seed === 'manual:add-ui') return 'existing';
+      if (m._counts && m._counts.registered > 0) return 'existing';
       return 'discovered';
     }
     // Build a quick lookup of which makers are already in
@@ -712,10 +761,27 @@ try {
 }
 
 server.listen(PORT, HOST, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Maker review UI: http://${HOST}:${PORT}/`);
-  // eslint-disable-next-line no-console
+  /* eslint-disable no-console */
+  if (TOKEN) {
+    console.log(`Maker review UI (token-protected, listening on ${HOST}:${PORT}):`);
+    console.log(`  Local:     http://127.0.0.1:${PORT}/?t=${TOKEN}`);
+    // List LAN IPv4 addresses so the user can see what to give other devices.
+    try {
+      const nets = require('os').networkInterfaces();
+      for (const name of Object.keys(nets)) {
+        for (const ni of (nets[name] || [])) {
+          if (ni.family === 'IPv4' && !ni.internal) {
+            console.log(`  LAN:       http://${ni.address}:${PORT}/?t=${TOKEN}`);
+          }
+        }
+      }
+    } catch (_) { /* ignore */ }
+    console.log('  Tunnel:    cloudflared tunnel --url http://localhost:' + PORT + '   (then visit the trycloudflare.com URL with ?t=<token>)');
+  } else {
+    console.log(`Maker review UI: http://${HOST}:${PORT}/`);
+    console.log('  (localhost-only — set REVIEW_TOKEN=<random hex> to enable LAN / tunnel access)');
+  }
   console.log(`(serving ${persistence.FILE})`);
-  // eslint-disable-next-line no-console
   console.log('Ctrl+C to stop.');
+  /* eslint-enable no-console */
 });
