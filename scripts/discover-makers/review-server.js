@@ -87,12 +87,13 @@ const aiState = { exceededAt: 0, reason: '' };
 // boolean above is the authoritative block — this counter is for
 // situational awareness, not enforcement.
 const AI_DAILY_BUDGET_NEURONS = 10000;
-// Each Llama-3.1-8B call on Workers AI consumes roughly 2-5 Neurons depending
-// on prompt + completion size. We use 3 as a conservative midpoint. If the
-// counter says "0 left" while CF still allows, the boolean below stays false;
-// if CF blocks earlier than the counter expects, the boolean flips and the
-// pill turns red regardless of the counter.
-const NEURONS_PER_CALL = 3;
+// Calibrated from real exhaustion event 2026-04-29 22:35 UTC: 33,000 tokens
+// across 12 Llama-3.1-8B calls produced the "10,000 Neurons exhausted" 429.
+// Solve for rate: 10,000 / 33,000 ≈ 0.30 Neurons per token. The earlier
+// per-call constant (NEURONS_PER_CALL=3) was wildly low because Llama on
+// Workers AI charges per-token, not per-call, and our prompts run 2-3KB
+// each. Token-based gives ±10% accuracy vs ±10x for the old constant.
+const NEURONS_PER_TOKEN = 0.30;
 const aiUsage = { dayKey: '', calls: 0, tokens: 0 };
 
 function utcDayKey() {
@@ -590,7 +591,7 @@ const server = http.createServer(async (req, res) => {
     const snap = aiQuotaSnapshot();
     snap.callsToday = aiUsage.calls;
     snap.tokensToday = aiUsage.tokens;
-    snap.estimatedNeuronsToday = aiUsage.calls * NEURONS_PER_CALL;
+    snap.estimatedNeuronsToday = Math.round(aiUsage.tokens * NEURONS_PER_TOKEN);
     snap.budget = AI_DAILY_BUDGET_NEURONS;
     snap.dayKey = aiUsage.dayKey;
     const tavily = {

@@ -144,6 +144,8 @@
   .stats-bar .pill.ai-quota:hover { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); }
   .stats-bar .pill.ai-quota.exhausted { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); color: #ffb4b4; }
   .stats-bar .pill.ai-quota.exhausted:hover { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); }
+  .stats-bar .pill.ai-quota.warn { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); color: #ffd896; }
+  .stats-bar .pill.ai-quota.warn:hover { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); }
   .b-sector { background: var(--navy); color: var(--gold); }
   .b-biz-manufacturer { background: #e0f2e6; color: var(--verified); }
   .b-biz-manufacturer-trader { background: #e6f0fa; color: var(--contacted); }
@@ -601,8 +603,12 @@ function renderStats() {
   const pct = Math.min(100, Math.round((used / AI_QUOTA_DAILY) * 100));
   const aiTitle = aiState && aiState.exceeded
     ? `CF blocked: ${aiState.reason || 'quota exhausted'} · resets ${aiState.resetsAt ? new Date(aiState.resetsAt).toLocaleString() : 'tomorrow'}`
-    : `CF Workers AI free tier — ${calls.toLocaleString()} calls / ~${tokens.toLocaleString()} tokens today (Neuron count is approximate; CF blocks at the real wall)`;
-  const aiCls = aiState && aiState.exceeded ? 'pill ai-quota exhausted' : 'pill ai-quota';
+    : `CF Workers AI free tier — ${calls.toLocaleString()} calls / ~${tokens.toLocaleString()} tokens today (Neuron est = tokens × 0.30, calibrated from the 2026-04-29 exhaustion event)`;
+  // Three states: exhausted (red), warn ≥80% (orange), normal (green).
+  // Warn state gives the user a heads-up to ease off before CF blocks.
+  const aiCls = (aiState && aiState.exceeded)
+    ? 'pill ai-quota exhausted'
+    : (pct >= 80 ? 'pill ai-quota warn' : 'pill ai-quota');
   const aiTxt = aiState && aiState.exceeded
     ? `🚫 AI quota exhausted (0 / ${AI_QUOTA_DAILY.toLocaleString()})`
     : `🤖 AI: ~${used.toLocaleString()} / ${AI_QUOTA_DAILY.toLocaleString()} <span class="n">${left.toLocaleString()} left</span> · ${pct}%`;
