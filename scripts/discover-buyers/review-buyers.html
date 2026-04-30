@@ -160,6 +160,30 @@
   .saving.ok { color: var(--verified); }
   .saving.err { color: var(--rejected); }
 
+  /* Working indicator — visible-everywhere progress banner whenever a
+     crawl or compose job is running. Pulses + spins so the user can
+     tell at a glance that something is alive. */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes wpulse { 0%,100% { opacity: 1 } 50% { opacity: .55 } }
+  .work-banner { position: fixed; left: 50%; transform: translateX(-50%); top: 8px; z-index: 200; background: linear-gradient(135deg, #34d298, #00b07c); color: #0f1110; padding: 8px 16px 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; box-shadow: 0 6px 18px rgba(52,210,152,.4); display: none; align-items: center; gap: 8px; max-width: calc(100vw - 24px); }
+  .work-banner.show { display: inline-flex; }
+  .work-banner.done { background: #2a7d3f; color: #fff; animation: none; }
+  .work-banner.err  { background: #b03030; color: #fff; animation: none; }
+  .work-banner .wb-spin { width: 14px; height: 14px; border: 2px solid rgba(15,17,16,.25); border-top-color: #0f1110; border-radius: 50%; animation: spin 0.8s linear infinite; flex: 0 0 auto; }
+  .work-banner.done .wb-spin, .work-banner.err .wb-spin { display: none; }
+  .work-banner .wb-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70vw; }
+  .work-banner .wb-bar { width: 60px; height: 4px; background: rgba(15,17,16,.18); border-radius: 2px; overflow: hidden; flex: 0 0 auto; }
+  .work-banner .wb-bar > i { display: block; height: 100%; background: #0f1110; width: 0; transition: width .3s ease; }
+
+  /* Spinner inline next to the cr-status text — same animation but tiny */
+  .crawl .cr-spin { display: none; width: 11px; height: 11px; border: 2px solid rgba(52,210,152,.25); border-top-color: #34d298; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 4px; }
+  .crawl.is-running .cr-spin { display: inline-block; }
+  .crawl.is-running .cr-status { animation: wpulse 1.6s ease-in-out infinite; }
+
+  /* When a discover is running, dim the grid cards subtly so the user
+     knows the data they see is mid-update. */
+  body.is-discovering #grid { opacity: 0.85; transition: opacity .2s; }
+
   /* Modal — matches maker review chrome */
   .modal-back { position: fixed; inset: 0; background: rgba(10, 31, 68, 0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-back.open { display: flex; }
@@ -189,6 +213,12 @@
 </head>
 <body>
 
+<div class="work-banner" id="work-banner" role="status" aria-live="polite">
+  <span class="wb-spin"></span>
+  <span class="wb-text" id="wb-text">Working…</span>
+  <span class="wb-bar"><i id="wb-bar-fill"></i></span>
+</div>
+
 <div class="sticky-top">
 <div class="review-bar">
   <div class="h-left">
@@ -206,6 +236,7 @@
     </label>
     <button id="cr-run">+ Discover Buyers</button>
     <button id="bn-add" class="bn-add" type="button" title="Add a known buyer manually">+ Add Buyer</button>
+    <span class="cr-spin" aria-hidden="true"></span>
     <span class="cr-status" id="cr-status"></span>
   </div>
   <div class="bottom-row">
@@ -579,10 +610,12 @@ async function openCompose(id) {
     draft = (await dRes.json()).draft;
   } else {
     setSaving('Generating draft via LLM…');
+    showBanner('Generating draft via LLM…', 'work');
     const cRes = await fetch('/api/buyers/' + encodeURIComponent(id) + '/compose', { method: 'POST' });
     const cJson = await cRes.json();
-    if (!cJson.ok) { alert('compose failed: ' + cJson.error); return; }
+    if (!cJson.ok) { hideBanner(); alert('compose failed: ' + cJson.error); return; }
     draft = cJson.draft;
+    showBanner('✓ Draft ready', 'done'); hideBanner(2000);
     refreshLimits();
   }
   $('cmp-toEmail').value = draft.toEmail || '';
@@ -602,14 +635,17 @@ $('cmp-recompose').addEventListener('click', async () => {
   if (!currentBuyer) return;
   if (!confirm('Re-run LLM and overwrite the current draft?')) return;
   setSaving('Re-composing…');
+  showBanner('Re-composing draft via LLM…', 'work');
   const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/compose', { method: 'POST' });
   const d = await r.json();
-  if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
+  if (!d.ok) { setSaving('error: ' + d.error, 'err'); showBanner('Compose failed: ' + d.error, 'err'); hideBanner(4000); return; }
   $('cmp-toEmail').value = d.draft.toEmail || ''; $('cmp-subject').value = d.draft.subject || '';
   $('cmp-html').value = d.draft.htmlBody || ''; $('cmp-text').value = d.draft.textBody || '';
   $('cmp-preview').innerHTML = d.draft.htmlBody || '';
   refreshSendButton(d.draft);
-  setSaving('re-composed', 'ok'); refreshLimits();
+  setSaving('re-composed', 'ok');
+  showBanner('✓ Draft re-composed', 'done'); hideBanner(2000);
+  refreshLimits();
 });
 $('cmp-html').addEventListener('input', () => { $('cmp-preview').innerHTML = $('cmp-html').value; });
 $('cmp-save').addEventListener('click', async () => {
@@ -644,10 +680,16 @@ $('cmp-send').addEventListener('click', async () => {
   if (!currentBuyer) return;
   if (!confirm(`Send to ${$('cmp-toEmail').value} via ergsn-mail? This is a real cold email.`)) return;
   setSaving('Sending…');
+  showBanner('Sending via ergsn-mail…', 'work');
   const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/send', { method: 'POST' });
   const d = await r.json();
-  if (!d.ok) { setSaving('send error: ' + (d.error || JSON.stringify(d.response).slice(0,160)), 'err'); return; }
+  if (!d.ok) {
+    setSaving('send error: ' + (d.error || JSON.stringify(d.response).slice(0,160)), 'err');
+    showBanner('Send failed: ' + (d.error || ''), 'err'); hideBanner(6000);
+    return;
+  }
   setSaving('✓ sent · ' + (d.sentAt || ''), 'ok');
+  showBanner('✓ Email sent', 'done'); hideBanner(3000);
   setTimeout(() => { closeCmp(); loadBuyers(); }, 1200);
 });
 
@@ -712,14 +754,35 @@ $('am-submit').addEventListener('click', async () => {
   await loadBuyers();
 });
 
+// ─── Working indicator helpers ─────────────────────────────────────────
+function showBanner(text, mode = 'work') {
+  const b = $('work-banner'); $('wb-text').textContent = text;
+  b.classList.remove('done', 'err');
+  if (mode === 'done') b.classList.add('done');
+  if (mode === 'err')  b.classList.add('err');
+  b.classList.add('show');
+}
+function hideBanner(delayMs = 0) {
+  const b = $('work-banner');
+  if (delayMs > 0) setTimeout(() => b.classList.remove('show'), delayMs);
+  else b.classList.remove('show');
+}
+function setCrawlSpinning(on) {
+  const c = document.querySelector('.crawl');
+  if (c) c.classList.toggle('is-running', !!on);
+  document.body.classList.toggle('is-discovering', !!on);
+}
+
 // ─── Crawl ──────────────────────────────────────────────────────────────
 async function startCrawl() {
   const sector = $('cr-sector').value;
   const max = parseInt($('cr-max').value, 10) || 50;
   $('cr-status').textContent = 'starting…';
+  setCrawlSpinning(true);
+  showBanner('Starting buyer discovery…', 'work');
   const r = await fetch('/api/crawl/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sector, max }) });
   const d = await r.json();
-  if (!d.ok) { $('cr-status').textContent = 'error: ' + d.error; return; }
+  if (!d.ok) { $('cr-status').textContent = 'error: ' + d.error; setCrawlSpinning(false); showBanner('Discovery failed: ' + d.error, 'err'); hideBanner(4000); return; }
   pollCrawl(d.jobId);
 }
 async function pollCrawl(jobId) {
@@ -728,10 +791,27 @@ async function pollCrawl(jobId) {
       const r = await fetch('/api/crawl/' + encodeURIComponent(jobId));
       const d = await r.json(); if (!d.ok) throw new Error(d.error || 'poll failed');
       const j = d.job; const c = j.counts || {};
-      const summary = `fetched ${c.fetched||0} · verified ${c.verified||0} · failed ${c.failed||0} · +${c.added||0} new`;
-      if (j.status === 'running') { $('cr-status').textContent = `▶ ${j.sector === '__all__' ? 'all' : j.sector} · ${summary}`; setTimeout(tick, 3000); }
-      else { $('cr-status').textContent = (j.status === 'done' ? '✓' : '✗') + ' ' + summary; loadBuyers(); refreshLimits(); }
-    } catch (e) { $('cr-status').textContent = 'poll error: ' + e.message; }
+      const sectorLabel = j.sector === '__all__' ? 'all sectors' : (SECTOR_LABELS[j.sector] || j.sector);
+      const total = (c.fetched || 0) + (c.failed || 0);
+      const summary = `${sectorLabel} · fetched ${c.fetched||0} · verified ${c.verified||0} · failed ${c.failed||0} · +${c.added||0} new`;
+      if (j.status === 'running') {
+        $('cr-status').textContent = `▶ ${summary}`;
+        showBanner(`Discovering ${sectorLabel} · ${total} processed · ${c.verified||0} verified`, 'work');
+        setTimeout(tick, 3000);
+      } else {
+        const ok = j.status === 'done';
+        $('cr-status').textContent = (ok ? '✓ ' : '✗ ') + summary;
+        setCrawlSpinning(false);
+        showBanner((ok ? '✓ ' : '✗ ') + summary, ok ? 'done' : 'err');
+        hideBanner(ok ? 6000 : 8000);
+        loadBuyers(); refreshLimits();
+      }
+    } catch (e) {
+      $('cr-status').textContent = 'poll error: ' + e.message;
+      setCrawlSpinning(false);
+      showBanner('Poll error: ' + e.message, 'err');
+      hideBanner(6000);
+    }
   };
   tick();
 }
@@ -748,6 +828,15 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 loadBuyers();
 refreshLimits();
 setInterval(refreshLimits, 30000);
+// On boot, if a discover job is mid-run (e.g. user refreshed), resume
+// polling so the banner picks up where it left off.
+(async () => {
+  try {
+    const r = await fetch('/api/crawl'); const d = await r.json();
+    const live = (d.jobs || []).find(j => j.status === 'running');
+    if (live) { setCrawlSpinning(true); pollCrawl(live.id); }
+  } catch (_) {}
+})();
 </script>
 </body>
 </html>
