@@ -78,13 +78,55 @@
       ],
       "status": "contacted",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:16:18.076Z",
+      "lastVerifiedAt": "2026-04-30T11:32:17.657Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
         "emailsHarvested": 2
       },
       "lastEmailedAt": "2026-04-30T04:38:49.058Z"
+    },
+    {
+      "id": "ameri-shred-com",
+      "legalName": "Ameri Shred Corp.",
+      "displayName": "Ameri Shred Corp.",
+      "country": "US",
+      "region": "Michigan",
+      "sector": "k-security",
+      "buyerType": "unclear",
+      "homepageUrl": "https://ameri-shred.com/",
+      "homepageHost": "ameri-shred.com",
+      "headquartersAddress": "3490 US Hwy 23 N PO Box 68 Alpena, MI 49707",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "industrial shredders",
+        "recycling equipment"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@ameri-shred.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "Sales: (800) 634 8981 / Service: (888) 270 6879",
+        "linkedinUrl": "https://www.linkedin.com/company/ameri-shred-corp./"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T11:31:37.822Z",
+      "enrichmentSources": {
+        "llm": "cf-workers-ai",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
     },
     {
       "id": "arli-com",
@@ -125,7 +167,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:16:55.755Z",
+      "lastVerifiedAt": "2026-04-30T11:32:42.833Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
@@ -240,7 +282,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:19:04.277Z",
+      "lastVerifiedAt": "2026-04-30T11:34:04.616Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -324,7 +366,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:20:18.902Z",
+      "lastVerifiedAt": "2026-04-30T11:34:41.937Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -370,7 +412,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:16:04.190Z",
+      "lastVerifiedAt": "2026-04-30T11:32:10.859Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -419,6 +461,51 @@
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
         "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "dkwholesale-com",
+      "legalName": "DK Wholesale Ltd",
+      "displayName": "DK Wholesale",
+      "country": "GB",
+      "region": "United Kingdom",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://dkwholesale.com/",
+      "homepageHost": "dkwholesale.com",
+      "headquartersAddress": "United Kingdom",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "watches",
+        "clocks",
+        "appliances",
+        "electricals",
+        "personal care products"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@dkwholesale.com",
+        "procurementEmail": "sales@dkwholesale.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T11:31:11.304Z",
+      "enrichmentSources": {
+        "llm": "cf-workers-ai",
+        "pagesScanned": 3,
+        "emailsHarvested": 6
       }
     },
     {
@@ -480,7 +567,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:19:55.105Z",
+      "lastVerifiedAt": "2026-04-30T11:34:31.790Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -550,7 +637,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:14:36.903Z",
+      "lastVerifiedAt": "2026-04-30T11:31:16.352Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -595,7 +682,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:19:16.864Z",
+      "lastVerifiedAt": "2026-04-30T11:34:10.685Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -638,7 +725,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:22:16.676Z",
+      "lastVerifiedAt": "2026-04-30T11:35:36.177Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -676,7 +763,7 @@
       "status": "queued",
       "rejectedReason": "Reference portal, not an outreach target.",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:21:48.316Z"
+      "lastVerifiedAt": "2026-04-30T11:35:26.145Z"
     },
     {
       "id": "highsecuritypapershredders-com",
@@ -716,7 +803,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:20:05.146Z",
+      "lastVerifiedAt": "2026-04-30T11:34:35.734Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
@@ -762,7 +849,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:15:03.855Z",
+      "lastVerifiedAt": "2026-04-30T11:31:30.417Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -806,7 +893,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:19:30.071Z",
+      "lastVerifiedAt": "2026-04-30T11:34:17.406Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -850,7 +937,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:21:21.901Z",
+      "lastVerifiedAt": "2026-04-30T11:35:12.388Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
@@ -922,7 +1009,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:20:58.557Z",
+      "lastVerifiedAt": "2026-04-30T11:34:54.652Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -965,7 +1052,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:18:07.745Z",
+      "lastVerifiedAt": "2026-04-30T11:33:26.086Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1008,7 +1095,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:17:53.304Z",
+      "lastVerifiedAt": "2026-04-30T11:33:19.635Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
@@ -1053,7 +1140,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:17:12.326Z",
+      "lastVerifiedAt": "2026-04-30T11:32:56.946Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1098,7 +1185,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:21:10.936Z",
+      "lastVerifiedAt": "2026-04-30T11:35:00.821Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1144,7 +1231,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:20:46.566Z",
+      "lastVerifiedAt": "2026-04-30T11:34:48.725Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1190,7 +1277,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:19:42.860Z",
+      "lastVerifiedAt": "2026-04-30T11:34:24.326Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1236,7 +1323,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:16:44.082Z",
+      "lastVerifiedAt": "2026-04-30T11:32:32.834Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -1282,7 +1369,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:18:50.546Z",
+      "lastVerifiedAt": "2026-04-30T11:33:51.596Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -1327,11 +1414,50 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:20:32.228Z",
+      "lastVerifiedAt": "2026-04-30T11:33:57.746Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
         "emailsHarvested": 6
+      }
+    },
+    {
+      "id": "mylittlesalesman-com",
+      "legalName": "",
+      "displayName": "Security Check",
+      "country": "",
+      "region": "",
+      "sector": "k-security",
+      "buyerType": "unclear",
+      "homepageUrl": "https://www.mylittlesalesman.com/browser-check?returnUrl=%2f",
+      "homepageHost": "mylittlesalesman.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T11:32:49.223Z",
+      "enrichmentSources": {
+        "llm": "cf-workers-ai",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
       }
     },
     {
@@ -1420,7 +1546,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:18:36.725Z",
+      "lastVerifiedAt": "2026-04-30T11:33:42.973Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -1472,6 +1598,52 @@
       }
     },
     {
+      "id": "pbsoffice-com",
+      "legalName": "Progressive Business Systems, Inc.",
+      "displayName": "PBS Office",
+      "country": "US",
+      "region": "Georgia",
+      "sector": "k-security",
+      "buyerType": "unclear",
+      "homepageUrl": "https://www.pbsoffice.com/",
+      "homepageHost": "pbsoffice.com",
+      "headquartersAddress": "1397 Duncan Lane, Suite D, Auburn, GA 30011",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "check signers",
+        "currency counters",
+        "coin sorters",
+        "paper shredders",
+        "laminators",
+        "time recording"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@pbsoffice.com",
+        "procurementEmail": "sales@pbsoffice.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "800 359 0364",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T11:35:07.526Z",
+      "enrichmentSources": {
+        "llm": "cf-workers-ai",
+        "pagesScanned": 3,
+        "emailsHarvested": 1
+      }
+    },
+    {
       "id": "pricereporter-com",
       "legalName": "Price Reporter, Inc.",
       "displayName": "Price Reporter",
@@ -1509,7 +1681,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:21:36.645Z",
+      "lastVerifiedAt": "2026-04-30T11:35:20.741Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1552,7 +1724,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:17:42.143Z",
+      "lastVerifiedAt": "2026-04-30T11:33:14.835Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1597,7 +1769,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:18:21.777Z",
+      "lastVerifiedAt": "2026-04-30T11:33:33.586Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1643,7 +1815,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:17:26.065Z",
+      "lastVerifiedAt": "2026-04-30T11:33:04.066Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1689,7 +1861,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:15:24.420Z",
+      "lastVerifiedAt": "2026-04-30T11:31:50.264Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1734,7 +1906,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:15:38.138Z",
+      "lastVerifiedAt": "2026-04-30T11:31:58.345Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1805,7 +1977,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:13:43.049Z",
+      "lastVerifiedAt": "2026-04-30T11:30:27.155Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1851,7 +2023,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:14:10.774Z",
+      "lastVerifiedAt": "2026-04-30T11:30:58.773Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -1897,7 +2069,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:15:50.935Z",
+      "lastVerifiedAt": "2026-04-30T11:32:03.979Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
@@ -1928,6 +2100,47 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30"
+    },
+    {
+      "id": "store-directsupply-com",
+      "legalName": "Direct Supply",
+      "displayName": "Direct Supply",
+      "country": "US",
+      "region": "North America",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://store.directsupply.com/",
+      "homepageHost": "store.directsupply.com",
+      "headquartersAddress": "Direct Supply, USA",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Healthcare & Senior Living Products"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/direct-supply/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T11:31:04.190Z",
+      "enrichmentSources": {
+        "llm": "cf-workers-ai",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
     },
     {
       "id": "tagovcloud-com",
@@ -1965,7 +2178,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:22:28.768Z",
+      "lastVerifiedAt": "2026-04-30T11:35:43.427Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 1,
@@ -2010,7 +2223,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:16:31.283Z",
+      "lastVerifiedAt": "2026-04-30T11:32:25.930Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -2053,7 +2266,7 @@
       ],
       "status": "verified",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:13:55.702Z",
+      "lastVerifiedAt": "2026-04-30T11:30:40.145Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 2,
@@ -2124,7 +2337,7 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T04:14:50.663Z",
+      "lastVerifiedAt": "2026-04-30T11:31:24.096Z",
       "enrichmentSources": {
         "llm": "anthropic-haiku-4-5",
         "pagesScanned": 3,
