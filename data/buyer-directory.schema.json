@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERGSN Buyer Directory",
+  "description": "Vetted procurement / importer / distributor contacts for ERGSN cold outreach. Mirror of maker-directory but on the buyer side. Status progression: raw → verified → contacted → replied → converted (or rejected at any step).",
+  "type": "object",
+  "required": ["_doc", "buyers"],
+  "properties": {
+    "_doc": { "type": "string" },
+    "_schema": { "type": "string" },
+    "buyers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "legalName", "country", "sector", "status"],
+        "properties": {
+          "id":               { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "legalName":        { "type": "string" },
+          "displayName":      { "type": "string" },
+          "country":          { "type": "string", "description": "ISO-3166 alpha-2 (US, KR, DE, JP, ...)" },
+          "region":           { "type": "string", "description": "City / state / region" },
+          "sector":           { "enum": ["k-security", "k-tech", "k-energy", "k-bio", "k-beauty", "k-culture-goods", "k-franchise", "k-smart-living", "k-tourism-assets", "multi"] },
+          "buyerType":        { "enum": ["distributor", "importer", "system-integrator", "fed-procurement", "retail-chain", "marketplace", "end-user", "broker", "unclear"] },
+          "homepageUrl":      { "type": "string" },
+          "homepageHost":     { "type": "string" },
+          "headquartersAddress": { "type": "string" },
+          "employeeSizeBand": { "enum": ["1-10", "11-50", "51-200", "201-1000", "1000+", "unknown"] },
+          "annualRevenueBand":{ "enum": ["<$1M", "$1M-$10M", "$10M-$100M", "$100M-$1B", "$1B+", "unknown"] },
+          "primaryProductInterest": { "type": "array", "items": { "type": "string" } },
+          "knownTradeHistoryWithKorea": { "type": "boolean" },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "primaryEmail":    { "type": "string" },
+              "decisionMaker":   { "type": "string" },
+              "decisionMakerTitle": { "type": "string" },
+              "procurementEmail":{ "type": "string" },
+              "tel":             { "type": "string" },
+              "linkedinUrl":     { "type": "string" }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "seed": { "type": "string" },
+                "seedQuery": { "type": "string" },
+                "discoveredAt": { "type": "string" }
+              }
+            }
+          },
+          "status":           { "enum": ["raw", "verified", "rejected", "queued", "contacted", "replied", "converted", "unsubscribed"] },
+          "rejectedReason":   { "type": "string" },
+          "lastEmailedAt":    { "type": "string" },
+          "lastReplyAt":      { "type": "string" },
+          "notes":            { "type": "string" },
+          "discoveredAt":     { "type": "string" },
+          "lastVerifiedAt":   { "type": "string" }
+        }
+      }
+    }
+  }
+}

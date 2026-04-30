@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ERGSN — Buyer Outreach</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root { --navy: #111418; --gold: #34d298; --bg: #f7f7f5; --line: #e8e3d8; --muted: #6c6356; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: #0f1110; }
+  .top { background: linear-gradient(180deg,#1a1f26,#111418); color: #fff; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; position: sticky; top: 0; z-index: 50; }
+  .top h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: .04em; }
+  .top h1 .e { color: var(--gold); }
+  .top .sub { font-size: 11px; opacity: .65; }
+  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; display: flex; gap: 6px; align-items: center; font-size: 12px; flex-wrap: wrap; }
+  .crawl select, .crawl input { padding: 3px 6px; border: 1px solid #2a323b; border-radius: 5px; background: #181c22; color: #fff; font-size: 12px; }
+  .crawl button { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--gold); background: var(--gold); color: #0f1110; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .crawl button:disabled { opacity: .4; cursor: not-allowed; background: #2a323b; border-color: #2a323b; color: #888; }
+  .crawl .cr-status { color: var(--gold); margin-left: 4px; max-width: 360px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); font-size: 11px; align-items: center; }
+  .pill { background: rgba(0,0,0,.04); border: 1px solid var(--line); border-radius: 20px; padding: 3px 9px; cursor: pointer; }
+  .pill.active { background: var(--gold); border-color: var(--gold); color: #0f1110; }
+  .pill .n { color: var(--gold); font-weight: 700; margin-right: 3px; }
+  .pill.active .n { color: #0f1110; }
+  .pill.quota { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); cursor: default; font-weight: 600; }
+  .pill.quota.warn { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); }
+  .pill.quota.exhausted { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); color: #a02020; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); font-size: 11px; align-items: center; }
+  .toolbar label { display: flex; align-items: center; gap: 4px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .toolbar select, .toolbar input[type="search"] { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; }
+  .toolbar select.on { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 700; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; padding: 16px 20px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.04); }
+  .card h3 { font-size: 14px; margin: 0; }
+  .card .meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 8px; }
+  .card .interests { display: flex; gap: 4px; flex-wrap: wrap; }
+  .card .interest { background: rgba(52,210,152,.1); border: 1px solid rgba(52,210,152,.3); border-radius: 4px; padding: 1px 6px; font-size: 10px; color: #007a55; }
+  .card .url a { font-size: 11px; color: var(--gold); }
+  .card .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .card .actions button { padding: 4px 8px; border-radius: 5px; border: 1px solid var(--line); background: #fff; font-size: 11px; cursor: pointer; }
+  .card .actions button.go { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 600; }
+  .card .actions button.danger { color: #c33; border-color: #f5c2c2; }
+  .card .actions button.warn { color: #b06800; border-color: #f0d0a0; }
+  .card .actions button.disabled { opacity: 0.4; cursor: not-allowed; }
+  .card .badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+  .b-raw { background: #eee; color: #555; }
+  .b-verified { background: #e7f6ee; color: #0a6e3a; }
+  .b-queued { background: #fde9c0; color: #8a5a00; }
+  .b-contacted { background: #d6e6ff; color: #0a4a99; }
+  .b-replied { background: #e6d3ff; color: #56188a; }
+  .b-converted { background: #c5edd0; color: #0f6e2c; }
+  .b-rejected { background: #f5dada; color: #903030; }
+  .b-unsubscribed { background: #ddd; color: #555; }
+  .modal-back { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
+  .modal-back.open { display: flex; }
+  .modal { background: #fff; border-radius: 10px; max-width: 720px; width: 100%; padding: 18px 20px; }
+  .modal h2 { margin: 0 0 12px; font-size: 16px; }
+  .modal label { display: block; font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .modal input[type="text"], .modal input[type="url"], .modal textarea, .modal select { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; font-family: inherit; }
+  .modal textarea.html { min-height: 220px; font-family: 'Consolas', monospace; font-size: 11px; }
+  .modal textarea.text { min-height: 120px; }
+  .modal .preview { border: 1px solid var(--line); border-radius: 6px; padding: 12px; background: #fafaf8; margin-top: 6px; font-size: 13px; }
+  .modal .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+  .modal .row button { padding: 6px 12px; border-radius: 5px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 12px; }
+  .modal .row button.go { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 700; }
+  .modal .row button.danger { color: #c33; border-color: #f5c2c2; }
+  .modal .row .saving { font-size: 11px; color: var(--muted); margin-left: auto; }
+  .modal .row .saving.ok { color: #0a6e3a; }
+  .modal .row .saving.err { color: #c33; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div>
+    <h1><span class="e">E</span>RGSN — Buyer Outreach</h1>
+    <div class="sub">Vetted procurement / importer / distributor leads · cold outreach via ergsn-mail</div>
+  </div>
+  <div class="crawl">
+    <label>Sector
+      <select id="cr-sector">
+        <option value="__all__">all sectors</option>
+      </select>
+    </label>
+    <label>Max
+      <input type="number" id="cr-max" value="50" min="1" max="500" style="width:60px">
+    </label>
+    <button id="cr-run">+ Discover Buyers</button>
+    <button id="bn-add">+ Add Buyer</button>
+    <span class="cr-status" id="cr-status"></span>
+  </div>
+</div>
+
+<div class="pills" id="pills"></div>
+
+<div class="toolbar">
+  <label>Status <select id="f-status"><option value="">all</option><option value="raw">raw</option><option value="verified">verified</option><option value="queued">queued</option><option value="contacted">contacted</option><option value="replied">replied</option><option value="converted">converted</option><option value="rejected">rejected</option><option value="unsubscribed">unsubscribed</option></select></label>
+  <label>Sector <select id="f-sector"><option value="">all</option></select></label>
+  <label>Type <select id="f-type"><option value="">all</option><option value="distributor">distributor</option><option value="importer">importer</option><option value="system-integrator">system-integrator</option><option value="fed-procurement">fed-procurement</option><option value="retail-chain">retail-chain</option><option value="marketplace">marketplace</option><option value="end-user">end-user</option><option value="broker">broker</option><option value="unclear">unclear</option></select></label>
+  <label>Country <select id="f-country"><option value="">all</option></select></label>
+  <label>Draft <select id="f-draft"><option value="">all</option><option value="any">has draft</option><option value="approved">approved</option><option value="sent">sent</option><option value="none">no draft</option></select></label>
+  <label>Search <input type="search" id="f-q" placeholder="name / host / city…" style="width:200px"></label>
+  <span class="stat" id="stat" style="margin-left:auto;color:var(--muted);font-size:11px"></span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- Add Buyer modal -->
+<div class="modal-back" id="add-modal">
+  <div class="modal">
+    <h2>Add buyer manually</h2>
+    <label>Legal name *<input type="text" id="am-legalName" maxlength="200"></label>
+    <label>Homepage URL<input type="url" id="am-homepageUrl"></label>
+    <label>Country (ISO-2)<input type="text" id="am-country" maxlength="2"></label>
+    <label>Sector<select id="am-sector"></select></label>
+    <label>Buyer type<select id="am-buyerType"><option value="distributor">distributor</option><option value="importer">importer</option><option value="system-integrator">system-integrator</option><option value="fed-procurement">fed-procurement</option><option value="retail-chain">retail-chain</option><option value="marketplace">marketplace</option><option value="end-user">end-user</option><option value="broker">broker</option><option value="unclear" selected>unclear</option></select></label>
+    <label>Primary email<input type="text" id="am-primaryEmail"></label>
+    <label>Decision maker name<input type="text" id="am-decisionMaker"></label>
+    <label>Decision maker title<input type="text" id="am-decisionMakerTitle"></label>
+    <label>Notes<textarea id="am-notes" maxlength="2000"></textarea></label>
+    <div class="row">
+      <span class="saving" id="am-msg"></span>
+      <button onclick="closeAdd()">Cancel</button>
+      <button class="go" onclick="submitAdd()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Compose / Edit modal -->
+<div class="modal-back" id="cmp-modal">
+  <div class="modal">
+    <h2 id="cmp-title">Mail draft</h2>
+    <div id="cmp-buyer-meta" style="font-size:11px;color:var(--muted);margin-bottom:8px"></div>
+    <label>To email<input type="text" id="cmp-toEmail"></label>
+    <label>Subject<input type="text" id="cmp-subject" maxlength="200"></label>
+    <label>HTML body<textarea id="cmp-html" class="html"></textarea></label>
+    <label>Plain-text body<textarea id="cmp-text" class="text"></textarea></label>
+    <label>Preview</label>
+    <div class="preview" id="cmp-preview"></div>
+    <div class="row">
+      <button class="danger" id="cmp-recompose" title="Re-run LLM, overwrites the draft">↻ Re-compose</button>
+      <span class="saving" id="cmp-msg"></span>
+      <button onclick="closeCmp()">Close</button>
+      <button id="cmp-save">💾 Save draft</button>
+      <button id="cmp-approve" title="Mark as approved (still won't send until you click Send)">✓ Approve</button>
+      <button class="go" id="cmp-send" disabled title="Approve first, then click to send via ergsn-mail">→ Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+const SECTOR_LABELS = {
+  'k-security': 'K-Security', 'k-tech': 'K-Tech', 'k-energy': 'K-Energy', 'k-bio': 'K-Bio',
+  'k-beauty': 'K-Beauty', 'k-culture-goods': 'K-Culture Goods', 'k-franchise': 'K-Franchise',
+  'k-smart-living': 'K-Smart Living', 'k-tourism-assets': 'K-Tourism Assets', 'multi': 'Multi'
+};
+
+let allBuyers = [];
+let aiState = { exceeded: false }, tavilyState = { callsThisMonth: 0, budget: 1000 };
+
+async function loadBuyers() {
+  const r = await fetch('/api/buyers'); const d = await r.json();
+  allBuyers = d.buyers || [];
+  fillSectorOptions();
+  fillCountryOptions();
+  refreshFilterChrome();
+  render();
+}
+async function refreshLimits() {
+  try {
+    const r = await fetch('/api/limits'); const d = await r.json();
+    aiState = d.ai || aiState; tavilyState = d.tavily || tavilyState;
+  } catch (_) {}
+  renderPills();
+}
+
+function fillSectorOptions() {
+  const sectors = Array.from(new Set(allBuyers.map(b => b.sector).filter(Boolean))).sort();
+  for (const sel of [$('f-sector'), $('cr-sector'), $('am-sector')]) {
+    if (!sel) continue;
+    const cur = sel.value;
+    const head = sel.id === 'cr-sector' ? '<option value="__all__">all sectors</option>' : '<option value="">all</option>';
+    sel.innerHTML = (sel.id === 'am-sector' ? '' : head) + sectors.map(s => `<option value="${esc(s)}">${esc(SECTOR_LABELS[s] || s)}</option>`).join('');
+    if (cur) sel.value = cur;
+  }
+}
+function fillCountryOptions() {
+  const set = Array.from(new Set(allBuyers.map(b => b.country).filter(Boolean))).sort();
+  const sel = $('f-country'); const cur = sel.value;
+  sel.innerHTML = '<option value="">all</option>' + set.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  if (cur) sel.value = cur;
+}
+
+const FILTER_DEFAULTS = { 'f-status': '', 'f-sector': '', 'f-type': '', 'f-country': '', 'f-draft': '' };
+function refreshFilterChrome() { for (const id of Object.keys(FILTER_DEFAULTS)) { const s = $(id); if (s) s.classList.toggle('on', s.value !== FILTER_DEFAULTS[id]); } }
+
+function filtered() {
+  const st = $('f-status').value, sec = $('f-sector').value, ty = $('f-type').value, cy = $('f-country').value, dr = $('f-draft').value;
+  const q = ($('f-q').value || '').toLowerCase();
+  return allBuyers.filter(b => {
+    if (st && b.status !== st) return false;
+    if (sec && b.sector !== sec) return false;
+    if (ty && b.buyerType !== ty) return false;
+    if (cy && b.country !== cy) return false;
+    if (dr === 'any' && !b._hasDraft) return false;
+    if (dr === 'approved' && b._draftStatus !== 'approved') return false;
+    if (dr === 'sent' && b._draftStatus !== 'sent') return false;
+    if (dr === 'none' && b._hasDraft) return false;
+    if (q) {
+      const hay = `${b.legalName||''} ${b.displayName||''} ${b.homepageHost||''} ${b.region||''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderPills() {
+  const c = (s) => allBuyers.filter(b => b.status === s).length;
+  const aiUsed = aiState.estimatedNeuronsToday || 0, aiBud = aiState.budget || 10000, aiLeft = Math.max(0, aiBud - aiUsed), aiPct = Math.min(100, Math.round(aiUsed/aiBud*100));
+  const tUsed = tavilyState.callsThisMonth || 0, tBud = tavilyState.budget || 1000, tLeft = Math.max(0, tBud - tUsed);
+  const aiCls = aiState.exceeded ? 'pill quota exhausted' : (aiPct >= 80 ? 'pill quota warn' : 'pill quota');
+  const aiTxt = aiState.exceeded ? `🚫 AI exhausted` : `🤖 AI: ~${aiUsed.toLocaleString()}/${aiBud.toLocaleString()} <span class="n">${aiLeft.toLocaleString()} left</span>`;
+  $('pills').innerHTML = `
+    <span class="${aiCls}" title="CF Workers AI free tier daily">${aiTxt}</span>
+    <span class="pill quota" title="Tavily Researcher tier">🔍 Tavily: ${tUsed}/${tBud} <span class="n">${tLeft} left</span></span>
+    <span class="pill" title="Total buyers" style="cursor:default"><span class="n">${allBuyers.length}</span> total</span>
+    <span class="pill" data-act="raw"><span class="n">${c('raw')}</span> raw</span>
+    <span class="pill" data-act="verified"><span class="n">${c('verified')}</span> verified</span>
+    <span class="pill" data-act="queued"><span class="n">${c('queued')}</span> queued</span>
+    <span class="pill" data-act="contacted"><span class="n">${c('contacted')}</span> contacted</span>
+    <span class="pill" data-act="replied"><span class="n">${c('replied')}</span> replied</span>
+    <span class="pill" data-act="converted"><span class="n">${c('converted')}</span> converted</span>
+    <span class="pill" data-act="rejected"><span class="n">${c('rejected')}</span> rejected</span>
+  `;
+  $('pills').querySelectorAll('[data-act]').forEach(p => p.addEventListener('click', () => { $('f-status').value = p.dataset.act; refreshFilterChrome(); render(); }));
+}
+
+function render() {
+  const list = filtered();
+  $('stat').textContent = `${list.length} of ${allBuyers.length}`;
+  const grid = $('grid');
+  if (!list.length) { grid.innerHTML = '<div class="empty">No matching buyers.</div>'; return; }
+  grid.innerHTML = list.map(b => card(b)).join('');
+  grid.querySelectorAll('.card').forEach(el => {
+    const id = el.dataset.id;
+    el.querySelectorAll('button[data-act]').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); handleAction(id, btn.dataset.act); }));
+  });
+}
+
+function card(b) {
+  const interest = (b.primaryProductInterest || []).slice(0, 4).map(s => `<span class="interest">${esc(s)}</span>`).join('');
+  const status = b.status || 'raw';
+  const hasEmail = !!(b.contact && (b.contact.primaryEmail || b.contact.procurementEmail));
+  const draftBadge = b._hasDraft ? `<span class="badge b-${esc(b._draftStatus || 'draft')}">draft: ${esc(b._draftStatus || 'draft')}</span>` : '';
+  return `
+    <div class="card" data-id="${esc(b.id)}">
+      <h3>${esc(b.displayName || b.legalName || b.id)}</h3>
+      <div class="meta">
+        <span class="badge b-${esc(status)}">${esc(status)}</span>
+        ${draftBadge}
+        ${b.country ? '<span>📍 ' + esc(b.country) + (b.region ? ' · ' + esc(b.region) : '') + '</span>' : ''}
+        ${b.buyerType && b.buyerType !== 'unclear' ? '<span>🏢 ' + esc(b.buyerType) + '</span>' : ''}
+        ${b.sector ? '<span>🏷️ ' + esc(SECTOR_LABELS[b.sector] || b.sector) + '</span>' : ''}
+        ${b.knownTradeHistoryWithKorea ? '<span>🇰🇷 has KR history</span>' : ''}
+      </div>
+      ${interest ? `<div class="interests">${interest}</div>` : ''}
+      ${b.contact && (b.contact.primaryEmail || b.contact.procurementEmail) ? `<div class="meta">📧 ${esc(b.contact.procurementEmail || b.contact.primaryEmail)}${b.contact.decisionMaker ? ' · ' + esc(b.contact.decisionMaker) : ''}</div>` : ''}
+      ${b.homepageUrl ? `<div class="url"><a href="${esc(b.homepageUrl)}" target="_blank" rel="noopener">${esc(b.homepageHost || b.homepageUrl)}</a></div>` : ''}
+      ${b.notes ? `<div class="meta" style="font-size:10px;font-style:italic">${esc(b.notes.slice(0, 200))}</div>` : ''}
+      <div class="actions">
+        ${status === 'raw' ? `<button class="go" data-act="verify">✓ Verify</button>` : ''}
+        ${(status === 'verified' || status === 'queued') && hasEmail ? `<button class="go" data-act="compose">✉ ${b._hasDraft ? 'Open Draft' : 'Compose'}</button>` : ''}
+        ${b._hasDraft ? `<button data-act="open-draft">📝 Open</button>` : ''}
+        ${status !== 'rejected' ? `<button class="warn" data-act="reject">✕ Reject</button>` : ''}
+        <button data-act="edit">✎ Edit</button>
+      </div>
+    </div>
+  `;
+}
+
+async function handleAction(id, act) {
+  if (act === 'verify') return patch(id, { status: 'verified' });
+  if (act === 'reject') {
+    const reason = prompt('Reject reason (optional):') || '';
+    return patch(id, { status: 'rejected', rejectedReason: reason });
+  }
+  if (act === 'compose' || act === 'open-draft') return openCompose(id);
+  if (act === 'edit') return openEdit(id);
+}
+
+async function patch(id, body) {
+  const r = await fetch('/api/buyers/' + encodeURIComponent(id), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const d = await r.json();
+  if (!d.ok) { alert('error: ' + (d.error || 'patch failed')); return; }
+  await loadBuyers();
+}
+
+// Compose / Edit
+let currentBuyer = null;
+async function openCompose(id) {
+  currentBuyer = allBuyers.find(b => b.id === id);
+  if (!currentBuyer) return;
+  $('cmp-title').textContent = 'Mail draft — ' + (currentBuyer.displayName || currentBuyer.legalName);
+  const c = currentBuyer.contact || {};
+  $('cmp-buyer-meta').textContent = `${currentBuyer.country || ''} · ${currentBuyer.buyerType || ''} · ${c.decisionMaker || ''} ${c.decisionMakerTitle ? '(' + c.decisionMakerTitle + ')' : ''}`;
+  let draft;
+  const dRes = await fetch('/api/buyers/' + encodeURIComponent(id) + '/draft');
+  if (dRes.ok) { draft = (await dRes.json()).draft; }
+  else {
+    setSaving('Generating draft via LLM…');
+    const cRes = await fetch('/api/buyers/' + encodeURIComponent(id) + '/compose', { method: 'POST' });
+    const cJson = await cRes.json();
+    if (!cJson.ok) { alert('compose failed: ' + cJson.error); return; }
+    draft = cJson.draft;
+    refreshLimits();
+  }
+  $('cmp-toEmail').value = draft.toEmail || '';
+  $('cmp-subject').value = draft.subject || '';
+  $('cmp-html').value = draft.htmlBody || '';
+  $('cmp-text').value = draft.textBody || '';
+  $('cmp-preview').innerHTML = draft.htmlBody || '';
+  refreshSendButton(draft);
+  $('cmp-modal').classList.add('open');
+  setSaving(`Composed by ${draft.composedBy || 'LLM'} · status=${draft.status}`);
+}
+function refreshSendButton(draft) {
+  $('cmp-send').disabled = !(draft && draft.status === 'approved' && draft.toEmail && draft.subject && draft.htmlBody);
+}
+function closeCmp() { $('cmp-modal').classList.remove('open'); currentBuyer = null; }
+function setSaving(text, cls = '') { const el = $('cmp-msg'); el.textContent = text; el.className = 'saving ' + cls; }
+
+$('cmp-recompose').addEventListener('click', async () => {
+  if (!currentBuyer) return;
+  if (!confirm('Re-run LLM and overwrite the current draft?')) return;
+  setSaving('Re-composing…');
+  const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/compose', { method: 'POST' });
+  const d = await r.json();
+  if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
+  $('cmp-toEmail').value = d.draft.toEmail || ''; $('cmp-subject').value = d.draft.subject || '';
+  $('cmp-html').value = d.draft.htmlBody || ''; $('cmp-text').value = d.draft.textBody || '';
+  $('cmp-preview').innerHTML = d.draft.htmlBody || '';
+  refreshSendButton(d.draft);
+  setSaving('Re-composed', 'ok'); refreshLimits();
+});
+
+$('cmp-save').addEventListener('click', async () => {
+  if (!currentBuyer) return;
+  setSaving('Saving…');
+  const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/draft', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toEmail: $('cmp-toEmail').value, subject: $('cmp-subject').value, htmlBody: $('cmp-html').value, textBody: $('cmp-text').value })
+  });
+  const d = await r.json();
+  if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
+  $('cmp-preview').innerHTML = d.draft.htmlBody || '';
+  refreshSendButton(d.draft);
+  setSaving('Saved', 'ok');
+});
+
+$('cmp-approve').addEventListener('click', async () => {
+  if (!currentBuyer) return;
+  // Save current edits first then flip status to approved
+  setSaving('Approving…');
+  await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/draft', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toEmail: $('cmp-toEmail').value, subject: $('cmp-subject').value, htmlBody: $('cmp-html').value, textBody: $('cmp-text').value })
+  });
+  const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/draft', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'approved' })
+  });
+  const d = await r.json();
+  if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
+  refreshSendButton(d.draft);
+  setSaving('Approved — Send button is now active', 'ok');
+});
+
+$('cmp-send').addEventListener('click', async () => {
+  if (!currentBuyer) return;
+  if (!confirm(`Send to ${$('cmp-toEmail').value} via ergsn-mail? This is a real cold email.`)) return;
+  setSaving('Sending…');
+  const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/send', { method: 'POST' });
+  const d = await r.json();
+  if (!d.ok) { setSaving('send error: ' + (d.error || JSON.stringify(d.response).slice(0,160)), 'err'); return; }
+  setSaving('✓ Sent · ' + (d.sentAt || ''), 'ok');
+  setTimeout(() => { closeCmp(); loadBuyers(); }, 1200);
+});
+
+// Edit a buyer (status / sector / contact)
+function openEdit(id) {
+  const b = allBuyers.find(x => x.id === id); if (!b) return;
+  // Inline-prompt edit (kept simple — fuller form not in v0)
+  const newStatus = prompt(`Status for ${b.id}? (raw, verified, queued, contacted, replied, converted, rejected, unsubscribed)`, b.status);
+  if (!newStatus) return;
+  const newSector = prompt(`Sector? (k-security, k-tech, ...)`, b.sector || 'multi') || b.sector;
+  const newType = prompt(`Buyer type?`, b.buyerType || 'unclear') || b.buyerType;
+  const newEmail = prompt(`Procurement email?`, (b.contact && b.contact.procurementEmail) || (b.contact && b.contact.primaryEmail) || '') || '';
+  patch(id, {
+    status: newStatus, sector: newSector, buyerType: newType,
+    contact: { procurementEmail: newEmail }
+  });
+}
+
+// Add Buyer
+function openAdd() {
+  // populate sector options
+  const sel = $('am-sector');
+  sel.innerHTML = Object.keys(SECTOR_LABELS).map(s => `<option value="${s}">${SECTOR_LABELS[s]}</option>`).join('');
+  $('add-modal').classList.add('open');
+}
+function closeAdd() { $('add-modal').classList.remove('open'); }
+async function submitAdd() {
+  const body = {
+    legalName: $('am-legalName').value.trim(),
+    homepageUrl: $('am-homepageUrl').value.trim(),
+    country: $('am-country').value.trim().toUpperCase(),
+    sector: $('am-sector').value, buyerType: $('am-buyerType').value,
+    primaryEmail: $('am-primaryEmail').value.trim(),
+    decisionMaker: $('am-decisionMaker').value.trim(),
+    decisionMakerTitle: $('am-decisionMakerTitle').value.trim(),
+    notes: $('am-notes').value
+  };
+  if (!body.legalName) { $('am-msg').textContent = 'legal name required'; return; }
+  $('am-msg').textContent = 'Saving…';
+  const r = await fetch('/api/buyers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const d = await r.json();
+  if (!d.ok) { $('am-msg').textContent = 'error: ' + d.error; return; }
+  closeAdd();
+  await loadBuyers();
+}
+
+// Crawl
+async function startCrawl() {
+  const sector = $('cr-sector').value;
+  const max = parseInt($('cr-max').value, 10) || 50;
+  $('cr-status').textContent = 'starting…';
+  const r = await fetch('/api/crawl/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sector, max }) });
+  const d = await r.json();
+  if (!d.ok) { $('cr-status').textContent = 'error: ' + d.error; return; }
+  pollCrawl(d.jobId);
+}
+async function pollCrawl(jobId) {
+  const tick = async () => {
+    try {
+      const r = await fetch('/api/crawl/' + encodeURIComponent(jobId));
+      const d = await r.json();
+      if (!d.ok) throw new Error(d.error || 'poll failed');
+      const j = d.job; const c = j.counts || {};
+      const summary = `fetched ${c.fetched||0} · verified ${c.verified||0} · failed ${c.failed||0} · +${c.added||0} new`;
+      if (j.status === 'running') {
+        $('cr-status').textContent = `▶ ${j.sector === '__all__' ? 'all' : j.sector} · ${summary}`;
+        setTimeout(tick, 3000);
+      } else {
+        $('cr-status').textContent = (j.status === 'done' ? '✓' : '✗') + ' ' + summary;
+        loadBuyers(); refreshLimits();
+      }
+    } catch (e) { $('cr-status').textContent = 'poll error: ' + e.message; }
+  };
+  tick();
+}
+
+document.getElementById('cr-run').addEventListener('click', startCrawl);
+document.getElementById('bn-add').addEventListener('click', openAdd);
+['f-status','f-sector','f-type','f-country','f-draft'].forEach(id => $(id).addEventListener('change', () => { refreshFilterChrome(); render(); }));
+$('f-q').addEventListener('input', render);
+document.querySelectorAll('.modal-back').forEach(m => m.addEventListener('click', e => { if (e.target.classList.contains('modal-back')) m.classList.remove('open'); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-back.open').forEach(m => m.classList.remove('open')); });
+
+loadBuyers();
+refreshLimits();
+setInterval(refreshLimits, 30000);
+</script>
+</body>
+</html>

@@ -10,7 +10,11 @@
     "process:images": "node scripts/process-images.js",
     "extract:pdf":    "node scripts/extract-from-pdf.js",
     "discover:makers": "node scripts/discover-makers/discover.js",
-    "review:makers":   "node scripts/discover-makers/review-server.js"
+    "review:makers":   "node scripts/discover-makers/review-server.js",
+    "discover:buyers": "node scripts/discover-buyers/discover.js",
+    "compose:buyers":  "node scripts/discover-buyers/compose.js",
+    "send:buyers":     "node scripts/discover-buyers/send.js",
+    "review:buyers":   "node scripts/discover-buyers/review-server.js"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
