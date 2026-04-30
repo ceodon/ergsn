@@ -189,10 +189,13 @@ export default {
          outreach, partner ops, mail send. Triggers Telegram alerts on
          suspicious patterns. */
       if (path === '/admin/audit' && request.method === 'POST') {
-        return adminGate(request, env, cors, () => recordAdminAudit(request, env, cors));
+        return adminGate(request, env, cors, (ctx) => recordAdminAudit(request, env, cors, ctx));
       }
       if (path === '/admin/audit/recent' && request.method === 'GET') {
-        return adminGate(request, env, cors, () => listAdminAuditRecent(url, env, cors));
+        return adminGate(request, env, cors, (ctx) => listAdminAuditRecent(url, env, cors, ctx));
+      }
+      if (path === '/admin/whoami' && request.method === 'GET') {
+        return adminGate(request, env, cors, (ctx) => ok({ ok: true, email: ctx.email, role: ctx.role, source: ctx.source }, cors));
       }
 
       /* admin: email log */
@@ -401,18 +404,153 @@ function corsHeaders(request, env) {
   return {
     'Access-Control-Allow-Origin':  matched,
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    /* Cf-Access-Jwt-Assertion is the header CF Access injects upstream; it
+       arrives automatically on requests routed through Access — listing it
+       in Allow-Headers is for completeness, in case anything ever calls
+       admin endpoints with the header explicitly. */
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Cf-Access-Jwt-Assertion',
     'Access-Control-Max-Age':       '86400',
     'Vary': 'Origin'
   };
 }
 
-/* Admin gate now resolves to one of:
-     - master ADMIN_KEY (env secret) — implicit role 'owner'
-     - admin_users row (DB-backed key) — has explicit role
-   The wrapping handler may consult ctx.role if it needs to gate sub-actions.
-   Returns the underlying handler result. */
+/* ─── Cloudflare Access JWT verification (defense in depth) ──────────────
+ *
+ * Even when admin.ergsn.net sits behind CF Access, we re-verify the JWT
+ * inside the Worker. This is "belt and suspenders": if the Access policy
+ * is misconfigured, paused, or bypassed via a misrouted request, the
+ * Worker still rejects unauthorized callers.
+ *
+ * The Worker reads two secrets (set via `wrangler secret put` per
+ * admin/CF_ACCESS_SETUP.md Step 7):
+ *   - CF_ACCESS_TEAM   = team name (e.g. "ergsn") — drives JWKS URL
+ *   - CF_ACCESS_AUD    = AUD tag of the admin app (binds JWT to *this*
+ *                        application; another CF Access app on the
+ *                        same account cannot mint a JWT that works here)
+ *
+ * Caching strategy: JWKS lives in a module-scoped variable that
+ * persists across requests within a single Worker isolate. TTL is
+ * 1 hour; refresh on cache miss or expiry. Cloudflare rotates Access
+ * keys infrequently (~quarterly), so a 1-hour stale-tolerance is safe.
+ */
+let _jwksCache = null;          /* { keys: [...], fetchedAt: ms } */
+const JWKS_TTL_MS = 60 * 60 * 1000;
+
+async function fetchJwks(team) {
+  if (_jwksCache && (Date.now() - _jwksCache.fetchedAt) < JWKS_TTL_MS) {
+    return _jwksCache.keys;
+  }
+  const url = `https://${team}.cloudflareaccess.com/cdn-cgi/access/certs`;
+  const r = await fetch(url, { cf: { cacheTtl: 3600, cacheEverything: true } });
+  if (!r.ok) throw new Error(`JWKS fetch failed: ${r.status}`);
+  const data = await r.json();
+  _jwksCache = { keys: data.keys || [], fetchedAt: Date.now() };
+  return _jwksCache.keys;
+}
+
+function b64urlToBytes(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+function b64urlToJson(s) {
+  const bytes = b64urlToBytes(s);
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+/* Verifies a CF Access JWT. Returns { email, sub } on success, throws on
+   any failure (caller catches and falls through to X-Admin-Key path). */
+async function verifyAccessJwt(token, env) {
+  if (!env.CF_ACCESS_TEAM) throw new Error('CF_ACCESS_TEAM not configured');
+  if (!env.CF_ACCESS_AUD)  throw new Error('CF_ACCESS_AUD not configured');
+
+  const parts = token.split('.');
+  if (parts.length !== 3) throw new Error('malformed JWT');
+
+  const header  = b64urlToJson(parts[0]);
+  const payload = b64urlToJson(parts[1]);
+
+  if (header.alg !== 'RS256') throw new Error('unexpected alg: ' + header.alg);
+  if (!header.kid) throw new Error('no kid in JWT header');
+
+  /* Fetch JWKS and locate matching key. */
+  const keys = await fetchJwks(env.CF_ACCESS_TEAM);
+  const jwk  = keys.find(k => k.kid === header.kid);
+  if (!jwk) throw new Error('no JWKS key for kid ' + header.kid);
+
+  /* Import the JWK as a verify key + verify the RS256 signature. */
+  const cryptoKey = await crypto.subtle.importKey(
+    'jwk',
+    jwk,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['verify']
+  );
+  const sigBytes  = b64urlToBytes(parts[2]);
+  const dataBytes = new TextEncoder().encode(parts[0] + '.' + parts[1]);
+  const valid = await crypto.subtle.verify(
+    'RSASSA-PKCS1-v1_5', cryptoKey, sigBytes, dataBytes
+  );
+  if (!valid) throw new Error('signature invalid');
+
+  /* Verify standard claims. */
+  const now = Math.floor(Date.now() / 1000);
+  if (typeof payload.exp !== 'number' || payload.exp < now)        throw new Error('expired');
+  if (typeof payload.iat === 'number' && payload.iat > now + 60)   throw new Error('iat in future');
+  const expectIss = `https://${env.CF_ACCESS_TEAM}.cloudflareaccess.com`;
+  if (payload.iss !== expectIss)                                   throw new Error('bad iss: ' + payload.iss);
+  /* aud may be string or array. */
+  const auds = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+  if (!auds.includes(env.CF_ACCESS_AUD))                           throw new Error('aud mismatch');
+
+  if (!payload.email) throw new Error('no email claim');
+  return { email: String(payload.email).toLowerCase(), sub: payload.sub || null };
+}
+
+/* Admin gate — dual-auth.
+ * Order of preference:
+ *   1) Cf-Access-Jwt-Assertion header  (daily entry — the railroad)
+ *   2) X-Admin-Key header              (recovery path — the spare)
+ *
+ * Either accepted path populates ctx with:
+ *   - role:     'owner' (master key or verified Access email) | DB-row role
+ *   - email:    Verified email (CF Access) or null
+ *   - source:   'cf-access' | 'admin-key' | 'admin-user'
+ *   - userId:   admin_users.id when source='admin-user'
+ *   - username: human label for audit log
+ *
+ * Important: even when CF Access is in front of this Worker, the JWT
+ * verification re-checks signature + iss + aud + exp locally — so a
+ * misconfigured Access policy or accidentally-public hostname cannot
+ * grant access. Both layers must agree.
+ */
 async function adminGate(request, env, cors, next) {
+  /* Path 1 — CF Access JWT */
+  const jwt = request.headers.get('Cf-Access-Jwt-Assertion') || request.headers.get('cf-access-jwt-assertion') || '';
+  if (jwt) {
+    try {
+      const { email, sub } = await verifyAccessJwt(jwt, env);
+      /* Optional belt-and-suspenders email allowlist. If
+         CF_ACCESS_ALLOWED_EMAILS is set (comma list), enforce it here too —
+         CF Access policy already restricts, but this adds a second guard. */
+      if (env.CF_ACCESS_ALLOWED_EMAILS) {
+        const allowed = env.CF_ACCESS_ALLOWED_EMAILS.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        if (!allowed.includes(email)) return fail(403, 'email not allowed', cors);
+      }
+      return next({ role: 'owner', email, username: email, source: 'cf-access', sub });
+    } catch (_e) {
+      /* JWT present but invalid — DO NOT fall back to X-Admin-Key.
+         A spoofed JWT on a request that didn't actually go through CF
+         Access should fail closed, not slip through to recovery path. */
+      return fail(401, 'invalid CF Access JWT', cors);
+    }
+  }
+
+  /* Path 2 — X-Admin-Key (recovery) */
   const key = request.headers.get('X-Admin-Key') || '';
   if (!key) return fail(401, 'unauthorized', cors);
   let role = null, userId = null, username = null;
@@ -428,7 +566,7 @@ async function adminGate(request, env, cors, next) {
     } catch (_) {}
   }
   if (!role) return fail(401, 'unauthorized', cors);
-  return next({ role, userId, username });
+  return next({ role, userId, username, email: null, source: role === 'owner' && username === 'owner' ? 'admin-key' : 'admin-user' });
 }
 
 /* Role gate — call inside a handler when an action is restricted */
@@ -2450,7 +2588,7 @@ async function ensureAdminAuditTable(env) {
   _adminAuditReady = true;
 }
 
-async function recordAdminAudit(request, env, cors) {
+async function recordAdminAudit(request, env, cors, ctx) {
   await ensureAdminAuditTable(env);
   const body = await safeJson(request);
   if (!body || !body.action) return fail(400, '`action` required', cors);
@@ -2459,15 +2597,23 @@ async function recordAdminAudit(request, env, cors) {
   const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || '';
   const ua = String(request.headers.get('User-Agent') || '').slice(0, 240);
 
-  // CF-Access JWT not yet enforced (Phase 2-3); actor_email comes from the
-  // body when the local Node tool can identify the user, else stays empty.
-  const actorEmail = String(body.actorEmail || '').slice(0, 120);
+  /* actor_email: prefer the CF Access JWT email (verified, signed, unforgeable);
+     fall back to body-supplied actorEmail for the local Node tool path.
+     The body field is still respected for recovery / local-tool callers
+     using X-Admin-Key — but a verified JWT email always wins. */
+  const actorEmail = String((ctx && ctx.email) || body.actorEmail || '').slice(0, 120);
   const action = String(body.action).slice(0, 80);
   const targetKind = String(body.targetKind || '').slice(0, 40);
   const targetId = String(body.targetId || '').slice(0, 120);
   const payload = body.payload ? JSON.stringify(body.payload).slice(0, 4000) : null;
   const ok = body.ok === false ? 0 : 1;
-  const source = String(body.source || '').slice(0, 40);
+  /* source: prefer ctx.source (set by adminGate based on which auth path
+     succeeded — 'cf-access' | 'admin-key' | 'admin-user'). Body-supplied
+     source still tracked when present (for the local-tool case) by
+     concatenating, but ctx wins as the leading token. */
+  const ctxSrc = ctx && ctx.source ? String(ctx.source) : '';
+  const bodySrc = String(body.source || '');
+  const source = (ctxSrc && bodySrc && ctxSrc !== bodySrc ? `${ctxSrc}/${bodySrc}` : (ctxSrc || bodySrc)).slice(0, 40);
 
   try {
     await env.DB.prepare(
