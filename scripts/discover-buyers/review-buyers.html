@@ -34,14 +34,17 @@
 
   /* ─── Sticky top: review-bar + filter toolbar lock together ─── */
   .sticky-top { position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
-  .review-bar { background: linear-gradient(180deg, #1a1f26, #111418); color: #fff; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; align-items: flex-start; gap: 18px; flex-wrap: wrap; }
-  .review-bar .h-left { flex: 1; min-width: 250px; }
-  .review-bar .h1 { font-weight: 700; letter-spacing: .04em; font-size: 15px; }
+  /* Compact review-bar: was 14px 20px / gap 18px → 10px 16px / gap 12px,
+     plus tighter h-sub + tighter bottom-row vertical padding. ~40% less
+     vertical real estate vs the maker tool's review-bar. */
+  .review-bar { background: linear-gradient(180deg, #1a1f26, #111418); color: #fff; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .review-bar .h-left { flex: 1; min-width: 220px; }
+  .review-bar .h1 { font-weight: 700; letter-spacing: .04em; font-size: 14px; line-height: 1.2; }
   .review-bar .h1 .gold { color: #34d298; }
-  .review-bar .h-sub { font-size: 12px; opacity: .65; margin-top: 2px; }
-  .review-bar .h-sub code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+  .review-bar .h-sub { font-size: 11px; opacity: .55; margin-top: 1px; line-height: 1.3; }
+  .review-bar .h-sub code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 10px; }
 
-  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: #ccc; }
+  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 5px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: #ccc; }
   .crawl select, .crawl input[type="number"] { padding: 3px 6px; border: 1px solid #2a323b; border-radius: 5px; background: #181c22; color: #fff; font-size: 12px; }
   .crawl label { display: flex; align-items: center; gap: 4px; }
   .crawl button { padding: 4px 10px; border-radius: 6px; border: 1px solid #34d298; background: #34d298; color: #0f1110; font-weight: 700; font-size: 12px; cursor: pointer; }
@@ -52,29 +55,33 @@
   .crawl .cr-status { color: #34d298; margin-left: 4px; max-width: 360px; }
   .crawl .cr-status a { color: #34d298; text-decoration: underline; cursor: pointer; }
 
-  /* Toolbar — same active-filter chrome as maker */
-  .toolbar { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); align-items: center; }
+  /* Toolbar — search box now lives here (moved out of the dark stats-bar
+     so it gets the white-bg treatment + grows to fill the row). */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 6px 20px; background: #fff; border-bottom: 1px solid var(--line); align-items: center; }
   .toolbar label { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
   .toolbar select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; background: #fff; font-family: inherit; transition: border-color .15s, background .15s, color .15s, box-shadow .15s; }
   .toolbar select.active-filter { background: #34d298; border-color: #00b07c; color: #0f1110; font-weight: 700; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
   .toolbar select.active-filter:hover { background: #00ffa1; }
   .toolbar label:has(select.active-filter) { color: #00875f; }
-  .toolbar .stat { margin-left: auto; color: var(--muted); font-size: 11px; align-self: center; }
+  .toolbar .stat { color: var(--muted); font-size: 11px; align-self: center; flex: 0 0 auto; }
   .toolbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
 
-  /* Bottom row inside review-bar: stats pills + search box riding inline */
-  .bottom-row { flex-basis: 100%; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+  /* Stats pills row inside review-bar — tighter. */
+  .bottom-row { flex-basis: 100%; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
   .bottom-row .stats-bar { flex: 1 1 auto; padding: 0; min-width: 0; flex-wrap: wrap; }
-  .review-search { flex: 1 1 200px; min-width: 200px; max-width: 100%; box-sizing: border-box; overflow: hidden; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 3px 9px; line-height: 1.3; color: #ccc; font-size: 11px; height: 26px; }
-  .review-search:focus-within { border-color: rgba(52,210,152,.6); }
-  .review-search.active-filter { border-color: #00b07c; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
-  .review-search.active-filter input { color: #fff; font-weight: 600; }
+
+  /* Search box — light-bg variant for the toolbar context. Auto-grows
+     into whatever space is left after the filter selects + stat. */
+  .review-search { flex: 1 1 200px; min-width: 200px; max-width: 100%; box-sizing: border-box; overflow: hidden; display: inline-flex; align-items: center; gap: 6px; background: #fafaf6; border: 1px solid var(--line); border-radius: 20px; padding: 3px 10px; line-height: 1.3; color: #555; font-size: 12px; height: 26px; margin-left: auto; }
+  .review-search:focus-within { border-color: #34d298; box-shadow: 0 0 0 2px rgba(52,210,152,.18); }
+  .review-search.active-filter { border-color: #00b07c; box-shadow: 0 0 0 2px rgba(52,210,152,.25); background: #fff; }
+  .review-search.active-filter input { color: #1a1a1a; font-weight: 600; }
   .review-search .icon { flex: 0 0 auto; color: #34d298; font-size: 13px; }
-  .review-search input { flex: 1 1 0; width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: inherit; font-size: 12px; min-width: 0; padding: 0; line-height: 1.3; }
-  .review-search input::placeholder { color: rgba(255,255,255,.4); }
-  .review-search .clear { flex: 0 0 auto; background: transparent; border: 0; color: rgba(255,255,255,.5); cursor: pointer; padding: 0 2px; font-size: 14px; line-height: 1; display: none; }
+  .review-search input { flex: 1 1 0; width: 0; background: transparent; border: 0; outline: 0; color: #1a1a1a; font-family: inherit; font-size: 12px; min-width: 0; padding: 0; line-height: 1.3; }
+  .review-search input::placeholder { color: var(--muted); }
+  .review-search .clear { flex: 0 0 auto; background: transparent; border: 0; color: #999; cursor: pointer; padding: 0 2px; font-size: 14px; line-height: 1; display: none; }
   .review-search.has-q .clear { display: inline; }
-  .review-search .clear:hover { color: #fff; }
+  .review-search .clear:hover { color: var(--rejected); }
 
   /* Stats bar — pills in the dark review-bar */
   .stats-bar { display: flex; flex-wrap: wrap; gap: 10px; padding: 6px 0 0 0; font-size: 11px; color: rgba(255,255,255,.7); }
@@ -202,13 +209,7 @@
     <span class="cr-status" id="cr-status"></span>
   </div>
   <div class="bottom-row">
-    <div class="stats-bar" id="stats-bar">
-      <div class="review-search" id="search-box">
-        <span class="icon">🔎</span>
-        <input id="f-q" placeholder="search…" autocomplete="off">
-        <button class="clear" id="f-q-clear" title="Clear" type="button">×</button>
-      </div>
-    </div>
+    <div class="stats-bar" id="stats-bar"></div>
   </div>
 </div>
 
@@ -257,6 +258,11 @@
     </select>
   </label>
   <span class="stat" id="stat"></span>
+  <div class="review-search" id="search-box">
+    <span class="icon">🔎</span>
+    <input id="f-q" placeholder="search name / host / city…" autocomplete="off">
+    <button class="clear" id="f-q-clear" title="Clear" type="button">×</button>
+  </div>
 </div>
 </div>
 
@@ -484,10 +490,8 @@ function renderStats() {
     <span class="pill ${cur === 'rejected' ? 'active' : ''}" data-act="rejected">rejected <span class="n">${c('rejected')}</span></span>
   `;
   const bar = $('stats-bar');
-  const sb = $('search-box');
   bar.innerHTML = html;
   bar.querySelectorAll('.pill[data-act]').forEach(p => p.addEventListener('click', () => applyStatsFilter(p.dataset.act)));
-  if (sb) bar.appendChild(sb);
 }
 
 function applyStatsFilter(act) {
