@@ -206,10 +206,10 @@
    CF_Authorization cookie travels with the request (no CORS, no X-Admin-
    Key fallback). Anywhere else (recovery, ergsn.net, local), fall back
    to the legacy *.workers.dev URL with X-Admin-Key. */
-const RFQ_URL = location.hostname === 'admin.ergsn.net'
-  ? '/api/rfq'
-  : 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+const ON_ADMIN = (location.hostname === 'admin.ergsn.net');
+const RFQ_URL = ON_ADMIN ? '/api/rfq' : 'https://ergsn-rfq-tracker.ceodon.workers.dev';
 const SS_KEY = 'ergsn_admin_key';
+const CF_LOGOUT = 'https://ergsn.cloudflareaccess.com/cdn-cgi/access/logout';
 
 const $ = (id) => document.getElementById(id);
 let lastData = null;
@@ -227,11 +227,21 @@ const FLAG = (cc) => {
 
 async function fetchMetrics() {
   const range = $('rangeSel').value;
-  const r = await fetch(RFQ_URL + '/admin/item-metrics?range=' + encodeURIComponent(range), {
-    headers: { 'X-Admin-Key': adminKey() }
-  });
+  /* On admin.ergsn.net, the CF_Authorization cookie travels same-origin
+     and authenticates us — X-Admin-Key is unnecessary (and absent). */
+  const headers = {};
+  const k = adminKey();
+  if (k) headers['X-Admin-Key'] = k;
+  const r = await fetch(RFQ_URL + '/admin/item-metrics?range=' + encodeURIComponent(range), { headers });
+  if (r.status === 401) {
+    /* Under CF Access, a 401 means the session expired — reload so the
+       gate redirects us through Email OTP again. Off-Hub it means the
+       cached ADMIN_KEY is wrong. */
+    if (ON_ADMIN) { location.reload(); throw new Error('session expired — reloading'); }
+    clearAdminKey();
+    throw new Error('unauthorized');
+  }
   const data = await r.json();
-  if (r.status === 401) { clearAdminKey(); throw new Error('unauthorized'); }
   if (!r.ok || data.ok === false) throw new Error(data.error || 'HTTP ' + r.status);
   return data;
 }
@@ -385,14 +395,21 @@ function downloadCsv() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (adminKey()) showApp();
+  /* On the Admin Hub, CF Access has already authenticated us — skip the
+     ADMIN_KEY gate entirely. Off-Hub (recovery), the cached key falls
+     back. */
+  if (ON_ADMIN || adminKey()) showApp();
   $('gateBtn').addEventListener('click', tryGate);
   $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
   $('rangeSel').addEventListener('change', reload);
   $('sectorSel').addEventListener('change', () => render(lastData));
   $('reloadBtn').addEventListener('click', reload);
   $('csvBtn').addEventListener('click', downloadCsv);
-  $('logoutBtn').addEventListener('click', () => { clearAdminKey(); location.reload(); });
+  $('logoutBtn').addEventListener('click', () => {
+    if (ON_ADMIN) { location.href = CF_LOGOUT; return; }
+    clearAdminKey();
+    location.reload();
+  });
 });
 </script>
 <script defer src="scripts/header.js"></script>

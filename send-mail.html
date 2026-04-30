@@ -124,10 +124,12 @@
    CF_Authorization cookie travels with the request (no CORS, no X-Admin-
    Key fallback). Anywhere else, fall back to *.workers.dev with X-Admin-
    Key recovery. */
-const ADMIN_SEND_URL = location.hostname === 'admin.ergsn.net'
+const ON_ADMIN = (location.hostname === 'admin.ergsn.net');
+const ADMIN_SEND_URL = ON_ADMIN
   ? '/api/mail/admin-send'
   : 'https://ergsn-mail.ceodon.workers.dev/admin-send';
 const SS_KEY = 'ergsn_admin_key';
+const CF_LOGOUT = 'https://ergsn.cloudflareaccess.com/cdn-cgi/access/logout';
 
 function $(id) { return document.getElementById(id); }
 function escHtml(s) {
@@ -203,7 +205,9 @@ async function tryGate(key) {
 async function submitMail(e) {
   e.preventDefault();
   const key = (function(){ try { return sessionStorage.getItem(SS_KEY) || ''; } catch(_) { return ''; } })();
-  if (!key) { logout(); return; }
+  /* Off-Hub paths still need the cached ADMIN_KEY. On the Admin Hub the
+     CF_Authorization cookie carries auth — no key required. */
+  if (!ON_ADMIN && !key) { logout(); return; }
   const payload = {
     to:       $('to').value.split(',').map(s => s.trim()).filter(Boolean),
     subject:  $('subject').value.trim(),
@@ -217,12 +221,17 @@ async function submitMail(e) {
   $('sendBtn').disabled = true;
   $('sendBtn').textContent = '발송 중…';
   try {
+    const headers = { 'Content-Type': 'application/json; charset=utf-8' };
+    if (key) headers['X-Admin-Key'] = key;
     const r = await fetch(ADMIN_SEND_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Admin-Key': key },
+      headers,
       body: JSON.stringify(payload)
     });
-    if (r.status === 401) { logout(); showToast('err', '인증 만료. 다시 로그인 후 재발송.'); return; }
+    if (r.status === 401) {
+      if (ON_ADMIN) { showToast('err', 'CF Access 세션 만료. 새로고침 후 재로그인하세요.'); setTimeout(() => location.reload(), 1500); return; }
+      logout(); showToast('err', '인증 만료. 다시 로그인 후 재발송.'); return;
+    }
     const data = await r.json().catch(() => ({}));
     if (r.ok && data.ok) {
       showToast('ok', '✓ 발송 완료. id=' + (data.id || '(none)') + ' — 수신함을 확인하세요.');
@@ -247,8 +256,13 @@ document.addEventListener('DOMContentLoaded', () => {
   $('adminKeyInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') { e.preventDefault(); $('gateBtn').click(); }
   });
-  $('logoutBtn').addEventListener('click', logout);
-  /* Auto-restore session if key already cached */
+  $('logoutBtn').addEventListener('click', () => {
+    if (ON_ADMIN) { location.href = CF_LOGOUT; return; }
+    logout();
+  });
+  /* On the Admin Hub, CF Access has already authenticated us — show the
+     composer immediately. Off-Hub, fall back to the cached ADMIN_KEY. */
+  if (ON_ADMIN) { showComposer(); return; }
   try {
     const cached = sessionStorage.getItem(SS_KEY);
     if (cached) showComposer();

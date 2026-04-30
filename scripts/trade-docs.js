@@ -30,16 +30,24 @@ function setAdminKey(k) { try { sessionStorage.setItem(ADMIN_SS, k); } catch (_)
 function clearAdminKey() { try { sessionStorage.removeItem(ADMIN_SS); } catch (_) {} }
 
 async function apiAdmin(method, path, body) {
+  /* On the Admin Hub the CF_Authorization cookie travels same-origin and
+     authenticates. Off-Hub we still send the cached ADMIN_KEY. Never
+     send an empty header — the Worker would still accept it via JWT,
+     but a bare empty value is a noisy log line. */
+  const headers = { 'Content-Type': 'application/json; charset=utf-8' };
+  const k = adminKey();
+  if (k) headers['X-Admin-Key'] = k;
   const r = await fetch(API_URL + path, {
     method,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'X-Admin-Key': adminKey()
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined
   });
   const data = await r.json().catch(() => ({}));
-  if (r.status === 401) { clearAdminKey(); throw new Error('unauthorized'); }
+  if (r.status === 401) {
+    if (ON_ADMIN) { location.reload(); throw new Error('session expired — reloading'); }
+    clearAdminKey();
+    throw new Error('unauthorized');
+  }
   if (!r.ok || data.ok === false) throw new Error(data.error || ('HTTP ' + r.status));
   return data;
 }
@@ -64,12 +72,12 @@ async function apiBuyerPO(token, data) {
 
 /* ─── brand-mail send (admin) ─── */
 async function sendBrandMail(payload) {
+  const headers = { 'Content-Type': 'application/json; charset=utf-8' };
+  const k = adminKey();
+  if (k) headers['X-Admin-Key'] = k;
   const r = await fetch(MAIL_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'X-Admin-Key': adminKey()
-    },
+    headers,
     body: JSON.stringify(payload)
   });
   const j = await r.json().catch(() => ({}));
@@ -307,7 +315,7 @@ function buildPrintHtml(type, tx, data, docId) {
 
 /* ─── public ─── */
 return {
-  API_URL, MAIL_URL, DOC_META, STATUS_LABELS, STATUS_NEXT,
+  API_URL, MAIL_URL, ON_ADMIN, DOC_META, STATUS_LABELS, STATUS_NEXT,
   adminKey, setAdminKey, clearAdminKey,
   apiAdmin, apiBuyer, apiBuyerPO, sendBrandMail,
   esc, fmt, fmtDate,

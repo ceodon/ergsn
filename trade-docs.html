@@ -601,8 +601,12 @@ async function importCsv() {
   } catch (e) { t.className='toast err'; t.textContent='실패: ' + e.message; }
 }
 
+const CF_LOGOUT = 'https://ergsn.cloudflareaccess.com/cdn-cgi/access/logout';
 document.addEventListener('DOMContentLoaded', () => {
-  if (TD.adminKey()) { try { showApp(); } catch (_) {} }
+  /* On the Admin Hub, CF Access has already authenticated us — skip the
+     ADMIN_KEY gate entirely. Off-Hub (recovery), the cached key falls
+     back. */
+  if (TD.ON_ADMIN || TD.adminKey()) { try { showApp(); } catch (_) {} }
   $('gateBtn').addEventListener('click', tryGate);
   $('adminKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryGate(); } });
   $('newTxBtn').addEventListener('click', newTx);
@@ -617,7 +621,11 @@ document.addEventListener('DOMContentLoaded', () => {
   $('backupRunBtn').addEventListener('click', runBackup);
   $('dateFrom').addEventListener('change', renderTxList);
   $('dateTo').addEventListener('change', renderTxList);
-  $('logoutBtn').addEventListener('click', () => { TD.clearAdminKey(); location.reload(); });
+  $('logoutBtn').addEventListener('click', () => {
+    if (TD.ON_ADMIN) { location.href = CF_LOGOUT; return; }
+    TD.clearAdminKey();
+    location.reload();
+  });
   $('statusFilter').addEventListener('change', loadTxList);
   $('searchBox').addEventListener('input', renderTxList);
   /* CSV export — fetch with admin key, then trigger browser download. The
