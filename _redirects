@@ -1,0 +1,12 @@
+# ERGSN — URL redirects (Cloudflare Pages / Workers Static Assets syntax)
+# ----------------------------------------------------------------------
+# Format: <source>  <destination>  <status>
+# - 301 = permanent · 302 = temporary · 404 = block + serve dest
+# - First match wins; order matters
+
+# Admin hub — temporary block until Cloudflare Access is configured
+# (project_admin_dashboard_plan.md Phase 0). Returns 404 so anyone
+# hitting /admin/ gets the standard not-found page, not the launcher.
+# Remove these two lines once Access is gating the subdomain.
+/admin/*   /404.html   404
+/admin     /404.html   404
