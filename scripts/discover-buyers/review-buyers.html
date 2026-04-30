@@ -5,78 +5,188 @@
 <title>ERGSN — Buyer Outreach</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.svg">
 <style>
-  :root { --navy: #111418; --gold: #34d298; --bg: #f7f7f5; --line: #e8e3d8; --muted: #6c6356; }
+  :root {
+    --navy: #111418;
+    --gold: #34d298;
+    --gold-light: #00ffa1;
+    --bg: #f7f7f5;
+    --card-bg: #fff;
+    --line: #e6e6e0;
+    --muted: #6b6b6b;
+    --raw: #888;
+    --verified: #2a7d3f;
+    --queued: #b58a00;
+    --rejected: #b03030;
+    --contacted: #1e63b8;
+    --replied: #6b2db8;
+    --converted: #5e2db8;
+    --unsubscribed: #555;
+  }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: #0f1110; }
-  .top { background: linear-gradient(180deg,#1a1f26,#111418); color: #fff; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; flex-wrap: wrap; gap: 16px; align-items: center; position: sticky; top: 0; z-index: 50; }
-  .top h1 { font-size: 17px; margin: 0; font-weight: 800; letter-spacing: .04em; }
-  .top h1 .e { color: var(--gold); }
-  .top .sub { font-size: 11px; opacity: .65; }
-  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; display: flex; gap: 6px; align-items: center; font-size: 12px; flex-wrap: wrap; }
-  .crawl select, .crawl input { padding: 3px 6px; border: 1px solid #2a323b; border-radius: 5px; background: #181c22; color: #fff; font-size: 12px; }
-  .crawl button { padding: 4px 10px; border-radius: 6px; border: 1px solid var(--gold); background: var(--gold); color: #0f1110; font-weight: 700; font-size: 12px; cursor: pointer; }
-  .crawl button:disabled { opacity: .4; cursor: not-allowed; background: #2a323b; border-color: #2a323b; color: #888; }
-  .crawl .cr-status { color: var(--gold); margin-left: 4px; max-width: 360px; }
-  .pills { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); font-size: 11px; align-items: center; }
-  .pill { background: rgba(0,0,0,.04); border: 1px solid var(--line); border-radius: 20px; padding: 3px 9px; cursor: pointer; }
-  .pill.active { background: var(--gold); border-color: var(--gold); color: #0f1110; }
-  .pill .n { color: var(--gold); font-weight: 700; margin-right: 3px; }
-  .pill.active .n { color: #0f1110; }
-  .pill.quota { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); cursor: default; font-weight: 600; }
-  .pill.quota.warn { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); }
-  .pill.quota.exhausted { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); color: #a02020; }
-  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); font-size: 11px; align-items: center; }
-  .toolbar label { display: flex; align-items: center; gap: 4px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-  .toolbar select, .toolbar input[type="search"] { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; }
-  .toolbar select.on { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 700; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; padding: 16px 20px; }
-  .card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.04); }
-  .card h3 { font-size: 14px; margin: 0; }
-  .card .meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 8px; }
-  .card .interests { display: flex; gap: 4px; flex-wrap: wrap; }
-  .card .interest { background: rgba(52,210,152,.1); border: 1px solid rgba(52,210,152,.3); border-radius: 4px; padding: 1px 6px; font-size: 10px; color: #007a55; }
-  .card .url a { font-size: 11px; color: var(--gold); }
-  .card .actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-  .card .actions button { padding: 4px 8px; border-radius: 5px; border: 1px solid var(--line); background: #fff; font-size: 11px; cursor: pointer; }
-  .card .actions button.go { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 600; }
-  .card .actions button.danger { color: #c33; border-color: #f5c2c2; }
-  .card .actions button.warn { color: #b06800; border-color: #f0d0a0; }
-  .card .actions button.disabled { opacity: 0.4; cursor: not-allowed; }
-  .card .badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
-  .b-raw { background: #eee; color: #555; }
-  .b-verified { background: #e7f6ee; color: #0a6e3a; }
-  .b-queued { background: #fde9c0; color: #8a5a00; }
-  .b-contacted { background: #d6e6ff; color: #0a4a99; }
-  .b-replied { background: #e6d3ff; color: #56188a; }
-  .b-converted { background: #c5edd0; color: #0f6e2c; }
-  .b-rejected { background: #f5dada; color: #903030; }
-  .b-unsubscribed { background: #ddd; color: #555; }
-  .modal-back { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
-  .modal-back.open { display: flex; }
-  .modal { background: #fff; border-radius: 10px; max-width: 720px; width: 100%; padding: 18px 20px; }
-  .modal h2 { margin: 0 0 12px; font-size: 16px; }
-  .modal label { display: block; font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 10px; text-transform: uppercase; letter-spacing: .04em; }
-  .modal input[type="text"], .modal input[type="url"], .modal textarea, .modal select { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; font-family: inherit; }
-  .modal textarea.html { min-height: 220px; font-family: 'Consolas', monospace; font-size: 11px; }
-  .modal textarea.text { min-height: 120px; }
-  .modal .preview { border: 1px solid var(--line); border-radius: 6px; padding: 12px; background: #fafaf8; margin-top: 6px; font-size: 13px; }
-  .modal .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
-  .modal .row button { padding: 6px 12px; border-radius: 5px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 12px; }
-  .modal .row button.go { background: var(--gold); border-color: #00b07c; color: #0f1110; font-weight: 700; }
-  .modal .row button.danger { color: #c33; border-color: #f5c2c2; }
-  .modal .row .saving { font-size: 11px; color: var(--muted); margin-left: auto; }
-  .modal .row .saving.ok { color: #0a6e3a; }
-  .modal .row .saving.err { color: #c33; }
+  html { scrollbar-gutter: stable; overflow-y: scroll; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: #1a1a1a; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+
+  /* ─── ERGSN wordmark — kerning policy ─── */
+  .eh-logo-mark { font-family: inherit; font-size: 22px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; line-height: 1; background: linear-gradient(320deg, #a8a8a6 15%, #c2c0c0 48%, #f9f8f6 64%, #d4d4d4 76%, #7f7f7f 88%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-kerning: none; font-feature-settings: "kern" 0; -webkit-font-feature-settings: "kern" 0; vertical-align: -1px; margin-right: 6px; }
+  .eh-logo-mark .eh-e { background: linear-gradient(84deg, #00bf79 42%, #00ffa1 81%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* ─── Sticky top: review-bar + filter toolbar lock together ─── */
+  .sticky-top { position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .review-bar { background: linear-gradient(180deg, #1a1f26, #111418); color: #fff; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; align-items: flex-start; gap: 18px; flex-wrap: wrap; }
+  .review-bar .h-left { flex: 1; min-width: 250px; }
+  .review-bar .h1 { font-weight: 700; letter-spacing: .04em; font-size: 15px; }
+  .review-bar .h1 .gold { color: #34d298; }
+  .review-bar .h-sub { font-size: 12px; opacity: .65; margin-top: 2px; }
+  .review-bar .h-sub code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+  .crawl { background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 8px; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: #ccc; }
+  .crawl select, .crawl input[type="number"] { padding: 3px 6px; border: 1px solid #2a323b; border-radius: 5px; background: #181c22; color: #fff; font-size: 12px; }
+  .crawl label { display: flex; align-items: center; gap: 4px; }
+  .crawl button { padding: 4px 10px; border-radius: 6px; border: 1px solid #34d298; background: #34d298; color: #0f1110; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .crawl button:hover:not(:disabled) { background: #00ffa1; }
+  .crawl button:disabled { opacity: 0.4; cursor: not-allowed; background: #2a323b; border-color: #2a323b; color: #888; }
+  .crawl button.bn-add { background: transparent; color: #34d298; border-color: #34d298; }
+  .crawl button.bn-add:hover { background: #34d298; color: #0f1110; }
+  .crawl .cr-status { color: #34d298; margin-left: 4px; max-width: 360px; }
+  .crawl .cr-status a { color: #34d298; text-decoration: underline; cursor: pointer; }
+
+  /* Toolbar — same active-filter chrome as maker */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 8px 20px; background: #fff; border-bottom: 1px solid var(--line); align-items: center; }
+  .toolbar label { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .toolbar select { padding: 4px 6px; border: 1px solid var(--line); border-radius: 5px; font-size: 12px; background: #fff; font-family: inherit; transition: border-color .15s, background .15s, color .15s, box-shadow .15s; }
+  .toolbar select.active-filter { background: #34d298; border-color: #00b07c; color: #0f1110; font-weight: 700; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
+  .toolbar select.active-filter:hover { background: #00ffa1; }
+  .toolbar label:has(select.active-filter) { color: #00875f; }
+  .toolbar .stat { margin-left: auto; color: var(--muted); font-size: 11px; align-self: center; }
+  .toolbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 2px; }
+
+  /* Bottom row inside review-bar: stats pills + search box riding inline */
+  .bottom-row { flex-basis: 100%; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 6px; }
+  .bottom-row .stats-bar { flex: 1 1 auto; padding: 0; min-width: 0; flex-wrap: wrap; }
+  .review-search { flex: 1 1 200px; min-width: 200px; max-width: 100%; box-sizing: border-box; overflow: hidden; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.05); border: 1px solid rgba(52,210,152,.3); border-radius: 20px; padding: 3px 9px; line-height: 1.3; color: #ccc; font-size: 11px; height: 26px; }
+  .review-search:focus-within { border-color: rgba(52,210,152,.6); }
+  .review-search.active-filter { border-color: #00b07c; box-shadow: 0 0 0 2px rgba(52,210,152,.25); }
+  .review-search.active-filter input { color: #fff; font-weight: 600; }
+  .review-search .icon { flex: 0 0 auto; color: #34d298; font-size: 13px; }
+  .review-search input { flex: 1 1 0; width: 0; background: transparent; border: 0; outline: 0; color: #fff; font-family: inherit; font-size: 12px; min-width: 0; padding: 0; line-height: 1.3; }
+  .review-search input::placeholder { color: rgba(255,255,255,.4); }
+  .review-search .clear { flex: 0 0 auto; background: transparent; border: 0; color: rgba(255,255,255,.5); cursor: pointer; padding: 0 2px; font-size: 14px; line-height: 1; display: none; }
+  .review-search.has-q .clear { display: inline; }
+  .review-search .clear:hover { color: #fff; }
+
+  /* Stats bar — pills in the dark review-bar */
+  .stats-bar { display: flex; flex-wrap: wrap; gap: 10px; padding: 6px 0 0 0; font-size: 11px; color: rgba(255,255,255,.7); }
+  .stats-bar .pill { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: 3px 9px; cursor: pointer; transition: background .15s, border-color .15s; }
+  .stats-bar .pill:hover { background: rgba(52,210,152,.15); border-color: rgba(52,210,152,.4); color: #fff; }
+  .stats-bar .pill .n { color: #34d298; font-weight: 700; margin-right: 3px; }
+  .stats-bar .pill.active { background: #34d298; border-color: #34d298; color: #0f1110; }
+  .stats-bar .pill.active .n { color: #0f1110; }
+  .stats-bar .pill.ai-quota { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); color: #fff; cursor: default; font-weight: 600; }
+  .stats-bar .pill.ai-quota:hover { background: rgba(52,210,152,.10); border-color: rgba(52,210,152,.45); }
+  .stats-bar .pill.ai-quota.exhausted { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); color: #ffb4b4; }
+  .stats-bar .pill.ai-quota.exhausted:hover { background: rgba(255,80,80,.18); border-color: rgba(255,80,80,.6); }
+  .stats-bar .pill.ai-quota.warn { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); color: #ffd896; }
+  .stats-bar .pill.ai-quota.warn:hover { background: rgba(255,180,60,.18); border-color: rgba(255,180,60,.55); }
+
+  /* Buyer cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 14px; padding: 16px 20px 60px; }
+  .card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card h2 { margin: 0; font-size: 16px; line-height: 1.25; word-break: break-word; }
+  .card h2 .display { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 6px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; line-height: 1.5; font-weight: 600; }
+  .b-status-raw { background: #efefef; color: var(--raw); }
+  .b-status-verified { background: #e0f2e6; color: var(--verified); }
+  .b-status-queued { background: #fbf2d6; color: var(--queued); }
+  .b-status-rejected { background: #f6dede; color: var(--rejected); }
+  .b-status-contacted { background: #dde9f7; color: var(--contacted); }
+  .b-status-replied { background: #ebdef7; color: var(--replied); }
+  .b-status-converted { background: #ebdef7; color: var(--converted); border: 1px solid #c2a8e0; }
+  .b-status-unsubscribed { background: #ddd; color: var(--unsubscribed); }
+  .b-sector { background: var(--navy); color: var(--gold); }
+  .b-type-distributor { background: #e0f2e6; color: var(--verified); }
+  .b-type-importer { background: #e6f0fa; color: var(--contacted); }
+  .b-type-system-integrator { background: #efe3f6; color: var(--converted); }
+  .b-type-fed-procurement { background: #fdf0e0; color: #aa4f00; }
+  .b-type-retail-chain { background: #fbf2d6; color: var(--queued); }
+  .b-type-marketplace { background: #ddebf2; color: #1e63b8; }
+  .b-type-end-user { background: #efefef; color: #444; }
+  .b-type-broker { background: #fde0d0; color: #903030; }
+  .b-type-unclear { background: #efefef; color: var(--muted); }
+  .b-draft-draft { background: #fbf2d6; color: var(--queued); }
+  .b-draft-approved { background: #e0f2e6; color: var(--verified); }
+  .b-draft-sent { background: #dde9f7; color: var(--contacted); }
+  .b-draft-failed { background: #f6dede; color: var(--rejected); }
+  .b-kr-history { background: #efe3d6; color: #8a5a1f; }
+  .interests { display: flex; flex-wrap: wrap; gap: 4px; }
+  .interest { background: rgba(52,210,152,.1); border: 1px solid rgba(52,210,152,.3); border-radius: 4px; padding: 1px 6px; font-size: 10px; color: #007a55; }
+  .links { font-size: 12px; word-break: break-all; }
+  .links a { color: var(--navy); text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .links .lbl { color: var(--muted); margin-right: 4px; }
+  .meta { font-size: 12px; color: var(--muted); display: grid; gap: 2px; }
+  .contact-block { font-size: 12px; padding: 6px 8px; background: #f6f8fc; border: 1px solid #e0e6f0; border-radius: 6px; display: grid; gap: 3px; }
+  .contact-block .row { display: flex; gap: 6px; align-items: center; word-break: break-all; }
+  .contact-block .row .ico { width: 18px; flex: 0 0 18px; text-align: center; }
+  .contact-block a { color: var(--navy); text-decoration: none; }
+  .contact-block a:hover { text-decoration: underline; }
+  .contact-block .empty { color: var(--muted); font-style: italic; }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--line); }
+  .actions button { padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 12px; cursor: pointer; font-weight: 600; }
+  .actions button:hover { filter: brightness(.96); }
+  .actions button.bn-verify { background: #f0faf3; border-color: #b9d9c2; color: var(--verified); }
+  .actions button.bn-queued { background: #fdf6df; border-color: #e2cc7e; color: var(--queued); }
+  .actions button.bn-reject { background: #fcecec; border-color: #e2b9b9; color: var(--rejected); }
+  .actions button.bn-compose { background: var(--navy); border-color: var(--navy); color: var(--gold); }
+  .actions button.bn-edit { background: #fff; border-color: var(--line); color: #555; }
+  .actions button.is-active { color: #fff; box-shadow: 0 0 0 2px currentColor inset, 0 0 0 2px rgba(0,0,0,.06); font-weight: 800; }
+  .actions button.bn-verify.is-active { background: var(--verified); border-color: var(--verified); }
+  .actions button.bn-verify.is-active::before { content: '● '; }
+  .actions button.bn-queued.is-active { background: var(--queued); border-color: var(--queued); }
+  .actions button.bn-queued.is-active::before { content: '● '; }
+  .actions button.bn-reject.is-active { background: var(--rejected); border-color: var(--rejected); }
+  .actions button.bn-reject.is-active::before { content: '● '; }
   .empty { padding: 40px; text-align: center; color: var(--muted); }
+  .saving { font-size: 11px; color: var(--muted); }
+  .saving.ok { color: var(--verified); }
+  .saving.err { color: var(--rejected); }
+
+  /* Modal — matches maker review chrome */
+  .modal-back { position: fixed; inset: 0; background: rgba(10, 31, 68, 0.55); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .modal-back.open { display: flex; }
+  .modal-card { background: #fff; border-radius: 12px; width: 100%; max-width: 760px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,.3); overflow: hidden; }
+  .modal-head { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; background: var(--navy); color: #fff; }
+  .modal-head h2 { margin: 0; font-size: 15px; flex: 1; }
+  .modal-head .close { background: transparent; border: 1px solid #44567c; color: #fff; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  .modal-meta { padding: 10px 18px; background: #fafaf6; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--muted); display: grid; gap: 4px; }
+  .modal-body { padding: 16px 18px; overflow-y: auto; flex: 1; }
+  .modal-loading { padding: 32px; text-align: center; color: var(--muted); }
+  .modal-loading .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid #ddd; border-top-color: var(--navy); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .modal-body label { display: block; font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .modal-body input[type="text"], .modal-body input[type="url"], .modal-body input[type="email"], .modal-body textarea, .modal-body select {
+    width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; font-family: inherit; }
+  .modal-body textarea.html { min-height: 240px; font-family: 'Consolas', 'Menlo', monospace; font-size: 11px; }
+  .modal-body textarea.text { min-height: 140px; }
+  .modal-body .preview { border: 1px solid var(--line); border-radius: 6px; padding: 12px; background: #fafaf8; margin-top: 6px; font-size: 13px; max-height: 320px; overflow-y: auto; }
+  .modal-foot { padding: 10px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
+  .modal-foot button { padding: 6px 14px; border-radius: 5px; font-size: 13px; cursor: pointer; font-weight: 600; border: 1px solid var(--line); background: #fff; }
+  .modal-foot button.go { background: #34d298; border-color: #34d298; color: #0f1110; }
+  .modal-foot button.go:disabled { opacity: 0.4; cursor: not-allowed; background: #efefef; border-color: var(--line); color: var(--muted); }
+  .modal-foot button.warn { background: #fdf6df; border-color: #e2cc7e; color: var(--queued); }
+  .modal-foot button.danger { color: var(--rejected); border-color: #e2b9b9; }
+  .modal-foot .saving-spot { flex: 1; font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
 
-<div class="top">
-  <div>
-    <h1><span class="e">E</span>RGSN — Buyer Outreach</h1>
-    <div class="sub">Vetted procurement / importer / distributor leads · cold outreach via ergsn-mail</div>
+<div class="sticky-top">
+<div class="review-bar">
+  <div class="h-left">
+    <div class="h1"><a href="https://ergsn.net/" target="_blank" rel="noopener" style="text-decoration:none;"><span class="eh-logo-mark"><span class="eh-e">E</span><span>R</span><span>G</span><span>S</span><span>N</span></span></a> Buyer Outreach</div>
+    <div class="h-sub">Vetted procurement / importer / distributor leads — drafts persist to <code>data/buyer-outbox/</code> · sends via <code>ergsn-mail</code> Worker.</div>
   </div>
   <div class="crawl">
     <label>Sector
@@ -85,83 +195,192 @@
       </select>
     </label>
     <label>Max
-      <input type="number" id="cr-max" value="50" min="1" max="500" style="width:60px">
+      <input type="number" id="cr-max" value="50" min="1" max="500" style="width: 60px;">
     </label>
     <button id="cr-run">+ Discover Buyers</button>
-    <button id="bn-add">+ Add Buyer</button>
+    <button id="bn-add" class="bn-add" type="button" title="Add a known buyer manually">+ Add Buyer</button>
     <span class="cr-status" id="cr-status"></span>
+  </div>
+  <div class="bottom-row">
+    <div class="stats-bar" id="stats-bar">
+      <div class="review-search" id="search-box">
+        <span class="icon">🔎</span>
+        <input id="f-q" placeholder="search…" autocomplete="off">
+        <button class="clear" id="f-q-clear" title="Clear" type="button">×</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="pills" id="pills"></div>
-
 <div class="toolbar">
-  <label>Status <select id="f-status"><option value="">all</option><option value="raw">raw</option><option value="verified">verified</option><option value="queued">queued</option><option value="contacted">contacted</option><option value="replied">replied</option><option value="converted">converted</option><option value="rejected">rejected</option><option value="unsubscribed">unsubscribed</option></select></label>
-  <label>Sector <select id="f-sector"><option value="">all</option></select></label>
-  <label>Type <select id="f-type"><option value="">all</option><option value="distributor">distributor</option><option value="importer">importer</option><option value="system-integrator">system-integrator</option><option value="fed-procurement">fed-procurement</option><option value="retail-chain">retail-chain</option><option value="marketplace">marketplace</option><option value="end-user">end-user</option><option value="broker">broker</option><option value="unclear">unclear</option></select></label>
-  <label>Country <select id="f-country"><option value="">all</option></select></label>
-  <label>Draft <select id="f-draft"><option value="">all</option><option value="any">has draft</option><option value="approved">approved</option><option value="sent">sent</option><option value="none">no draft</option></select></label>
-  <label>Search <input type="search" id="f-q" placeholder="name / host / city…" style="width:200px"></label>
-  <span class="stat" id="stat" style="margin-left:auto;color:var(--muted);font-size:11px"></span>
+  <label>Status
+    <select id="f-status">
+      <option value="">all</option>
+      <option value="raw">raw</option>
+      <option value="verified">verified</option>
+      <option value="queued">queued</option>
+      <option value="contacted">contacted</option>
+      <option value="replied">replied</option>
+      <option value="converted">converted</option>
+      <option value="rejected">rejected</option>
+      <option value="unsubscribed">unsubscribed</option>
+    </select>
+  </label>
+  <label>Sector
+    <select id="f-sector"><option value="">all</option></select>
+  </label>
+  <label>Type
+    <select id="f-type">
+      <option value="">all</option>
+      <option value="distributor">distributor</option>
+      <option value="importer">importer</option>
+      <option value="system-integrator">system-integrator</option>
+      <option value="fed-procurement">fed-procurement</option>
+      <option value="retail-chain">retail-chain</option>
+      <option value="marketplace">marketplace</option>
+      <option value="end-user">end-user</option>
+      <option value="broker">broker</option>
+      <option value="unclear">unclear</option>
+    </select>
+  </label>
+  <label>Country
+    <select id="f-country"><option value="">all</option></select>
+  </label>
+  <span class="sep"></span>
+  <label>Draft
+    <select id="f-draft">
+      <option value="">all</option>
+      <option value="any">has draft</option>
+      <option value="approved">approved</option>
+      <option value="sent">sent</option>
+      <option value="none">no draft</option>
+    </select>
+  </label>
+  <span class="stat" id="stat"></span>
+</div>
+</div>
+
+<!-- Add Buyer modal -->
+<div class="modal-back" id="add-modal">
+  <div class="modal-card">
+    <div class="modal-head"><h2>Add buyer manually</h2><button class="close" type="button" onclick="closeAdd()">Close</button></div>
+    <div class="modal-body">
+      <label>Legal name *</label><input type="text" id="am-legalName" maxlength="200" required>
+      <label>Homepage URL</label><input type="url" id="am-homepageUrl">
+      <label>Country (ISO-2)</label><input type="text" id="am-country" maxlength="2">
+      <label>Sector</label><select id="am-sector"></select>
+      <label>Buyer type</label>
+      <select id="am-buyerType">
+        <option value="distributor">distributor</option>
+        <option value="importer">importer</option>
+        <option value="system-integrator">system-integrator</option>
+        <option value="fed-procurement">fed-procurement</option>
+        <option value="retail-chain">retail-chain</option>
+        <option value="marketplace">marketplace</option>
+        <option value="end-user">end-user</option>
+        <option value="broker">broker</option>
+        <option value="unclear" selected>unclear</option>
+      </select>
+      <label>Primary email</label><input type="email" id="am-primaryEmail">
+      <label>Procurement email</label><input type="email" id="am-procurementEmail">
+      <label>Decision-maker name</label><input type="text" id="am-decisionMaker">
+      <label>Decision-maker title</label><input type="text" id="am-decisionMakerTitle">
+      <label>Notes</label><textarea id="am-notes" maxlength="2000"></textarea>
+    </div>
+    <div class="modal-foot">
+      <span class="saving-spot" id="am-msg"></span>
+      <button type="button" onclick="closeAdd()">Cancel</button>
+      <button class="go" type="button" id="am-submit">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Compose / Edit-Draft modal -->
+<div class="modal-back" id="cmp-modal">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="cmp-title">Mail draft</h2><button class="close" type="button" onclick="closeCmp()">Close</button></div>
+    <div class="modal-meta" id="cmp-buyer-meta"></div>
+    <div class="modal-body">
+      <label>To email</label><input type="email" id="cmp-toEmail">
+      <label>Subject</label><input type="text" id="cmp-subject" maxlength="200">
+      <label>HTML body</label><textarea id="cmp-html" class="html"></textarea>
+      <label>Plain-text body</label><textarea id="cmp-text" class="text"></textarea>
+      <label>Preview</label>
+      <div class="preview" id="cmp-preview"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="warn" id="cmp-recompose" title="Re-run LLM (overwrites the draft)">↻ Re-compose</button>
+      <span class="saving-spot saving" id="cmp-msg"></span>
+      <button type="button" onclick="closeCmp()">Close</button>
+      <button id="cmp-save">💾 Save draft</button>
+      <button id="cmp-approve">✓ Approve</button>
+      <button class="go" id="cmp-send" disabled>→ Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Buyer modal -->
+<div class="modal-back" id="edit-modal">
+  <div class="modal-card">
+    <div class="modal-head"><h2>Edit buyer</h2><button class="close" type="button" onclick="closeEdit()">Close</button></div>
+    <div class="modal-body">
+      <label>Status</label>
+      <select id="ed-status">
+        <option value="raw">raw</option>
+        <option value="verified">verified</option>
+        <option value="queued">queued</option>
+        <option value="contacted">contacted</option>
+        <option value="replied">replied</option>
+        <option value="converted">converted</option>
+        <option value="rejected">rejected</option>
+        <option value="unsubscribed">unsubscribed</option>
+      </select>
+      <label>Sector</label><select id="ed-sector"></select>
+      <label>Buyer type</label>
+      <select id="ed-buyerType">
+        <option value="distributor">distributor</option>
+        <option value="importer">importer</option>
+        <option value="system-integrator">system-integrator</option>
+        <option value="fed-procurement">fed-procurement</option>
+        <option value="retail-chain">retail-chain</option>
+        <option value="marketplace">marketplace</option>
+        <option value="end-user">end-user</option>
+        <option value="broker">broker</option>
+        <option value="unclear">unclear</option>
+      </select>
+      <label>Procurement email</label><input type="email" id="ed-procurementEmail">
+      <label>Primary email</label><input type="email" id="ed-primaryEmail">
+      <label>Decision-maker name</label><input type="text" id="ed-decisionMaker">
+      <label>Decision-maker title</label><input type="text" id="ed-decisionMakerTitle">
+      <label>Notes</label><textarea id="ed-notes" maxlength="2000"></textarea>
+    </div>
+    <div class="modal-foot">
+      <span class="saving-spot saving" id="ed-msg"></span>
+      <button type="button" onclick="closeEdit()">Cancel</button>
+      <button class="go" type="button" id="ed-submit">Save</button>
+    </div>
+  </div>
 </div>
 
 <div class="grid" id="grid"></div>
 
-<!-- Add Buyer modal -->
-<div class="modal-back" id="add-modal">
-  <div class="modal">
-    <h2>Add buyer manually</h2>
-    <label>Legal name *<input type="text" id="am-legalName" maxlength="200"></label>
-    <label>Homepage URL<input type="url" id="am-homepageUrl"></label>
-    <label>Country (ISO-2)<input type="text" id="am-country" maxlength="2"></label>
-    <label>Sector<select id="am-sector"></select></label>
-    <label>Buyer type<select id="am-buyerType"><option value="distributor">distributor</option><option value="importer">importer</option><option value="system-integrator">system-integrator</option><option value="fed-procurement">fed-procurement</option><option value="retail-chain">retail-chain</option><option value="marketplace">marketplace</option><option value="end-user">end-user</option><option value="broker">broker</option><option value="unclear" selected>unclear</option></select></label>
-    <label>Primary email<input type="text" id="am-primaryEmail"></label>
-    <label>Decision maker name<input type="text" id="am-decisionMaker"></label>
-    <label>Decision maker title<input type="text" id="am-decisionMakerTitle"></label>
-    <label>Notes<textarea id="am-notes" maxlength="2000"></textarea></label>
-    <div class="row">
-      <span class="saving" id="am-msg"></span>
-      <button onclick="closeAdd()">Cancel</button>
-      <button class="go" onclick="submitAdd()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Compose / Edit modal -->
-<div class="modal-back" id="cmp-modal">
-  <div class="modal">
-    <h2 id="cmp-title">Mail draft</h2>
-    <div id="cmp-buyer-meta" style="font-size:11px;color:var(--muted);margin-bottom:8px"></div>
-    <label>To email<input type="text" id="cmp-toEmail"></label>
-    <label>Subject<input type="text" id="cmp-subject" maxlength="200"></label>
-    <label>HTML body<textarea id="cmp-html" class="html"></textarea></label>
-    <label>Plain-text body<textarea id="cmp-text" class="text"></textarea></label>
-    <label>Preview</label>
-    <div class="preview" id="cmp-preview"></div>
-    <div class="row">
-      <button class="danger" id="cmp-recompose" title="Re-run LLM, overwrites the draft">↻ Re-compose</button>
-      <span class="saving" id="cmp-msg"></span>
-      <button onclick="closeCmp()">Close</button>
-      <button id="cmp-save">💾 Save draft</button>
-      <button id="cmp-approve" title="Mark as approved (still won't send until you click Send)">✓ Approve</button>
-      <button class="go" id="cmp-send" disabled title="Approve first, then click to send via ergsn-mail">→ Send</button>
-    </div>
-  </div>
-</div>
-
 <script>
 const $ = id => document.getElementById(id);
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+function todayLocalIso() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 
 const SECTOR_LABELS = {
   'k-security': 'K-Security', 'k-tech': 'K-Tech', 'k-energy': 'K-Energy', 'k-bio': 'K-Bio',
   'k-beauty': 'K-Beauty', 'k-culture-goods': 'K-Culture Goods', 'k-franchise': 'K-Franchise',
   'k-smart-living': 'K-Smart Living', 'k-tourism-assets': 'K-Tourism Assets', 'multi': 'Multi'
 };
+const AI_QUOTA_DAILY = 10000;
+const TAVILY_QUOTA_MONTHLY = 1000;
 
 let allBuyers = [];
-let aiState = { exceeded: false }, tavilyState = { callsThisMonth: 0, budget: 1000 };
+let aiState = { exceeded: false }, tavilyState = { callsThisMonth: 0, budget: TAVILY_QUOTA_MONTHLY };
+let currentBuyer = null;
+let editingBuyer = null;
 
 async function loadBuyers() {
   const r = await fetch('/api/buyers'); const d = await r.json();
@@ -172,20 +391,18 @@ async function loadBuyers() {
   render();
 }
 async function refreshLimits() {
-  try {
-    const r = await fetch('/api/limits'); const d = await r.json();
-    aiState = d.ai || aiState; tavilyState = d.tavily || tavilyState;
-  } catch (_) {}
-  renderPills();
+  try { const r = await fetch('/api/limits'); const d = await r.json(); aiState = d.ai || aiState; tavilyState = d.tavily || tavilyState; } catch (_) {}
+  if (typeof renderStats === 'function' && Array.isArray(allBuyers)) renderStats();
 }
 
 function fillSectorOptions() {
-  const sectors = Array.from(new Set(allBuyers.map(b => b.sector).filter(Boolean))).sort();
-  for (const sel of [$('f-sector'), $('cr-sector'), $('am-sector')]) {
+  const sectors = Object.keys(SECTOR_LABELS);
+  for (const sel of [$('f-sector'), $('cr-sector'), $('am-sector'), $('ed-sector')]) {
     if (!sel) continue;
     const cur = sel.value;
-    const head = sel.id === 'cr-sector' ? '<option value="__all__">all sectors</option>' : '<option value="">all</option>';
-    sel.innerHTML = (sel.id === 'am-sector' ? '' : head) + sectors.map(s => `<option value="${esc(s)}">${esc(SECTOR_LABELS[s] || s)}</option>`).join('');
+    const head = sel.id === 'cr-sector' ? '<option value="__all__">all sectors</option>'
+               : (sel.id === 'am-sector' || sel.id === 'ed-sector') ? '' : '<option value="">all</option>';
+    sel.innerHTML = head + sectors.map(s => `<option value="${esc(s)}">${esc(SECTOR_LABELS[s])}</option>`).join('');
     if (cur) sel.value = cur;
   }
 }
@@ -197,7 +414,13 @@ function fillCountryOptions() {
 }
 
 const FILTER_DEFAULTS = { 'f-status': '', 'f-sector': '', 'f-type': '', 'f-country': '', 'f-draft': '' };
-function refreshFilterChrome() { for (const id of Object.keys(FILTER_DEFAULTS)) { const s = $(id); if (s) s.classList.toggle('on', s.value !== FILTER_DEFAULTS[id]); } }
+function refreshFilterChrome() {
+  for (const id of Object.keys(FILTER_DEFAULTS)) {
+    const s = $(id); if (s) s.classList.toggle('active-filter', s.value !== FILTER_DEFAULTS[id]);
+  }
+  const sb = $('search-box');
+  if (sb) sb.classList.toggle('active-filter', $('f-q').value.length > 0);
+}
 
 function filtered() {
   const st = $('f-status').value, sec = $('f-sector').value, ty = $('f-type').value, cy = $('f-country').value, dr = $('f-draft').value;
@@ -212,37 +435,17 @@ function filtered() {
     if (dr === 'sent' && b._draftStatus !== 'sent') return false;
     if (dr === 'none' && b._hasDraft) return false;
     if (q) {
-      const hay = `${b.legalName||''} ${b.displayName||''} ${b.homepageHost||''} ${b.region||''}`.toLowerCase();
+      const hay = `${b.legalName||''} ${b.displayName||''} ${b.homepageHost||''} ${b.region||''} ${(b.contact && b.contact.primaryEmail)||''}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   });
 }
 
-function renderPills() {
-  const c = (s) => allBuyers.filter(b => b.status === s).length;
-  const aiUsed = aiState.estimatedNeuronsToday || 0, aiBud = aiState.budget || 10000, aiLeft = Math.max(0, aiBud - aiUsed), aiPct = Math.min(100, Math.round(aiUsed/aiBud*100));
-  const tUsed = tavilyState.callsThisMonth || 0, tBud = tavilyState.budget || 1000, tLeft = Math.max(0, tBud - tUsed);
-  const aiCls = aiState.exceeded ? 'pill quota exhausted' : (aiPct >= 80 ? 'pill quota warn' : 'pill quota');
-  const aiTxt = aiState.exceeded ? `🚫 AI exhausted` : `🤖 AI: ~${aiUsed.toLocaleString()}/${aiBud.toLocaleString()} <span class="n">${aiLeft.toLocaleString()} left</span>`;
-  $('pills').innerHTML = `
-    <span class="${aiCls}" title="CF Workers AI free tier daily">${aiTxt}</span>
-    <span class="pill quota" title="Tavily Researcher tier">🔍 Tavily: ${tUsed}/${tBud} <span class="n">${tLeft} left</span></span>
-    <span class="pill" title="Total buyers" style="cursor:default"><span class="n">${allBuyers.length}</span> total</span>
-    <span class="pill" data-act="raw"><span class="n">${c('raw')}</span> raw</span>
-    <span class="pill" data-act="verified"><span class="n">${c('verified')}</span> verified</span>
-    <span class="pill" data-act="queued"><span class="n">${c('queued')}</span> queued</span>
-    <span class="pill" data-act="contacted"><span class="n">${c('contacted')}</span> contacted</span>
-    <span class="pill" data-act="replied"><span class="n">${c('replied')}</span> replied</span>
-    <span class="pill" data-act="converted"><span class="n">${c('converted')}</span> converted</span>
-    <span class="pill" data-act="rejected"><span class="n">${c('rejected')}</span> rejected</span>
-  `;
-  $('pills').querySelectorAll('[data-act]').forEach(p => p.addEventListener('click', () => { $('f-status').value = p.dataset.act; refreshFilterChrome(); render(); }));
-}
-
 function render() {
   const list = filtered();
   $('stat').textContent = `${list.length} of ${allBuyers.length}`;
+  renderStats();
   const grid = $('grid');
   if (!list.length) { grid.innerHTML = '<div class="empty">No matching buyers.</div>'; return; }
   grid.innerHTML = list.map(b => card(b)).join('');
@@ -252,32 +455,87 @@ function render() {
   });
 }
 
+function renderStats() {
+  const c = (s) => allBuyers.filter(b => b.status === s).length;
+  const aiUsed = aiState.estimatedNeuronsToday || 0, aiBud = aiState.budget || AI_QUOTA_DAILY;
+  const aiLeft = Math.max(0, aiBud - aiUsed), aiPct = Math.min(100, Math.round(aiUsed/aiBud*100));
+  const aiCls = aiState.exceeded ? 'pill ai-quota exhausted' : (aiPct >= 80 ? 'pill ai-quota warn' : 'pill ai-quota');
+  const aiTxt = aiState.exceeded
+    ? `🚫 AI quota exhausted (0 / ${aiBud.toLocaleString()})`
+    : `🤖 AI: ~${aiUsed.toLocaleString()} / ${aiBud.toLocaleString()} <span class="n">${aiLeft.toLocaleString()} left</span> · ${aiPct}%`;
+  const tUsed = tavilyState.callsThisMonth || 0, tBud = tavilyState.budget || TAVILY_QUOTA_MONTHLY;
+  const tLeft = Math.max(0, tBud - tUsed), tPct = Math.min(100, Math.round(tUsed/tBud*100));
+  const tCls = tLeft === 0 ? 'pill ai-quota exhausted' : 'pill ai-quota';
+  const tTxt = tLeft === 0
+    ? `🚫 Tavily quota exhausted (0 / ${tBud.toLocaleString()})`
+    : `🔍 Tavily: ${tUsed.toLocaleString()} / ${tBud.toLocaleString()} <span class="n">${tLeft.toLocaleString()} left</span> · ${tPct}%`;
+  const cur = $('f-status').value;
+  const html = `
+    <span class="${aiCls}" title="CF Workers AI free tier — ${(aiState.callsToday||0).toLocaleString()} calls / ~${(aiState.tokensToday||0).toLocaleString()} tokens today">${aiTxt}</span>
+    <span class="${tCls}" title="Tavily Researcher tier — ${tUsed.toLocaleString()} of ${tBud.toLocaleString()} queries this month">${tTxt}</span>
+    <a class="pill ai-quota" target="_blank" rel="noopener" href="https://resend.com/emails" style="text-decoration:none;color:inherit;" title="Resend free tier — 3,000/mo + 100/day. Local server doesn't track these. Click for dashboard.">📧 Resend: 3,000/mo · 100/day (check dashboard)</a>
+    <span class="pill ${cur === '' ? 'active' : ''}" data-act="all">All <span class="n">${allBuyers.length}</span></span>
+    <span class="pill ${cur === 'raw' ? 'active' : ''}" data-act="raw">raw <span class="n">${c('raw')}</span></span>
+    <span class="pill ${cur === 'verified' ? 'active' : ''}" data-act="verified">verified <span class="n">${c('verified')}</span></span>
+    <span class="pill ${cur === 'queued' ? 'active' : ''}" data-act="queued">queued <span class="n">${c('queued')}</span></span>
+    <span class="pill ${cur === 'contacted' ? 'active' : ''}" data-act="contacted">contacted <span class="n">${c('contacted')}</span></span>
+    <span class="pill ${cur === 'replied' ? 'active' : ''}" data-act="replied">replied <span class="n">${c('replied')}</span></span>
+    <span class="pill ${cur === 'converted' ? 'active' : ''}" data-act="converted">converted <span class="n">${c('converted')}</span></span>
+    <span class="pill ${cur === 'rejected' ? 'active' : ''}" data-act="rejected">rejected <span class="n">${c('rejected')}</span></span>
+  `;
+  const bar = $('stats-bar');
+  const sb = $('search-box');
+  bar.innerHTML = html;
+  bar.querySelectorAll('.pill[data-act]').forEach(p => p.addEventListener('click', () => applyStatsFilter(p.dataset.act)));
+  if (sb) bar.appendChild(sb);
+}
+
+function applyStatsFilter(act) {
+  if (act === 'all') $('f-status').value = '';
+  else $('f-status').value = act;
+  refreshFilterChrome();
+  render();
+}
+
 function card(b) {
-  const interest = (b.primaryProductInterest || []).slice(0, 4).map(s => `<span class="interest">${esc(s)}</span>`).join('');
   const status = b.status || 'raw';
-  const hasEmail = !!(b.contact && (b.contact.primaryEmail || b.contact.procurementEmail));
-  const draftBadge = b._hasDraft ? `<span class="badge b-${esc(b._draftStatus || 'draft')}">draft: ${esc(b._draftStatus || 'draft')}</span>` : '';
+  const hasEmail = !!(b.contact && (b.contact.procurementEmail || b.contact.primaryEmail));
+  const interest = (b.primaryProductInterest || []).slice(0, 4).map(s => `<span class="interest">${esc(s)}</span>`).join('');
+  const draftBadge = b._hasDraft ? `<span class="badge b-draft-${esc(b._draftStatus || 'draft')}">draft: ${esc(b._draftStatus || 'draft')}</span>` : '';
+  const sectorBadge = b.sector ? `<span class="badge b-sector">${esc(SECTOR_LABELS[b.sector] || b.sector)}</span>` : '';
+  const typeBadge = b.buyerType && b.buyerType !== 'unclear' ? `<span class="badge b-type-${esc(b.buyerType)}">${esc(b.buyerType)}</span>` : '';
+  const krBadge = b.knownTradeHistoryWithKorea ? '<span class="badge b-kr-history">🇰🇷 KR history</span>' : '';
+  const c = b.contact || {};
+  const contactBlock = (c.procurementEmail || c.primaryEmail || c.decisionMaker || c.tel)
+    ? `<div class="contact-block">
+        ${c.procurementEmail ? `<div class="row"><span class="ico">📧</span><a href="mailto:${esc(c.procurementEmail)}">${esc(c.procurementEmail)}</a> <span style="color:var(--muted)">(procurement)</span></div>` : ''}
+        ${c.primaryEmail && c.primaryEmail !== c.procurementEmail ? `<div class="row"><span class="ico">📧</span><a href="mailto:${esc(c.primaryEmail)}">${esc(c.primaryEmail)}</a></div>` : ''}
+        ${c.decisionMaker ? `<div class="row"><span class="ico">👤</span>${esc(c.decisionMaker)}${c.decisionMakerTitle ? ' · ' + esc(c.decisionMakerTitle) : ''}</div>` : ''}
+        ${c.tel ? `<div class="row"><span class="ico">☎</span>${esc(c.tel)}</div>` : ''}
+       </div>`
+    : `<div class="contact-block"><div class="empty">no contact info — use Edit to add</div></div>`;
   return `
     <div class="card" data-id="${esc(b.id)}">
-      <h3>${esc(b.displayName || b.legalName || b.id)}</h3>
-      <div class="meta">
-        <span class="badge b-${esc(status)}">${esc(status)}</span>
+      <h2>${esc(b.legalName || b.id)}${b.displayName && b.displayName !== b.legalName ? `<span class="display">${esc(b.displayName)}</span>` : ''}</h2>
+      <div class="badges">
+        <span class="badge b-status-${esc(status)}">${esc(status)}</span>
         ${draftBadge}
-        ${b.country ? '<span>📍 ' + esc(b.country) + (b.region ? ' · ' + esc(b.region) : '') + '</span>' : ''}
-        ${b.buyerType && b.buyerType !== 'unclear' ? '<span>🏢 ' + esc(b.buyerType) + '</span>' : ''}
-        ${b.sector ? '<span>🏷️ ' + esc(SECTOR_LABELS[b.sector] || b.sector) + '</span>' : ''}
-        ${b.knownTradeHistoryWithKorea ? '<span>🇰🇷 has KR history</span>' : ''}
+        ${sectorBadge}
+        ${typeBadge}
+        ${b.country ? '<span class="badge" style="background:#fafafa;color:#444;border:1px solid var(--line)">📍 ' + esc(b.country) + (b.region ? ' · ' + esc(b.region) : '') + '</span>' : ''}
+        ${krBadge}
       </div>
       ${interest ? `<div class="interests">${interest}</div>` : ''}
-      ${b.contact && (b.contact.primaryEmail || b.contact.procurementEmail) ? `<div class="meta">📧 ${esc(b.contact.procurementEmail || b.contact.primaryEmail)}${b.contact.decisionMaker ? ' · ' + esc(b.contact.decisionMaker) : ''}</div>` : ''}
-      ${b.homepageUrl ? `<div class="url"><a href="${esc(b.homepageUrl)}" target="_blank" rel="noopener">${esc(b.homepageHost || b.homepageUrl)}</a></div>` : ''}
-      ${b.notes ? `<div class="meta" style="font-size:10px;font-style:italic">${esc(b.notes.slice(0, 200))}</div>` : ''}
+      ${contactBlock}
+      ${b.homepageUrl ? `<div class="links"><span class="lbl">🌐</span><a href="${esc(b.homepageUrl)}" target="_blank" rel="noopener">${esc(b.homepageHost || b.homepageUrl)}</a></div>` : ''}
+      ${b.notes ? `<div class="meta" style="font-style:italic">${esc(b.notes.slice(0, 200))}</div>` : ''}
       <div class="actions">
-        ${status === 'raw' ? `<button class="go" data-act="verify">✓ Verify</button>` : ''}
-        ${(status === 'verified' || status === 'queued') && hasEmail ? `<button class="go" data-act="compose">✉ ${b._hasDraft ? 'Open Draft' : 'Compose'}</button>` : ''}
-        ${b._hasDraft ? `<button data-act="open-draft">📝 Open</button>` : ''}
-        ${status !== 'rejected' ? `<button class="warn" data-act="reject">✕ Reject</button>` : ''}
-        <button data-act="edit">✎ Edit</button>
+        <button class="bn-verify ${status === 'verified' ? 'is-active' : ''}" data-act="verify" title="Mark verified">✓ Verify</button>
+        <button class="bn-queued ${status === 'queued' ? 'is-active' : ''}" data-act="queued" title="Hold for later">⏸ Queue</button>
+        <button class="bn-reject ${status === 'rejected' ? 'is-active' : ''}" data-act="reject" title="Reject (won't be contacted)">✕ Reject</button>
+        ${(status === 'verified' || status === 'queued') && hasEmail ? `<button class="bn-compose" data-act="compose">✉ ${b._hasDraft ? 'Open Draft' : 'Compose'}</button>` : ''}
+        ${b._hasDraft && status !== 'verified' && status !== 'queued' ? `<button class="bn-compose" data-act="compose">✉ Open Draft</button>` : ''}
+        <button class="bn-edit" data-act="edit" style="margin-left:auto" title="Edit contact / sector / type">✎ Edit</button>
       </div>
     </div>
   `;
@@ -285,14 +543,14 @@ function card(b) {
 
 async function handleAction(id, act) {
   if (act === 'verify') return patch(id, { status: 'verified' });
+  if (act === 'queued') return patch(id, { status: 'queued' });
   if (act === 'reject') {
     const reason = prompt('Reject reason (optional):') || '';
     return patch(id, { status: 'rejected', rejectedReason: reason });
   }
-  if (act === 'compose' || act === 'open-draft') return openCompose(id);
+  if (act === 'compose') return openCompose(id);
   if (act === 'edit') return openEdit(id);
 }
-
 async function patch(id, body) {
   const r = await fetch('/api/buyers/' + encodeURIComponent(id), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const d = await r.json();
@@ -300,18 +558,22 @@ async function patch(id, body) {
   await loadBuyers();
 }
 
-// Compose / Edit
-let currentBuyer = null;
+// ─── Compose modal ────────────────────────────────────────────────────────
 async function openCompose(id) {
   currentBuyer = allBuyers.find(b => b.id === id);
   if (!currentBuyer) return;
   $('cmp-title').textContent = 'Mail draft — ' + (currentBuyer.displayName || currentBuyer.legalName);
   const c = currentBuyer.contact || {};
-  $('cmp-buyer-meta').textContent = `${currentBuyer.country || ''} · ${currentBuyer.buyerType || ''} · ${c.decisionMaker || ''} ${c.decisionMakerTitle ? '(' + c.decisionMakerTitle + ')' : ''}`;
+  $('cmp-buyer-meta').innerHTML = [
+    '<div><strong>' + esc(currentBuyer.legalName || currentBuyer.id) + '</strong></div>',
+    '<div>' + esc(currentBuyer.country || '') + (currentBuyer.region ? ' · ' + esc(currentBuyer.region) : '') + ' · ' + esc(currentBuyer.buyerType || '') + ' · ' + esc(SECTOR_LABELS[currentBuyer.sector] || currentBuyer.sector || '') + '</div>',
+    c.decisionMaker ? '<div>👤 ' + esc(c.decisionMaker) + (c.decisionMakerTitle ? ' (' + esc(c.decisionMakerTitle) + ')' : '') + '</div>' : ''
+  ].join('');
   let draft;
   const dRes = await fetch('/api/buyers/' + encodeURIComponent(id) + '/draft');
-  if (dRes.ok) { draft = (await dRes.json()).draft; }
-  else {
+  if (dRes.ok) {
+    draft = (await dRes.json()).draft;
+  } else {
     setSaving('Generating draft via LLM…');
     const cRes = await fetch('/api/buyers/' + encodeURIComponent(id) + '/compose', { method: 'POST' });
     const cJson = await cRes.json();
@@ -326,11 +588,9 @@ async function openCompose(id) {
   $('cmp-preview').innerHTML = draft.htmlBody || '';
   refreshSendButton(draft);
   $('cmp-modal').classList.add('open');
-  setSaving(`Composed by ${draft.composedBy || 'LLM'} · status=${draft.status}`);
+  setSaving(`composed by ${draft.composedBy || 'LLM'} · status=${draft.status}`);
 }
-function refreshSendButton(draft) {
-  $('cmp-send').disabled = !(draft && draft.status === 'approved' && draft.toEmail && draft.subject && draft.htmlBody);
-}
+function refreshSendButton(draft) { $('cmp-send').disabled = !(draft && draft.status === 'approved' && draft.toEmail && draft.subject && draft.htmlBody); }
 function closeCmp() { $('cmp-modal').classList.remove('open'); currentBuyer = null; }
 function setSaving(text, cls = '') { const el = $('cmp-msg'); el.textContent = text; el.className = 'saving ' + cls; }
 
@@ -345,9 +605,9 @@ $('cmp-recompose').addEventListener('click', async () => {
   $('cmp-html').value = d.draft.htmlBody || ''; $('cmp-text').value = d.draft.textBody || '';
   $('cmp-preview').innerHTML = d.draft.htmlBody || '';
   refreshSendButton(d.draft);
-  setSaving('Re-composed', 'ok'); refreshLimits();
+  setSaving('re-composed', 'ok'); refreshLimits();
 });
-
+$('cmp-html').addEventListener('input', () => { $('cmp-preview').innerHTML = $('cmp-html').value; });
 $('cmp-save').addEventListener('click', async () => {
   if (!currentBuyer) return;
   setSaving('Saving…');
@@ -359,12 +619,10 @@ $('cmp-save').addEventListener('click', async () => {
   if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
   $('cmp-preview').innerHTML = d.draft.htmlBody || '';
   refreshSendButton(d.draft);
-  setSaving('Saved', 'ok');
+  setSaving('saved', 'ok');
 });
-
 $('cmp-approve').addEventListener('click', async () => {
   if (!currentBuyer) return;
-  // Save current edits first then flip status to approved
   setSaving('Approving…');
   await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/draft', {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -376,9 +634,8 @@ $('cmp-approve').addEventListener('click', async () => {
   const d = await r.json();
   if (!d.ok) { setSaving('error: ' + d.error, 'err'); return; }
   refreshSendButton(d.draft);
-  setSaving('Approved — Send button is now active', 'ok');
+  setSaving('✓ Approved — Send is now active', 'ok');
 });
-
 $('cmp-send').addEventListener('click', async () => {
   if (!currentBuyer) return;
   if (!confirm(`Send to ${$('cmp-toEmail').value} via ergsn-mail? This is a real cold email.`)) return;
@@ -386,54 +643,72 @@ $('cmp-send').addEventListener('click', async () => {
   const r = await fetch('/api/buyers/' + encodeURIComponent(currentBuyer.id) + '/send', { method: 'POST' });
   const d = await r.json();
   if (!d.ok) { setSaving('send error: ' + (d.error || JSON.stringify(d.response).slice(0,160)), 'err'); return; }
-  setSaving('✓ Sent · ' + (d.sentAt || ''), 'ok');
+  setSaving('✓ sent · ' + (d.sentAt || ''), 'ok');
   setTimeout(() => { closeCmp(); loadBuyers(); }, 1200);
 });
 
-// Edit a buyer (status / sector / contact)
+// ─── Edit modal ──────────────────────────────────────────────────────────
 function openEdit(id) {
-  const b = allBuyers.find(x => x.id === id); if (!b) return;
-  // Inline-prompt edit (kept simple — fuller form not in v0)
-  const newStatus = prompt(`Status for ${b.id}? (raw, verified, queued, contacted, replied, converted, rejected, unsubscribed)`, b.status);
-  if (!newStatus) return;
-  const newSector = prompt(`Sector? (k-security, k-tech, ...)`, b.sector || 'multi') || b.sector;
-  const newType = prompt(`Buyer type?`, b.buyerType || 'unclear') || b.buyerType;
-  const newEmail = prompt(`Procurement email?`, (b.contact && b.contact.procurementEmail) || (b.contact && b.contact.primaryEmail) || '') || '';
-  patch(id, {
-    status: newStatus, sector: newSector, buyerType: newType,
-    contact: { procurementEmail: newEmail }
-  });
+  editingBuyer = allBuyers.find(b => b.id === id);
+  if (!editingBuyer) return;
+  const c = editingBuyer.contact || {};
+  $('ed-status').value = editingBuyer.status || 'raw';
+  $('ed-sector').value = editingBuyer.sector || 'multi';
+  $('ed-buyerType').value = editingBuyer.buyerType || 'unclear';
+  $('ed-procurementEmail').value = c.procurementEmail || '';
+  $('ed-primaryEmail').value = c.primaryEmail || '';
+  $('ed-decisionMaker').value = c.decisionMaker || '';
+  $('ed-decisionMakerTitle').value = c.decisionMakerTitle || '';
+  $('ed-notes').value = editingBuyer.notes || '';
+  $('ed-msg').textContent = '';
+  $('edit-modal').classList.add('open');
 }
+function closeEdit() { $('edit-modal').classList.remove('open'); editingBuyer = null; }
+$('ed-submit').addEventListener('click', async () => {
+  if (!editingBuyer) return;
+  $('ed-msg').textContent = 'saving…';
+  const body = {
+    status: $('ed-status').value, sector: $('ed-sector').value, buyerType: $('ed-buyerType').value,
+    notes: $('ed-notes').value,
+    contact: {
+      procurementEmail: $('ed-procurementEmail').value.trim(),
+      primaryEmail: $('ed-primaryEmail').value.trim(),
+      decisionMaker: $('ed-decisionMaker').value.trim(),
+      decisionMakerTitle: $('ed-decisionMakerTitle').value.trim()
+    }
+  };
+  const r = await fetch('/api/buyers/' + encodeURIComponent(editingBuyer.id), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const d = await r.json();
+  if (!d.ok) { $('ed-msg').textContent = 'error: ' + d.error; return; }
+  closeEdit();
+  await loadBuyers();
+});
 
-// Add Buyer
-function openAdd() {
-  // populate sector options
-  const sel = $('am-sector');
-  sel.innerHTML = Object.keys(SECTOR_LABELS).map(s => `<option value="${s}">${SECTOR_LABELS[s]}</option>`).join('');
-  $('add-modal').classList.add('open');
-}
+// ─── Add Buyer modal ─────────────────────────────────────────────────────
+function openAdd() { $('am-msg').textContent = ''; $('am-legalName').value = ''; $('am-homepageUrl').value = ''; $('am-country').value = ''; $('am-primaryEmail').value = ''; $('am-procurementEmail').value = ''; $('am-decisionMaker').value = ''; $('am-decisionMakerTitle').value = ''; $('am-notes').value = ''; $('add-modal').classList.add('open'); }
 function closeAdd() { $('add-modal').classList.remove('open'); }
-async function submitAdd() {
+$('am-submit').addEventListener('click', async () => {
   const body = {
     legalName: $('am-legalName').value.trim(),
     homepageUrl: $('am-homepageUrl').value.trim(),
     country: $('am-country').value.trim().toUpperCase(),
     sector: $('am-sector').value, buyerType: $('am-buyerType').value,
     primaryEmail: $('am-primaryEmail').value.trim(),
+    procurementEmail: $('am-procurementEmail').value.trim(),
     decisionMaker: $('am-decisionMaker').value.trim(),
     decisionMakerTitle: $('am-decisionMakerTitle').value.trim(),
     notes: $('am-notes').value
   };
   if (!body.legalName) { $('am-msg').textContent = 'legal name required'; return; }
-  $('am-msg').textContent = 'Saving…';
+  $('am-msg').textContent = 'saving…';
   const r = await fetch('/api/buyers', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const d = await r.json();
   if (!d.ok) { $('am-msg').textContent = 'error: ' + d.error; return; }
   closeAdd();
   await loadBuyers();
-}
+});
 
-// Crawl
+// ─── Crawl ──────────────────────────────────────────────────────────────
 async function startCrawl() {
   const sector = $('cr-sector').value;
   const max = parseInt($('cr-max').value, 10) || 50;
@@ -447,26 +722,22 @@ async function pollCrawl(jobId) {
   const tick = async () => {
     try {
       const r = await fetch('/api/crawl/' + encodeURIComponent(jobId));
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.error || 'poll failed');
+      const d = await r.json(); if (!d.ok) throw new Error(d.error || 'poll failed');
       const j = d.job; const c = j.counts || {};
       const summary = `fetched ${c.fetched||0} · verified ${c.verified||0} · failed ${c.failed||0} · +${c.added||0} new`;
-      if (j.status === 'running') {
-        $('cr-status').textContent = `▶ ${j.sector === '__all__' ? 'all' : j.sector} · ${summary}`;
-        setTimeout(tick, 3000);
-      } else {
-        $('cr-status').textContent = (j.status === 'done' ? '✓' : '✗') + ' ' + summary;
-        loadBuyers(); refreshLimits();
-      }
+      if (j.status === 'running') { $('cr-status').textContent = `▶ ${j.sector === '__all__' ? 'all' : j.sector} · ${summary}`; setTimeout(tick, 3000); }
+      else { $('cr-status').textContent = (j.status === 'done' ? '✓' : '✗') + ' ' + summary; loadBuyers(); refreshLimits(); }
     } catch (e) { $('cr-status').textContent = 'poll error: ' + e.message; }
   };
   tick();
 }
 
-document.getElementById('cr-run').addEventListener('click', startCrawl);
-document.getElementById('bn-add').addEventListener('click', openAdd);
+// ─── Wire-up ─────────────────────────────────────────────────────────────
+$('cr-run').addEventListener('click', startCrawl);
+$('bn-add').addEventListener('click', openAdd);
 ['f-status','f-sector','f-type','f-country','f-draft'].forEach(id => $(id).addEventListener('change', () => { refreshFilterChrome(); render(); }));
-$('f-q').addEventListener('input', render);
+$('f-q').addEventListener('input', () => { $('search-box').classList.toggle('has-q', $('f-q').value.length > 0); refreshFilterChrome(); render(); });
+$('f-q-clear').addEventListener('click', () => { $('f-q').value = ''; $('search-box').classList.remove('has-q'); $('f-q').focus(); refreshFilterChrome(); render(); });
 document.querySelectorAll('.modal-back').forEach(m => m.addEventListener('click', e => { if (e.target.classList.contains('modal-back')) m.classList.remove('open'); }));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-back.open').forEach(m => m.classList.remove('open')); });
 
