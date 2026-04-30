@@ -22,6 +22,16 @@
     // small and chrome-injected so it loads with the same brand shell.
     "not_found_handling": "404-page"
   },
+  // Custom domains. ergsn.net is the main public site; admin.ergsn.net
+  // is the Cloudflare-Access-gated admin hub (gating defined in CF Access
+  // Application "ERGSN Admin Hub" — see admin/CF_ACCESS_SETUP.md). Both
+  // route to the same static-assets worker; the path /admin/* serves the
+  // launcher only after CF Access auth, the apex paths serve the public
+  // site as before.
+  "routes": [
+    { "pattern": "ergsn.net/*",       "zone_name": "ergsn.net" },
+    { "pattern": "admin.ergsn.net/*", "zone_name": "ergsn.net" }
+  ],
   "observability": {
     "enabled": true
   }
