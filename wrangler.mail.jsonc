@@ -13,5 +13,15 @@
   "compatibility_date": "2026-04-24",
   "observability": {
     "enabled": true
-  }
+  },
+  // Keep the *.workers.dev URL alive for the public site's outbound mail
+  // (RFQ acknowledgements etc.). Adding `routes` would otherwise auto-
+  // disable workers.dev.
+  "workers_dev": true,
+  // Same-origin mount under the CF Access-gated Admin Hub. send-mail.html
+  // opened from admin.ergsn.net then hits /api/mail/admin-send same-origin,
+  // so the CF_Authorization cookie travels with the call.
+  "routes": [
+    { "pattern": "admin.ergsn.net/api/mail/*", "zone_name": "ergsn.net" }
+  ]
 }

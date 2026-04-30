@@ -124,21 +124,31 @@ export default {
     const origin = request.headers.get('Origin') || '';
     const allowList = (env.ALLOW_ORIGIN || '*').split(',').map(s => s.trim()).filter(Boolean);
     const wildcard = allowList.includes('*');
-    const matched = wildcard ? '*' : (allowList.includes(origin) ? origin : '');
+    const isErgsn = /^https:\/\/([a-z0-9-]+\.)?ergsn\.net$/i.test(origin);
+    const matched = wildcard ? '*' : (allowList.includes(origin) || isErgsn ? origin : '');
     const cors = {
-      'Access-Control-Allow-Origin': matched,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Cf-Access-Jwt-Assertion',
       'Access-Control-Max-Age': '86400',
       'Vary': 'Origin'
     };
+    if (matched) {
+      cors['Access-Control-Allow-Origin'] = matched;
+      /* Credentials cannot pair with the wildcard origin per CORS spec. */
+      if (matched !== '*') cors['Access-Control-Allow-Credentials'] = 'true';
+    }
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405, headers: cors });
     }
 
     const url = new URL(request.url);
-    const path = url.pathname.replace(/\/$/, '') || '/';
+    /* Strip the same-origin Admin Hub mount prefix so admin.ergsn.net/api/mail/*
+       and the legacy *.workers.dev path-space share one router. */
+    let pathname = url.pathname;
+    if (pathname === '/api/mail' || pathname === '/api/mail/') pathname = '/';
+    else if (pathname.startsWith('/api/mail/')) pathname = pathname.slice('/api/mail'.length);
+    const path = pathname.replace(/\/$/, '') || '/';
 
     /* /raw bypasses CORS origin check because it's admin-only via header. */
     if (path !== '/raw' && !matched) {

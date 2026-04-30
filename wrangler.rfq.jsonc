@@ -17,6 +17,18 @@
   "main": "cloudflare-worker-rfq.js",
   "compatibility_date": "2026-04-24",
   "observability": { "enabled": true },
+  // Keep the *.workers.dev URL alive for legacy callers (the public RFQ
+  // submission flow on ergsn.net + buyer-side dashboards). Adding `routes`
+  // would otherwise auto-disable workers.dev.
+  "workers_dev": true,
+  // Same-origin mount under the CF Access-gated Admin Hub. Browser fetches
+  // from admin.ergsn.net/api/rfq/* travel with the CF_Authorization cookie
+  // automatically — no CORS, no X-Admin-Key fallback required for admin
+  // surfaces (admin-analytics.html, partner-dashboard.html when opened
+  // from admin.ergsn.net).
+  "routes": [
+    { "pattern": "admin.ergsn.net/api/rfq/*", "zone_name": "ergsn.net" }
+  ],
   "d1_databases": [
     {
       "binding":       "RFQ",

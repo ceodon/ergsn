@@ -120,7 +120,13 @@
 </div>
 
 <script>
-const ADMIN_SEND_URL = 'https://ergsn-mail.ceodon.workers.dev/admin-send';
+/* When opened under admin.ergsn.net, hit the same-origin mount so the
+   CF_Authorization cookie travels with the request (no CORS, no X-Admin-
+   Key fallback). Anywhere else, fall back to *.workers.dev with X-Admin-
+   Key recovery. */
+const ADMIN_SEND_URL = location.hostname === 'admin.ergsn.net'
+  ? '/api/mail/admin-send'
+  : 'https://ergsn-mail.ceodon.workers.dev/admin-send';
 const SS_KEY = 'ergsn_admin_key';
 
 function $(id) { return document.getElementById(id); }

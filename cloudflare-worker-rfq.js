@@ -36,14 +36,20 @@ function parseAllow(raw) {
 }
 function cors(origin, allowList) {
   const wildcard = allowList.includes('*');
-  const matched = wildcard ? '*' : (allowList.includes(origin) ? origin : '');
-  return {
-    'Access-Control-Allow-Origin': matched,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  const isErgsn = /^https:\/\/([a-z0-9-]+\.)?ergsn\.net$/i.test(origin);
+  const matched = wildcard ? '*' : (allowList.includes(origin) || isErgsn ? origin : '');
+  const headers = {
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Cf-Access-Jwt-Assertion',
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin'
   };
+  if (matched) {
+    headers['Access-Control-Allow-Origin'] = matched;
+    /* Specific-origin echoes can carry credentials; the wildcard cannot. */
+    if (matched !== '*') headers['Access-Control-Allow-Credentials'] = 'true';
+  }
+  return headers;
 }
 
 /* ─── Cloudflare Access JWT verification (defense in depth) ───────────────
@@ -156,12 +162,18 @@ export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
     const allowList = parseAllow(env.ALLOW_ORIGIN);
-    const matched = allowList.includes('*') ? '*' : (allowList.includes(origin) ? origin : '');
+    const isErgsn = /^https:\/\/([a-z0-9-]+\.)?ergsn\.net$/i.test(origin);
+    const matched = allowList.includes('*') ? '*' : (allowList.includes(origin) || isErgsn ? origin : '');
     const headers = cors(origin, allowList);
     if (request.method === 'OPTIONS') return new Response(null, { headers });
 
     const url = new URL(request.url);
-    const path = url.pathname.replace(/\/$/, '');
+    /* Strip the same-origin Admin Hub mount prefix so admin.ergsn.net/api/rfq/*
+       and the legacy *.workers.dev path-space share one router. */
+    let pathname = url.pathname;
+    if (pathname === '/api/rfq' || pathname === '/api/rfq/') pathname = '/';
+    else if (pathname.startsWith('/api/rfq/')) pathname = pathname.slice('/api/rfq'.length);
+    const path = pathname.replace(/\/$/, '');
     const j = (obj, status = 200) => new Response(JSON.stringify(obj), { status, headers: { ...headers, 'Content-Type': 'application/json' } });
 
     if (!env.RFQ || typeof env.RFQ.prepare !== 'function') {

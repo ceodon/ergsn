@@ -5,8 +5,15 @@
 
 window.TD = (function () {
 
-const API_URL  = 'https://ergsn-trade-docs.ceodon.workers.dev';
-const MAIL_URL = 'https://ergsn-mail.ceodon.workers.dev/admin-send';
+/* Origin-aware endpoints. When the document surface is opened from the
+   CF Access-gated Admin Hub (admin.ergsn.net), prefer the same-origin
+   mount so the CF_Authorization cookie travels automatically — no CORS,
+   no X-Admin-Key fallback needed. From the public site (ergsn.net) for
+   buyer surfaces, keep the legacy *.workers.dev URL where auth is the
+   per-row buyer token rather than a cookie. */
+const ON_ADMIN  = (typeof location !== 'undefined' && location.hostname === 'admin.ergsn.net');
+const API_URL   = ON_ADMIN ? '/api/trade-docs'      : 'https://ergsn-trade-docs.ceodon.workers.dev';
+const MAIL_URL  = ON_ADMIN ? '/api/mail/admin-send' : 'https://ergsn-mail.ceodon.workers.dev/admin-send';
 const ADMIN_SS = 'ergsn_admin_key';
 
 const DOC_META = {

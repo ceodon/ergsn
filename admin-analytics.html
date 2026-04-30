@@ -202,7 +202,13 @@
 </div>
 
 <script>
-const RFQ_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+/* When opened under admin.ergsn.net, hit the same-origin mount so the
+   CF_Authorization cookie travels with the request (no CORS, no X-Admin-
+   Key fallback). Anywhere else (recovery, ergsn.net, local), fall back
+   to the legacy *.workers.dev URL with X-Admin-Key. */
+const RFQ_URL = location.hostname === 'admin.ergsn.net'
+  ? '/api/rfq'
+  : 'https://ergsn-rfq-tracker.ceodon.workers.dev';
 const SS_KEY = 'ergsn_admin_key';
 
 const $ = (id) => document.getElementById(id);

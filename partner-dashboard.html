@@ -236,7 +236,14 @@
    Token acts as both identifier and authz; it can be rotated via the admin
    /partner/rotate endpoint if leaked. Treat the dashboard URL like a password. */
 (function () {
-  const WORKER_URL = 'https://ergsn-rfq-tracker.ceodon.workers.dev';
+  /* Origin-aware: when opened from admin.ergsn.net (admin viewing a
+     partner's dashboard), use the same-origin Admin Hub mount so the
+     CF_Authorization cookie is attached. From ergsn.net (the partner's
+     normal entry point), keep the legacy *.workers.dev URL — auth is
+     the URL token, not a cookie, so cross-origin is fine. */
+  const WORKER_URL = location.hostname === 'admin.ergsn.net'
+    ? '/api/rfq'
+    : 'https://ergsn-rfq-tracker.ceodon.workers.dev';
   const params = new URLSearchParams(location.search);
   const token = (params.get('t') || '').trim();
 
