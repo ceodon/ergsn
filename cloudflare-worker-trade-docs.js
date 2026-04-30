@@ -113,7 +113,12 @@ export default {
 
   async fetch(request, env) {
     const url = new URL(request.url);
-    const path = url.pathname.replace(/\/$/, '') || '/';
+    /* Strip the same-origin mount prefix so admin.ergsn.net/api/trade-docs/*
+       and the legacy *.workers.dev path-space share one router. */
+    let pathname = url.pathname;
+    if (pathname === '/api/trade-docs' || pathname === '/api/trade-docs/') pathname = '/';
+    else if (pathname.startsWith('/api/trade-docs/')) pathname = pathname.slice('/api/trade-docs'.length);
+    const path = pathname.replace(/\/$/, '') || '/';
 
     const cors = corsHeaders(request, env);
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
@@ -400,9 +405,9 @@ export default {
 function corsHeaders(request, env) {
   const origin = request.headers.get('Origin') || '';
   const allow = (env.ALLOW_ORIGIN || '*').split(',').map(s => s.trim()).filter(Boolean);
-  const matched = allow.includes('*') ? '*' : (allow.includes(origin) ? origin : '');
-  return {
-    'Access-Control-Allow-Origin':  matched,
+  const isErgsn = /^https:\/\/([a-z0-9-]+\.)?ergsn\.net$/i.test(origin);
+  const matched = allow.includes('*') ? '*' : (allow.includes(origin) || isErgsn ? origin : '');
+  const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, OPTIONS',
     /* Cf-Access-Jwt-Assertion is the header CF Access injects upstream; it
        arrives automatically on requests routed through Access — listing it
@@ -412,6 +417,15 @@ function corsHeaders(request, env) {
     'Access-Control-Max-Age':       '86400',
     'Vary': 'Origin'
   };
+  if (matched) {
+    headers['Access-Control-Allow-Origin'] = matched;
+    /* Credentials cannot be combined with the wildcard origin per the
+       CORS spec, so only echo Allow-Credentials when we matched a
+       specific origin. admin.ergsn.net + the in-browser fetch use
+       `credentials: 'include'`, which requires this header. */
+    if (matched !== '*') headers['Access-Control-Allow-Credentials'] = 'true';
+  }
+  return headers;
 }
 
 /* ─── Cloudflare Access JWT verification (defense in depth) ──────────────

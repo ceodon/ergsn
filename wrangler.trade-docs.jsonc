@@ -23,6 +23,19 @@
   "main": "cloudflare-worker-trade-docs.js",
   "compatibility_date": "2026-04-24",
   "observability": { "enabled": true },
+  // Keep the *.workers.dev URL alive for legacy callers (trade-docs.html,
+  // send-mail.html, partner-dashboard.html, admin-analytics.html) that
+  // still hit ergsn-trade-docs.ceodon.workers.dev directly. Adding
+  // `routes` would otherwise auto-disable workers.dev.
+  "workers_dev": true,
+  // Same-origin mount under the CF Access-gated Admin Hub. Browser fetches
+  // from admin.ergsn.net/api/trade-docs/* travel with the CF_Authorization
+  // cookie automatically — no CORS, no X-Admin-Key required. The static
+  // route admin.ergsn.net/* (in wrangler.jsonc) keeps everything else;
+  // CF Workers prefers the more-specific pattern.
+  "routes": [
+    { "pattern": "admin.ergsn.net/api/trade-docs/*", "zone_name": "ergsn.net" }
+  ],
   "d1_databases": [
     {
       "binding":       "DB",

@@ -280,7 +280,11 @@
   // Recovery path: if CF Access is disabled and ADMIN_KEY is stored
   // locally (legacy fallback), we send X-Admin-Key. The Worker accepts
   // either.
-  const TRADE_DOCS_ENDPOINT = 'https://ergsn-trade-docs.ceodon.workers.dev';
+  /* Same-origin mount of the trade-docs Worker. Routed at
+     admin.ergsn.net/api/trade-docs/* via wrangler.trade-docs.jsonc.
+     Same-origin means the CF_Authorization cookie travels automatically
+     — no CORS, no X-Admin-Key required for the audit feed. */
+  const TRADE_DOCS_ENDPOINT = '/api/trade-docs';
   function getAdminKey() { try { return localStorage.getItem('ADMIN_KEY') || ''; } catch (_) { return ''; } }
 
   /* Build common headers — JWT travels via cookie, so the only thing
