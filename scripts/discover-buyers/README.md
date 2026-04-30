@@ -10,7 +10,17 @@ buyer for human approval before send.
 
 ```
    Tavily search ─┐
-   manual seed   ─┴─►  verify.js  ─►  data/buyer-directory.json   (status: raw|verified)
+   CSV seed      ─┼─►  verify.js  ──┐
+   (wishlist)     │                  │
+                  │     ┌── multi-page fetch (homepage + /contact /about /procurement
+                  │     │   /vendor /partnerships /leadership; sitemap.xml fallback)
+                  │     ├── email regex harvest (mailto: + body, priority-scored:
+                  │     │   procurement@ > vendor@ > sales@ > info@)
+                  │     ├── LLM extract (Llama-3.1-8B → Anthropic Haiku fallback)
+                  │     ├── SAM.gov enrichment (US fed-procurement only, free API)
+                  │     └── OpenCorporates cross-check (legal-registry confirm)
+                  │
+                  └─►  data/buyer-directory.json   (status: raw|verified)
                                        │
                                        ▼
                      compose.js (LLM)  ─►  data/buyer-outbox/<id>.json   (status: draft)
@@ -29,9 +39,15 @@ buyer for human approval before send.
 ## Commands
 
 ```bash
-# 1. Discover candidates (Tavily search)
+# 1. Discover candidates — Tavily search (sector-tuned queries, all 9 sectors)
 TAVILY_API_KEY=tvly-... npm run discover:buyers -- --sector=k-security
 TAVILY_API_KEY=tvly-... npm run discover:buyers -- --all-sectors
+
+# 1b. CSV seed — when sales has a hand-curated target list
+#    edit data/buyer-seeds.csv (header: url,sector,buyerType,note)
+npm run discover:buyers -- --seed=csv
+npm run discover:buyers -- --seed=csv --csv=data/special-list.csv
+npm run discover:buyers -- --seed=csv --sector=k-security  (filter CSV rows)
 
 # 2. Generate per-buyer mail drafts (CF Workers AI primary, Anthropic Haiku fallback)
 npm run compose:buyers -- --sector=k-security --max=5
@@ -65,6 +81,9 @@ REVIEW_TOKEN=$(node -e "console.log(require('crypto').randomBytes(16).toString('
 | `ERGSN_MAIL_ENDPOINT` | Defaults to `https://ergsn-mail.ceodon.workers.dev` |
 | `BUYER_REVIEW_PORT` | Defaults to 5175 |
 | `REVIEW_TOKEN` | Optional — opens LAN/tunnel access (same model as maker review) |
+| `SAM_GOV_API_KEY` | Optional — lifts SAM.gov 10/min rate limit. Free at [sam.gov](https://sam.gov/data-services). Falls back to `DEMO_KEY`. |
+| `OPENCORPORATES_API_TOKEN` | Optional — lifts OpenCorporates 50/day limit. Free at [opencorporates.com](https://opencorporates.com/). |
+| `APOLLO_API_KEY` | (Phase 3C, not yet wired) — would enable email-finder fallback at 100 enrichments/month free. Add when needed. |
 
 ## Files written
 
@@ -108,6 +127,10 @@ REVIEW_TOKEN=$(node -e "console.log(require('crypto').randomBytes(16).toString('
 * **Unsubscribe handler**. The footer link points to
   `https://ergsn.net/unsubscribe` but that page does not exist yet. v1 adds
   a tiny Worker that records the click and flips `status: unsubscribed`.
+* **Apollo.io email-finder fallback** (Phase 3C). When SAM.gov / OpenCorporates
+  / on-page harvest all fail to surface a procurement email, Apollo's
+  free 100/month tier could fill the gap. Path: add `lib/enrich-apollo.js`
+  + `APOLLO_API_KEY` env, call from verify.js after the harvest step.
 * **A/B subject testing**. Single subject per buyer.
 * **HTML preview testing across mail clients**. Use the Resend dashboard
   preview before approving.

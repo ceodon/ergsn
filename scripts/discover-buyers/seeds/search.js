@@ -34,53 +34,113 @@ const HOST_BLACKLIST = new Set([
 
 const HOST_BLACKLIST_SUFFIX = ['.go.kr'];
 
+/**
+ * Buyer-search query taxonomy (Phase 2A).
+ *
+ * Each sector defines queries across 4 axes — buyer-type · region ·
+ * decision-role · vertical-context. Generic "Korean shredder distributor"
+ * was replaced by procurement-vocabulary-specific queries that target
+ * the actual humans who write the PO. Capped at ~10 per sector to stay
+ * within the 1,000/month Tavily budget when running --all-sectors.
+ *
+ * Add new lines per sector freely — the verify pipeline dedupes by host.
+ */
 const QUERIES = {
   'k-security': [
-    'US paper shredder distributor wholesale',
-    'GSA Schedule 36 high-security shredder vendor',
-    'federal government office equipment procurement contractor',
-    'commercial shredder importer United States',
-    'data destruction equipment dealer USA'
+    // Buyer-type
+    'US paper shredder distributor wholesale catalog',
+    'commercial shredder dealer United States vendor list',
+    'high-security shredder reseller B2B',
+    // Region / vertical
+    'GSA Schedule 36 office equipment prime contractor',
+    'federal government shredder procurement officer',
+    'law firm document destruction service provider USA',
+    // Decision-role
+    'office equipment sourcing manager United States contact',
+    'records management vendor RFP USA',
+    // Adjacent
+    'NAID AAA certified destruction company customer list',
+    'bank document destruction vendor procurement'
   ],
   'k-tech': [
-    'US 3D stereoscopic display importer',
-    'AV systems integrator stereoscopic distributor',
-    'Korean tech components US distributor'
+    'US display systems integrator stereoscopic 3D',
+    'AV procurement specialist commercial integrator USA',
+    'electronics components importer United States distributor',
+    'medical imaging display reseller USA',
+    'Korean semiconductor distributor United States contact',
+    'OEM contract manufacturer sourcing manager US',
+    'simulation training systems procurement defence',
+    'broadcasting display systems integrator North America'
   ],
   'k-energy': [
-    'industrial generator importer United States',
-    'HYGEN hydrogen generator distributor',
-    'commercial energy equipment dealer US'
+    'industrial generator distributor United States procurement',
+    'commercial backup power dealer US wholesaler',
+    'battery storage system integrator USA buyer',
+    'solar inverter procurement officer United States',
+    'utility-scale energy storage wholesale buyer',
+    'EV charger distributor importer US',
+    'microgrid integration company procurement contact',
+    'datacenter UPS power distributor'
   ],
   'k-bio': [
-    'cosmeceutical importer United States',
-    'Korean skincare ingredient buyer US distributor',
-    'medical device importer USA Korean OEM'
+    'cosmeceutical importer United States procurement',
+    'medical device distributor USA Korean OEM partner',
+    'IVD diagnostics distributor wholesale US',
+    'private-label skincare cosmeceutical brand sourcing',
+    'biotech ingredient buyer USA cosmetic raw material',
+    'dental device importer United States',
+    'clinical lab equipment dealer US procurement',
+    'pharmacy chain private-label sourcing manager'
   ],
   'k-beauty': [
-    'K-beauty wholesale distributor United States',
-    'Korean cosmetics importer US private label',
-    'skincare retail chain procurement Korea'
+    'K-beauty wholesale distributor United States private label',
+    'Korean cosmetics importer USA Sephora',
+    'skincare retail chain procurement manager USA',
+    'beauty subscription box procurement vendor',
+    'Costco Walmart beauty private-label sourcing',
+    'Latam K-beauty distributor importer',
+    'Middle East cosmetics distributor Korean brand',
+    'Southeast Asia K-beauty wholesale buyer'
   ],
   'k-culture-goods': [
-    'Korean traditional craft importer US',
-    'hanbok wholesale distributor United States',
-    'Korean ceramics importer USA gift retailer'
+    'Korean traditional craft importer United States retail',
+    'hanbok wholesale distributor USA fashion buyer',
+    'premium ceramics importer gift retailer USA',
+    'museum store buyer Korean traditional goods',
+    'hanji stationery importer specialty retail',
+    'K-pop merchandise licensing distributor US',
+    'Korean modern hanbok fashion buyer Europe',
+    'gift specialty store buyer Asia traditional craft'
   ],
   'k-franchise': [
-    'Korean franchise master broker United States',
-    'food franchise development consultant US',
-    'restaurant brand licensing buyer USA'
+    'Korean franchise master broker United States licensing',
+    'food franchise development consultant US sourcing',
+    'restaurant brand licensing buyer USA acquisition',
+    'cafe franchise master licensee Middle East',
+    'fitness franchise development director Asia',
+    'beauty service franchise multi-unit operator US',
+    'F&B franchise territory development manager',
+    'master franchisee Korean concept Latin America'
   ],
   'k-smart-living': [
-    'smart home appliance importer United States',
-    'Korean IoT device distributor USA',
-    'air purifier wholesale buyer US'
+    'smart home appliance importer United States procurement',
+    'Korean IoT device distributor USA wholesale',
+    'air purifier wholesale buyer US private-label',
+    'water purifier rental company procurement Asia',
+    'home automation systems integrator USA',
+    'kitchen appliance importer USA Costco',
+    'wellness device distributor European Union',
+    'small-appliance retail chain sourcing manager'
   ],
   'k-tourism-assets': [
-    'inbound Korea tour operator US',
-    'hanok stay travel agency USA',
-    'Korea tourism wholesaler United States'
+    'Korea inbound tour operator United States travel agency',
+    'hanok stay travel agency USA luxury booking',
+    'Korea tourism wholesaler procurement DMC',
+    'fractional ownership hospitality investor Korea hanok',
+    'wellness travel agency Korean program buyer',
+    'cultural tourism operator USA Korea program',
+    'Asia luxury tour operator inbound Korea',
+    'corporate retreat planner Korea booking agency'
   ]
 };
 

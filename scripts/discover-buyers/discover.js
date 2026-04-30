@@ -24,6 +24,7 @@ require('../discover-makers/lib/dotenv').loadDotEnv();
 const { verifyAll } = require('./verify');
 const persistence = require('./lib/persistence');
 const searchSeed = require('./seeds/search');
+const csvSeed = require('./seeds/csv');
 
 function parseArgs(argv) {
   const out = {};
@@ -34,12 +35,14 @@ function parseArgs(argv) {
   return out;
 }
 
-async function loadSeed(name, { sector, allSectors }) {
+async function loadSeed(name, { sector, allSectors, csvPath }) {
   switch (name) {
     case 'search':
       return allSectors ? await searchSeed.loadAll() : await searchSeed.load(sector);
+    case 'csv':
+      return csvSeed.load({ csvPath, sector: allSectors ? null : sector });
     default:
-      throw new Error(`Unknown seed "${name}". Available: search`);
+      throw new Error(`Unknown seed "${name}". Available: search, csv`);
   }
 }
 
@@ -57,15 +60,20 @@ async function main() {
   const sector = args.sector;
   const allSectors = Boolean(args['all-sectors']);
   const dryRun = Boolean(args['dry-run']);
+  const csvPath = args.csv || null;
 
-  if (!sector && !allSectors) {
-    console.error('error: --sector or --all-sectors is required');
+  // CSV seed allows running without a sector flag (CSV rows carry sector
+  // per row). Search seed requires --sector or --all-sectors.
+  if (seedName !== 'csv' && !sector && !allSectors) {
+    console.error('error: --sector or --all-sectors is required for seed=' + seedName);
     console.error(`available sectors for buyer search: ${searchSeed.availableSectors().join(', ')}`);
     process.exit(1);
   }
 
-  const candidates = await loadSeed(seedName, { sector, allSectors });
-  const scope = allSectors ? `all-sectors (${searchSeed.availableSectors().length})` : `sector=${sector}`;
+  const candidates = await loadSeed(seedName, { sector, allSectors, csvPath });
+  const scope = seedName === 'csv'
+    ? (sector ? `csv sector=${sector}` : 'csv all-rows')
+    : (allSectors ? `all-sectors (${searchSeed.availableSectors().length})` : `sector=${sector}`);
   console.log(`discover-buyers: seed=${seedName} ${scope} candidates=${candidates.length}${dryRun ? ' (dry-run)' : ''}`);
 
   const { entries, reports } = await verifyAll(candidates, { onProgress: logProgress });

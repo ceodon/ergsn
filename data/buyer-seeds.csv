@@ -1,0 +1,15 @@
+# ERGSN buyer seed list — feed to discover-buyers via --seed=csv
+# Header row is required. `url` is the only required column.
+# Empty cells are fine — the verify + LLM pipeline fills the rest.
+# Lines starting with `#` are ignored.
+#
+# Format: url,sector,buyerType,note
+url,sector,buyerType,note
+# K-Security pilot (US)
+https://www.shredderwarehouse.com/,k-security,distributor,
+https://www.myshredder.com/,k-security,distributor,
+https://www.wbmason.com/,k-security,distributor,office-supply chain
+https://www.officedepot.com/,k-security,retail-chain,
+https://www.staples.com/,k-security,retail-chain,
+https://www.unisonmarketplace.com/,k-security,marketplace,fed reverse auction
+# Add your own rows below — one URL per line

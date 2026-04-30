@@ -1,41 +1,55 @@
 'use strict';
 
 /**
- * Buyer-side verify pipeline.
+ * Buyer-side verify pipeline (Phase 1A: multi-page).
  *
- * For each candidate URL from a seed plugin, fetch the homepage, run LLM
- * extraction (CF Workers AI primary, Anthropic Haiku fallback), and produce
- * a buyer-directory entry at status 'raw' (or 'verified' if extraction
- * yields a clear buyerType + primaryEmail).
+ * For each candidate URL:
+ *   1. Fetch the homepage AND up to 5 high-signal sub-pages (/contact*,
+ *      /about*, /procurement*, /vendors*, /partnerships*, /leadership*),
+ *      via lib/multi-page-fetch.js.
+ *   2. Regex-harvest mailto: + body emails from every fetched page.
+ *   3. Pass aggregated visible text + ranked email candidates +
+ *      LinkedIn hint to the LLM. The LLM picks the best emails to keep
+ *      and extracts buyerType / decision-maker / employee-band / etc.
+ *   4. Optional enrichment: SAM.gov + OpenCorporates lookups (Phase 3A/B).
+ *   5. Build a buyer-directory entry at status 'verified' (if email +
+ *      buyerType are confident) or 'raw' (needs human review).
  *
- * Reuses the maker-side fetch + extract-hints helpers — they're sector-
- * agnostic.
+ * Falls through silently on any single-page failure — the partial result
+ * still feeds the LLM. Only a homepage 4xx aborts the whole verify.
  */
 
-const { politeFetch } = require('../discover-makers/lib/fetch');
-const { extractAll } = require('../discover-makers/lib/extract-hints');
 const { bareHost, hostToSlug } = require('../discover-makers/lib/normalize');
 const { enrichBuyer } = require('./lib/llm-extract-buyer');
+const { collectBuyerInfo } = require('./lib/multi-page-fetch');
+const { lookupSamGov } = require('./lib/enrich-sam-gov');
+const { lookupOpenCorporates } = require('./lib/enrich-opencorporates');
 
 function todayISO() { return new Date().toISOString().slice(0, 10); }
 function nowISO()   { return new Date().toISOString(); }
 
 async function verifyCandidate(candidate) {
-  const fetched = await politeFetch(candidate.url);
-  if (!fetched.ok) {
-    return { ok: false, reason: fetched.status > 0 ? `HTTP ${fetched.status}` : (fetched.error || 'fetch failed'), candidate };
+  const collected = await collectBuyerInfo(candidate.url);
+  if (!collected.ok) {
+    return { ok: false, reason: collected.reason || 'fetch failed', candidate };
   }
-
-  const hints = extractAll(fetched.text, fetched.finalUrl);
-  const host = bareHost(fetched.finalUrl) || bareHost(candidate.url);
+  const host = bareHost(collected.finalUrl) || bareHost(candidate.url);
   if (!host) return { ok: false, reason: 'host parse failed', candidate };
+
+  // Pre-compute the email hint for the LLM. Top 3 candidates.
+  const emailHint = (collected.emailCandidates || []).slice(0, 3);
 
   let extraction = null, source = 'cf-workers-ai';
   try {
-    const r = await enrichBuyer({ url: fetched.finalUrl, hints, html: fetched.text });
+    const r = await enrichBuyer({
+      url: collected.finalUrl,
+      hints: collected.aggregatedHints,
+      html: '<MULTIPAGE>' + collected.aggregatedText + '</MULTIPAGE>',
+      extraEmailCandidates: emailHint,
+      linkedinCandidate: collected.linkedinCandidate
+    });
     extraction = r.enriched;
     source = r.source || 'cf-workers-ai';
-    // Per-call AI usage line for the review-server live counter
     if (r.usage) {
       // eslint-disable-next-line no-console
       console.log(`ai-call: in=${r.usage.input_tokens || 0} out=${r.usage.output_tokens || 0}`);
@@ -45,21 +59,40 @@ async function verifyCandidate(candidate) {
   }
   if (!extraction) return { ok: false, reason: 'llm-no-output', candidate };
 
-  // Decide initial status — verified if we have BOTH a sensible buyerType
-  // and at least one email; raw otherwise (human review needed).
-  const hasEmail = !!(extraction.contact && (extraction.contact.primaryEmail || extraction.contact.procurementEmail));
+  // Best email — prefer LLM's pick, but if LLM dropped it, fall back to
+  // the highest-priority harvested address (procurement@/vendor@/etc).
+  const c = extraction.contact || {};
+  if (!c.procurementEmail && !c.primaryEmail && emailHint.length > 0) {
+    const best = emailHint[0];
+    // Disambiguate: harvested email goes into the procurement slot only if
+    // the prefix actually says procurement / vendor / sourcing; otherwise
+    // it's primaryEmail.
+    if (/^procurement@|^vendors?@|^suppliers?@|^purchasing@|^sourcing@/i.test(best.email)) {
+      c.procurementEmail = best.email;
+    } else {
+      c.primaryEmail = best.email;
+    }
+    extraction.contact = c;
+  }
+  if (!c.linkedinUrl && collected.linkedinCandidate) {
+    c.linkedinUrl = collected.linkedinCandidate;
+    extraction.contact = c;
+  }
+
+  // Decide initial status
+  const hasEmail = !!(c.procurementEmail || c.primaryEmail);
   const hasBuyerType = extraction.buyerType && extraction.buyerType !== 'unclear';
   const status = (hasEmail && hasBuyerType) ? 'verified' : 'raw';
 
   const entry = {
     id: hostToSlug(host),
-    legalName: extraction.legalName || hints.ogSiteName || '',
-    displayName: extraction.displayName || hints.ogSiteName || hints.title || '',
+    legalName: extraction.legalName || (collected.aggregatedHints.ogSiteName) || '',
+    displayName: extraction.displayName || (collected.aggregatedHints.ogSiteName) || (collected.aggregatedHints.title) || '',
     country: extraction.country || (host.endsWith('.kr') ? 'KR' : ''),
     region: extraction.region || '',
     sector: candidate.sectorHint || 'multi',
     buyerType: extraction.buyerType,
-    homepageUrl: fetched.finalUrl,
+    homepageUrl: collected.finalUrl,
     homepageHost: host,
     headquartersAddress: extraction.headquartersAddress || '',
     employeeSizeBand: extraction.employeeSizeBand,
@@ -74,8 +107,34 @@ async function verifyCandidate(candidate) {
     }],
     status,
     discoveredAt: todayISO(),
-    lastVerifiedAt: nowISO()
+    lastVerifiedAt: nowISO(),
+    enrichmentSources: { llm: source, pagesScanned: collected.pages.length, emailsHarvested: (collected.emailCandidates || []).length }
   };
+
+  // Phase 3A — SAM.gov enrichment for likely-fed-procurement US entries
+  const wantSam = entry.country === 'US' && (entry.buyerType === 'fed-procurement' || ['k-security','k-energy','k-bio','k-tech'].includes(entry.sector));
+  if (wantSam) {
+    try {
+      const sam = await lookupSamGov(entry.legalName || entry.displayName || '');
+      if (sam && sam.matched) {
+        entry.samGov = sam;
+        // If SAM has a more authoritative legal name, prefer it
+        if (sam.legalBusinessName) entry.legalName = sam.legalBusinessName;
+        entry.enrichmentSources.samGov = sam.source || 'sam.gov';
+      }
+    } catch (_) { /* best-effort */ }
+  }
+
+  // Phase 3B — OpenCorporates legal-registry cross-check (best-effort)
+  try {
+    const oc = await lookupOpenCorporates({ name: entry.legalName || entry.displayName, country: entry.country });
+    if (oc && oc.matched) {
+      entry.openCorporates = oc;
+      if (!entry.headquartersAddress && oc.registeredAddress) entry.headquartersAddress = oc.registeredAddress;
+      entry.enrichmentSources.openCorporates = oc.source || 'opencorporates';
+    }
+  } catch (_) { /* best-effort */ }
+
   return { ok: true, entry, hasBuyerType, hasEmail, source };
 }
 

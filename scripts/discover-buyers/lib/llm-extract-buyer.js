@@ -73,22 +73,38 @@ function htmlToText(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
-function buildUserMsg({ url, hints, html }) {
-  const slim = htmlToText(html).slice(0, 4000);
+function buildUserMsg({ url, hints, html, extraEmailCandidates, linkedinCandidate }) {
+  // For multi-page input, the caller wraps content in <MULTIPAGE>...</MULTIPAGE>
+  // already; for single-page just runs through htmlToText as before.
+  const isMulti = /^<MULTIPAGE>/i.test(String(html || '').trim());
+  const slim = isMulti
+    ? String(html).replace(/^<MULTIPAGE>/i, '').replace(/<\/MULTIPAGE>$/i, '').slice(0, 8000)
+    : htmlToText(html).slice(0, 6000);
   const hintBlob = JSON.stringify({
     title: hints.title || '',
     ogSiteName: hints.ogSiteName || '',
     metaDescription: (hints.metaDescription || '').slice(0, 240),
     htmlLang: hints.htmlLang || ''
   });
+  const emailHintLines = Array.isArray(extraEmailCandidates) && extraEmailCandidates.length
+    ? [
+        '<HARVESTED_EMAILS>',
+        'These addresses were regex-harvested from the company\'s own pages (mailto: links and footer text). Pick the best B2B/procurement-oriented one for primaryEmail or procurementEmail. The list is pre-sorted by likely relevance.',
+        JSON.stringify(extraEmailCandidates.map(e => ({ email: e.email, source: e.source, page: e.pageUrl }))),
+        '</HARVESTED_EMAILS>'
+      ].join('\n')
+    : '';
+  const liHint = linkedinCandidate ? `<LINKEDIN_CANDIDATE>${linkedinCandidate}</LINKEDIN_CANDIDATE>` : '';
   return [
     `<COMPANY_PAGE url="${url.replace(/"/g, '&quot;')}">`,
     '<HINTS>', hintBlob, '</HINTS>',
+    emailHintLines,
+    liHint,
     '<VISIBLE_TEXT>', slim, '</VISIBLE_TEXT>',
     '</COMPANY_PAGE>',
     '',
-    'Return the JSON object now.'
-  ].join('\n');
+    'Return the JSON object now. If <HARVESTED_EMAILS> is present, prefer those over any address you find in <VISIBLE_TEXT> — the regex harvest already filtered noise.'
+  ].filter(Boolean).join('\n');
 }
 
 function safeParseJson(text) {
@@ -138,13 +154,13 @@ function sanitise(o) {
   };
 }
 
-async function enrichBuyer({ url, hints, html }, { model = DEFAULT_MODEL, maxTokens = 700 } = {}) {
+async function enrichBuyer({ url, hints, html, extraEmailCandidates, linkedinCandidate }, { model = DEFAULT_MODEL, maxTokens = 800 } = {}) {
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   const apiToken  = process.env.CLOUDFLARE_AI_TOKEN;
   if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID missing in .env');
   if (!apiToken)  throw new Error('CLOUDFLARE_AI_TOKEN missing in .env');
 
-  const userMsg = buildUserMsg({ url, hints, html });
+  const userMsg = buildUserMsg({ url, hints, html, extraEmailCandidates, linkedinCandidate });
   const cfUrl = `${ACCOUNT_BASE}/${encodeURIComponent(accountId)}/ai/run/${model}`;
   const body = {
     messages: [
