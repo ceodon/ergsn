@@ -111,18 +111,42 @@ npx wrangler secret put CF_ACCESS_AUD  --config wrangler.trade-docs.jsonc
 
 The Worker will read these on next request — no redeploy needed.
 
-## Step 8 — Verify the gate works
+## Step 8 — Enable the admin deploy (remove admin/ from .cfignore)
 
-1. In a fresh incognito window: `https://admin.ergsn.net/`
+Until now, `admin/` has been kept OUT of the public Worker deploy via a
+line in `.cfignore`. This is the safety net during setup — without CF
+Access in front, deploying admin/ would expose the launcher publicly.
+
+Now that CF Access is gating both `admin.ergsn.net/*` and
+`ergsn.net/admin/*`, the admin/ files can be safely deployed. Remove the
+`.cfignore` entry and push:
+
+```bash
+# In the repo root
+sed -i.bak '/^admin\/$/d; /^# Admin hub.*deploy/,/^$/d' .cfignore  # remove the "admin/" rule + comment block
+rm .cfignore.bak
+git add .cfignore
+git commit -m "Enable admin/ in deploy now that CF Access is live"
+git push origin main
+```
+
+Wait ~60 seconds for the auto-build to finish. (Or check
+https://dash.cloudflare.com → Workers & Pages → ergsn → Deployments.)
+
+## Step 9 — Verify the gate works
+
+1. In a fresh incognito window: `https://admin.ergsn.net/admin/`
 2. Should redirect to Cloudflare Access login screen
 3. Enter your email → check inbox for 6-digit PIN → enter PIN
-4. Should land on the admin hub (`/admin/index.html`)
-5. The audit feed at the bottom should populate (proves Worker JWT verification works)
-6. From a NON-allowed email (use any other inbox if you have one): should be denied with "You don't have permission".
+4. Should land on the admin hub
+5. The top bar should show your verified email (`Signed in as <email> via Cloudflare Access`)
+6. The audit feed at the bottom should populate (proves Worker JWT verification works)
+7. From a NON-allowed email (use any other inbox if you have one): should be denied with "You don't have permission".
+8. Visit `https://ergsn.net/admin/` — should ALSO go through CF Access (since the second destination gates the apex path).
 
-If all four work, you're done.
+If all six work, you're done.
 
-## Step 9 — Repeat for the local-tool subdomains (later, in Phase 2)
+## Step 10 — Repeat for the local-tool subdomains (later, in Phase 2)
 
 Repeat Steps 1, 4, 5, 6, 7 for:
 

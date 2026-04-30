@@ -25,6 +25,12 @@ data/maker-contacts.json
 CLAUDE.md
 PRODUCTS.md
 
+# Admin hub — kept out of the public deploy until Cloudflare Access is
+# configured per admin/CF_ACCESS_SETUP.md. Remove this rule AFTER Step 8
+# of the runbook (gate verified working). Until then, /admin/* must
+# return 404 from the public site.
+admin/
+
 # Lock files — no need to ship
 package-lock.json
 bun.lock
