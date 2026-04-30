@@ -302,20 +302,29 @@
     `https://${CF_ACCESS_TEAM}.cloudflareaccess.com/cdn-cgi/access/logout`;
 
   /* whoami — surface the verified email at the top so the admin can
-     visually confirm "I am logged in as the expected account". */
+     visually confirm "I am logged in as the expected account".
+     Uses Cloudflare Access's same-origin /cdn-cgi/access/get-identity
+     endpoint, which returns the verified user's email + groups when
+     the CF_Authorization cookie is present. This works ONLY when the
+     page is served from a CF Access-gated hostname (admin.ergsn.net or
+     ergsn.net/admin/*). On a non-gated origin it returns 401 and we
+     show "unauthenticated" — that's a useful diagnostic too. */
   async function loadWhoami() {
     const span = document.getElementById('who-email');
     try {
-      const r = await fetch(TRADE_DOCS_ENDPOINT + '/admin/whoami', {
-        headers: adminHeaders(),
-        credentials: 'include'
-      });
-      if (!r.ok) { span.textContent = 'unauthenticated'; return; }
+      const r = await fetch('/cdn-cgi/access/get-identity', { credentials: 'same-origin' });
+      if (r.status === 401 || r.status === 403) {
+        span.textContent = 'CF Access not active on this origin';
+        span.title = 'open admin.ergsn.net/admin/ for the gated path';
+        return;
+      }
+      if (!r.ok) { span.textContent = 'unauthenticated (HTTP ' + r.status + ')'; return; }
       const d = await r.json();
-      span.textContent = d.email || (d.source === 'admin-key' ? 'recovery (ADMIN_KEY)' : 'admin');
-      span.title = `source=${d.source} · role=${d.role}`;
-    } catch (_) {
-      span.textContent = 'offline';
+      span.textContent = d.email || d.user_uuid || 'authenticated (no email claim)';
+      const idp = (d.idp && d.idp.type) || 'unknown';
+      span.title = `idp=${idp} · iat=${d.iat || '?'} · groups=${(d.geo && d.geo.country) || ''}`;
+    } catch (e) {
+      span.textContent = 'offline (' + (e.message || 'fetch failed') + ')';
     }
   }
 
