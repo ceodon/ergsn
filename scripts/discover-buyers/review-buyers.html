@@ -564,6 +564,7 @@ function card(b) {
       ${contactBlock}
       ${b.homepageUrl ? `<div class="links"><span class="lbl">🌐</span><a href="${esc(b.homepageUrl)}" target="_blank" rel="noopener">${esc(b.homepageHost || b.homepageUrl)}</a></div>` : ''}
       ${b.notes ? `<div class="meta" style="font-style:italic">${esc(b.notes.slice(0, 200))}</div>` : ''}
+      ${(b._sends && b._sends.length) ? `<div class="meta" style="font-size:11px">📨 ${b._sends.length} sent · last ${esc((b._sends[b._sends.length-1].sentAt || '').slice(0,16))}${b._sends[b._sends.length-1].resendUrl ? ' · <a href="'+esc(b._sends[b._sends.length-1].resendUrl)+'" target="_blank" rel="noopener" style="color:var(--gold)">view in Resend ↗</a>' : ''}</div>` : ''}
       <div class="actions">
         <button class="bn-verify ${status === 'verified' ? 'is-active' : ''}" data-act="verify" title="Mark verified">✓ Verify</button>
         <button class="bn-queued ${status === 'queued' ? 'is-active' : ''}" data-act="queued" title="Hold for later">⏸ Queue</button>
@@ -688,9 +689,15 @@ $('cmp-send').addEventListener('click', async () => {
     showBanner('Send failed: ' + (d.error || ''), 'err'); hideBanner(6000);
     return;
   }
-  setSaving('✓ sent · ' + (d.sentAt || ''), 'ok');
-  showBanner('✓ Email sent', 'done'); hideBanner(3000);
-  setTimeout(() => { closeCmp(); loadBuyers(); }, 1200);
+  // Surface the Resend deep-link so the user can verify delivery / opens
+  // / bounces directly in the Resend dashboard for THIS specific message.
+  const resendLink = d.resendUrl
+    ? ` · <a href="${esc(d.resendUrl)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">view in Resend</a>`
+    : '';
+  setSaving('✓ sent · ' + (d.sentAt || '') + (d.resendId ? ' · id ' + d.resendId.slice(0, 8) : ''), 'ok');
+  $('cmp-msg').innerHTML = '✓ sent · ' + esc((d.sentAt || '').slice(11, 19)) + resendLink;
+  showBanner('✓ Email sent', 'done'); hideBanner(4000);
+  setTimeout(() => { closeCmp(); loadBuyers(); }, 1800);
 });
 
 // ─── Edit modal ──────────────────────────────────────────────────────────

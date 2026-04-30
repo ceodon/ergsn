@@ -156,6 +156,8 @@ async function main() {
       result = { httpStatus: 0, ok: false, body: { error: e.message } };
     }
     const sentAt = new Date().toISOString();
+    const resendId = result.body && result.body.id ? result.body.id : '';
+    const resendUrl = resendId ? `https://resend.com/emails/${resendId}` : '';
     appendSendLog({
       buyerId: buyer.id,
       toEmail: draft.toEmail,
@@ -164,7 +166,9 @@ async function main() {
       ok: result.ok,
       httpStatus: result.httpStatus,
       composedBy: draft.composedBy,
-      response: result.body
+      response: result.body,
+      resendId,
+      resendUrl
     });
     // Update buyer status + draft status
     if (result.ok) {
@@ -173,9 +177,11 @@ async function main() {
       if (x) { x.status = 'contacted'; x.lastEmailedAt = sentAt; persistence.write(obj); }
       draft.status = 'sent';
       draft.sentAt = sentAt;
+      draft.resendId = resendId;
+      draft.resendUrl = resendUrl;
       fs.writeFileSync(draft._file, JSON.stringify(draft, null, 2) + '\n');
       sent += 1;
-      console.log(`  OK   ${buyer.id}  ·  HTTP ${result.httpStatus}`);
+      console.log(`  OK   ${buyer.id}  ·  HTTP ${result.httpStatus}  ·  resend: ${resendUrl}`);
     } else {
       draft.status = 'failed';
       draft.lastError = JSON.stringify(result.body).slice(0, 200);

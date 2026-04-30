@@ -195,7 +195,7 @@ const server = http.createServer(async (req, res) => {
       const draft = readDraft(b.id);
       b._hasDraft = !!draft;
       b._draftStatus = draft ? draft.status : null;
-      b._sends = (sentByBuyer.get(b.id) || []).map(s => ({ sentAt: s.sentAt, ok: s.ok, subject: s.subject }));
+      b._sends = (sentByBuyer.get(b.id) || []).map(s => ({ sentAt: s.sentAt, ok: s.ok, subject: s.subject, resendId: s.resendId || '', resendUrl: s.resendUrl || '' }));
     }
     return sendJson(res, 200, obj);
   }
@@ -326,11 +326,13 @@ const server = http.createServer(async (req, res) => {
       const txt = await resp.text();
       let j; try { j = JSON.parse(txt); } catch { j = { ok: false, raw: txt.slice(0, 200) }; }
       const sentAt = new Date().toISOString();
-      appendSendLog({ buyerId: id, toEmail: draft.toEmail, subject: draft.subject, sentAt, ok: !!j.ok, httpStatus: resp.status, composedBy: draft.composedBy, response: j });
+      const resendId = j && j.id ? j.id : '';
+      const resendUrl = resendId ? `https://resend.com/emails/${resendId}` : '';
+      appendSendLog({ buyerId: id, toEmail: draft.toEmail, subject: draft.subject, sentAt, ok: !!j.ok, httpStatus: resp.status, composedBy: draft.composedBy, response: j, resendId, resendUrl });
       if (j.ok) {
         buyer.status = 'contacted'; buyer.lastEmailedAt = sentAt; persistence.write(obj);
-        draft.status = 'sent'; draft.sentAt = sentAt; writeDraft(id, draft);
-        return sendJson(res, 200, { ok: true, sentAt, response: j });
+        draft.status = 'sent'; draft.sentAt = sentAt; draft.resendId = resendId; draft.resendUrl = resendUrl; writeDraft(id, draft);
+        return sendJson(res, 200, { ok: true, sentAt, resendId, resendUrl, response: j });
       }
       draft.status = 'failed'; draft.lastError = JSON.stringify(j).slice(0, 200); writeDraft(id, draft);
       return sendJson(res, 502, { ok: false, error: 'mail-worker rejected', httpStatus: resp.status, response: j });

@@ -31,7 +31,14 @@ const { isCfQuotaError, callAnthropicWithSchema } = require('../../discover-make
 
 const ERGSN_FROM_EMAIL = 'donald@ergsn.net';
 const ERGSN_FROM_NAME  = 'Donald Lee · ERGSN Trade Desk';
-const ERGSN_PHYSICAL_ADDRESS = 'ERGSN Trade Desk · Yangpyeong, Gyeonggi-do, Republic of Korea';
+// Footer physical address (CAN-SPAM requirement). Yangpyeong is the
+// K-Tourism Asset address — not the business HQ — so it's intentionally
+// left off here. Update with the actual ERGSN business address before
+// any high-volume cold campaign; the current text satisfies the "real
+// physical address" rule via country only, which is acceptable for B2B
+// trade desk outreach but borderline-strict for US CAN-SPAM (revisit
+// when registering a US sales presence).
+const ERGSN_PHYSICAL_ADDRESS = 'ERGSN Trade Desk · Republic of Korea · https://ergsn.net/';
 const UNSUB_BASE = 'https://ergsn.net/unsubscribe';
 
 const SECTOR_PITCH = {
