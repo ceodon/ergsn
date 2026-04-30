@@ -40,10 +40,84 @@ function cors(origin, allowList) {
   return {
     'Access-Control-Allow-Origin': matched,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Cf-Access-Jwt-Assertion',
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin'
   };
+}
+
+/* ─── Cloudflare Access JWT verification (defense in depth) ───────────────
+ * Mirrors the verifier in cloudflare-worker-trade-docs.js so this Worker
+ * can also validate signed CF Access JWTs at the edge. Even when the
+ * request reaches us through CF Access, we re-verify the signature so
+ * a misconfigured Access policy or accidentally-public hostname cannot
+ * grant admin access on its own.
+ *
+ * Secrets required (set via `wrangler secret put`):
+ *   CF_ACCESS_TEAM = <team-name>     (e.g. "ergsn")
+ *   CF_ACCESS_AUD  = <application AUD tag>
+ *
+ * If those secrets are absent, the JWT path silently fails — caller
+ * falls through to the X-Admin-Key recovery path. */
+let _jwksCache = null;
+const JWKS_TTL_MS = 60 * 60 * 1000;
+async function fetchJwks(team) {
+  if (_jwksCache && (Date.now() - _jwksCache.fetchedAt) < JWKS_TTL_MS) return _jwksCache.keys;
+  const r = await fetch(`https://${team}.cloudflareaccess.com/cdn-cgi/access/certs`, { cf: { cacheTtl: 3600, cacheEverything: true } });
+  if (!r.ok) throw new Error('JWKS fetch failed: ' + r.status);
+  const data = await r.json();
+  _jwksCache = { keys: data.keys || [], fetchedAt: Date.now() };
+  return _jwksCache.keys;
+}
+function _b64urlBytes(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function _b64urlJson(s) { return JSON.parse(new TextDecoder().decode(_b64urlBytes(s))); }
+async function verifyAccessJwt(token, env) {
+  if (!env.CF_ACCESS_TEAM || !env.CF_ACCESS_AUD) throw new Error('CF Access secrets not configured');
+  const parts = token.split('.');
+  if (parts.length !== 3) throw new Error('malformed JWT');
+  const header = _b64urlJson(parts[0]);
+  const payload = _b64urlJson(parts[1]);
+  if (header.alg !== 'RS256') throw new Error('unexpected alg');
+  if (!header.kid) throw new Error('no kid');
+  const keys = await fetchJwks(env.CF_ACCESS_TEAM);
+  const jwk = keys.find(k => k.kid === header.kid);
+  if (!jwk) throw new Error('no JWKS key for kid');
+  const cryptoKey = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', cryptoKey, _b64urlBytes(parts[2]), new TextEncoder().encode(parts[0] + '.' + parts[1]));
+  if (!valid) throw new Error('signature invalid');
+  const now = Math.floor(Date.now() / 1000);
+  if (typeof payload.exp !== 'number' || payload.exp < now) throw new Error('expired');
+  if (typeof payload.iat === 'number' && payload.iat > now + 60) throw new Error('iat in future');
+  if (payload.iss !== `https://${env.CF_ACCESS_TEAM}.cloudflareaccess.com`) throw new Error('bad iss');
+  const auds = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+  if (!auds.includes(env.CF_ACCESS_AUD)) throw new Error('aud mismatch');
+  if (!payload.email) throw new Error('no email claim');
+  return { email: String(payload.email).toLowerCase(), sub: payload.sub || null };
+}
+
+/* Dual-auth helper. Returns {ok, source, email, error} where source is
+ * 'cf-access' (verified JWT) or 'admin-key' (X-Admin-Key matches secret).
+ * Order: JWT preferred. JWT-present-but-invalid fails closed. */
+async function adminAuth(request, env) {
+  const jwt = request.headers.get('Cf-Access-Jwt-Assertion') || request.headers.get('cf-access-jwt-assertion') || '';
+  if (jwt) {
+    try {
+      const { email } = await verifyAccessJwt(jwt, env);
+      return { ok: true, source: 'cf-access', email };
+    } catch (_) {
+      return { ok: false, error: 'invalid CF Access JWT' };
+    }
+  }
+  const key = request.headers.get('X-Admin-Key') || '';
+  if (env.ADMIN_KEY && key === env.ADMIN_KEY) return { ok: true, source: 'admin-key', email: null };
+  return { ok: false, error: 'unauthorized' };
 }
 function genId() {
   const t = Date.now().toString(36);
@@ -235,8 +309,8 @@ export default {
 
     // POST /update — admin only
     if (request.method === 'POST' && path.endsWith('/update')) {
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) return j({ ok: false, error: auth.error || 'unauthorized' }, 401);
       let body;
       try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers }); }
       const id = (body.id || '').trim().toUpperCase();
@@ -256,8 +330,8 @@ export default {
 
     // POST /partner/create — admin only — provisions a partner account.
     if (request.method === 'POST' && path.endsWith('/partner/create')) {
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) return j({ ok: false, error: auth.error || 'unauthorized' }, 401);
       let body;
       try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers }); }
       const id = String(body.id || '').trim();
@@ -278,8 +352,8 @@ export default {
 
     // POST /partner/rotate — admin only — issues a new token (invalidating the old one).
     if (request.method === 'POST' && path.endsWith('/partner/rotate')) {
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) return j({ ok: false, error: auth.error || 'unauthorized' }, 401);
       let body;
       try { body = await request.json(); } catch { return new Response('Bad JSON', { status: 400, headers }); }
       const id = String(body.id || '').trim();
@@ -293,8 +367,8 @@ export default {
 
     // GET /partner/list — admin only — returns all partners (no tokens leaked).
     if (request.method === 'GET' && path.endsWith('/partner/list')) {
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) return j({ ok: false, error: auth.error || 'unauthorized' }, 401);
       const res = await env.RFQ.prepare('SELECT id, company_name, tier, sector, product_ids, created_at, token_rotated_at FROM partners ORDER BY created_at DESC').all();
       return j({ ok: true, partners: res.results || [] });
     }
@@ -303,8 +377,8 @@ export default {
     // by product (model name), sector, country, stage, and time series.
     // Powers admin-analytics.html (ergsn.net/admin-analytics).
     if (request.method === 'GET' && path.endsWith('/admin/item-metrics')) {
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) return j({ ok: false, error: 'unauthorized' }, 401);
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) return j({ ok: false, error: auth.error || 'unauthorized' }, 401);
       const range = Math.max(1, Math.min(365, parseInt(url.searchParams.get('range'), 10) || 30));
       const since = Date.now() - (range * 86400000);
       const prevSince = since - (range * 86400000);

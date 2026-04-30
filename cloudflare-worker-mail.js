@@ -59,6 +59,66 @@
  *   inbox (or spam if DNS verification incomplete).
  */
 
+/* ─── Cloudflare Access JWT verification (defense in depth) ───────────────
+ * Mirrors the verifier in cloudflare-worker-trade-docs.js. Allows the
+ * mail Worker's admin endpoints (/admin-send, /raw) to honor a verified
+ * CF Access JWT in addition to the legacy X-Admin-Key. Secrets required:
+ *   CF_ACCESS_TEAM = <team-name>     (e.g. "ergsn")
+ *   CF_ACCESS_AUD  = <application AUD tag>
+ * Both are public identifiers (not actual secrets) — bound via wrangler. */
+let _jwksCache = null;
+const JWKS_TTL_MS = 60 * 60 * 1000;
+async function fetchJwks(team) {
+  if (_jwksCache && (Date.now() - _jwksCache.fetchedAt) < JWKS_TTL_MS) return _jwksCache.keys;
+  const r = await fetch(`https://${team}.cloudflareaccess.com/cdn-cgi/access/certs`, { cf: { cacheTtl: 3600, cacheEverything: true } });
+  if (!r.ok) throw new Error('JWKS fetch failed: ' + r.status);
+  const data = await r.json();
+  _jwksCache = { keys: data.keys || [], fetchedAt: Date.now() };
+  return _jwksCache.keys;
+}
+function _b64urlBytes(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  const bin = atob(s);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function _b64urlJson(s) { return JSON.parse(new TextDecoder().decode(_b64urlBytes(s))); }
+async function verifyAccessJwt(token, env) {
+  if (!env.CF_ACCESS_TEAM || !env.CF_ACCESS_AUD) throw new Error('CF Access secrets not configured');
+  const parts = token.split('.');
+  if (parts.length !== 3) throw new Error('malformed JWT');
+  const header = _b64urlJson(parts[0]);
+  const payload = _b64urlJson(parts[1]);
+  if (header.alg !== 'RS256') throw new Error('unexpected alg');
+  if (!header.kid) throw new Error('no kid');
+  const keys = await fetchJwks(env.CF_ACCESS_TEAM);
+  const jwk = keys.find(k => k.kid === header.kid);
+  if (!jwk) throw new Error('no JWKS key for kid');
+  const cryptoKey = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', cryptoKey, _b64urlBytes(parts[2]), new TextEncoder().encode(parts[0] + '.' + parts[1]));
+  if (!valid) throw new Error('signature invalid');
+  const now = Math.floor(Date.now() / 1000);
+  if (typeof payload.exp !== 'number' || payload.exp < now) throw new Error('expired');
+  if (typeof payload.iat === 'number' && payload.iat > now + 60) throw new Error('iat in future');
+  if (payload.iss !== `https://${env.CF_ACCESS_TEAM}.cloudflareaccess.com`) throw new Error('bad iss');
+  const auds = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
+  if (!auds.includes(env.CF_ACCESS_AUD)) throw new Error('aud mismatch');
+  if (!payload.email) throw new Error('no email claim');
+  return { email: String(payload.email).toLowerCase(), sub: payload.sub || null };
+}
+async function adminAuth(request, env) {
+  const jwt = request.headers.get('Cf-Access-Jwt-Assertion') || request.headers.get('cf-access-jwt-assertion') || '';
+  if (jwt) {
+    try { const { email } = await verifyAccessJwt(jwt, env); return { ok: true, source: 'cf-access', email }; }
+    catch (_) { return { ok: false, error: 'invalid CF Access JWT' }; }
+  }
+  const key = request.headers.get('X-Admin-Key') || '';
+  if (env.ADMIN_KEY && key === env.ADMIN_KEY) return { ok: true, source: 'admin-key', email: null };
+  return { ok: false, error: 'unauthorized' };
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin') || '';
@@ -68,7 +128,7 @@ export default {
     const cors = {
       'Access-Control-Allow-Origin': matched,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Cf-Access-Jwt-Assertion',
       'Access-Control-Max-Age': '86400',
       'Vary': 'Origin'
     };
@@ -92,12 +152,13 @@ export default {
     if (path === '/send') return handleSend(body, env, cors);
     if (path === '/raw')  return handleRaw(body, env, cors, request);
     if (path === '/admin-send') {
-      /* Same brand-wrap as /send, gated by ADMIN_KEY header. Used by
-         the owner-only send-mail.html composer so a leaked URL alone
-         can't spray spam through the relay. */
-      const key = request.headers.get('X-Admin-Key') || '';
-      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
-        return jsonResponse({ ok: false, error: 'unauthorized' }, 401, cors);
+      /* Same brand-wrap as /send, gated by dual-auth (CF Access JWT or
+         legacy X-Admin-Key). Used by the owner-only send-mail.html
+         composer so a leaked URL alone can't spray spam through the
+         relay. JWT path verifies signature, iss, aud, exp at the edge. */
+      const auth = await adminAuth(request, env);
+      if (!auth.ok) {
+        return jsonResponse({ ok: false, error: auth.error || 'unauthorized' }, 401, cors);
       }
       return handleSend(body, env, cors);
     }
@@ -147,9 +208,10 @@ async function handleSend(body, env, cors) {
  * /raw — admin-only, no template wrap (for transactional internals)
  * ================================================================== */
 async function handleRaw(body, env, cors, request) {
-  const key = request.headers.get('X-Admin-Key') || '';
-  if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
-    return jsonResponse({ ok: false, error: 'unauthorized' }, 401, cors);
+  /* Dual-auth: CF Access JWT preferred, X-Admin-Key as recovery. */
+  const auth = await adminAuth(request, env);
+  if (!auth.ok) {
+    return jsonResponse({ ok: false, error: auth.error || 'unauthorized' }, 401, cors);
   }
   /* Caller is fully responsible for the Resend payload shape — passed
      through as-is. Use this only when the brand wrap is in the way
