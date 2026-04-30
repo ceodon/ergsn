@@ -138,7 +138,7 @@ async function verifyCandidate(candidate) {
   return { ok: true, entry, hasBuyerType, hasEmail, source };
 }
 
-async function verifyAll(candidates, { onProgress } = {}) {
+async function verifyAll(candidates, { onProgress, onEntry } = {}) {
   const reports = [];
   const entries = [];
   let i = 0;
@@ -146,7 +146,18 @@ async function verifyAll(candidates, { onProgress } = {}) {
     i += 1;
     const r = await verifyCandidate(c);
     reports.push(r);
-    if (r.ok) entries.push(r.entry);
+    if (r.ok) {
+      entries.push(r.entry);
+      // Incremental hook — discover.js wires this to upsertMany([entry])
+      // so each verified buyer lands in the directory immediately. Without
+      // this, an interrupted batch (Ctrl+C, OS shutdown, CF quota wall)
+      // would lose every verified entry that hadn't reached the post-loop
+      // persist step.
+      if (onEntry) {
+        try { await onEntry(r.entry); }
+        catch (e) { /* eslint-disable-next-line no-console */ console.error('  onEntry error:', e.message); }
+      }
+    }
     if (onProgress) onProgress({ i, total: candidates.length, candidate: c, result: r });
   }
   return { entries, reports };

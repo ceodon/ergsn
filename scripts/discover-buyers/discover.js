@@ -70,21 +70,40 @@ async function main() {
     process.exit(1);
   }
 
-  const candidates = await loadSeed(seedName, { sector, allSectors, csvPath });
+  let candidates = await loadSeed(seedName, { sector, allSectors, csvPath });
+
+  // Cap — even with --all-sectors a sweep can surface 1,000+ candidates
+  // (9 sectors × 8-12 queries × up to 20 results). Each verify is
+  // 5-30 seconds, so an unbounded run takes hours. --max defaults to 200
+  // for buyer side; user passes --max=10000 to override.
+  const maxArg = args.max ? Number(args.max) : 200;
+  if (Number.isFinite(maxArg) && maxArg > 0 && candidates.length > maxArg) {
+    console.log(`(capping ${candidates.length} candidates → ${maxArg} via --max=${maxArg}; pass a larger --max to sweep more)`);
+    candidates = candidates.slice(0, maxArg);
+  }
+
   const scope = seedName === 'csv'
     ? (sector ? `csv sector=${sector}` : 'csv all-rows')
     : (allSectors ? `all-sectors (${searchSeed.availableSectors().length})` : `sector=${sector}`);
   console.log(`discover-buyers: seed=${seedName} ${scope} candidates=${candidates.length}${dryRun ? ' (dry-run)' : ''}`);
 
-  const { entries, reports } = await verifyAll(candidates, { onProgress: logProgress });
+  // Incremental persist hook — each successful verify lands in
+  // data/buyer-directory.json IMMEDIATELY so the UI sees results trickling
+  // in real time, and an interrupted batch never loses verified entries.
+  let persistedCount = 0;
+  const onEntry = dryRun ? null : (entry) => {
+    const stats = persistence.upsertMany([entry]);
+    persistedCount += stats.added + stats.updated;
+  };
+
+  const { entries, reports } = await verifyAll(candidates, { onProgress: logProgress, onEntry });
 
   const okCount = reports.filter(r => r.ok).length;
   const verifiedCount = reports.filter(r => r.ok && r.entry.status === 'verified').length;
   const failCount = reports.filter(r => !r.ok).length;
 
-  if (!dryRun && entries.length > 0) {
-    const stats = persistence.upsertMany(entries);
-    console.log(`\npersisted: +${stats.added} new, ${stats.updated} updated → ${stats.total} total in ${persistence.FILE}`);
+  if (!dryRun) {
+    console.log(`\npersisted: ${persistedCount} entries written incrementally → ${persistence.read().buyers.length} total in ${persistence.FILE}`);
   }
   console.log(`\nsummary: ${okCount} fetched · ${verifiedCount} verified (auto) · ${failCount} failed`);
 }
