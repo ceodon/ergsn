@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Social Poster · ERGSN Admin</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root {
+    --navy: #0a1428; --navy-2: #14263f; --line: rgba(255,255,255,.12);
+    --gold: #d4af37; --white: #f4f1e8; --muted: #98a3b5;
+    --ok: #34d298; --err: #ff7a7a; --warn: #f5b34c;
+    --card-bg: rgba(255,255,255,.04);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Pretendard, sans-serif; background: var(--navy); color: var(--white); padding: 28px 22px 60px; line-height: 1.5; font-size: 14px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  .crumbs { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--gold); }
+  h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 20px; font-size: 12px; }
+  .pill { display: inline-block; padding: 2px 8px; background: rgba(212,175,55,.15); color: var(--gold); border-radius: 999px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  section { background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; margin-top: 18px; }
+  section h2 { margin: 0 0 12px; font-size: 16px; color: var(--gold); }
+  section .desc { color: var(--muted); font-size: 12px; margin: 0 0 14px; }
+
+  textarea, input[type="text"], input[type="datetime-local"], select { width: 100%; background: rgba(0,0,0,.25); border: 1px solid var(--line); border-radius: 8px; color: var(--white); padding: 10px 12px; font: inherit; outline: none; }
+  textarea { min-height: 130px; resize: vertical; font-family: inherit; }
+  textarea:focus, input:focus, select:focus { border-color: var(--gold); }
+  label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+
+  .platforms { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 6px 0 0; }
+  .platforms label { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(0,0,0,.2); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; margin: 0; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--white); }
+  .platforms label:hover { border-color: var(--gold); }
+  .platforms input[type="checkbox"] { accent-color: var(--gold); }
+  .platforms .pn { color: var(--muted); font-size: 10px; margin-left: auto; text-transform: uppercase; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 700px) { .row, .row.three { grid-template-columns: 1fr; } }
+
+  .images-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .img-thumb { position: relative; width: 84px; height: 84px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: rgba(0,0,0,.3); }
+  .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-thumb button.x { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,.7); color: white; border: 0; width: 18px; height: 18px; border-radius: 9px; cursor: pointer; line-height: 18px; padding: 0; font-size: 10px; }
+
+  .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .btn { padding: 10px 18px; border: 0; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; transition: .15s; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-primary { background: var(--gold); color: var(--navy); }
+  .btn-primary:hover:not(:disabled) { background: #e8c252; }
+  .btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--line); }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+  .btn-danger { background: rgba(255,122,122,.12); color: var(--err); border: 1px solid rgba(255,122,122,.3); }
+
+  .toast { padding: 10px 14px; margin-top: 12px; border-radius: 8px; font-size: 12px; display: none; }
+  .toast.ok  { background: rgba(52,210,152,.12); border: 1px solid rgba(52,210,152,.3); color: var(--ok); display: block; }
+  .toast.err { background: rgba(255,122,122,.12); border: 1px solid rgba(255,122,122,.3); color: var(--err); display: block; }
+
+  .conn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .conn { padding: 12px 14px; background: rgba(0,0,0,.2); border: 1px solid var(--line); border-radius: 8px; font-size: 12px; }
+  .conn .name { font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .conn .status { color: var(--muted); font-size: 11px; }
+  .conn .status.connected { color: var(--ok); }
+  .conn .status.pending { color: var(--warn); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px dashed var(--line); }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: 10px; }
+  td code { background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+  .stage { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .stage.draft { background: rgba(245,179,76,.15); color: var(--warn); }
+  .stage.scheduled { background: rgba(212,175,55,.15); color: var(--gold); }
+  .stage.publishing { background: rgba(212,175,55,.25); color: var(--gold); }
+  .stage.published { background: rgba(52,210,152,.15); color: var(--ok); }
+  .stage.failed { background: rgba(255,122,122,.15); color: var(--err); }
+
+  .gate { background: rgba(255,179,76,.06); border: 1px solid rgba(255,179,76,.3); padding: 16px; border-radius: 10px; margin-bottom: 18px; font-size: 12px; color: var(--warn); }
+  .empty { color: var(--muted); padding: 18px; text-align: center; font-size: 12px; }
+  .small { font-size: 11px; color: var(--muted); }
+  .phase-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; background: rgba(212,175,55,.2); color: var(--gold); font-size: 9px; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="crumbs">
+    <a href="/admin/">← Admin Hub</a>
+  </div>
+
+  <h1>📡 Social Poster <span class="phase-tag">PHASE 1 SKELETON</span></h1>
+  <p class="sub">Cross-post · 예약 · AI 초안 · 분석 — Facebook · Instagram · Threads · LinkedIn · Naver Blog</p>
+
+  <div class="gate" id="gate" style="display:none">
+    <strong>Off-Hub 모드.</strong> 이 도구는 <code>admin.ergsn.net</code> 에서 열어야 정상 동작합니다.
+    여기서는 ADMIN_KEY 폴백이 동작하지만 OAuth 콜백·CF Access actor가 동작하지 않습니다.
+  </div>
+
+  <!-- ─── Composer ─────────────────────────────────────────────── -->
+  <section>
+    <h2>새 게시물</h2>
+    <p class="desc">한 번 작성하면 선택한 모든 플랫폼에 동시 게시. 이미지·해시태그·예약 시각 모두 단일 폼에서 처리.</p>
+
+    <label for="body">본문 <span class="small">(플랫폼별 글자수 제한은 워커가 자동 트리밍)</span></label>
+    <textarea id="body" placeholder="작성할 내용을 입력하세요. 줄바꿈 + 해시태그 + 링크 모두 워커가 플랫폼별 사양에 맞춰 변환합니다."></textarea>
+
+    <label>플랫폼 <span class="small">(체크한 플랫폼에 자동 게시)</span></label>
+    <div class="platforms" id="platformList">
+      <label><input type="checkbox" value="facebook_page" data-default="1"> Facebook Page <span class="pn">FB</span></label>
+      <label><input type="checkbox" value="instagram"    data-default="1"> Instagram <span class="pn">IG</span></label>
+      <label><input type="checkbox" value="threads"      data-default="1"> Threads <span class="pn">TH</span></label>
+      <label><input type="checkbox" value="linkedin"     data-default="1"> LinkedIn <span class="pn">LI</span></label>
+      <label><input type="checkbox" value="naver_blog"> Naver Blog <span class="pn">NV · 수동 보조</span></label>
+    </div>
+
+    <div class="row three">
+      <div>
+        <label for="locale">언어</label>
+        <select id="locale">
+          <option value="ko">한국어 (ko)</option>
+          <option value="en">English (en)</option>
+          <option value="ja">日本語 (ja)</option>
+          <option value="zh">中文 (zh)</option>
+        </select>
+      </div>
+      <div>
+        <label for="scheduled">발행 시각 <span class="small">(비우면 즉시)</span></label>
+        <input type="datetime-local" id="scheduled">
+      </div>
+      <div>
+        <label for="link">캐노니컬 링크 (선택)</label>
+        <input type="text" id="link" placeholder="https://ergsn.net/...">
+      </div>
+    </div>
+
+    <label for="hashtags">해시태그 <span class="small">(콤마 또는 공백 구분, # 자동 부착)</span></label>
+    <input type="text" id="hashtags" placeholder="ergsn b2bsourcing korea">
+
+    <label>이미지</label>
+    <div class="actions" style="margin-top:6px">
+      <input type="file" id="imageUpload" accept="image/*" multiple style="flex:1">
+      <button class="btn btn-ghost" id="aiMatchBtn" type="button" disabled title="Phase 5">🖼 R2 라이브러리 매칭 (Phase 5)</button>
+      <button class="btn btn-ghost" id="aiGenBtn"   type="button" disabled title="Phase 5">✨ AI 생성 (Phase 5)</button>
+    </div>
+    <div class="images-bar" id="imageBar"></div>
+
+    <div class="actions">
+      <button class="btn btn-ghost"   id="aiDraftBtn" type="button" disabled title="Phase 5">🤖 AI 초안 (Phase 5)</button>
+      <button class="btn btn-ghost"   id="saveBtn"    type="button">💾 초안 저장</button>
+      <button class="btn btn-primary" id="publishBtn" type="button" title="Phase 2-3 OAuth 연결 후 활성화">🚀 발행</button>
+      <button class="btn btn-ghost"   id="resetBtn"   type="button" style="margin-left:auto">↺ 비우기</button>
+    </div>
+    <div class="toast" id="composerToast"></div>
+  </section>
+
+  <!-- ─── OAuth connections ───────────────────────────────────── -->
+  <section>
+    <h2>SNS 연결 상태</h2>
+    <p class="desc">
+      각 플랫폼의 Developer App 등록 → OAuth 인증 후 토큰이 D1에 저장되면 발행 가능. <strong>Phase 2</strong> Meta(FB·IG·Threads), <strong>Phase 3</strong> LinkedIn 단계에서 활성화.
+    </p>
+    <div class="conn-grid" id="connGrid">로딩…</div>
+    <p class="small" style="margin-top:14px">
+      Naver Blog는 공식 자동게시 API 부재로 <strong>수동 보조</strong> 모드로 발행됩니다 — 본문·이미지·해시태그를 클립보드에 정렬해 붙여넣기 1회 클릭으로 끝.
+    </p>
+  </section>
+
+  <!-- ─── Recent posts ────────────────────────────────────────── -->
+  <section>
+    <h2>최근 게시물</h2>
+    <p class="desc">초안·예약·발행 결과 통합 조회. 플랫폼별 결과는 행을 클릭해 확장.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>작성</th>
+          <th>상태</th>
+          <th>플랫폼</th>
+          <th>본문</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="postBody"><tr><td colspan="6" class="empty">로딩…</td></tr></tbody>
+    </table>
+  </section>
+
+</div>
+
+<script>
+/* ─── endpoint resolution (origin-aware, mirrors other admin tools) ─── */
+const ON_ADMIN = (location.hostname === 'admin.ergsn.net');
+const API = ON_ADMIN ? '/api/social' : 'https://ergsn-social.ceodon.workers.dev';
+const SS_KEY = 'ergsn_admin_key';
+const CF_LOGOUT = 'https://ergsn.cloudflareaccess.com/cdn-cgi/access/logout';
+const PLATFORM_LABEL = {
+  facebook_page: 'Facebook',
+  instagram: 'Instagram',
+  threads: 'Threads',
+  linkedin: 'LinkedIn',
+  naver_blog: 'Naver Blog'
+};
+const PROVIDER_OF = {
+  facebook_page: 'meta',
+  instagram: 'meta',
+  threads: 'meta',
+  linkedin: 'linkedin',
+  naver_blog: 'naver'
+};
+
+if (!ON_ADMIN) document.getElementById('gate').style.display = 'block';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function adminKey() { try { return sessionStorage.getItem(SS_KEY) || ''; } catch (_) { return ''; } }
+function authHeaders(extra) {
+  const h = { ...(extra || {}) };
+  const k = adminKey();
+  if (k) h['X-Admin-Key'] = k;
+  return h;
+}
+async function api(method, path, body, isForm) {
+  const opts = { method, headers: authHeaders(isForm ? {} : (body ? { 'Content-Type': 'application/json' } : {})) };
+  if (body) opts.body = isForm ? body : JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  if (r.status === 401) {
+    if (ON_ADMIN) { location.reload(); throw new Error('session expired — reloading'); }
+    throw new Error('unauthorized — set localStorage.ADMIN_KEY for off-Hub access');
+  }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || j.ok === false) throw new Error(j.error || ('HTTP ' + r.status));
+  return j;
+}
+
+/* ─── composer state ─── */
+const composer = { images: [] };
+
+function showToast(kind, msg) {
+  const t = $('composerToast');
+  t.className = 'toast ' + kind;
+  t.textContent = msg;
+  setTimeout(() => { if (t.textContent === msg) t.className = 'toast'; }, 6000);
+}
+
+function renderImages() {
+  const bar = $('imageBar');
+  if (!composer.images.length) { bar.innerHTML = ''; return; }
+  bar.innerHTML = composer.images.map((img, i) =>
+    `<div class="img-thumb" data-i="${i}">
+       <img src="${API + '/images/' + esc(img.id)}" alt="${esc(img.alt_text || '')}" loading="lazy">
+       <button class="x" data-i="${i}" title="제거">×</button>
+     </div>`
+  ).join('');
+  bar.querySelectorAll('button.x').forEach(b => b.addEventListener('click', (e) => {
+    const i = parseInt(e.currentTarget.dataset.i, 10);
+    composer.images.splice(i, 1);
+    renderImages();
+  }));
+}
+
+async function uploadFiles(fileList) {
+  for (const f of Array.from(fileList)) {
+    const fd = new FormData();
+    fd.append('file', f);
+    fd.append('alt', '');
+    try {
+      const r = await api('POST', '/images', fd, true);
+      composer.images.push({ id: r.id, r2_key: r.r2_key, mime: r.mime, alt_text: '' });
+    } catch (e) {
+      showToast('err', '업로드 실패: ' + e.message);
+    }
+  }
+  renderImages();
+}
+
+function readPlatforms() {
+  return Array.from(document.querySelectorAll('#platformList input[type="checkbox"]:checked')).map(b => b.value);
+}
+function readHashtags(s) {
+  return (s || '').split(/[,\s]+/).map(h => h.replace(/^#+/, '').trim()).filter(Boolean);
+}
+function readScheduled() {
+  const s = $('scheduled').value;
+  return s ? new Date(s).getTime() : null;
+}
+function readForm() {
+  return {
+    body:         $('body').value,
+    locale:       $('locale').value,
+    link:         $('link').value.trim() || null,
+    hashtags:     readHashtags($('hashtags').value),
+    platforms:    readPlatforms(),
+    scheduled_at: readScheduled(),
+    images:       composer.images.map(i => ({ id: i.id, r2_key: i.r2_key, alt: i.alt_text || '' })),
+    source:       'user'
+  };
+}
+function clearForm() {
+  $('body').value = '';
+  $('hashtags').value = '';
+  $('link').value = '';
+  $('scheduled').value = '';
+  composer.images = [];
+  renderImages();
+  document.querySelectorAll('#platformList input[type="checkbox"]').forEach(b => { b.checked = b.dataset.default === '1'; });
+}
+
+async function saveDraft() {
+  const data = readForm();
+  if (!data.body) { showToast('err', '본문을 입력하세요.'); return; }
+  $('saveBtn').disabled = true;
+  try {
+    const r = await api('POST', '/posts', data);
+    showToast('ok', '✓ 초안 저장됨 · id=' + r.id + (data.scheduled_at ? ' (예약)' : ''));
+    clearForm();
+    loadPosts();
+  } catch (e) {
+    showToast('err', '저장 실패: ' + e.message);
+  } finally {
+    $('saveBtn').disabled = false;
+  }
+}
+
+async function publishNow() {
+  const data = readForm();
+  if (!data.body) { showToast('err', '본문을 입력하세요.'); return; }
+  if (!data.platforms.length) { showToast('err', '발행할 플랫폼을 1개 이상 선택하세요.'); return; }
+  $('publishBtn').disabled = true;
+  try {
+    /* Phase 1: save first, then call publish stub. Phase 2/3 publishers
+       replace the stub with real platform fan-out. */
+    const created = await api('POST', '/posts', data);
+    const r = await api('POST', '/posts/' + created.id + '/publish');
+    showToast(r.stub ? 'err' : 'ok',
+      (r.stub ? '⚠ ' : '✓ ') + (r.message || 'published') + ' · id=' + created.id);
+    clearForm();
+    loadPosts();
+  } catch (e) {
+    showToast('err', '발행 실패: ' + e.message);
+  } finally {
+    $('publishBtn').disabled = false;
+  }
+}
+
+/* ─── recent posts ─── */
+async function loadPosts() {
+  const tbody = $('postBody');
+  try {
+    const r = await api('GET', '/posts?limit=30');
+    const rows = r.rows || [];
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">아직 작성된 게시물 없음.</td></tr>'; return; }
+    tbody.innerHTML = rows.map(p => {
+      const ts = new Date(p.created_at).toISOString().slice(0,16).replace('T',' ');
+      const body = (p.body || '').slice(0, 90) + ((p.body || '').length > 90 ? '…' : '');
+      const targets = '—'; /* expanded in Phase 2 with per-platform results */
+      return `<tr data-id="${esc(p.id)}">
+        <td><code>${esc(p.id)}</code></td>
+        <td><span class="small">${ts}</span></td>
+        <td><span class="stage ${esc(p.status)}">${esc(p.status)}</span></td>
+        <td><span class="small">${targets}</span></td>
+        <td><span class="small">${esc(body)}</span></td>
+        <td><button class="btn btn-ghost" data-del="${esc(p.id)}" style="padding:4px 10px;font-size:11px">삭제</button></td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('button[data-del]').forEach(b => b.addEventListener('click', async (e) => {
+      const id = e.currentTarget.dataset.del;
+      if (!confirm('삭제할까요? ' + id)) return;
+      try { await api('DELETE', '/posts/' + id); loadPosts(); } catch (err) { showToast('err', err.message); }
+    }));
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">로딩 실패: ' + esc(e.message) + '</td></tr>';
+  }
+}
+
+/* ─── OAuth status ─── */
+async function loadConnections() {
+  const grid = $('connGrid');
+  /* Static plan: show all 5 platforms with their phase + connect button. */
+  const plan = [
+    { provider: 'meta',     platform: 'facebook_page', label: 'Facebook Page',   phase: 'Phase 2' },
+    { provider: 'meta',     platform: 'instagram',     label: 'Instagram',       phase: 'Phase 2' },
+    { provider: 'meta',     platform: 'threads',       label: 'Threads',         phase: 'Phase 2' },
+    { provider: 'linkedin', platform: 'linkedin',      label: 'LinkedIn',        phase: 'Phase 3' },
+    { provider: 'naver',    platform: 'naver_blog',    label: 'Naver Blog',      phase: 'Phase 4 (manual)' }
+  ];
+  let connected = [];
+  try { const r = await api('GET', '/oauth/status'); connected = r.connections || []; } catch (_) { /* not fatal */ }
+  grid.innerHTML = plan.map(p => {
+    const has = connected.find(c => c.provider === p.provider);
+    const cls = has ? 'connected' : 'pending';
+    const status = has ? '연결됨 · ' + esc(has.account_label || '') : '미연결 · ' + p.phase;
+    return `<div class="conn">
+      <div class="name">${esc(p.label)}</div>
+      <div class="status ${cls}">${status}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── wire up ─── */
+document.addEventListener('DOMContentLoaded', () => {
+  $('imageUpload').addEventListener('change', (e) => uploadFiles(e.target.files));
+  $('saveBtn').addEventListener('click', saveDraft);
+  $('publishBtn').addEventListener('click', publishNow);
+  $('resetBtn').addEventListener('click', () => { if (confirm('현재 작성 내용을 비우시겠습니까?')) clearForm(); });
+  loadPosts();
+  loadConnections();
+});
+</script>
+<script defer src="scripts/header.js"></script>
+</body>
+</html>

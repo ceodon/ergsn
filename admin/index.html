@@ -51,6 +51,7 @@
   .b-laptop { background: rgba(255,180,60,.15); color: #ffc97a; border: 1px solid rgba(255,180,60,.4); }
   .b-deferred { background: rgba(150,150,150,.12); color: #aaa; border: 1px solid rgba(150,150,150,.3); }
   .b-bot { background: rgba(80,140,255,.15); color: #80a8ff; border: 1px solid rgba(80,140,255,.4); }
+  .b-new { background: rgba(212,175,55,.15); color: var(--gold); border: 1px solid rgba(212,175,55,.4); }
   .card .desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
   .card .meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 12px; }
   .card .meta code { background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 3px; font-size: 10px; color: #ccc; }
@@ -240,6 +241,22 @@
       </div>
       <div class="actions">
         <a class="secondary" href="https://dash.cloudflare.com/" target="_blank" rel="noopener">Cloudflare Dashboard ↗</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">📡</div>
+        <h3>Social Poster</h3>
+        <span class="badge b-new">phase 1</span>
+      </div>
+      <div class="desc">Cross-post one composer message to Facebook · Instagram · Threads · LinkedIn · Naver Blog. Phase 1 skeleton (compose + image library + drafts); OAuth + per-platform publishers + AI draft + insights land in Phase 2-7.</div>
+      <div class="meta">
+        <span><code>social.html</code></span>
+        <span>Worker <code>ergsn-social</code></span>
+      </div>
+      <div class="actions">
+        <a class="go" href="/social.html" target="_blank" rel="noopener">Open ↗</a>
       </div>
     </div>
 

@@ -1,0 +1,62 @@
+// ERGSN Social Poster Worker config — Phase 1 skeleton.
+//
+// Cross-posts a single composer-authored message to:
+//   Facebook Page · Instagram · Threads · LinkedIn · Naver Blog (manual assist)
+// + AI draft (Anthropic), R2 image library + Vision matching, scheduled
+// fan-out, post-publish insights loop. Phase 1 here ships the routing,
+// auth gate, schema, image upload, and stub endpoints — OAuth + per-
+// platform publishers land in Phase 2-3.
+//
+// Usage:
+//   npx wrangler d1 execute ergsn-social --remote --config wrangler.social.jsonc --file migrations/social/0001_init.sql
+//   npx wrangler r2 bucket create ergsn-social-media   (already done)
+//   npx wrangler secret put ADMIN_KEY              --config wrangler.social.jsonc
+//   npx wrangler secret put CF_ACCESS_TEAM         --config wrangler.social.jsonc   # "ergsn"
+//   npx wrangler secret put CF_ACCESS_AUD          --config wrangler.social.jsonc   # 4a18703f...450f
+//   npx wrangler secret put ANTHROPIC_API_KEY      --config wrangler.social.jsonc   # Phase 5
+//   npx wrangler secret put META_APP_ID            --config wrangler.social.jsonc   # Phase 2
+//   npx wrangler secret put META_APP_SECRET        --config wrangler.social.jsonc   # Phase 2
+//   npx wrangler secret put LINKEDIN_CLIENT_ID     --config wrangler.social.jsonc   # Phase 3
+//   npx wrangler secret put LINKEDIN_CLIENT_SECRET --config wrangler.social.jsonc   # Phase 3
+//   npx wrangler deploy --config wrangler.social.jsonc
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ergsn-social",
+  "main": "cloudflare-worker-social.js",
+  "compatibility_date": "2026-04-24",
+  "observability": { "enabled": true },
+  // Keep the *.workers.dev URL alive for manual / off-Hub access (e.g.
+  // OAuth callback endpoints that Meta/LinkedIn must reach without a
+  // CF Access cookie). Adding `routes` would otherwise auto-disable.
+  "workers_dev": true,
+  // Same-origin mount under the CF Access-gated Admin Hub. Composer
+  // fetches travel with the CF_Authorization cookie automatically.
+  "routes": [
+    { "pattern": "admin.ergsn.net/api/social/*", "zone_name": "ergsn.net" }
+  ],
+  // Two D1 bindings:
+  //   DB        — the Worker's own store
+  //   AUDIT_DB  — shared admin_audit_log (lives on ergsn-trade-docs)
+  "d1_databases": [
+    {
+      "binding":       "DB",
+      "database_name": "ergsn-social",
+      "database_id":   "81270845-6acb-4bf8-9a61-c9207abffce3"
+    },
+    {
+      "binding":       "AUDIT_DB",
+      "database_name": "ergsn-trade-docs",
+      "database_id":   "9a3e3579-2458-4710-9ebe-90d49e03f85c"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding":     "FILES",
+      "bucket_name": "ergsn-social-media"
+    }
+  ],
+  // Phase 7 will add a cron trigger (every minute) for scheduled fan-out
+  // and Phase 6 a daily one for insights collection. Disabled until those
+  // handlers exist so we don't burn invocations on stubs.
+  // "triggers": { "crons": ["* * * * *", "0 17 * * *"] }
+}
