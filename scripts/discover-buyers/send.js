@@ -83,8 +83,12 @@ function recentlySent(buyerId, log) {
 }
 
 async function sendOne(draft, endpoint, adminKey) {
+  // Worker's normaliseRecipients expects either a string or an array of
+  // {email,name} objects, NOT a single object — passing a bare object
+  // triggers "invalid `to` address" (the wrap [{email: <whole obj>}]
+  // misreads our object-as-email).
   const body = {
-    to: { email: draft.toEmail, name: draft.toName || '' },
+    to: [{ email: draft.toEmail, ...(draft.toName ? { name: draft.toName } : {}) }],
     from: draft.fromEmail,
     fromName: draft.fromName,
     replyTo: draft.replyTo || draft.fromEmail,

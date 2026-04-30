@@ -316,7 +316,9 @@ const server = http.createServer(async (req, res) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ERGSN_MAIL_ADMIN_KEY, 'Origin': 'https://ergsn.net' },
         body: JSON.stringify({
-          to: { email: draft.toEmail, name: draft.toName || '' },
+          // Worker expects an array (or bare string) — single object triggers
+          // "invalid `to` address" via the [{email: <whole obj>}] mis-wrap.
+          to: [{ email: draft.toEmail, ...(draft.toName ? { name: draft.toName } : {}) }],
           from: draft.fromEmail, fromName: draft.fromName, replyTo: draft.replyTo || draft.fromEmail,
           subject: draft.subject, htmlBody: draft.htmlBody, textBody: draft.textBody || '', locale: 'en'
         })
