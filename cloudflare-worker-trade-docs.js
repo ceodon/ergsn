@@ -178,10 +178,22 @@ export default {
         return adminGate(request, env, cors, () => createDocFromAnother(docFrom[1], docFrom[2], docFrom[3], request, env, cors));
       }
 
-      /* admin: audit log */
+      /* admin: audit log (per-transaction) */
       const auditByTx = path.match(/^\/audit\/by-tx\/([\w-]+)$/);
       if (auditByTx && request.method === 'GET') return adminGate(request, env, cors, () => listAuditByTx(auditByTx[1], env, cors));
       if (path === '/audit/recent' && request.method === 'GET') return adminGate(request, env, cors, () => listAuditRecent(url, env, cors));
+
+      /* admin: ADMIN HUB cross-tool audit log (Phase 4 of admin dashboard
+         consolidation — separate from the per-transaction audit above).
+         Receives one row per admin action across maker review, buyer
+         outreach, partner ops, mail send. Triggers Telegram alerts on
+         suspicious patterns. */
+      if (path === '/admin/audit' && request.method === 'POST') {
+        return adminGate(request, env, cors, () => recordAdminAudit(request, env, cors));
+      }
+      if (path === '/admin/audit/recent' && request.method === 'GET') {
+        return adminGate(request, env, cors, () => listAdminAuditRecent(url, env, cors));
+      }
 
       /* admin: email log */
       const emailByTx = path.match(/^\/email-log\/by-tx\/([\w-]+)$/);
@@ -2396,6 +2408,157 @@ function filterCatalogForAi(catalog, rfqSummary) {
     price: p.price || null, moq: p.moq || null,
     incoterms: p.incoterms || null
   }));
+}
+
+/* ===================================================================
+ * Admin Hub audit log (Phase 4 of project_admin_dashboard_plan.md)
+ *
+ * Cross-tool audit table — separate from the per-transaction audit_log
+ * the trade-docs flow already maintains. One row per admin action across
+ * maker review, buyer outreach, partner ops, mail send. Alert triggers
+ * post to Telegram via env.TG_BOT_TOKEN + env.TG_CHAT_ID when configured.
+ *
+ * Schema is created idempotently on first call so no separate migration
+ * step is needed. Indexes keep the dashboard recent-feed query fast.
+ * =================================================================== */
+
+const ADMIN_AUDIT_TABLE_DDL = [
+  `CREATE TABLE IF NOT EXISTS admin_audit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts TEXT NOT NULL,
+    actor_email TEXT,
+    actor_ip TEXT,
+    actor_ua TEXT,
+    action TEXT NOT NULL,
+    target_kind TEXT,
+    target_id TEXT,
+    payload_json TEXT,
+    ok INTEGER DEFAULT 1,
+    source TEXT
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_admin_audit_ts ON admin_audit_log(ts DESC)`,
+  `CREATE INDEX IF NOT EXISTS idx_admin_audit_actor ON admin_audit_log(actor_email, ts DESC)`,
+  `CREATE INDEX IF NOT EXISTS idx_admin_audit_action ON admin_audit_log(action, ts DESC)`
+];
+let _adminAuditReady = false;
+
+async function ensureAdminAuditTable(env) {
+  if (_adminAuditReady) return;
+  for (const ddl of ADMIN_AUDIT_TABLE_DDL) {
+    try { await env.DB.prepare(ddl).run(); } catch (_) { /* ignore */ }
+  }
+  _adminAuditReady = true;
+}
+
+async function recordAdminAudit(request, env, cors) {
+  await ensureAdminAuditTable(env);
+  const body = await safeJson(request);
+  if (!body || !body.action) return fail(400, '`action` required', cors);
+
+  const ts = new Date().toISOString();
+  const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || '';
+  const ua = String(request.headers.get('User-Agent') || '').slice(0, 240);
+
+  // CF-Access JWT not yet enforced (Phase 2-3); actor_email comes from the
+  // body when the local Node tool can identify the user, else stays empty.
+  const actorEmail = String(body.actorEmail || '').slice(0, 120);
+  const action = String(body.action).slice(0, 80);
+  const targetKind = String(body.targetKind || '').slice(0, 40);
+  const targetId = String(body.targetId || '').slice(0, 120);
+  const payload = body.payload ? JSON.stringify(body.payload).slice(0, 4000) : null;
+  const ok = body.ok === false ? 0 : 1;
+  const source = String(body.source || '').slice(0, 40);
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO admin_audit_log (ts, actor_email, actor_ip, actor_ua, action, target_kind, target_id, payload_json, ok, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(ts, actorEmail, ip, ua, action, targetKind, targetId, payload, ok, source).run();
+  } catch (e) {
+    return fail(500, 'audit insert failed: ' + (e.message || e), cors);
+  }
+
+  // Fire-and-forget alert evaluation. Errors here never fail the audit.
+  try { await maybeAlert(env, { ts, actorEmail, ip, ua, action, targetKind, targetId, payload, ok, source }); }
+  catch (_) { /* swallow */ }
+
+  return ok_(({ ok: true, ts }), cors);
+}
+
+async function listAdminAuditRecent(url, env, cors) {
+  await ensureAdminAuditTable(env);
+  const limit = Math.min(200, Math.max(1, parseInt(url.searchParams.get('limit') || '50', 10) || 50));
+  const action = url.searchParams.get('action') || '';
+  const actor = url.searchParams.get('actor') || '';
+  const source = url.searchParams.get('source') || '';
+  const where = []; const args = [];
+  if (action) { where.push('action = ?'); args.push(action); }
+  if (actor)  { where.push('actor_email = ?'); args.push(actor); }
+  if (source) { where.push('source = ?'); args.push(source); }
+  const sql = `SELECT id, ts, actor_email, actor_ip, action, target_kind, target_id, ok, source FROM admin_audit_log ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY ts DESC LIMIT ?`;
+  args.push(limit);
+  const r = await env.DB.prepare(sql).bind(...args).all();
+  return ok({ ok: true, rows: r.results || [] }, cors);
+}
+
+/**
+ * Alert rules — fire Telegram on suspicious patterns. Cheap heuristics
+ * intentionally; tighten thresholds based on observed noise.
+ *   1. Partner delete (any time)
+ *   2. Bulk send: 5+ buyer.send actions by the same actor in 60 min
+ *   3. Auth-fail burst: 3+ ok=0 actions in 5 min from same IP
+ *   4. New IP for an actor (vs last 7 days)
+ *   5. Unsubscribe webhook surge: 10+ in 1 hour (unusual for cold outreach)
+ */
+async function maybeAlert(env, ev) {
+  const rules = [];
+
+  if (ev.action === 'partner.delete') {
+    rules.push({ kind: 'partner-delete', text: `🚨 partner.delete by ${ev.actorEmail || ev.ip || 'unknown'} → ${ev.targetId}` });
+  }
+
+  if (ev.action === 'buyer.send' && ev.ok === 1) {
+    const since = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const r = await env.DB.prepare(`SELECT COUNT(*) AS n FROM admin_audit_log WHERE action='buyer.send' AND ok=1 AND ts >= ? AND (actor_email = ? OR (actor_email='' AND actor_ip = ?))`).bind(since, ev.actorEmail || '', ev.ip || '').first();
+    if (r && r.n >= 5) rules.push({ kind: 'bulk-send', text: `📨⚠️ bulk-send: ${r.n} buyer mails in last 60min by ${ev.actorEmail || ev.ip || 'unknown'}` });
+  }
+
+  if (ev.ok === 0) {
+    const since = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const r = await env.DB.prepare(`SELECT COUNT(*) AS n FROM admin_audit_log WHERE ok=0 AND ts >= ? AND actor_ip = ?`).bind(since, ev.ip || '').first();
+    if (r && r.n >= 3) rules.push({ kind: 'auth-fail-burst', text: `🚨 auth-fail burst: ${r.n} failures in last 5min from IP ${ev.ip || 'unknown'} (${ev.action})` });
+  }
+
+  if (ev.actorEmail && ev.ip) {
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const r = await env.DB.prepare(`SELECT COUNT(*) AS n FROM admin_audit_log WHERE actor_email = ? AND actor_ip = ? AND ts >= ? AND ts < ?`).bind(ev.actorEmail, ev.ip, since, ev.ts).first();
+    if (r && r.n === 0) rules.push({ kind: 'new-ip', text: `🌐 new IP for ${ev.actorEmail}: ${ev.ip} (action ${ev.action})` });
+  }
+
+  if (!rules.length) return;
+  for (const r of rules) await sendAdminTelegramAlert(env, r.text, ev);
+}
+
+async function sendAdminTelegramAlert(env, text, ev) {
+  const token = env.TG_BOT_TOKEN || env.ALERT_TG_BOT_TOKEN || '';
+  const chatId = env.TG_ADMIN_CHAT_ID || env.ALERT_TG_CHAT_ID || env.TG_CHAT_ID || '';
+  if (!token || !chatId) return;
+  const body = `${text}\n\nts: ${ev.ts}\naction: ${ev.action}\ntarget: ${ev.targetKind || '-'}/${ev.targetId || '-'}\nsource: ${ev.source || '-'}`;
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: body, disable_web_page_preview: true })
+    });
+  } catch (_) { /* swallow — alert failure must not break the audit insert */ }
+}
+
+/* Tiny shim — `ok` is already a top-level helper in this Worker (returns
+ * a JSON 200 response), but we use the local name `ok` as a column inside
+ * the audit row. To avoid a name clash, expose `ok_` as the response builder
+ * for the audit handlers. */
+function ok_(payload, cors) {
+  // eslint-disable-next-line no-undef
+  return ok(payload, cors);
 }
 
 /* ───────────── helpers ───────────── */

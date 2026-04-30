@@ -3,6 +3,180 @@
   "_schema": "data/buyer-directory.schema.json",
   "buyers": [
     {
+      "id": "afadvantage-gov",
+      "legalName": "AF Advantage",
+      "displayName": "AF Advantage",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://afadvantage.gov/",
+      "homepageHost": "afadvantage.gov",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:22:01.317Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "alleghenyshredders-com",
+      "legalName": "Allegheny Shredders",
+      "displayName": "Allegheny Shredders",
+      "country": "US",
+      "region": "Pennsylvania",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://alleghenyshredders.com/",
+      "homepageHost": "alleghenyshredders.com",
+      "headquartersAddress": "101 Destruction Ln, Greensburg, PA 15601",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Industrial shredders",
+        "Paper shredders",
+        "Hard drive shredders",
+        "Material handling equipment"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "solutions@alleghenyshredders.com",
+        "procurementEmail": "solutions@alleghenyshredders.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 245-2497",
+        "linkedinUrl": "https://www.linkedin.com/company/allegheny-shredders/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "contacted",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:16:18.076Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      },
+      "lastEmailedAt": "2026-04-30T04:38:49.058Z"
+    },
+    {
+      "id": "arli-com",
+      "legalName": "ARLINGTON",
+      "displayName": "ARLINGTON",
+      "country": "US",
+      "region": "United States",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://arli.com/",
+      "homepageHost": "arli.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "201-1000",
+      "annualRevenueBand": "$100M-$1B",
+      "primaryProductInterest": [
+        "Office machines and supplies",
+        "Imaging supplies",
+        "Printer and copier parts",
+        "Toner and ink cartridges",
+        "MFPs",
+        "Scanners"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@arli.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "800-887-3040",
+        "linkedinUrl": "https://www.linkedin.com/company/arlington-industries/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:16:55.755Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "blogs-usfcr-com",
+      "legalName": "US Federal Contractor Registration",
+      "displayName": "USFCR",
+      "country": "US",
+      "region": "Florida",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://blogs.usfcr.com/",
+      "homepageHost": "blogs.usfcr.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Federal contracting consulting",
+        "SAM.gov registration",
+        "Government procurement services",
+        "Federal compliance management"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "contact@usfcr.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(877) 252 2700",
+        "linkedinUrl": "https://www.linkedin.com/company/us-federal-contractor-registration"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:22:43.919Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 0
+      }
+    },
+    {
       "id": "capital-shredder-corp",
       "legalName": "Capital Shredder Corp.",
       "displayName": "Capital Shredder Corp.",
@@ -29,6 +203,225 @@
       "discoveredAt": "2026-04-30"
     },
     {
+      "id": "clarybusinessmachines-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Clary Business Machines",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://clarybusinessmachines.com/",
+      "homepageHost": "clarybusinessmachines.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Paper shredders and data destruction equipment",
+        "Paper machines and mailroom equipment",
+        "Interactive displays and digital signage",
+        "Office finishing equipment",
+        "Business machines and supplies"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "sales@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992-5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:19:04.277Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 3
+      }
+    },
+    {
+      "id": "crowell-com",
+      "legalName": "Crowell & Moring LLP",
+      "displayName": "Crowell & Moring",
+      "country": "US",
+      "region": "Washington, DC",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://www.crowell.com/en",
+      "homepageHost": "crowell.com",
+      "headquartersAddress": "Washington, DC, United States",
+      "employeeSizeBand": "1000+",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "webteam@crowell.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/crowell-&-moring-llp/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:22:59.278Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 5
+      }
+    },
+    {
+      "id": "custombinding-com",
+      "legalName": "Custom Binding Products",
+      "displayName": "Custom Binding Products",
+      "country": "US",
+      "region": "California",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://custombinding.com/",
+      "homepageHost": "custombinding.com",
+      "headquartersAddress": "4664 Mercury St, San Diego, CA 92111",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Binding equipment",
+        "Binding supplies",
+        "Laminating equipment",
+        "Laminating supplies",
+        "Covers and binders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "858 268 3830",
+        "linkedinUrl": "https://www.linkedin.com/company/custom-binding"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:20:18.902Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "delioa-com",
+      "legalName": "Deli Group Co., Ltd.",
+      "displayName": "DELI",
+      "country": "CN",
+      "region": "Zhejiang",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.delioa.com/",
+      "homepageHost": "delioa.com",
+      "headquartersAddress": "301 Xuxiake Rd, Ninghai, Ningbo, Zhejiang, China",
+      "employeeSizeBand": "201-1000",
+      "annualRevenueBand": "$100M-$1B",
+      "primaryProductInterest": [
+        "Office automation equipment",
+        "Printers and scanners",
+        "Paper shredders",
+        "Laminators",
+        "Safe boxes",
+        "Power strips"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "justin.zhang@nbdeli.com",
+        "procurementEmail": "justin.zhang@nbdeli.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/106436008/admin/dashboard/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:16:04.190Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
+    },
+    {
+      "id": "department-va-gov",
+      "legalName": "U.S. Department of Veterans Affairs",
+      "displayName": "U.S. Department of Veterans Affairs",
+      "country": "US",
+      "region": "Washington, D.C.",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://department.va.gov/",
+      "homepageHost": "department.va.gov",
+      "headquartersAddress": "810 Vermont Avenue NW, Washington, D.C. 20420, USA",
+      "employeeSizeBand": "1000+",
+      "annualRevenueBand": "$1B+",
+      "primaryProductInterest": [
+        "Medical supplies and equipment",
+        "Healthcare services",
+        "IT and telecommunications",
+        "Facilities and infrastructure"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "procurement@va.gov",
+        "procurementEmail": "procurement@va.gov",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:23:13.276Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
       "id": "fedbid-com",
       "legalName": "Unison Marketplace (FedBid)",
       "displayName": "Unison Marketplace",
@@ -50,6 +443,49 @@
       "status": "verified",
       "discoveredAt": "2026-04-30",
       "lastVerifiedAt": "2026-04-30T01:14:52.720Z"
+    },
+    {
+      "id": "fellowes-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Fellowes Shredders",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.fellowes-shredder.com/",
+      "homepageHost": "fellowes-shredder.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Shredder supplies",
+        "Office equipment"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "nas@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:19:55.105Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 4
+      }
     },
     {
       "id": "fortessa-com",
@@ -76,6 +512,140 @@
       "discoveredAt": "2026-04-30"
     },
     {
+      "id": "gbc-com",
+      "legalName": "GBC (General Binding Corporation)",
+      "displayName": "GBC",
+      "country": "US",
+      "region": "Illinois",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://www.gbc.com/",
+      "homepageHost": "gbc.com",
+      "headquartersAddress": "Chicago, Illinois, USA",
+      "employeeSizeBand": "1000+",
+      "annualRevenueBand": "$100M-$1B",
+      "primaryProductInterest": [
+        "Binding machines",
+        "Laminating machines",
+        "Paper shredders",
+        "Paper handling equipment",
+        "Binding supplies",
+        "Laminating supplies"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@gbc.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/gbc/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:14:36.903Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "gbc-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "GBC Shredder",
+      "country": "US",
+      "region": "California",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.gbc-shredder.com/",
+      "homepageHost": "gbc-shredder.com",
+      "headquartersAddress": "San Diego, California, USA",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Document destruction equipment",
+        "Office shredders",
+        "High security shredders",
+        "Shredder supplies"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "sales@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:19:16.864Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 5
+      }
+    },
+    {
+      "id": "gsa-federalschedules-com",
+      "legalName": "Federal Schedules, Inc.",
+      "displayName": "FEDSched",
+      "country": "US",
+      "region": "United States",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://gsa.federalschedules.com/",
+      "homepageHost": "gsa.federalschedules.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "GSA Schedule Contract consulting",
+        "Federal procurement support",
+        "Government contracting services"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/federal-schedules-inc-"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:22:16.676Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
       "id": "gsaadvantage-gov",
       "legalName": "GSA Advantage (US General Services Administration)",
       "displayName": "GSA Advantage",
@@ -96,12 +666,196 @@
           "seed": "manual:owner-known",
           "seedQuery": "fed procurement portal",
           "discoveredAt": "2026-04-30"
+        },
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
         }
       ],
       "status": "queued",
       "rejectedReason": "Reference portal, not an outreach target.",
       "discoveredAt": "2026-04-30",
-      "lastVerifiedAt": "2026-04-30T01:03:14.662Z"
+      "lastVerifiedAt": "2026-04-30T04:21:48.316Z"
+    },
+    {
+      "id": "highsecuritypapershredders-com",
+      "legalName": "High Security Paper Shredders",
+      "displayName": "High Security Paper Shredders",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://www.highsecuritypapershredders.com/",
+      "homepageHost": "highsecuritypapershredders.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "High security paper shredders",
+        "NSA approved shredders",
+        "DOD approved shredders",
+        "Drive destruction equipment",
+        "Optical media destroyers"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "unknown",
+        "decisionMakerTitle": "unknown",
+        "tel": "(800) 243 9226",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:20:05.146Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "hsm-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "HSM Shredders",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.hsm-shredder.com/",
+      "homepageHost": "hsm-shredder.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Industrial shredders",
+        "Cardboard shredders",
+        "Crushers and compressors",
+        "Balers",
+        "Shredder supplies and accessories"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "nas@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "800-992-5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:15:03.855Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 4
+      }
+    },
+    {
+      "id": "ideal-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Ideal Shredder",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://ideal-shredder.com/",
+      "homepageHost": "ideal-shredder.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Document shredders",
+        "Hard drive punchers",
+        "Degaussers",
+        "Shredder supplies and accessories"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "sales@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:19:30.071Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 3
+      }
+    },
+    {
+      "id": "info-winvale-com",
+      "legalName": "Winvale",
+      "displayName": "Winvale",
+      "country": "US",
+      "region": "Washington, DC",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://info.winvale.com/blog",
+      "homepageHost": "info.winvale.com",
+      "headquartersAddress": "Washington, DC",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "GSA Schedule consulting",
+        "Government contracting support",
+        "IT manufacturer support",
+        "Federal procurement services"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@winvale.com",
+        "procurementEmail": "info@winvale.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(202) 296 5505",
+        "linkedinUrl": "http://www.linkedin.com/company/winvale"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:21:21.901Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 1
+      }
     },
     {
       "id": "intimus-com",
@@ -128,6 +882,457 @@
       "rejectedReason": "Competitor, not a buyer.",
       "discoveredAt": "2026-04-30",
       "lastVerifiedAt": "2026-04-30T01:03:12.306Z"
+    },
+    {
+      "id": "intimus-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Intimus Shredders",
+      "country": "US",
+      "region": "United States",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.intimus-shredder.com/",
+      "homepageHost": "intimus-shredder.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Multimedia shredders",
+        "Hard drive degaussers",
+        "Cardboard shredders",
+        "Pharmacy shredders",
+        "High security shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "sales@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:20:58.557Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 5
+      }
+    },
+    {
+      "id": "iqsdirectory-com",
+      "legalName": "Industrial Quick Search, Inc.",
+      "displayName": "IQS Directory",
+      "country": "US",
+      "region": "Michigan",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://www.iqsdirectory.com/",
+      "homepageHost": "iqsdirectory.com",
+      "headquartersAddress": "1500 East Beltline Ave SE, Grand Rapids, MI 49506",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "OEM manufacturing services",
+        "Industrial suppliers and distributors",
+        "Manufacturing equipment and components"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@iqsdirectory.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "616.285.3129",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:18:07.745Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "iwaste-staging-app-cloud-gov",
+      "legalName": "US EPA",
+      "displayName": "Incident Waste Decision Support Tool (I-WASTE DST)",
+      "country": "US",
+      "region": "United States",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://iwaste-staging.app.cloud.gov/",
+      "homepageHost": "iwaste-staging.app.cloud.gov",
+      "headquartersAddress": "Washington, DC",
+      "employeeSizeBand": "1000+",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Waste disposal decision support",
+        "Emergency response guidance",
+        "Hazardous waste management"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "contact@epa.gov",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:17:53.304Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "jxquanheng-com",
+      "legalName": "Jiangxi Quanheng Materials Technology Co., Ltd.",
+      "displayName": "Jiangxi Quanheng",
+      "country": "CN",
+      "region": "Jiangxi",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://jxquanheng.com/",
+      "homepageHost": "jxquanheng.com",
+      "headquartersAddress": "Room 501, Unit 1, Building 2, Ganzhou International Enterprise Centre, Development Zone, Ganzhou City, Jiangxi Province, China",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Office equipment",
+        "Packaging machinery",
+        "Package materials",
+        "Smart kitchen appliances",
+        "Protective packaging"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@jxquanheng.com",
+        "procurementEmail": "info@jxquanheng.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "+1 206 430 9112",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:17:12.326Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "kobra-shredder-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Kobra Shredders",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.kobra-shredder.com/",
+      "homepageHost": "kobra-shredder.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "High security shredders",
+        "Digital media shredders",
+        "Industrial shredders",
+        "Cardboard shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "nas@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:21:10.936Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 4
+      }
+    },
+    {
+      "id": "machine-solution-com",
+      "legalName": "ProSource Packaging, Inc",
+      "displayName": "Machine Solutions",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.machine-solution.com/",
+      "homepageHost": "machine-solution.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Paper folders",
+        "Cardboard shredders",
+        "Paper cutters",
+        "Binding machines",
+        "Laminators"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "unknown",
+        "decisionMakerTitle": "unknown",
+        "tel": "1-800-203-0233",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:20:46.566Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "machineshark-com",
+      "legalName": "MachineShark",
+      "displayName": "MachineShark",
+      "country": "US",
+      "region": "North America",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://machineshark.com/",
+      "homepageHost": "machineshark.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "3D printers",
+        "Safes and security equipment",
+        "Data destruction shredders",
+        "Currency counters",
+        "Digital printing machines",
+        "3D scanners"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@machineshark.com",
+        "procurementEmail": "info@machineshark.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "1-833-767-4275",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:19:42.860Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 3
+      }
+    },
+    {
+      "id": "meridian-newellpaper-com",
+      "legalName": "Jackson Newell Paper Companies",
+      "displayName": "Jackson Newell Paper Companies - Meridian",
+      "country": "US",
+      "region": "Mississippi",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://meridian.newellpaper.com/",
+      "homepageHost": "meridian.newellpaper.com",
+      "headquartersAddress": "Jackson, Mississippi, USA",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Office supplies",
+        "Cleaning supplies",
+        "Food service supplies",
+        "Industrial packaging",
+        "Janitorial products",
+        "Paper products"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "support@newellpaper.com",
+        "procurementEmail": "support@newellpaper.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "800-844-5449",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:16:44.082Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
+    },
+    {
+      "id": "monroe-systems-com",
+      "legalName": "Monroe Systems for Business",
+      "displayName": "Monroe Systems for Business",
+      "country": "US",
+      "region": "Pennsylvania",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://monroe-systems.com/",
+      "homepageHost": "monroe-systems.com",
+      "headquartersAddress": "United States",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Printing calculators",
+        "Calculator supplies",
+        "Office equipment",
+        "Ink ribbons",
+        "Paper tape rolls",
+        "Shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "orders@monroe-systems.com",
+        "procurementEmail": "orders@monroe-systems.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "267-580-2600",
+        "linkedinUrl": "https://www.linkedin.com/company/monroe-systems-for-business"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:18:50.546Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
+    },
+    {
+      "id": "mybinding-com",
+      "legalName": "MyBinding.com",
+      "displayName": "MyBinding.com",
+      "country": "US",
+      "region": "Oregon",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.mybinding.com/",
+      "homepageHost": "mybinding.com",
+      "headquartersAddress": "1449 NE 25th, Unit E, Hillsboro, OR 97124",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Binding machines and supplies",
+        "Laminating equipment and film",
+        "Paper cutters",
+        "Document finishing solutions",
+        "Shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@mybinding.com",
+        "procurementEmail": "sales@mybinding.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "1-800-944-4573",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "high-security shredder reseller B2B",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:20:32.228Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 6
+      }
     },
     {
       "id": "myshredder-com",
@@ -177,6 +1382,366 @@
       "discoveredAt": "2026-04-30"
     },
     {
+      "id": "paperindex-com",
+      "legalName": "PaperIndex",
+      "displayName": "PaperIndex",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://www.paperindex.com/",
+      "homepageHost": "paperindex.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper products",
+        "Waste paper",
+        "Packaging paper",
+        "Kraft paper",
+        "Tissue paper",
+        "Paper machinery"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "wecare@paperindex.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/paperindex-dot-com/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:18:36.725Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 1
+      }
+    },
+    {
+      "id": "papershredders-com",
+      "legalName": "Capital Shredder",
+      "displayName": "Capital Shredder",
+      "country": "US",
+      "region": "Maryland",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://www.papershredders.com/",
+      "homepageHost": "papershredders.com",
+      "headquartersAddress": "5550 Wilkins Court, Rockville, MD 20852, US",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Hard drive shredders",
+        "Optical media disintegrators",
+        "Degaussers"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@papershredders.com",
+        "procurementEmail": "info@papershredders.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "301-770-3900",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:14:24.317Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
+    },
+    {
+      "id": "pricereporter-com",
+      "legalName": "Price Reporter, Inc.",
+      "displayName": "Price Reporter",
+      "country": "US",
+      "region": "New Jersey",
+      "sector": "k-security",
+      "buyerType": "fed-procurement",
+      "homepageUrl": "https://pricereporter.com/",
+      "homepageHost": "pricereporter.com",
+      "headquartersAddress": "145 Cedar Ln #210, Englewood, NJ 07631, United States",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "GSA contract consulting",
+        "GSA contract management",
+        "GSA catalog upload",
+        "GSA order management",
+        "Federal procurement services"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "salesteam@pricereporter.com",
+        "procurementEmail": "salesteam@pricereporter.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "201.567.6646",
+        "linkedinUrl": "http://www.linkedin.com/company/price-reporter-inc-"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:21:36.645Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 3
+      }
+    },
+    {
+      "id": "recyclingtoday-com",
+      "legalName": "Recycling Today Media Group",
+      "displayName": "Recycling Today",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "unclear",
+      "homepageUrl": "https://www.recyclingtoday.com/",
+      "homepageHost": "recyclingtoday.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Recycled materials",
+        "Scrap metal",
+        "Environmental services"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:17:42.143Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "rentechdigital-com",
+      "legalName": "Rentech Digital",
+      "displayName": "Rentech Digital",
+      "country": "US",
+      "region": "New York",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://rentechdigital.com/",
+      "homepageHost": "rentechdigital.com",
+      "headquartersAddress": "1180 Avenue of the Americas, 8th floor, New York, NY 10036",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "Business process automation software",
+        "Data scraping tools",
+        "AI-powered content generation",
+        "E-commerce mobile app builder",
+        "B2B database and leads"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "team@rentechdigital.com",
+        "procurementEmail": "team@rentechdigital.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "+1(760)389 9794",
+        "linkedinUrl": "https://www.linkedin.com/company/rentech-digital"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:18:21.777Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 5
+      }
+    },
+    {
+      "id": "san-lan-com",
+      "legalName": "San Lan Technologies Co., Ltd",
+      "displayName": "San Lan Technologies",
+      "country": "CN",
+      "region": "Jiangxi",
+      "sector": "k-security",
+      "buyerType": "system-integrator",
+      "homepageUrl": "https://san-lan.com/",
+      "homepageHost": "san-lan.com",
+      "headquartersAddress": "Industry park, Shicheng county, Ganzhou city, Jiangxi Province, P.R. China",
+      "employeeSizeBand": "51-200",
+      "annualRevenueBand": "$10M-$100M",
+      "primaryProductInterest": [
+        "E-waste recycling machines",
+        "Lead acid battery recycling plant",
+        "Lithium ion battery recycling plant",
+        "Circuit board recycling plant",
+        "Cable recycling machines",
+        "Shredders and pre-choppers"
+      ],
+      "knownTradeHistoryWithKorea": true,
+      "contact": {
+        "primaryEmail": "info@san-lan.com",
+        "procurementEmail": "info@san-lan.com",
+        "decisionMaker": "Curbing Jiang",
+        "decisionMakerTitle": "Contact Person",
+        "tel": "+86 139 2377 4083",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "commercial shredder dealer United States vendor list",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:17:26.065Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 6
+      }
+    },
+    {
+      "id": "semshred-com",
+      "legalName": "Security Engineered Machinery Co., Inc.",
+      "displayName": "SEM Shred",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "end-user",
+      "homepageUrl": "https://www.semshred.com/",
+      "homepageHost": "semshred.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Hard drive destruction",
+        "SSD destruction",
+        "Optical media shredders",
+        "Disintegrators",
+        "Data destruction services"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "contact@semshred.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/security-engineered-machinery/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:15:24.420Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 1
+      }
+    },
+    {
+      "id": "shred-tech-com",
+      "legalName": "Shred-Tech",
+      "displayName": "Shred Tech",
+      "country": "CA",
+      "region": "Ontario",
+      "sector": "k-security",
+      "buyerType": "system-integrator",
+      "homepageUrl": "https://shred-tech.com/",
+      "homepageHost": "shred-tech.com",
+      "headquartersAddress": "295 Pinebush Rd. Cambridge, Ontario Canada N1T 1B2",
+      "employeeSizeBand": "201-1000",
+      "annualRevenueBand": "$100M-$1B",
+      "primaryProductInterest": [
+        "Industrial shredders",
+        "Shredding trucks",
+        "Collection trucks",
+        "Slow-speed shredders",
+        "Recycling equipment"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@shred-tech.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "+1 (519) 621 3560",
+        "linkedinUrl": "https://www.linkedin.com/company/shred-tech/?originalSubdomain=ca"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:15:38.138Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
       "id": "shredder-warehouse-com",
       "legalName": "Shredder Warehouse",
       "displayName": "Shredder Warehouse",
@@ -200,6 +1765,144 @@
       "discoveredAt": "2026-04-30",
       "lastVerifiedAt": "2026-04-30T01:03:06.705Z",
       "rejectedReason": ""
+    },
+    {
+      "id": "shredderdepot-com",
+      "legalName": "Shredder Depot Office Products",
+      "displayName": "Shredder Depot",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "http://www.shredderdepot.com/",
+      "homepageHost": "shredderdepot.com",
+      "headquartersAddress": "unknown",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Cross cut shredders",
+        "Strip cut shredders",
+        "Commercial shredders",
+        "Industrial shredders",
+        "High security shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@shredderdepot.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:13:43.049Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "shreddermanufacturers-com",
+      "legalName": "Shredder Manufacturers",
+      "displayName": "Shredder Manufacturers",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://shreddermanufacturers.com/",
+      "homepageHost": "shreddermanufacturers.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Industrial shredders",
+        "Cardboard shredders",
+        "Metal shredders",
+        "Plastic shredders",
+        "Tire shredders",
+        "Document shredders"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:14:10.774Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "shredderwarehouse-com",
+      "legalName": "Clary Business Machines",
+      "displayName": "Shredder Warehouse",
+      "country": "US",
+      "region": "California",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.shredderwarehouse.com/",
+      "homepageHost": "shredderwarehouse.com",
+      "headquartersAddress": "12335 World Trade Drive, Suite 9, San Diego, CA 92128",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Paper shredders",
+        "Document destruction equipment",
+        "High security shredders",
+        "Digital media shredders",
+        "Hard drive degaussers",
+        "Crushers and compressors"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "sales@clarybusinessmachines.com",
+        "procurementEmail": "sales@clarybusinessmachines.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 992 5279",
+        "linkedinUrl": "https://www.linkedin.com/company/clarybusinessmachines/"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:15:50.935Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 3
+      }
     },
     {
       "id": "staples-com",
@@ -227,6 +1930,137 @@
       "discoveredAt": "2026-04-30"
     },
     {
+      "id": "tagovcloud-com",
+      "legalName": "TransAccess",
+      "displayName": "TransAccess",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "unclear",
+      "homepageUrl": "https://www.tagovcloud.com/",
+      "homepageHost": "tagovcloud.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Document management",
+        "Content management",
+        "Enterprise document capture"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "GSA Schedule 36 office equipment prime contractor",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:22:28.768Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 1,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "thomasnet-com",
+      "legalName": "Thomas Publishing Company",
+      "displayName": "Thomasnet",
+      "country": "US",
+      "region": "North America",
+      "sector": "k-security",
+      "buyerType": "marketplace",
+      "homepageUrl": "https://www.thomasnet.com/",
+      "homepageHost": "thomasnet.com",
+      "headquartersAddress": "United States",
+      "employeeSizeBand": "1000+",
+      "annualRevenueBand": "$100M-$1B",
+      "primaryProductInterest": [
+        "Industrial supplier discovery platform",
+        "MRO products",
+        "OEM components",
+        "Manufacturing services",
+        "Custom manufacturing"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@thomasnet.com",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "",
+        "linkedinUrl": "https://www.linkedin.com/company/thomasforindustry"
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:16:31.283Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 0
+      }
+    },
+    {
+      "id": "unitedgrp-com",
+      "legalName": "United Group",
+      "displayName": "United Group",
+      "country": "US",
+      "region": "New Jersey",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.unitedgrp.com/",
+      "homepageHost": "unitedgrp.com",
+      "headquartersAddress": "99 Kero Rd, Carlstadt, NJ 07072",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Thermal paper rolls",
+        "ATM machines",
+        "Warehouse logistics"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "info@unitedgrp.com",
+        "procurementEmail": "info@unitedgrp.com",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "1866 464 7655",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "verified",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:13:55.702Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 2,
+        "emailsHarvested": 2
+      }
+    },
+    {
       "id": "wbmason-com",
       "legalName": "W.B. Mason Co., Inc.",
       "displayName": "W.B. Mason",
@@ -252,6 +2086,50 @@
       ],
       "status": "raw",
       "discoveredAt": "2026-04-30"
+    },
+    {
+      "id": "whitakerbrothers-com",
+      "legalName": "Whitaker Brothers",
+      "displayName": "Whitaker Brothers",
+      "country": "US",
+      "region": "unknown",
+      "sector": "k-security",
+      "buyerType": "distributor",
+      "homepageUrl": "https://www.whitakerbrothers.com/",
+      "homepageHost": "whitakerbrothers.com",
+      "headquartersAddress": "",
+      "employeeSizeBand": "unknown",
+      "annualRevenueBand": "unknown",
+      "primaryProductInterest": [
+        "Data destruction equipment",
+        "Paper shredders",
+        "Hard drive degaussers",
+        "Document destruction machines"
+      ],
+      "knownTradeHistoryWithKorea": false,
+      "contact": {
+        "primaryEmail": "",
+        "procurementEmail": "",
+        "decisionMaker": "",
+        "decisionMakerTitle": "",
+        "tel": "(800) 243 9226",
+        "linkedinUrl": ""
+      },
+      "sources": [
+        {
+          "seed": "search:tavily",
+          "seedQuery": "US paper shredder distributor wholesale catalog",
+          "discoveredAt": "2026-04-30"
+        }
+      ],
+      "status": "raw",
+      "discoveredAt": "2026-04-30",
+      "lastVerifiedAt": "2026-04-30T04:14:50.663Z",
+      "enrichmentSources": {
+        "llm": "anthropic-haiku-4-5",
+        "pagesScanned": 3,
+        "emailsHarvested": 0
+      }
     }
   ]
 }

@@ -32,6 +32,11 @@
 
 require('../discover-makers/lib/dotenv').loadDotEnv();
 
+// Cross-tool audit client — fire-and-forget on every status flip,
+// compose, send. Silent no-op if ADMIN_KEY env is unset.
+const audit = require('../lib/admin-audit');
+function fireAudit(event) { audit.log(event).catch(() => {}); }
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -255,6 +260,7 @@ const server = http.createServer(async (req, res) => {
     }
     entry.lastVerifiedAt = new Date().toISOString();
     persistence.write(obj);
+    fireAudit({ source: 'buyer-review', action: 'buyer.patch', targetKind: 'buyer', targetId: id, payload: { status: entry.status, sector: entry.sector, buyerType: entry.buyerType } });
     return sendJson(res, 200, { ok: true, entry });
   }
 
@@ -269,9 +275,11 @@ const server = http.createServer(async (req, res) => {
       const draft = await composeMail(buyer);
       writeDraft(id, draft);
       if (draft.usage) noteAi(draft.usage);
+      fireAudit({ source: 'buyer-review', action: 'buyer.compose', targetKind: 'buyer', targetId: id, payload: { sector: buyer.sector, composedBy: draft.composedBy } });
       return sendJson(res, 200, { ok: true, draft });
     } catch (e) {
       noteAiState(e.message || '');
+      fireAudit({ source: 'buyer-review', action: 'buyer.compose', targetKind: 'buyer', targetId: id, ok: false, payload: { error: e.message.slice(0, 200) } });
       return sendJson(res, 500, { ok: false, error: e.message });
     }
   }
@@ -332,9 +340,11 @@ const server = http.createServer(async (req, res) => {
       if (j.ok) {
         buyer.status = 'contacted'; buyer.lastEmailedAt = sentAt; persistence.write(obj);
         draft.status = 'sent'; draft.sentAt = sentAt; draft.resendId = resendId; draft.resendUrl = resendUrl; writeDraft(id, draft);
+        fireAudit({ source: 'buyer-review', action: 'buyer.send', targetKind: 'buyer', targetId: id, payload: { toEmail: draft.toEmail, subject: draft.subject, resendId, sector: buyer.sector } });
         return sendJson(res, 200, { ok: true, sentAt, resendId, resendUrl, response: j });
       }
       draft.status = 'failed'; draft.lastError = JSON.stringify(j).slice(0, 200); writeDraft(id, draft);
+      fireAudit({ source: 'buyer-review', action: 'buyer.send', targetKind: 'buyer', targetId: id, ok: false, payload: { toEmail: draft.toEmail, error: draft.lastError, httpStatus: resp.status } });
       return sendJson(res, 502, { ok: false, error: 'mail-worker rejected', httpStatus: resp.status, response: j });
     } catch (e) {
       return sendJson(res, 500, { ok: false, error: e.message });

@@ -11,6 +11,11 @@ images/raw/*
 images/raw/processed/
 # Third-party maker contact details — local-only, never publish without explicit approval
 data/maker-contacts.json
+# Buyer outreach operational state — drafts contain recipient PII, log
+# can grow unboundedly. The cloud-side admin_audit_log on ergsn-trade-docs
+# is the long-term source of truth; local files are working scratch.
+data/buyer-outbox/
+data/buyer-send-log.json
 # Secrets — API tokens, deploy keys, etc. Never commit.
 .env
 .env.*

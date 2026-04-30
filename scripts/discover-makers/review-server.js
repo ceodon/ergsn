@@ -32,6 +32,11 @@
 // Load .env so /api/makers/:id/discover-products has CF Workers AI creds
 require('./lib/dotenv').loadDotEnv();
 
+// Admin audit client — fire-and-forget central log on every status flip,
+// product register, manual promote, etc. Silent no-op if ADMIN_KEY is unset.
+const audit = require('../lib/admin-audit');
+function fireAudit(event) { audit.log(event).catch(() => {}); }
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -518,6 +523,7 @@ const server = http.createServer(async (req, res) => {
 
     entry.lastVerifiedAt = new Date().toISOString().slice(0, 10);
     persistence.write(obj);
+    fireAudit({ source: 'maker-review', action: 'maker.patch', targetKind: 'maker', targetId: id, payload: { status: entry.status, sector: entry.sector, contractSigned: entry.contractSigned, promoted } });
     return sendJson(res, 200, { ok: true, entry, promoted, notified });
   }
 
@@ -536,8 +542,10 @@ const server = http.createServer(async (req, res) => {
       result = promoteToContacts(entry);
       notified = await notifyPromote(entry);
     } catch (e) {
+      fireAudit({ source: 'maker-review', action: 'maker.promote', targetKind: 'maker', targetId: id, ok: false, payload: { error: e.message } });
       return sendJson(res, 500, { ok: false, error: e.message });
     }
+    fireAudit({ source: 'maker-review', action: 'maker.promote', targetKind: 'maker', targetId: id, payload: { action: result.action } });
     return sendJson(res, 200, { ok: true, action: result.action, contactsRow: result.row, notified });
   }
 
@@ -712,8 +720,12 @@ const server = http.createServer(async (req, res) => {
     if (extracted && extracted.priceHigh > 0) newProduct.priceHigh = extracted.priceHigh;
 
     try { productsStore.add(newProduct); }
-    catch (e) { return sendJson(res, 409, { ok: false, error: e.message }); }
+    catch (e) {
+      fireAudit({ source: 'maker-review', action: 'product.register', targetKind: 'product', targetId: newProduct.id, ok: false, payload: { error: e.message, makerId: maker.id } });
+      return sendJson(res, 409, { ok: false, error: e.message });
+    }
     productPersistence.patch(candId, { status: 'registered' });
+    fireAudit({ source: 'maker-review', action: 'product.register', targetKind: 'product', targetId: newProduct.id, payload: { makerId: maker.id, sector: newProduct.sector, model: newProduct.model } });
     if (maker.status !== 'onboarded' && maker.status !== 'rejected') {
       maker.status = 'onboarded';
       maker.lastVerifiedAt = new Date().toISOString().slice(0, 10);
@@ -789,6 +801,7 @@ const server = http.createServer(async (req, res) => {
     const candIdToFlip = product.candidateId || (productId.startsWith('cand-') ? productId.slice(5) : null);
     productsStore.remove(productId);
     if (candIdToFlip) productPersistence.patch(candIdToFlip, { status: 'discarded' });
+    fireAudit({ source: 'maker-review', action: 'product.unregister', targetKind: 'product', targetId: productId, payload: { makerId: product.makerId } });
     return sendJson(res, 200, { ok: true, removed: productId });
   }
 
