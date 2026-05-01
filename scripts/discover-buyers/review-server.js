@@ -187,6 +187,23 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Chrome modules — chat FAB + Top FAB. Whitelisted single-file reads so
+  // the buyer outreach tool inherits the same bottom-right widgets as the
+  // rest of the suite without being a generic /scripts/* mirror.
+  if (req.method === 'GET' && url.pathname.startsWith('/scripts/')) {
+    const ALLOWED = new Set(['chat.js', 'chat-core.js', 'top-fab.js']);
+    const fname = url.pathname.replace(/^\/scripts\//, '');
+    if (ALLOWED.has(fname)) {
+      const fpath = path.resolve(REPO_ROOT, 'scripts', fname);
+      fs.readFile(fpath, (err, buf) => {
+        if (err) { send404(res); return; }
+        res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'public, max-age=300' });
+        res.end(buf);
+      });
+      return;
+    }
+  }
+
   // Buyers list (with draft existence + send log summary)
   if (req.method === 'GET' && url.pathname === '/api/buyers') {
     const obj = persistence.read();

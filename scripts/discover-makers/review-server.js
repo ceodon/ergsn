@@ -363,6 +363,25 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Chrome modules — chat FAB + Top FAB. Single source of truth: the same
+  // files that the public site + admin chrome already use, served verbatim
+  // from the repo root so the maker review tool inherits future updates
+  // automatically. Whitelist exact filenames so this route can't double as
+  // an arbitrary read of /scripts/*.
+  if (req.method === 'GET' && url.pathname.startsWith('/scripts/')) {
+    const ALLOWED = new Set(['chat.js', 'chat-core.js', 'top-fab.js']);
+    const fname = url.pathname.replace(/^\/scripts\//, '');
+    if (ALLOWED.has(fname)) {
+      const fpath = path.resolve(REPO_ROOT, 'scripts', fname);
+      fs.readFile(fpath, (err, buf) => {
+        if (err) { send404(res); return; }
+        res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8', 'Cache-Control': 'public, max-age=300', 'Content-Length': buf.length });
+        res.end(buf);
+      });
+      return;
+    }
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/makers') {
     // Inject per-maker registered/candidate counts AND the origin classification
     // so the card can render badges + the global stats counter can group makers.

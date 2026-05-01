@@ -6,7 +6,9 @@
 <title>ERGSN — Admin Hub</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
+<meta name="admin-page-title" content="Admin Hub">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/scripts/admin-tokens.css">
 <style>
   :root {
     --navy: #111418;
@@ -22,16 +24,7 @@
   a { color: var(--gold); text-decoration: none; }
   a:hover { color: var(--gold-light); text-decoration: underline; }
 
-  .top { background: linear-gradient(180deg, #1a1f26, #111418); padding: 18px 28px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-  .eh-logo-mark { font-size: 24px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; line-height: 1; background: linear-gradient(320deg, #a8a8a6 15%, #c2c0c0 48%, #f9f8f6 64%, #d4d4d4 76%, #7f7f7f 88%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-kerning: none; }
-  .eh-logo-mark .eh-e { background: linear-gradient(84deg, #00bf79 42%, #00ffa1 81%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .top h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: .04em; }
-  .top h1 .accent { color: var(--gold); }
-  .top .who { margin-left: auto; font-size: 12px; color: var(--muted); }
-  .top .who code { background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: #ccc; }
-  .top .who a { font-size: 11px; }
-
-  .container { max-width: 1180px; margin: 0 auto; padding: 28px; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 28px clamp(16px,4vw,32px) 60px; }
   .lead { color: var(--muted); font-size: 13px; margin: 0 0 20px; max-width: 720px; line-height: 1.55; }
   .lead strong { color: #ccc; }
   .lead code { background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #ccc; }
@@ -67,9 +60,6 @@
   .quick a { font-size: 12px; padding: 5px 10px; border-radius: 4px; background: rgba(255,255,255,.05); color: #ccc; border: 1px solid var(--line); }
   .quick a:hover { background: rgba(52,210,152,.12); color: var(--gold); border-color: rgba(52,210,152,.4); text-decoration: none; }
 
-  .footer { color: var(--muted); font-size: 11px; padding: 28px 0 12px; border-top: 1px solid var(--line); margin-top: 32px; line-height: 1.6; }
-  .footer code { background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 3px; font-size: 10px; color: #ccc; }
-
   .audit-feed { background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin-top: 12px; max-height: 360px; overflow-y: auto; }
   .audit-feed .row { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 12px; line-height: 1.4; }
   .audit-feed .row:last-child { border-bottom: 0; }
@@ -80,23 +70,13 @@
   .audit-feed .empty { color: var(--muted); padding: 20px; text-align: center; font-size: 12px; }
 
   @media (max-width: 600px) {
-    .top { padding: 14px 16px; }
     .container { padding: 16px; }
     .grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-
-<div class="top">
-  <span class="eh-logo-mark"><span class="eh-e">E</span>RGSN</span>
-  <h1>Admin <span class="accent">Hub</span></h1>
-  <div class="who">
-    Signed in as <code id="who-email">…</code> via <code>Cloudflare Access</code> ·
-    <a id="logout-link" href="#" target="_top">sign out</a> ·
-    <a href="/" target="_blank" rel="noopener">main site ↗</a>
-  </div>
-</div>
+<!-- Admin chrome injected via /scripts/admin-header.js -->
 
 <div class="container">
   <p class="lead">
@@ -267,11 +247,6 @@
   <div class="audit-feed" id="audit-feed">
     <div class="empty">Loading recent activity…</div>
   </div>
-
-  <div class="footer">
-    Architecture · auth via <code>Cloudflare Access</code> (Phase 0-1) · audit via <code>D1 admin_audit_log</code> on <code>ergsn-trade-docs</code> (Phase 4) · token-based fallback intentionally retained as recovery path.
-    Plan + decisions: <code>memory/project_admin_dashboard_plan.md</code> · setup runbook: <code>admin/CF_ACCESS_SETUP.md</code>.
-  </div>
 </div>
 
 <script>
@@ -313,41 +288,9 @@
     return h;
   }
 
-  /* Resolve the Cloudflare Access logout URL from the team-name baked
-     into the same JWKS that the Worker uses. We never see the JWT
-     payload here client-side, but the team subdomain is constant
-     post-Step 2 of the runbook. The user can update this once if their
-     team changes. */
-  const CF_ACCESS_TEAM = 'ergsn'; // matches Worker secret CF_ACCESS_TEAM
-  document.getElementById('logout-link').href =
-    `https://${CF_ACCESS_TEAM}.cloudflareaccess.com/cdn-cgi/access/logout`;
-
-  /* whoami — surface the verified email at the top so the admin can
-     visually confirm "I am logged in as the expected account".
-     Uses Cloudflare Access's same-origin /cdn-cgi/access/get-identity
-     endpoint, which returns the verified user's email + groups when
-     the CF_Authorization cookie is present. This works ONLY when the
-     page is served from a CF Access-gated hostname (admin.ergsn.net or
-     ergsn.net/admin/*). On a non-gated origin it returns 401 and we
-     show "unauthenticated" — that's a useful diagnostic too. */
-  async function loadWhoami() {
-    const span = document.getElementById('who-email');
-    try {
-      const r = await fetch('/cdn-cgi/access/get-identity', { credentials: 'same-origin' });
-      if (r.status === 401 || r.status === 403) {
-        span.textContent = 'CF Access not active on this origin';
-        span.title = 'open admin.ergsn.net/admin/ for the gated path';
-        return;
-      }
-      if (!r.ok) { span.textContent = 'unauthenticated (HTTP ' + r.status + ')'; return; }
-      const d = await r.json();
-      span.textContent = d.email || d.user_uuid || 'authenticated (no email claim)';
-      const idp = (d.idp && d.idp.type) || 'unknown';
-      span.title = `idp=${idp} · iat=${d.iat || '?'} · groups=${(d.geo && d.geo.country) || ''}`;
-    } catch (e) {
-      span.textContent = 'offline (' + (e.message || 'fetch failed') + ')';
-    }
-  }
+  /* whoami + logout-link wiring + last-activity timestamp now live in
+     /scripts/admin-header.js — the shared admin chrome. The body audit
+     feed below is the only thing this page-local script still owns. */
 
   async function loadAuditFeed() {
     const feed = document.getElementById('audit-feed');
@@ -383,9 +326,9 @@
     }
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
-  loadWhoami();
   loadAuditFeed();
 </script>
 
+<script defer src="/scripts/admin-header.js"></script>
 </body>
 </html>

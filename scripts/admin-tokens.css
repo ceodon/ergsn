@@ -1,0 +1,135 @@
+/* ERGSN Admin shared tokens — base palette, font, body, container width.
+   Loaded via <link rel="stylesheet" href="/scripts/admin-tokens.css"> on every
+   admin sub-tool page so the look (BG, card, accent, font, max-width) matches
+   admin/index.html exactly. Per-tool styles override only what's necessary. */
+
+:root {
+  --eh-navy: #111418;
+  --eh-bg: #0d1115;
+  --eh-bg-2: #181c22;
+  --eh-card-bg: #181c22;
+  --eh-line: rgba(255,255,255,.08);
+  --eh-line-strong: rgba(255,255,255,.18);
+  --eh-muted: rgba(255,255,255,.55);
+  --eh-tx: #e8e8e8;
+  --eh-tx-soft: #cccccc;
+  --eh-gold: #34d298;
+  --eh-gold-light: #00ffa1;
+  --eh-warn: #ffc97a;
+  --eh-err: #ff7a7a;
+  --eh-fb: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --eh-fmono: "Consolas", "Menlo", "DejaVu Sans Mono", monospace;
+  --eh-admin-h: 56px;
+  --eh-container: 1180px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--eh-bg);
+  color: var(--eh-tx);
+  font: 14px/1.45 var(--eh-fb);
+  min-height: 100vh;
+}
+
+/* admin-header.js owns `body { padding-top: 56px !important }` so it can
+   defeat per-page `body { padding: 0 }` shorthand resets (admin/index.html
+   does this). Keep this file purely token + baseline; let the header set
+   layout reserve. */
+
+a { color: var(--eh-gold); text-decoration: none; }
+a:hover { color: var(--eh-gold-light); text-decoration: underline; }
+
+code { background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 4px; font-size: .92em; color: var(--eh-tx-soft); font-family: var(--eh-fmono); }
+
+/* Standard inner container — every admin sub-tool wraps content in `.wrap`
+   so width is uniform across the suite. Per-tool deeper nesting (.gate,
+   .panel, etc.) lives inside this wrap unchanged. */
+.wrap, .admin-wrap, .container {
+  max-width: var(--eh-container);
+  margin: 0 auto;
+  padding: 28px clamp(16px, 4vw, 32px) 60px;
+}
+
+/* Form controls — neutral baseline so per-tool inputs look the same.
+   Pages can override scoped to their own classes; never use bare
+   `input { }` or `select { }` selectors that would collide with the
+   admin-header's signed-in-as menu or worker health pin labels. */
+.wrap input[type="text"],
+.wrap input[type="password"],
+.wrap input[type="email"],
+.wrap input[type="number"],
+.wrap input[type="datetime-local"],
+.wrap input[type="search"],
+.wrap textarea,
+.wrap select {
+  background: rgba(0,0,0,.25);
+  color: var(--eh-tx);
+  border: 1px solid var(--eh-line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  outline: none;
+  width: 100%;
+}
+.wrap input:focus, .wrap textarea:focus, .wrap select:focus {
+  border-color: var(--eh-gold);
+}
+.wrap textarea { min-height: 110px; resize: vertical; font-family: inherit; }
+.wrap label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--eh-muted); margin: 14px 0 6px; }
+
+/* Card / panel baseline */
+.wrap .card,
+.wrap .panel,
+.wrap section.card,
+.wrap section.panel {
+  background: var(--eh-card-bg);
+  border: 1px solid var(--eh-line);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 16px;
+}
+
+/* Buttons — gold primary, outlined secondary, danger red. Same look on
+   every tool. */
+.wrap .btn {
+  padding: 9px 16px;
+  border: 1px solid var(--eh-gold);
+  border-radius: 8px;
+  font: 600 13px/1 var(--eh-fb);
+  cursor: pointer;
+  transition: background .12s, color .12s, border-color .12s;
+  background: var(--eh-gold);
+  color: #0f1110;
+}
+.wrap .btn:hover:not(:disabled) { background: var(--eh-gold-light); border-color: var(--eh-gold-light); }
+.wrap .btn:disabled { opacity: .55; cursor: not-allowed; }
+.wrap .btn-ghost { background: transparent; color: var(--eh-gold); }
+.wrap .btn-ghost:hover:not(:disabled) { background: rgba(52,210,152,.1); color: var(--eh-gold-light); }
+.wrap .btn-danger { background: rgba(255,122,122,.12); color: var(--eh-err); border-color: rgba(255,122,122,.4); }
+.wrap .btn-danger:hover:not(:disabled) { background: rgba(255,122,122,.2); color: var(--eh-err); }
+
+/* Pill / badge */
+.wrap .pill {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(212,175,55,.15);
+  color: var(--eh-gold);
+  border-radius: 999px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 600;
+}
+
+/* Toast / inline alert */
+.wrap .toast { padding: 9px 13px; border-radius: 6px; font-size: 12.5px; margin-top: .8rem; display: none; }
+.wrap .toast.ok { background: rgba(52,210,152,.12); color: var(--eh-gold); border: 1px solid rgba(52,210,152,.3); display: block; }
+.wrap .toast.err { background: rgba(255,122,122,.12); color: var(--eh-err); border: 1px solid rgba(255,122,122,.3); display: block; }
+
+/* Hide retired chrome that older admin pages still ship */
+.ergsn-back-bottom, .ergsn-back-top { display: none !important; }
+
+@media print {
+  body { padding-top: 0 !important; }
+}

@@ -12,11 +12,11 @@
 <style>
   @page { size: A4 portrait; margin: 15mm; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: #20201b; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #111; padding: 30px 20px; }
+  body { margin: 0; background: #20201b; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #111; }
   .tools { position: fixed; top: 72px; right: 16px; display: flex; gap: 8px; z-index: 5; }
   .tb { font-size: 13px; font-weight: 700; background: #c8932a; color: #111; padding: 10px 18px; border-radius: 8px; border: 0; cursor: pointer; font-family: inherit; }
   .tb.ghost { background: transparent; color: #c8932a; border: 1px solid #c8932a; }
-  .doc { width: 210mm; margin: 0 auto; background: #fff; padding: 18mm 18mm 22mm; position: relative; box-shadow: 0 20px 80px rgba(0,0,0,.5); }
+  .doc { width: 210mm; margin: 30px auto; background: #fff; padding: 18mm 18mm 22mm; position: relative; box-shadow: 0 20px 80px rgba(0,0,0,.5); }
   h1 { font-family: 'DM Serif Display', serif; font-size: 22pt; color: #0a1830; margin: 0 0 2mm; letter-spacing: .01em; }
   .sub { font-size: 9pt; color: #555; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6mm; }
   .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0a1830; padding-bottom: 5mm; margin-bottom: 6mm; }
@@ -47,7 +47,7 @@
   .sig-line { border-bottom: .8px solid #0a1830; height: 14mm; }
   .sig-cap { font-size: 9pt; color: #666; letter-spacing: .08em; margin-top: 2mm; }
   @media print {
-    body { background: #fff; padding: 0; }
+    body { background: #fff; }
     .doc { box-shadow: none; margin: 0; padding: 0; }
     .tools { display: none; }
     input { background: transparent !important; border-color: #ccc !important; }

@@ -7,20 +7,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
 <title>Admin Analytics — Item-level RFQ Logs · ERGSN</title>
 <meta name="robots" content="noindex,nofollow">
+<meta name="admin-page-title" content="Admin Analytics">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/scripts/admin-tokens.css">
 <style>
   :root {
-    --gold: #c8932a; --green: #15d78a; --red: #e06a6a; --warn: #e0a83f;
-    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
-    --bg: #0a0a0a; --bg-2: #141414; --bg-3: #1a1a1a; --border: #2a2a2a;
+    --gold: #34d298; --gold-light: #00ffa1; --green: #34d298; --red: #ff7a7a; --warn: #ffc97a;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cccccc; --tx-lt: rgba(255,255,255,.55);
+    --bg: #0d1115; --bg-2: #181c22; --bg-3: #1a1f26; --border: rgba(255,255,255,.08);
     --fd: 'DM Serif Display', 'Times New Roman', serif;
-    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --fb: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.6; }
-  a { color: var(--gold); text-decoration: none; } a:hover { text-decoration: underline; }
+  a { color: var(--gold); text-decoration: none; } a:hover { color: var(--gold-light); text-decoration: underline; }
 
-  .wrap { max-width: 1240px; margin: 0 auto; padding: 2rem clamp(16px,4vw,48px) 4rem; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px clamp(16px,4vw,32px) 60px; }
   .pill { display: inline-block; margin: 0 0 .8rem; padding: 4px 12px; font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--green); background: rgba(21,215,138,.1); border: 1px solid rgba(21,215,138,.3); border-radius: 12px; }
   h1 { font-family: var(--fd); font-size: clamp(28px,4vw,40px); font-weight: 800; color: var(--white); line-height: 1.15; margin: 0 0 .3rem; }
   .sub { color: var(--tx-lt); font-size: 14px; margin-bottom: 1.4rem; }
@@ -94,7 +96,7 @@
 </style>
 </head>
 <body>
-<!-- Shared ERGSN header is injected via scripts/header.js -->
+<!-- Admin chrome injected via /scripts/admin-header.js -->
 <div class="wrap">
 
   <!-- Admin gate (sessionStorage admin key) -->
@@ -412,6 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script defer src="scripts/header.js"></script>
+<script defer src="/scripts/admin-header.js"></script>
 </body>
 </html>

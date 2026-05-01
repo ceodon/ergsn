@@ -4,18 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
+<meta name="admin-page-title" content="Social Poster">
 <title>Social Poster · ERGSN Admin</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/scripts/admin-tokens.css">
 <style>
   :root {
-    --navy: #0a1428; --navy-2: #14263f; --line: rgba(255,255,255,.12);
-    --gold: #d4af37; --white: #f4f1e8; --muted: #98a3b5;
-    --ok: #34d298; --err: #ff7a7a; --warn: #f5b34c;
+    --navy: #0d1115; --navy-2: #181c22; --line: rgba(255,255,255,.08);
+    --gold: #34d298; --gold-light: #00ffa1; --white: #e8e8e8; --muted: rgba(255,255,255,.55);
+    --ok: #34d298; --err: #ff7a7a; --warn: #ffc97a;
     --card-bg: rgba(255,255,255,.04);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Pretendard, sans-serif; background: var(--navy); color: var(--white); padding: 28px 22px 60px; line-height: 1.5; font-size: 14px; }
-  .wrap { max-width: 1100px; margin: 0 auto; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: var(--navy); color: var(--white); line-height: 1.5; font-size: 14px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px clamp(16px,4vw,32px) 60px; }
   .crumbs { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
   .crumbs a { color: var(--muted); text-decoration: none; }
   .crumbs a:hover { color: var(--gold); }
@@ -85,10 +87,6 @@
 </head>
 <body>
 <div class="wrap">
-
-  <div class="crumbs">
-    <a href="/admin/">← Admin Hub</a>
-  </div>
 
   <h1>📡 Social Poster <span class="phase-tag">PHASE 1 SKELETON</span></h1>
   <p class="sub">Cross-post · 예약 · AI 초안 · 분석 — Facebook · Instagram · Threads · LinkedIn · Naver Blog</p>
@@ -407,6 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadConnections();
 });
 </script>
-<script defer src="scripts/header.js"></script>
+<script defer src="/scripts/admin-header.js"></script>
 </body>
 </html>

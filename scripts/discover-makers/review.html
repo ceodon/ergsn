@@ -1269,5 +1269,10 @@ async function patchProduct(card, id, status) {
 }
 </script>
 
+<!-- Bottom-right chrome — Top FAB + Trade Advisor chat. Same modules the
+     public site + admin tools use; the Node server whitelists these three
+     files under /scripts/. -->
+<script defer src="/scripts/top-fab.js"></script>
+<script defer src="/scripts/chat.js"></script>
 </body>
 </html>
