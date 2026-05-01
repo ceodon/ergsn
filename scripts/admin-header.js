@@ -60,11 +60,17 @@
     { key: 'b', label: 'Buyer Outreach',    href: 'https://buyer.ergsn.net/',    section: 'Review',  external: true }
   ];
 
+  /* Probe URLs — pick the lightest GET endpoint each worker exposes. The
+     mail worker rejects all non-POST with 405 (no GET routes by design),
+     so we probe its `/health` which is added in cloudflare-worker-mail.js
+     after a `wrangler deploy --config wrangler.mail.jsonc`. Even before
+     that deploy lands, the new classifier below treats 405 as "up" — the
+     worker IS responding, just to a method it doesn't route. */
   var WORKERS = [
-    { name: 'docs',   probe: '/api/trade-docs/admin/audit/recent?limit=1' },
-    { name: 'rfq',    probe: '/api/rfq/admin/item-metrics?days=1' },
-    { name: 'mail',   probe: '/api/mail/admin/health' },
-    { name: 'social', probe: '/api/social/posts?limit=1' }
+    { name: 'docs',   probe: '/api/trade-docs/health' },
+    { name: 'rfq',    probe: '/api/rfq/admin/item-metrics?range=1' },
+    { name: 'mail',   probe: '/api/mail/health' },
+    { name: 'social', probe: '/api/social/health' }
   ];
 
   /* ─── CSS ───────────────────────────────────────────────────────── */
@@ -242,9 +248,15 @@
     if (!dot) return;
     try {
       var r = await fetch(w.probe, { credentials: 'include', cache: 'no-store', method: 'GET' });
+      /* Health classification — pin reflects worker liveness, not endpoint
+         correctness. Any 2xx/4xx response means the worker received the
+         request and answered (it's alive). Only 5xx or a network error
+         counts as down. 401/403 specifically surface as warn so an auth
+         drop is visible without being mistaken for a worker outage. */
       if (r.ok) dot.dataset.state = 'up';
       else if (r.status === 401 || r.status === 403) dot.dataset.state = 'warn';
-      else dot.dataset.state = 'down';
+      else if (r.status >= 500) dot.dataset.state = 'down';
+      else dot.dataset.state = 'up';
     } catch (_) {
       dot.dataset.state = 'down';
     }

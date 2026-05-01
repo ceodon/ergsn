@@ -138,9 +138,6 @@ export default {
       if (matched !== '*') cors['Access-Control-Allow-Credentials'] = 'true';
     }
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
-    if (request.method !== 'POST') {
-      return new Response('Method not allowed', { status: 405, headers: cors });
-    }
 
     const url = new URL(request.url);
     /* Strip the same-origin Admin Hub mount prefix so admin.ergsn.net/api/mail/*
@@ -149,6 +146,17 @@ export default {
     if (pathname === '/api/mail' || pathname === '/api/mail/') pathname = '/';
     else if (pathname.startsWith('/api/mail/')) pathname = pathname.slice('/api/mail'.length);
     const path = pathname.replace(/\/$/, '') || '/';
+
+    /* Liveness probe — public, no auth, no body. Powers the worker health
+       pin in admin-header.js + admin-footer.js. Place BEFORE the POST-only
+       gate so a GET reaches it. */
+    if (request.method === 'GET' && (path === '/health' || path === '/')) {
+      return jsonResponse({ ok: true, name: 'ergsn-mail', alive: true }, 200, cors);
+    }
+
+    if (request.method !== 'POST') {
+      return new Response('Method not allowed', { status: 405, headers: cors });
+    }
 
     /* /raw bypasses CORS origin check because it's admin-only via header. */
     if (path !== '/raw' && !matched) {

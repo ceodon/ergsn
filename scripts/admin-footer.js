@@ -6,14 +6,17 @@
   window.__ergsnAdminFooterInjected = true;
 
   /* External services we touch — order mirrors the strip the user sees.
-     `probe` is the same-origin endpoint we GET to assess health.
-     `ok` is the HTTP code we treat as healthy (any 2xx by default). */
+     `probe` is the same-origin endpoint we GET to assess liveness.
+     `expect` whitelists status codes that should render "up" green even
+     when the response isn't strictly 2xx (e.g. CF Access /get-identity
+     returns 401 when no session — the service IS up, just not authenticated
+     for this caller). */
   var SERVICES = [
-    { name: 'CF Access',  probe: '/cdn-cgi/access/get-identity', expect: [200, 401] }, /* 401 = no session, but service is up */
-    { name: 'Trade Docs', probe: '/api/trade-docs/admin/audit/recent?limit=1' },
-    { name: 'RFQ',        probe: '/api/rfq/admin/item-metrics?days=1' },
-    { name: 'Mail',       probe: '/api/mail/admin/health' },
-    { name: 'Social',     probe: '/api/social/posts?limit=1' }
+    { name: 'CF Access',  probe: '/cdn-cgi/access/get-identity', expect: [200, 401] },
+    { name: 'Trade Docs', probe: '/api/trade-docs/health' },
+    { name: 'RFQ',        probe: '/api/rfq/admin/item-metrics?range=1' },
+    { name: 'Mail',       probe: '/api/mail/health' },
+    { name: 'Social',     probe: '/api/social/health' }
   ];
 
   var CSS = [
@@ -71,11 +74,16 @@
         cache: 'no-store',
         headers: { 'Accept': 'application/json,text/plain,*/*' }
       });
+      /* Match liveness semantics in admin-header.js — a worker that answers
+         ANY HTTP status is alive; only 5xx / network failure is down. The
+         `expect` list lets us paint a specific non-2xx as up (CF Access
+         get-identity 401 = service up, just unauthenticated). */
       var expect = item.expect || [];
       if (expect.indexOf(r.status) >= 0) { dot.classList.add('eh-up'); return; }
-      if (r.status >= 200 && r.status < 300) { dot.classList.add('eh-up'); return; }
+      if (r.ok) { dot.classList.add('eh-up'); return; }
       if (r.status === 401 || r.status === 403) { dot.classList.add('eh-warn'); return; }
-      dot.classList.add('eh-down');
+      if (r.status >= 500) { dot.classList.add('eh-down'); return; }
+      dot.classList.add('eh-up'); /* 4xx = worker reachable */
     } catch (_) {
       dot.classList.add('eh-down');
     }
