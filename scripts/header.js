@@ -245,7 +245,8 @@
        area. Matches the user-validated layout: logo at top-left (inside
        the injected header), breadcrumb-style back link at top-right of
        the page body. */
-    '.back,.vh-back{display:block !important;width:fit-content !important;margin-left:auto !important;margin-right:0 !important;text-align:right !important}',
+    '.back,.vh-back{display:block !important;width:fit-content !important;margin-left:auto !important;margin-right:0 !important;text-align:right !important;color:#fff !important;text-decoration:none !important;transition:color .15s !important}',
+    '.back:hover,.vh-back:hover{color:#34d298 !important}',
     /* `.ergsn-back-top` is a fixed-position floating back button on
        invoice-template / verified-certificate. The header logo already
        covers "back to home", and the .tools action cluster occupies the
