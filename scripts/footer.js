@@ -112,7 +112,6 @@
               '<li><a href="index.html#cases">Case Studies</a></li>' +
               '<li><a href="index.html#verify">Verification Process</a></li>' +
               '<li><a href="verified-partner.html">Verified Partner Program</a></li>' +
-              '<li><a href="verified-certificate.html">Verified Certificate</a></li>' +
               '<li><a href="escrow.html">Escrow Service</a></li>' +
               '<li><a href="index.html#compliance">Compliance</a></li>' +
               '<li><a href="index.html#trend">Trend Monthly</a></li>' +
