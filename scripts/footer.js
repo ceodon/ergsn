@@ -96,10 +96,13 @@
           '<div>' +
             '<p class="ef-col-title">Tools</p>' +
             '<ul class="ef-links">' +
-              '<li><a href="index.html#match">AI Partner Match</a></li>' +
-              '<li><a href="index.html#calculator">Quote Calculator</a></li>' +
+              '<li><a href="tools.html" style="color:#34d298;font-weight:700">★ Tools Hub (9 Free Tools)</a></li>' +
+              '<li><a href="quote-calculator.html">Quote Calculator</a></li>' +
+              '<li><a href="ai-partner-match.html">AI Partner Match</a></li>' +
+              '<li><a href="trade-route-map.html">Trade Route Map</a></li>' +
+              '<li><a href="wanted-board.html">Buyer Wanted Board</a></li>' +
+              '<li><a href="tools-landed-cost.html">Landed Cost Calculator</a></li>' +
               '<li><a href="export-docs.html">Export Documents AI</a></li>' +
-              '<li><a href="index.html#map">Trade Route Map</a></li>' +
               '<li><a href="index.html#trend">Trend Monthly</a></li>' +
               '<li><a href="tracker.html">RFQ Tracker</a></li>' +
             '</ul>' +
