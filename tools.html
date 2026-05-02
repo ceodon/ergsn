@@ -228,7 +228,7 @@
   .section .sub { font-size: 13px; color: var(--tx-lt); letter-spacing: .04em; margin-bottom: 1.4rem; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-top: 1.2rem; }
-  .tool-card { display: flex; flex-direction: column; padding: 22px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 14px; transition: border-color .18s, transform .18s, background .18s; text-decoration: none; color: inherit; }
+  .tool-card { scroll-margin-top: 80px; display: flex; flex-direction: column; padding: 22px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 14px; transition: border-color .18s, transform .18s, background .18s; text-decoration: none; color: inherit; }
   .tool-card:hover { border-color: var(--gold); background: var(--bg-3); transform: translateY(-2px); text-decoration: none; }
   .tool-card.coming { opacity: .55; cursor: default; }
   .tool-card.coming:hover { border-color: var(--border); transform: none; background: var(--bg-2); }
@@ -303,7 +303,7 @@
 
     <div class="grid">
 
-      <a class="tool-card" href="quote-calculator.html" data-cta="quote-calculator">
+      <a class="tool-card" id="quote-calculator" href="quote-calculator.html" data-cta="quote-calculator">
         <div class="tool-icon">$ · CIF/FOB</div>
         <h3 class="tool-name">Quote Calculator</h3>
         <p class="tool-desc">Instant CIF / FOB / CFR / EXW / DDP / DAP estimate across 5 K-sectors — K-Security, K-Tech, K-Energy, K-Bio, K-Beauty. FX across 11 currencies.</p>
@@ -313,7 +313,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="ai-partner-match.html" data-cta="ai-partner-match">
+      <a class="tool-card" id="ai-partner-match" href="ai-partner-match.html" data-cta="ai-partner-match">
         <div class="tool-icon">AI · Top-3</div>
         <h3 class="tool-name">AI Partner Match</h3>
         <p class="tool-desc">Country + industry → top 3 best-fit verified Korean suppliers from ERGSN's portfolio across 9 K-sectors. Free Tier 1, optional Sourcing Concierge $199/mo.</p>
@@ -323,7 +323,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="trade-route-map.html" data-cta="trade-route-map">
+      <a class="tool-card" id="trade-route-map" href="trade-route-map.html" data-cta="trade-route-map">
         <div class="tool-icon">SVG · 16 ports</div>
         <h3 class="tool-name">Trade Route Map</h3>
         <p class="tool-desc">Visualize Korean export shipping routes from Busan and Incheon to 16 major global ports — Los Angeles, Rotterdam, Tokyo, Sydney, Santos, Dubai, Singapore, Mumbai. CIF default.</p>
@@ -333,7 +333,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="wanted-board.html" data-cta="wanted-board">
+      <a class="tool-card" id="wanted-board" href="wanted-board.html" data-cta="wanted-board">
         <div class="tool-icon">Reverse RFQ</div>
         <h3 class="tool-name">Buyer Wanted Board</h3>
         <p class="tool-desc">Post sourcing needs anonymously — verified Korean manufacturers monitor and respond through ERGSN. Identity masked by default. 24-hour routing window.</p>
@@ -343,7 +343,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="tools-landed-cost.html" data-cta="landed-cost">
+      <a class="tool-card" id="landed-cost" href="tools-landed-cost.html" data-cta="landed-cost">
         <div class="tool-icon">$ → CIF</div>
         <h3 class="tool-name">Korea Landed Cost Calculator</h3>
         <p class="tool-desc">Estimate FOB → CIF landed cost from 14 Korean ports to 14 destination countries. Includes FTA-applied tariff, VAT, and customs estimate.</p>
@@ -353,7 +353,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="export-docs.html" data-cta="export-docs">
+      <a class="tool-card" id="export-docs" href="export-docs.html" data-cta="export-docs">
         <div class="tool-icon">HS · DOC</div>
         <h3 class="tool-name">Export Documents AI</h3>
         <p class="tool-desc">HS code lookup, country-by-country duty + certification checker, and printable Commercial Invoice / Packing List / Certificate of Origin templates.</p>
@@ -363,7 +363,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="escrow.html" data-cta="escrow">
+      <a class="tool-card" id="escrow" href="escrow.html" data-cta="escrow">
         <div class="tool-icon">T/T · 1%</div>
         <h3 class="tool-name">ERGSN Escrow Pilot</h3>
         <p class="tool-desc">Protected T/T settlement for first-time Korea-to-global B2B trades. Funds held by ERGSN, released on confirmed shipment. 1% pilot, Q3 2026.</p>
@@ -373,7 +373,7 @@
         </div>
       </a>
 
-      <a class="tool-card" href="trade-mission.html" data-cta="trade-mission">
+      <a class="tool-card" id="trade-mission" href="trade-mission.html" data-cta="trade-mission">
         <div class="tool-icon">5 × 50</div>
         <h3 class="tool-name">Trade Mission Live</h3>
         <p class="tool-desc">Quarterly 90-minute broadcast — 5 verified Korean makers present directly to 50+ global procurement buyers. Inaugural edition July 15, 2026 KST.</p>
