@@ -1,0 +1,158 @@
+{
+  "_meta": {
+    "schema": "ergsn-ports-v1",
+    "purpose": "Source of truth for the 14 Korean ports surfaced in tools-landed-cost.html",
+    "last_updated": "2026-05-03",
+    "review_owner": "ERGSN trade desk"
+  },
+  "ports": [
+    {
+      "code": "BUS",
+      "name_en": "Busan",
+      "name_ko": "부산항",
+      "city": "Busan",
+      "type": "sea",
+      "primary_routes": ["TPN", "TPS", "TAS", "TWC"],
+      "description": "Korea's #1 container port — 95% of all FCL exports. Default origin for nearly every Korean export.",
+      "annual_teu_million": 23.0
+    },
+    {
+      "code": "INC",
+      "name_en": "Incheon",
+      "name_ko": "인천항",
+      "city": "Incheon",
+      "type": "sea",
+      "primary_routes": ["TAS", "TPN"],
+      "description": "Capital-region gateway — short-haul to China, second-largest container volume.",
+      "annual_teu_million": 3.4
+    },
+    {
+      "code": "PTK",
+      "name_en": "Pyeongtaek",
+      "name_ko": "평택·당진항",
+      "city": "Pyeongtaek",
+      "type": "sea",
+      "primary_routes": ["TAS"],
+      "description": "Auto + parts hub on the west coast. RoRo + container terminals.",
+      "annual_teu_million": 0.9
+    },
+    {
+      "code": "KAN",
+      "name_en": "Gwangyang",
+      "name_ko": "광양항",
+      "city": "Gwangyang",
+      "type": "sea",
+      "primary_routes": ["TPN", "TWC"],
+      "description": "Steel + petrochemical export hub on the south coast. Deep-water terminal.",
+      "annual_teu_million": 2.1
+    },
+    {
+      "code": "USN",
+      "name_en": "Ulsan",
+      "name_ko": "울산항",
+      "city": "Ulsan",
+      "type": "sea",
+      "primary_routes": ["TPN"],
+      "description": "Auto + heavy industry — Hyundai Motor + Hyundai Heavy Industries shipments.",
+      "annual_teu_million": 0.5
+    },
+    {
+      "code": "KUV",
+      "name_en": "Gunsan",
+      "name_ko": "군산항",
+      "city": "Gunsan",
+      "type": "sea",
+      "primary_routes": ["TAS"],
+      "description": "West-coast secondary — short-haul China + ASEAN feeder service.",
+      "annual_teu_million": 0.3
+    },
+    {
+      "code": "YOS",
+      "name_en": "Yeosu",
+      "name_ko": "여수항",
+      "city": "Yeosu",
+      "type": "sea",
+      "primary_routes": ["TPN"],
+      "description": "South-coast bulk + petrochemical port — paired with Gwangyang for refineries.",
+      "annual_teu_million": 0.2
+    },
+    {
+      "code": "DHE",
+      "name_en": "Donghae",
+      "name_ko": "동해항",
+      "city": "Donghae",
+      "type": "sea",
+      "primary_routes": ["TPN"],
+      "description": "East-coast bulk port — cement, lumber, Russia/Japan trade.",
+      "annual_teu_million": 0.05
+    },
+    {
+      "code": "KPO",
+      "name_en": "Pohang",
+      "name_ko": "포항항",
+      "city": "Pohang",
+      "type": "sea",
+      "primary_routes": ["TPN"],
+      "description": "POSCO steel hub — primarily steel + raw material throughput.",
+      "annual_teu_million": 0.1
+    },
+    {
+      "code": "MAS",
+      "name_en": "Masan",
+      "name_ko": "마산항",
+      "city": "Changwon",
+      "type": "sea",
+      "primary_routes": ["TPN"],
+      "description": "South-coast — heavy industry, steel structures, defense.",
+      "annual_teu_million": 0.06
+    },
+    {
+      "code": "MOK",
+      "name_en": "Mokpo",
+      "name_ko": "목포항",
+      "city": "Mokpo",
+      "type": "sea",
+      "primary_routes": ["TAS"],
+      "description": "Southwest coast — short-haul China, agricultural exports.",
+      "annual_teu_million": 0.04
+    },
+    {
+      "code": "CJU",
+      "name_en": "Jeju",
+      "name_ko": "제주항",
+      "city": "Jeju",
+      "type": "sea",
+      "primary_routes": ["TAS"],
+      "description": "Island port — domestic + light export, Jeju agricultural produce.",
+      "annual_teu_million": 0.02
+    },
+    {
+      "code": "ICN",
+      "name_en": "Incheon Airport",
+      "name_ko": "인천공항",
+      "city": "Incheon",
+      "type": "air",
+      "primary_routes": ["AIR_GLOBAL"],
+      "description": "Default air-cargo origin — 95% of Korea's air exports. Cold chain, semiconductors, K-Beauty light shipments.",
+      "annual_tonnes_thousand": 3300
+    },
+    {
+      "code": "PUS-air",
+      "name_en": "Gimhae Airport",
+      "name_ko": "김해공항",
+      "city": "Busan",
+      "type": "air",
+      "primary_routes": ["AIR_REGIONAL"],
+      "description": "Regional air-cargo — Japan + China + ASEAN. Smaller than ICN but useful for southern-Korea makers.",
+      "annual_tonnes_thousand": 90
+    }
+  ],
+  "route_groups": {
+    "TPN": "Trans-Pacific North (US West Coast / Canada)",
+    "TPS": "Trans-Pacific South (Mexico / Latin America Pacific)",
+    "TAS": "Trans-Asia (Japan / China / ASEAN)",
+    "TWC": "Trans-World — Europe / Mediterranean / Middle East via Suez",
+    "AIR_GLOBAL": "Global air-cargo network",
+    "AIR_REGIONAL": "Regional air-cargo (East Asia + ASEAN)"
+  }
+}

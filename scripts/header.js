@@ -77,14 +77,19 @@
     },
     {
       title: 'Tools',
-      href: 'index.html#match',
+      href: 'tools.html',
       items: [
-        { href: 'index.html#match',      name: 'AI Partner Match',    desc: 'Country + industry → Top-3 matches' },
-        { href: 'index.html#calculator', name: 'Quote Calculator',    desc: 'Instant CIF/FOB estimate' },
-        { href: 'export-docs.html',      name: 'Export Documents AI', desc: 'HS code lookup · duty rates · templates' },
-        { href: 'index.html#map',        name: 'Trade Route Map',     desc: 'Global shipping lanes from Korea' },
-        { href: 'index.html#trend',      name: 'Trend Monthly',       desc: 'Monthly Korea export intelligence' },
-        { href: 'tracker.html',          name: 'RFQ Tracker',         desc: 'Check status of submitted RFQ' }
+        { href: 'tools.html',                name: 'All Free Tools',         tag: 'Hub',  desc: 'Hub · 9 free tools · calculators · finders · templates' },
+        { divider: true },
+        { href: 'quote-calculator.html',     name: 'Quote Calculator',                    desc: 'Instant CIF/FOB estimate · 5 K-sectors' },
+        { href: 'ai-partner-match.html',     name: 'AI Partner Match',                    desc: 'Country + industry → Top-3 verified makers' },
+        { href: 'trade-route-map.html',      name: 'Trade Route Map',                     desc: 'Seoul to 16 global ports · CIF default' },
+        { href: 'wanted-board.html',         name: 'Buyer Wanted Board',                  desc: 'Reverse RFQ · anonymous post' },
+        { href: 'tools-landed-cost.html',    name: 'Landed Cost Calculator',              desc: '14 Korean ports → 14 destinations · FTA-applied' },
+        { href: 'export-docs.html',          name: 'Export Documents AI',                 desc: 'HS code lookup · duty rates · 4 templates' },
+        { divider: true },
+        { href: 'index.html#trend',          name: 'Trend Monthly',                       desc: 'Monthly Korea export intelligence' },
+        { href: 'tracker.html',              name: 'RFQ Tracker',                         desc: 'Check status of submitted RFQ' }
       ]
     },
     {

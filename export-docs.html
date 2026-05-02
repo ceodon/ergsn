@@ -22,6 +22,79 @@
 <meta name="twitter:title" content="Export Documents AI · HS Code Lookup · ERGSN">
 <meta name="twitter:description" content="Free HS code lookup, duty + cert checker, printable trade-doc templates.">
 <meta name="twitter:image" content="https://ergsn.net/images/og-cover.jpg">
+
+<!-- WebApplication JSON-LD — the main tool surface -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Export Documents AI · HS Code Lookup · Cert Checker · Templates",
+  "url": "https://ergsn.net/export-docs.html",
+  "description": "AI-assisted HS6 code suggester, country-by-country import duty + certification checker, and 4 printable export document templates (Commercial Invoice, Packing List, Certificate of Origin, Proforma Invoice). Free, no signup.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "ERGSN CO., LTD.", "url": "https://ergsn.net/" },
+  "featureList": [
+    "AI HS6 code suggester (12+ Korean export sectors)",
+    "Country-specific duty + certification checker (15 destinations, 9 categories)",
+    "Printable Commercial Invoice template (A4, fillable, browser-print-to-PDF)",
+    "Printable Packing List template (A4, fillable, carton + weight + dimensions)",
+    "Printable Certificate of Origin template (KCCI-compatible)",
+    "Printable Proforma Invoice template (LC + import licence ready)"
+  ]
+}
+</script>
+
+<!-- BreadcrumbList JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home",                  "item": "https://ergsn.net/" },
+    { "@type": "ListItem", "position": 2, "name": "Tools",                 "item": "https://ergsn.net/tools.html" },
+    { "@type": "ListItem", "position": 3, "name": "Export Documents AI",   "item": "https://ergsn.net/export-docs.html" }
+  ]
+}
+</script>
+
+<!-- FAQPage JSON-LD — high-intent questions for AI Overviews + SERP -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question", "name": "What is an HS6 code and why does my product need one?",
+      "acceptedAnswer": { "@type": "Answer", "text": "HS6 (Harmonized System 6-digit) is the global standard product classification used by every customs authority. Your product needs it for tariff calculation, certification routing, and customs declaration. ERGSN's HS suggester returns the 3 most likely codes based on plain-English product description." }
+    },
+    {
+      "@type": "Question", "name": "Are the duty rates shown binding?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Rates are directional, based on harmonized-system chapter classifications and publicly-available tariff schedules as of 2026-Q2. Always verify against your destination country's official customs tariff. Engage your customs broker for binding rulings on borderline classifications." }
+    },
+    {
+      "@type": "Question", "name": "Can I customize the document templates?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. All 4 templates (Commercial Invoice, Packing List, Certificate of Origin, Proforma Invoice) are fillable HTML pages. Open the template, fill in your data, then File → Print → Save as PDF. No watermark, no signup." }
+    },
+    {
+      "@type": "Question", "name": "Are the templates accepted by customs authorities?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Templates follow standard international trade format (Incoterms 2020, ISO 4217 currency codes) and are used in production by Korean exporters working with ERGSN. Always have your destination broker review before first shipment." }
+    },
+    {
+      "@type": "Question", "name": "Does ERGSN issue Certificates of Origin?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The CO template is informational and KCCI-compatible in format. For FTA preferential origin claims requiring KCCI authentication, ERGSN's trade desk facilitates issuance through the Korea Chamber of Commerce. Open an RFQ to start the process." }
+    },
+    {
+      "@type": "Question", "name": "Do the templates work for air cargo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Commercial Invoice, Packing List, and Proforma Invoice templates work for any shipping mode — ocean (FCL/LCL) or air. Air shipments need additional documents (Air Waybill, dangerous goods declaration if applicable) issued by your forwarder." }
+    }
+  ]
+}
+</script>
+
 <style>
   :root {
     --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
@@ -156,22 +229,32 @@
       <div class="template-card">
         <h4>Packing List</h4>
         <p>Line-item carton, weight, and dimensions. Required by shipping lines and destination customs for container-level verification.</p>
-        <a href="mailto:ceodon@gmail.com?subject=Packing%20List%20Template%20Request">Request from trade desk &rarr;</a>
+        <a href="packing-list-template.html" target="_blank" rel="noopener noreferrer">Open template &rarr;</a>
       </div>
       <div class="template-card">
         <h4>Certificate of Origin</h4>
-        <p>Korea Chamber of Commerce-compatible CO template. Auto-fills "Republic of Korea" and Seoul issuance. For FTA origin claims, ERGSN trade desk authenticates.</p>
-        <a href="mailto:ceodon@gmail.com?subject=Certificate%20of%20Origin%20Template%20Request">Request from trade desk &rarr;</a>
+        <p>Korea Chamber of Commerce-compatible CO template. Pre-fills "Republic of Korea" and Seoul issuance. For FTA preferential claims requiring KCCI authentication, ERGSN trade desk facilitates issuance.</p>
+        <a href="co-template.html" target="_blank" rel="noopener noreferrer">Open template &rarr;</a>
       </div>
       <div class="template-card">
         <h4>Proforma Invoice</h4>
         <p>Pre-shipment commercial quote. Used for buyer-side approval, letter of credit issuance, and import licence applications.</p>
-        <a href="mailto:ceodon@gmail.com?subject=Proforma%20Invoice%20Template%20Request">Request from trade desk &rarr;</a>
+        <a href="proforma-template.html" target="_blank" rel="noopener noreferrer">Open template &rarr;</a>
       </div>
     </div>
   </section>
 
-  <p class="fine"><strong>Disclaimer:</strong> HS codes and duty rates shown are directional guidance based on harmonized-system chapter classifications and publicly-available tariff schedules as of 2026-Q1. Always verify against your destination country's official customs tariff before shipping, and engage your customs broker for binding rulings on borderline classifications. ERGSN's trade desk can assist verified partners with classification review on request.</p>
+  <section class="section">
+    <h2 style="font-size: 22px;">Other Free Korea Trade Tools</h2>
+    <p style="font-size: 13px; color: var(--tx-lt); letter-spacing: .04em; margin-bottom: 1rem;">All five tools live in one hub — built and maintained by ERGSN's trade desk.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 1rem;">
+      <a href="tools.html" data-cta="next-tools-hub" style="display: block; padding: 14px 18px; background: linear-gradient(160deg, #181410 0%, #121010 100%); border: 1px solid var(--gold); border-radius: 10px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: none;">All Free Tools (Hub) &rarr;</a>
+      <a href="tools-landed-cost.html" data-cta="next-landed-cost" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">Landed Cost Calculator &rarr;</strong>14 Korean ports × 14 destinations</a>
+      <a href="escrow.html" data-cta="next-escrow" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">ERGSN Escrow Pilot &rarr;</strong>1% protected T/T settlement for first-time trades</a>
+    </div>
+  </section>
+
+  <p class="fine"><strong>Disclaimer:</strong> HS codes and duty rates shown are directional guidance based on harmonized-system chapter classifications and publicly-available tariff schedules as of 2026-Q2. Always verify against your destination country's official customs tariff before shipping, and engage your customs broker for binding rulings on borderline classifications. ERGSN's trade desk can assist verified partners with classification review on request.</p>
 
 </div>
 

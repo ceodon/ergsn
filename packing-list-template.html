@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
-<!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
 <script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-<title>Commercial Invoice Template · ERGSN</title>
+<title>Packing List Template · ERGSN</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
@@ -30,36 +29,38 @@
   .field .l { color: #666; font-size: 9pt; }
   .field input { border: 0; border-bottom: .5px dotted #999; padding: 1px 2px; font: inherit; width: 100%; outline: none; background: transparent; color: #111; }
   .field input:focus { border-bottom-color: #c8932a; background: #fef8e6; }
-  table.lines { width: 100%; border-collapse: collapse; margin-bottom: 6mm; font-size: 9.5pt; }
-  table.lines th { background: #0a1830; color: #fff; text-align: left; padding: 3mm; font-size: 8.5pt; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
-  table.lines td { padding: 2.5mm 3mm; border-bottom: .5px solid #d8d8d0; vertical-align: top; }
+  table.lines { width: 100%; border-collapse: collapse; margin-bottom: 6mm; font-size: 9pt; }
+  table.lines th { background: #0a1830; color: #fff; text-align: left; padding: 3mm 2mm; font-size: 8pt; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
+  table.lines td { padding: 2mm; border-bottom: .5px solid #d8d8d0; vertical-align: top; }
   table.lines input { width: 100%; border: 0; padding: 1mm; font: inherit; outline: none; }
   table.lines input:focus { background: #fef8e6; }
   table.lines input.num { text-align: right; }
   table.lines tr:nth-child(even) td { background: #fafaf7; }
-  .totals { margin-left: auto; width: 80mm; border: 1px solid #d8d8d0; padding: 4mm 5mm; border-radius: 2mm; }
+  .totals { margin-left: auto; width: 90mm; border: 1px solid #d8d8d0; padding: 4mm 5mm; border-radius: 2mm; }
   .totals .row { display: flex; justify-content: space-between; padding: 1mm 0; font-size: 10pt; }
-  .totals .row.total { border-top: 2px solid #0a1830; margin-top: 2mm; padding-top: 3mm; font-size: 13pt; font-weight: 700; color: #0a1830; }
+  .totals .row.total { border-top: 2px solid #0a1830; margin-top: 2mm; padding-top: 3mm; font-size: 12pt; font-weight: 700; color: #0a1830; }
   .totals input { border: 0; border-bottom: .5px dotted #999; text-align: right; font: inherit; width: 50mm; outline: none; }
+  .marks { margin-top: 6mm; padding: 4mm 5mm; border: 1px solid #d8d8d0; border-radius: 2mm; }
+  .marks h3 { font-size: 8.5pt; color: #c8932a; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 2mm; font-weight: 700; }
+  .marks textarea { width: 100%; min-height: 16mm; border: 0; padding: 1mm; font: inherit; font-size: 10pt; resize: vertical; outline: none; }
+  .marks textarea:focus { background: #fef8e6; }
   .notes { font-size: 9pt; color: #555; margin-top: 8mm; padding-top: 4mm; border-top: 1px solid #d8d8d0; }
   .sigs { margin-top: 10mm; display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
   .sig-box { text-align: center; }
   .sig-line { border-bottom: .8px solid #0a1830; height: 14mm; }
   .sig-cap { font-size: 9pt; color: #666; letter-spacing: .08em; margin-top: 2mm; }
+  .print-attr { display: none; }
   @media print {
     body { background: #fff; }
     .doc { box-shadow: none; margin: 0; padding: 0; }
     .tools { display: none; }
-    input { background: transparent !important; border-color: #ccc !important; }
+    input, textarea { background: transparent !important; border-color: #ccc !important; }
     .ergsn-back-top, .ergsn-back-bottom { display: none; }
     .print-attr { display: block; text-align: center; font-size: 6.5pt; color: #999; margin-top: 8mm; padding-top: 3mm; border-top: .3px dotted #ccc; font-family: inherit; }
     .print-attr a { color: #999; text-decoration: none; }
   }
-  .print-attr { display: none; }
   .ergsn-back-top{position:fixed;left:20px;top:20px;z-index:10;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(20,20,20,.92);color:#c8932a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;border:1px solid #2a2a2a;border-radius:8px;backdrop-filter:blur(6px)}
   .ergsn-back-top:hover{border-color:#c8932a;background:#c8932a;color:#0a0a0a!important}
-  .ergsn-back-bottom{display:block;max-width:210mm;margin:2rem auto 3rem;padding:1.2rem 0 0;text-align:right;border-top:1px dashed #3a3a30;font-family:system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;color:#8b8b8b;letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
-  .ergsn-back-bottom:hover{color:#c8932a}
 </style>
 </head>
 <body>
@@ -77,8 +78,8 @@
       <p class="brand-sub">Korea &middot; Trade Gateway &middot; Since 2013</p>
     </div>
     <div style="text-align:right">
-      <h1>Commercial Invoice</h1>
-      <p class="sub">For export declaration &amp; customs clearance</p>
+      <h1>Packing List</h1>
+      <p class="sub">For container loading &amp; customs verification</p>
     </div>
   </div>
 
@@ -98,49 +99,57 @@
       <div class="field"><span class="l">Attn</span><input type="text" placeholder="Contact person"></div>
     </div>
     <div class="block">
-      <h3>Invoice details</h3>
-      <div class="field"><span class="l">Invoice no.</span><input type="text" placeholder="ERGSN-INV-0000"></div>
-      <div class="field"><span class="l">Date</span><input type="text" placeholder="2026-04-18"></div>
+      <h3>Packing List details</h3>
+      <div class="field"><span class="l">PL no.</span><input type="text" placeholder="ERGSN-PL-0000"></div>
+      <div class="field"><span class="l">Date</span><input type="text" placeholder="2026-05-03"></div>
+      <div class="field"><span class="l">Invoice ref.</span><input type="text" placeholder="ERGSN-INV-0000"></div>
       <div class="field"><span class="l">PO ref.</span><input type="text" placeholder="Buyer's PO / contract ref"></div>
-      <div class="field"><span class="l">Currency</span><input type="text" placeholder="USD"></div>
     </div>
     <div class="block">
       <h3>Shipment</h3>
       <div class="field"><span class="l">Port of loading</span><input type="text" placeholder="Busan, KR"></div>
       <div class="field"><span class="l">Port of discharge</span><input type="text" placeholder="Destination port"></div>
-      <div class="field"><span class="l">Incoterms 2020</span><input type="text" placeholder="CIF / FOB / EXW / DDP"></div>
-      <div class="field"><span class="l">Payment</span><input type="text" placeholder="T/T 50% advance, 50% before shipment"></div>
+      <div class="field"><span class="l">Container no.</span><input type="text" placeholder="MSCU1234567 / FCL 40HC"></div>
+      <div class="field"><span class="l">Vessel / Voy</span><input type="text" placeholder="Vessel name / voyage no."></div>
     </div>
   </div>
 
   <table class="lines">
     <thead>
       <tr>
-        <th style="width:20mm">HS code</th>
+        <th style="width:14mm">Carton</th>
+        <th style="width:18mm">HS code</th>
         <th>Description of goods</th>
         <th style="width:14mm;text-align:right">Qty</th>
-        <th style="width:20mm;text-align:right">Unit price</th>
-        <th style="width:22mm;text-align:right">Amount</th>
+        <th style="width:18mm;text-align:right">Net wt (kg)</th>
+        <th style="width:18mm;text-align:right">Gross wt (kg)</th>
+        <th style="width:24mm;text-align:right">Dim L×W×H (cm)</th>
       </tr>
     </thead>
     <tbody id="lineBody">
-      <tr><td><input type="text" placeholder="8472.90"></td><td><input type="text" placeholder="DL-16XD Industrial Shredder · Level 3 / P-4"></td><td><input type="text" class="num" placeholder="10"></td><td><input type="text" class="num" placeholder="7,800"></td><td><input type="text" class="num" placeholder="78,000"></td></tr>
-      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
-      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
-      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text" placeholder="1-10"></td><td><input type="text" placeholder="8472.90"></td><td><input type="text" placeholder="DL-16XD Industrial Shredder · Level 3"></td><td><input type="text" class="num" placeholder="10"></td><td><input type="text" class="num" placeholder="380"></td><td><input type="text" class="num" placeholder="425"></td><td><input type="text" class="num" placeholder="65×52×88"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td><td><input type="text" class="num"></td></tr>
     </tbody>
   </table>
 
   <div class="totals">
-    <div class="row"><span>Subtotal</span><input type="text" placeholder="78,000.00"></div>
-    <div class="row"><span>Ocean freight</span><input type="text" placeholder="2,400.00"></div>
-    <div class="row"><span>Marine insurance</span><input type="text" placeholder="624.00"></div>
-    <div class="row"><span>Other charges</span><input type="text" placeholder="0.00"></div>
-    <div class="row total"><span>Total (USD)</span><input type="text" placeholder="81,024.00"></div>
+    <div class="row"><span>Total cartons</span><input type="text" placeholder="10"></div>
+    <div class="row"><span>Total quantity</span><input type="text" placeholder="10 units"></div>
+    <div class="row"><span>Total net weight</span><input type="text" placeholder="380.00 kg"></div>
+    <div class="row"><span>Total gross weight</span><input type="text" placeholder="425.00 kg"></div>
+    <div class="row total"><span>Total volume (CBM)</span><input type="text" placeholder="2.97"></div>
+  </div>
+
+  <div class="marks">
+    <h3>Shipping marks &amp; numbers</h3>
+    <textarea placeholder="ERGSN&#10;BUSAN → LA&#10;C/NO. 1-10&#10;MADE IN KOREA"></textarea>
   </div>
 
   <div class="notes">
-    <strong>Remarks &amp; declarations:</strong> We certify that the particulars above are true and correct. Country of origin: Republic of Korea. Goods are declared for export under the referenced HS codes. This invoice is issued pursuant to Incoterms 2020.
+    <strong>Declaration:</strong> The above particulars of carton count, weights, and dimensions are true and correct to the best of our knowledge. Country of origin: Republic of Korea. Goods are packed for export under the referenced HS codes and Incoterms 2020. Total carton count and gross weight match the bill of lading.
   </div>
 
   <div class="sigs">

@@ -14,6 +14,52 @@
 <meta property="og:description" content="5 verified Korean makers · 50+ global buyers · one 90-minute broadcast.">
 <meta property="og:type" content="event">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- Event JSON-LD — quarterly broadcast event -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "ERGSN Trade Mission Live · Q3 2026",
+  "description": "Quarterly 90-minute broadcast featuring 5 verified Korean makers presenting directly to 50+ global procurement buyers. Inaugural edition.",
+  "startDate": "2026-07-15T14:00:00+09:00",
+  "endDate": "2026-07-15T15:30:00+09:00",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": "https://ergsn.net/trade-mission.html"
+  },
+  "image": "https://ergsn.net/images/og-cover.jpg",
+  "organizer": {
+    "@type": "Organization",
+    "name": "ERGSN CO., LTD.",
+    "url": "https://ergsn.net/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://ergsn.net/trade-mission.html",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2026-05-01"
+  }
+}
+</script>
+
+<!-- BreadcrumbList JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home",                "item": "https://ergsn.net/" },
+    { "@type": "ListItem", "position": 2, "name": "Tools",               "item": "https://ergsn.net/tools.html" },
+    { "@type": "ListItem", "position": 3, "name": "Trade Mission Live",  "item": "https://ergsn.net/trade-mission.html" }
+  ]
+}
+</script>
+
 <style>
   :root {
     --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
@@ -200,6 +246,16 @@
         </form>
       </div>
 
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 style="font-size: 22px;">Other Free Korea Trade Tools</h2>
+    <p style="font-size: 13px; color: var(--tx-lt); letter-spacing: .04em; margin-bottom: 1rem;">All five tools live in one hub — built and maintained by ERGSN's trade desk.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 1rem;">
+      <a href="tools.html" data-cta="next-tools-hub" style="display: block; padding: 14px 18px; background: linear-gradient(160deg, #181410 0%, #121010 100%); border: 1px solid var(--gold); border-radius: 10px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: none;">All Free Tools (Hub) &rarr;</a>
+      <a href="tools-landed-cost.html" data-cta="next-landed-cost" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">Landed Cost Calculator &rarr;</strong>14 Korean ports × 14 destinations</a>
+      <a href="export-docs.html" data-cta="next-export-docs" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">Export Documents AI &rarr;</strong>HS lookup · cert checker · 4 templates</a>
     </div>
   </section>
 

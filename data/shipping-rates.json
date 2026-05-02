@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "schema": "ergsn-shipping-rates-v1",
+    "purpose": "Quarterly average ocean + air freight rates for the Landed Cost Calculator",
+    "last_updated": "2026-05-03",
+    "quarter": "2026-Q2",
+    "next_review_due": "2026-08-01",
+    "source": "Freightos Baltic Index (FBX) + Drewry World Container Index (WCI) quarterly published averages, cross-checked with ERGSN trade desk operational quotes from Korean forwarders. Rates are USD per stated unit, ex-Korea, all-in including BAF/CAF/THC where customary.",
+    "review_owner": "ERGSN trade desk",
+    "important_note": "Ocean container rates moved 30-300% per quarter in 2024-2025. Use as planning estimate ONLY — request a real spot quote from ERGSN trade desk before any binding decision."
+  },
+  "ocean_fcl": {
+    "_unit": "USD per container, all-in ex-Korea",
+    "_modes": ["20ft", "40ft", "40hc"],
+    "rates": [
+      { "korea_port": "BUS", "destination": "US", "lane": "TPN→USWC",  "20ft": 1450, "40ft": 1850, "40hc": 1900, "transit_days": 14 },
+      { "korea_port": "BUS", "destination": "US", "lane": "TPN→USEC",  "20ft": 2400, "40ft": 3200, "40hc": 3300, "transit_days": 28 },
+      { "korea_port": "BUS", "destination": "MX", "lane": "TPS→MXP",   "20ft": 2200, "40ft": 2800, "40hc": 2900, "transit_days": 22 },
+      { "korea_port": "BUS", "destination": "CA", "lane": "TPN→YVR",   "20ft": 1500, "40ft": 1900, "40hc": 1950, "transit_days": 15 },
+      { "korea_port": "BUS", "destination": "BR", "lane": "TWC→SSZ",   "20ft": 2900, "40ft": 4200, "40hc": 4400, "transit_days": 38 },
+      { "korea_port": "BUS", "destination": "CL", "lane": "TPS→VAP",   "20ft": 2700, "40ft": 3800, "40hc": 4000, "transit_days": 32 },
+      { "korea_port": "BUS", "destination": "AE", "lane": "TWC→JEA",   "20ft": 1100, "40ft": 1500, "40hc": 1550, "transit_days": 22 },
+      { "korea_port": "BUS", "destination": "SA", "lane": "TWC→JED",   "20ft": 1200, "40ft": 1650, "40hc": 1700, "transit_days": 25 },
+      { "korea_port": "BUS", "destination": "JP", "lane": "TAS→TYO",   "20ft":  300, "40ft":  500, "40hc":  520, "transit_days":  3 },
+      { "korea_port": "BUS", "destination": "VN", "lane": "TAS→SGN",   "20ft":  450, "40ft":  700, "40hc":  720, "transit_days":  7 },
+      { "korea_port": "BUS", "destination": "TH", "lane": "TAS→LCH",   "20ft":  550, "40ft":  850, "40hc":  870, "transit_days":  9 },
+      { "korea_port": "BUS", "destination": "ID", "lane": "TAS→TPP",   "20ft":  600, "40ft":  900, "40hc":  920, "transit_days": 10 },
+      { "korea_port": "BUS", "destination": "PH", "lane": "TAS→MNL",   "20ft":  500, "40ft":  800, "40hc":  820, "transit_days":  9 },
+      { "korea_port": "BUS", "destination": "EU", "lane": "TWC→RTM",   "20ft": 1800, "40ft": 2600, "40hc": 2700, "transit_days": 32 },
+      { "korea_port": "BUS", "destination": "GB", "lane": "TWC→FXT",   "20ft": 1900, "40ft": 2750, "40hc": 2850, "transit_days": 33 }
+    ],
+    "_other_korea_ports_note": "For INC, PTK, KAN, USN, KUV, YOS, DHE, KPO, MAS, MOK, CJU — apply +5% to +12% on BUS rates depending on inland transfer + feeder service requirements. Use BUS as the canonical reference unless the maker has a contracted local port lifting."
+  },
+  "ocean_lcl": {
+    "_unit": "USD per cubic meter (CBM), all-in ex-Korea",
+    "_minimum_chargeable_volume_cbm": 1.0,
+    "rates": [
+      { "korea_port": "BUS", "destination": "US", "per_cbm": 75, "transit_days": 22 },
+      { "korea_port": "BUS", "destination": "MX", "per_cbm": 95, "transit_days": 28 },
+      { "korea_port": "BUS", "destination": "CA", "per_cbm": 80, "transit_days": 22 },
+      { "korea_port": "BUS", "destination": "BR", "per_cbm": 145, "transit_days": 42 },
+      { "korea_port": "BUS", "destination": "CL", "per_cbm": 130, "transit_days": 38 },
+      { "korea_port": "BUS", "destination": "AE", "per_cbm": 65, "transit_days": 26 },
+      { "korea_port": "BUS", "destination": "SA", "per_cbm": 70, "transit_days": 28 },
+      { "korea_port": "BUS", "destination": "JP", "per_cbm": 35, "transit_days": 5 },
+      { "korea_port": "BUS", "destination": "VN", "per_cbm": 40, "transit_days": 9 },
+      { "korea_port": "BUS", "destination": "TH", "per_cbm": 45, "transit_days": 11 },
+      { "korea_port": "BUS", "destination": "ID", "per_cbm": 50, "transit_days": 12 },
+      { "korea_port": "BUS", "destination": "PH", "per_cbm": 42, "transit_days": 11 },
+      { "korea_port": "BUS", "destination": "EU", "per_cbm": 95, "transit_days": 36 },
+      { "korea_port": "BUS", "destination": "GB", "per_cbm": 100, "transit_days": 37 }
+    ]
+  },
+  "air": {
+    "_unit": "USD per kg chargeable weight, all-in ex-Korea",
+    "_chargeable_weight_rule": "max(actual_kg, volume_cm3 / 6000)",
+    "rates": [
+      { "korea_port": "ICN", "destination": "US", "per_kg": 5.20, "transit_days": 3 },
+      { "korea_port": "ICN", "destination": "MX", "per_kg": 6.40, "transit_days": 4 },
+      { "korea_port": "ICN", "destination": "CA", "per_kg": 5.40, "transit_days": 3 },
+      { "korea_port": "ICN", "destination": "BR", "per_kg": 7.80, "transit_days": 5 },
+      { "korea_port": "ICN", "destination": "CL", "per_kg": 7.50, "transit_days": 5 },
+      { "korea_port": "ICN", "destination": "AE", "per_kg": 4.80, "transit_days": 4 },
+      { "korea_port": "ICN", "destination": "SA", "per_kg": 5.00, "transit_days": 4 },
+      { "korea_port": "ICN", "destination": "JP", "per_kg": 2.80, "transit_days": 1 },
+      { "korea_port": "ICN", "destination": "VN", "per_kg": 3.20, "transit_days": 2 },
+      { "korea_port": "ICN", "destination": "TH", "per_kg": 3.50, "transit_days": 2 },
+      { "korea_port": "ICN", "destination": "ID", "per_kg": 3.80, "transit_days": 3 },
+      { "korea_port": "ICN", "destination": "PH", "per_kg": 3.40, "transit_days": 2 },
+      { "korea_port": "ICN", "destination": "EU", "per_kg": 5.50, "transit_days": 4 },
+      { "korea_port": "ICN", "destination": "GB", "per_kg": 5.60, "transit_days": 4 }
+    ],
+    "_pus_air_note": "Gimhae Airport (PUS-air) handles regional cargo only — apply +20% on ICN rates and limit to JP / VN / TH / ID / PH lanes."
+  }
+}

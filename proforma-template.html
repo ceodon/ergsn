@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
-<!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
 <script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-<title>Commercial Invoice Template · ERGSN</title>
+<title>Proforma Invoice Template · ERGSN</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
@@ -23,10 +22,12 @@
   .brand { font-family: 'DM Serif Display', serif; font-size: 22pt; font-weight: 800; color: #0a1830; letter-spacing: .14em; }
   .brand .e { color: #c8932a; }
   .brand-sub { font-size: 8.5pt; color: #666; letter-spacing: .24em; text-transform: uppercase; }
+  .pf-banner { background: linear-gradient(180deg, #fff5f0 0%, #fffaf5 100%); border: 1px solid #d8a890; border-radius: 3mm; padding: 3mm 6mm; margin-bottom: 6mm; display: flex; justify-content: space-between; align-items: center; font-size: 9pt; color: #6a3a20; }
+  .pf-banner strong { color: #0a1830; letter-spacing: .08em; text-transform: uppercase; }
   .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-bottom: 6mm; }
   .block { border: 1px solid #d8d8d0; padding: 4mm 5mm; border-radius: 2mm; min-height: 32mm; }
   .block h3 { font-size: 8.5pt; color: #c8932a; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 2mm; font-weight: 700; font-family: inherit; }
-  .field { display: grid; grid-template-columns: 28mm 1fr; font-size: 10pt; padding: 1mm 0; }
+  .field { display: grid; grid-template-columns: 32mm 1fr; font-size: 10pt; padding: 1mm 0; }
   .field .l { color: #666; font-size: 9pt; }
   .field input { border: 0; border-bottom: .5px dotted #999; padding: 1px 2px; font: inherit; width: 100%; outline: none; background: transparent; color: #111; }
   .field input:focus { border-bottom-color: #c8932a; background: #fef8e6; }
@@ -41,25 +42,27 @@
   .totals .row { display: flex; justify-content: space-between; padding: 1mm 0; font-size: 10pt; }
   .totals .row.total { border-top: 2px solid #0a1830; margin-top: 2mm; padding-top: 3mm; font-size: 13pt; font-weight: 700; color: #0a1830; }
   .totals input { border: 0; border-bottom: .5px dotted #999; text-align: right; font: inherit; width: 50mm; outline: none; }
-  .notes { font-size: 9pt; color: #555; margin-top: 8mm; padding-top: 4mm; border-top: 1px solid #d8d8d0; }
+  .terms { margin-top: 6mm; padding: 4mm 5mm; border: 1px solid #d8d8d0; border-radius: 2mm; }
+  .terms h3 { font-size: 8.5pt; color: #c8932a; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 3mm; font-weight: 700; }
+  .terms .field { grid-template-columns: 36mm 1fr; }
+  .notes { font-size: 9pt; color: #555; margin-top: 8mm; padding-top: 4mm; border-top: 1px solid #d8d8d0; line-height: 1.6; }
+  .notes strong { color: #0a1830; }
   .sigs { margin-top: 10mm; display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
   .sig-box { text-align: center; }
   .sig-line { border-bottom: .8px solid #0a1830; height: 14mm; }
   .sig-cap { font-size: 9pt; color: #666; letter-spacing: .08em; margin-top: 2mm; }
+  .print-attr { display: none; }
   @media print {
     body { background: #fff; }
     .doc { box-shadow: none; margin: 0; padding: 0; }
     .tools { display: none; }
-    input { background: transparent !important; border-color: #ccc !important; }
+    input, textarea { background: transparent !important; border-color: #ccc !important; }
     .ergsn-back-top, .ergsn-back-bottom { display: none; }
     .print-attr { display: block; text-align: center; font-size: 6.5pt; color: #999; margin-top: 8mm; padding-top: 3mm; border-top: .3px dotted #ccc; font-family: inherit; }
     .print-attr a { color: #999; text-decoration: none; }
   }
-  .print-attr { display: none; }
   .ergsn-back-top{position:fixed;left:20px;top:20px;z-index:10;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(20,20,20,.92);color:#c8932a!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;border:1px solid #2a2a2a;border-radius:8px;backdrop-filter:blur(6px)}
   .ergsn-back-top:hover{border-color:#c8932a;background:#c8932a;color:#0a0a0a!important}
-  .ergsn-back-bottom{display:block;max-width:210mm;margin:2rem auto 3rem;padding:1.2rem 0 0;text-align:right;border-top:1px dashed #3a3a30;font-family:system-ui,-apple-system,sans-serif;font-size:12px;font-weight:600;color:#8b8b8b;letter-spacing:.06em;text-transform:uppercase;text-decoration:none}
-  .ergsn-back-bottom:hover{color:#c8932a}
 </style>
 </head>
 <body>
@@ -77,9 +80,13 @@
       <p class="brand-sub">Korea &middot; Trade Gateway &middot; Since 2013</p>
     </div>
     <div style="text-align:right">
-      <h1>Commercial Invoice</h1>
-      <p class="sub">For export declaration &amp; customs clearance</p>
+      <h1>Proforma Invoice</h1>
+      <p class="sub">Pre-shipment quote &middot; For LC issuance &amp; buyer approval</p>
     </div>
+  </div>
+
+  <div class="pf-banner">
+    <span><strong>Proforma — not a commercial invoice.</strong> For buyer-side approval, letter-of-credit issuance, and import licence application only. Final invoice issued after shipment.</span>
   </div>
 
   <div class="meta-grid">
@@ -91,25 +98,25 @@
       <div class="field"><span class="l">Business reg.</span><input type="text" placeholder="KR biz registration no."></div>
     </div>
     <div class="block">
-      <h3>Consignee / Buyer</h3>
+      <h3>Buyer / Importer</h3>
       <div class="field"><span class="l">Company</span><input type="text" placeholder="Buyer name"></div>
       <div class="field"><span class="l">Address</span><input type="text" placeholder="Destination address"></div>
       <div class="field"><span class="l">Country</span><input type="text" placeholder="e.g. United States"></div>
       <div class="field"><span class="l">Attn</span><input type="text" placeholder="Contact person"></div>
     </div>
     <div class="block">
-      <h3>Invoice details</h3>
-      <div class="field"><span class="l">Invoice no.</span><input type="text" placeholder="ERGSN-INV-0000"></div>
-      <div class="field"><span class="l">Date</span><input type="text" placeholder="2026-04-18"></div>
-      <div class="field"><span class="l">PO ref.</span><input type="text" placeholder="Buyer's PO / contract ref"></div>
+      <h3>Proforma details</h3>
+      <div class="field"><span class="l">Proforma no.</span><input type="text" placeholder="ERGSN-PF-0000"></div>
+      <div class="field"><span class="l">Date</span><input type="text" placeholder="2026-05-03"></div>
+      <div class="field"><span class="l">Validity</span><input type="text" placeholder="30 days from date"></div>
       <div class="field"><span class="l">Currency</span><input type="text" placeholder="USD"></div>
     </div>
     <div class="block">
-      <h3>Shipment</h3>
+      <h3>Estimated shipment</h3>
       <div class="field"><span class="l">Port of loading</span><input type="text" placeholder="Busan, KR"></div>
       <div class="field"><span class="l">Port of discharge</span><input type="text" placeholder="Destination port"></div>
       <div class="field"><span class="l">Incoterms 2020</span><input type="text" placeholder="CIF / FOB / EXW / DDP"></div>
-      <div class="field"><span class="l">Payment</span><input type="text" placeholder="T/T 50% advance, 50% before shipment"></div>
+      <div class="field"><span class="l">Est. ship date</span><input type="text" placeholder="2026-08-15 (post-deposit T+45)"></div>
     </div>
   </div>
 
@@ -133,14 +140,23 @@
 
   <div class="totals">
     <div class="row"><span>Subtotal</span><input type="text" placeholder="78,000.00"></div>
-    <div class="row"><span>Ocean freight</span><input type="text" placeholder="2,400.00"></div>
-    <div class="row"><span>Marine insurance</span><input type="text" placeholder="624.00"></div>
-    <div class="row"><span>Other charges</span><input type="text" placeholder="0.00"></div>
-    <div class="row total"><span>Total (USD)</span><input type="text" placeholder="81,024.00"></div>
+    <div class="row"><span>Estimated freight</span><input type="text" placeholder="2,400.00"></div>
+    <div class="row"><span>Estimated insurance</span><input type="text" placeholder="624.00"></div>
+    <div class="row total"><span>Total estimate (USD)</span><input type="text" placeholder="81,024.00"></div>
+  </div>
+
+  <div class="terms">
+    <h3>Payment &amp; commercial terms</h3>
+    <div class="field"><span class="l">Payment</span><input type="text" placeholder="T/T 30% advance, 70% before shipment / LC at sight"></div>
+    <div class="field"><span class="l">Bank details</span><input type="text" placeholder="Beneficiary name · bank · SWIFT · account no."></div>
+    <div class="field"><span class="l">Shipping mode</span><input type="text" placeholder="FCL 40HC ocean / LCL / Air freight"></div>
+    <div class="field"><span class="l">Lead time</span><input type="text" placeholder="45-60 days from deposit receipt"></div>
+    <div class="field"><span class="l">Warranty</span><input type="text" placeholder="12 months from B/L date"></div>
   </div>
 
   <div class="notes">
-    <strong>Remarks &amp; declarations:</strong> We certify that the particulars above are true and correct. Country of origin: Republic of Korea. Goods are declared for export under the referenced HS codes. This invoice is issued pursuant to Incoterms 2020.
+    <p><strong>Important:</strong> This is a Proforma Invoice issued for buyer's reference, letter-of-credit issuance, and import licence application. Final binding pricing will be confirmed on the Commercial Invoice issued at shipment. Prices subject to currency fluctuation, raw-material cost changes, and shipping rate movements between proforma date and shipment.</p>
+    <p style="margin-top:3mm;"><strong>Origin:</strong> Republic of Korea. <strong>Compliance:</strong> Goods comply with Korean export regulations. <strong>Acceptance:</strong> Buyer's signature below or formal PO referencing this Proforma constitutes acceptance.</p>
   </div>
 
   <div class="sigs">
@@ -150,7 +166,7 @@
     </div>
     <div class="sig-box">
       <div class="sig-line"></div>
-      <p class="sig-cap">Company stamp (Exporter)</p>
+      <p class="sig-cap">Buyer acceptance signature</p>
     </div>
   </div>
 

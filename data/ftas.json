@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "schema": "ergsn-ftas-v1",
+    "purpose": "Korea's bilateral and regional FTAs with chapter-level applicability for Landed Cost Calculator estimates",
+    "last_updated": "2026-05-03",
+    "source": "Korea Ministry of Trade, Industry and Energy (MOTIE) FTA portal + WTO RTA database; consult destination broker for product-specific HS6/HS8 rates",
+    "review_owner": "ERGSN trade desk",
+    "important_note": "FTA status here is chapter-level GENERAL. Product-specific rates depend on rules of origin, certificate of origin issuance, and HS6/HS8 schedule. Always verify with destination broker before binding pricing.",
+    "rate_basis": "Estimates show preferential ad-valorem AVERAGE under FTA vs MFN baseline. Real product rates can vary ±100% from average."
+  },
+  "ftas": [
+    {
+      "id": "KORUS",
+      "name": "Korea-United States FTA",
+      "in_force_year": 2012,
+      "destinations": ["US"],
+      "chapter_coverage": "near-universal",
+      "avg_pref_rate_pct": 0.0,
+      "avg_mfn_rate_pct": 3.5,
+      "notes": "~95% of US tariff lines duty-free immediately or staged-in by 2026. Notable carve-outs: certain textiles, some agriculture."
+    },
+    {
+      "id": "KCFTA",
+      "name": "Korea-Canada FTA",
+      "in_force_year": 2015,
+      "destinations": ["CA"],
+      "chapter_coverage": "near-universal",
+      "avg_pref_rate_pct": 0.0,
+      "avg_mfn_rate_pct": 4.0,
+      "notes": "98% of tariff lines duty-free by 2025. Most consumer + industrial goods qualify."
+    },
+    {
+      "id": "KCHFTA",
+      "name": "Korea-Chile FTA",
+      "in_force_year": 2004,
+      "destinations": ["CL"],
+      "chapter_coverage": "near-universal",
+      "avg_pref_rate_pct": 0.0,
+      "avg_mfn_rate_pct": 6.0,
+      "notes": "Korea's first FTA. Nearly all industrial + consumer goods duty-free."
+    },
+    {
+      "id": "KEUFTA",
+      "name": "Korea-EU FTA",
+      "in_force_year": 2011,
+      "destinations": ["EU"],
+      "chapter_coverage": "industrial-near-universal",
+      "avg_pref_rate_pct": 0.0,
+      "avg_mfn_rate_pct": 4.5,
+      "notes": "Industrial goods near-universally duty-free. Some agricultural + textile carve-outs remain."
+    },
+    {
+      "id": "KUKFTA",
+      "name": "Korea-United Kingdom FTA",
+      "in_force_year": 2021,
+      "destinations": ["GB"],
+      "chapter_coverage": "industrial-near-universal",
+      "avg_pref_rate_pct": 0.0,
+      "avg_mfn_rate_pct": 4.5,
+      "notes": "Replicates KEUFTA preferences post-Brexit. Industrial goods near-universally duty-free."
+    },
+    {
+      "id": "KAFTA",
+      "name": "Korea-ASEAN FTA",
+      "in_force_year": 2007,
+      "destinations": ["VN", "TH", "ID", "PH"],
+      "chapter_coverage": "broad-staged",
+      "avg_pref_rate_pct": 1.5,
+      "avg_mfn_rate_pct": 7.0,
+      "notes": "Staged liberalisation completed for most products. Bilateral KVNFTA / KIDFTA may offer better rates for specific HS lines."
+    },
+    {
+      "id": "KVNFTA",
+      "name": "Korea-Vietnam FTA",
+      "in_force_year": 2015,
+      "destinations": ["VN"],
+      "chapter_coverage": "broad",
+      "avg_pref_rate_pct": 0.5,
+      "avg_mfn_rate_pct": 8.0,
+      "notes": "Bilateral upgrade over KAFTA. ~92% of tariff lines duty-free by 2026."
+    },
+    {
+      "id": "KIDFTA",
+      "name": "Korea-Indonesia CEPA",
+      "in_force_year": 2023,
+      "destinations": ["ID"],
+      "chapter_coverage": "broad",
+      "avg_pref_rate_pct": 1.0,
+      "avg_mfn_rate_pct": 7.5,
+      "notes": "Recent CEPA — 92% of tariff lines duty-free over 20 years; immediate cuts on auto, steel, electronics."
+    },
+    {
+      "id": "RCEP",
+      "name": "Regional Comprehensive Economic Partnership",
+      "in_force_year": 2022,
+      "destinations": ["JP", "VN", "TH", "ID", "PH"],
+      "chapter_coverage": "broad-staged",
+      "avg_pref_rate_pct": 2.5,
+      "avg_mfn_rate_pct": 6.5,
+      "notes": "Korea-Japan tariff reduction is RCEP's headline (no prior bilateral FTA). Staged 20-year reduction for most lines."
+    },
+    {
+      "id": "KAEFTA",
+      "name": "Korea-UAE CEPA",
+      "in_force_year": 2024,
+      "destinations": ["AE"],
+      "chapter_coverage": "broad-pending-ratification",
+      "avg_pref_rate_pct": 1.0,
+      "avg_mfn_rate_pct": 5.0,
+      "notes": "Signed 2024. Verify ratification status before claiming preferential treatment. GCC common external tariff applies in interim."
+    }
+  ],
+  "no_fta": {
+    "destinations": ["MX", "BR", "SA"],
+    "note": "No Korea FTA in force. MFN rates apply. Korea-Mexico, Korea-Mercosur, and Korea-GCC negotiations ongoing as of 2026-Q2."
+  }
+}

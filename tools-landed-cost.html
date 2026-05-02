@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
+<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>Korea Landed Cost Calculator — FOB to CIF (14 Ports, Free) | ERGSN</title>
+<meta name="description" content="Calculate landed cost from any Korean port (Busan, Incheon, Pyeongtaek...) to 14 destination countries. Includes FTA-applied tariff, ocean/air freight, VAT, customs. Free, instant, no signup.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ergsn.net/tools-landed-cost.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ERGSN CO., LTD.">
+<meta property="og:title" content="Korea Landed Cost Calculator — FOB to CIF (14 Ports)">
+<meta property="og:description" content="Estimate FOB → CIF landed cost from 14 Korean ports to 14 destination countries with FTA-applied tariff comparison. Free, instant.">
+<meta property="og:url" content="https://ergsn.net/tools-landed-cost.html">
+<meta property="og:image" content="https://ergsn.net/images/og-cover.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Korea Landed Cost Calculator | ERGSN">
+<meta name="twitter:description" content="Estimate FOB → CIF landed cost from 14 Korean ports to 14 destinations. Free.">
+<meta name="twitter:image" content="https://ergsn.net/images/og-cover.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- WebApplication JSON-LD for the calculator itself -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Korea Landed Cost Calculator",
+  "url": "https://ergsn.net/tools-landed-cost.html",
+  "description": "Estimate landed cost from 14 Korean ports to 14 destination countries — FOB to CIF with FTA-applied tariff comparison, VAT, customs, ocean/air freight.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "provider": { "@type": "Organization", "name": "ERGSN CO., LTD.", "url": "https://ergsn.net/" },
+  "featureList": [
+    "14 Korean ports (Busan, Incheon, Pyeongtaek, Gwangyang, Ulsan, Gunsan, Yeosu, Donghae, Pohang, Masan, Mokpo, Jeju, Incheon Airport, Gimhae Airport)",
+    "14 destination countries (US, MX, CA, BR, CL, AE, SA, JP, VN, TH, ID, PH, EU, GB)",
+    "FTA-applied vs MFN tariff comparison (KORUS, KAFTA, RCEP, KCFTA, KIFTA, KEUFTA, KUKFTA, KCHFTA, KVNFTA, KIDFTA, KAEFTA)",
+    "Ocean FCL 20ft / 40ft / 40hc + LCL per CBM + Air per kg",
+    "Destination VAT/GST + customs processing fee",
+    "Shareable result URL"
+  ]
+}
+</script>
+
+<!-- SEO ② — HowTo JSON-LD: 6-step landed cost calculation -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Calculate Landed Cost from Korea",
+  "description": "Estimate the total landed cost of importing goods from Korea — FOB price, freight, insurance, tariff (FTA vs MFN), VAT, and customs fees.",
+  "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
+  "totalTime": "PT2M",
+  "step": [
+    { "@type": "HowToStep", "position": 1, "name": "Enter your HS6 code",        "text": "Pick your product's 6-digit HS code. The calculator's autocomplete covers ~40 common Korean export codes across K-Beauty, K-Bio, K-Tech, K-Energy, K-Security, and more." },
+    { "@type": "HowToStep", "position": 2, "name": "Choose origin port + destination", "text": "Select one of 14 Korean ports (12 sea + 2 air) and one of 14 destination countries. Busan is the canonical sea origin; Incheon Airport (ICN) is the canonical air origin." },
+    { "@type": "HowToStep", "position": 3, "name": "Enter FOB price + cargo details",  "text": "Enter FOB price (USD), quantity, cargo weight in kg, and volume in CBM. Pick shipping mode: FCL 20ft / 40ft / 40HC, LCL, or Air." },
+    { "@type": "HowToStep", "position": 4, "name": "Review FTA vs MFN comparison",     "text": "The calculator looks up applicable FTAs (KORUS for US, KCFTA for Canada, KEUFTA for EU, KAFTA + RCEP for ASEAN, etc.) and shows preferential vs MFN tariff side-by-side." },
+    { "@type": "HowToStep", "position": 5, "name": "See total landed cost",            "text": "FOB + Freight + Insurance = CIF. CIF + Tariff + VAT + Customs Fee = Total Landed Cost. Per-unit cost displayed below." },
+    { "@type": "HowToStep", "position": 6, "name": "Share or get a real quote",        "text": "Copy the share URL to send your calculation to a colleague, or open the RFQ form to convert the estimate into a real binding quote from ERGSN's trade desk." }
+  ]
+}
+</script>
+
+<!-- SEO ④ — BreadcrumbList: Home → Tools → Landed Cost Calculator -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home",                      "item": "https://ergsn.net/" },
+    { "@type": "ListItem", "position": 2, "name": "Tools",                     "item": "https://ergsn.net/tools.html" },
+    { "@type": "ListItem", "position": 3, "name": "Landed Cost Calculator",   "item": "https://ergsn.net/tools-landed-cost.html" }
+  ]
+}
+</script>
+
+<!-- SEO ③ — FAQPage JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question", "name": "What is FOB and how does it differ from CIF?",
+      "acceptedAnswer": { "@type": "Answer", "text": "FOB (Free On Board) is the price at which the seller delivers goods loaded onto the vessel at the named port — buyer pays freight + insurance from there. CIF (Cost, Insurance, Freight) bundles the seller-paid freight + marine insurance into the price quoted to the buyer. Landed cost adds tariff, VAT, and customs fees on top of CIF." }
+    },
+    {
+      "@type": "Question", "name": "Is the KORUS FTA tariff really 0% for most products?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — approximately 95% of US tariff lines are duty-free for Korean-origin goods under KORUS, either immediately or staged-in by 2026. Notable carve-outs remain for some textiles and certain agricultural categories. Always verify your specific HS6 line with your customs broker." }
+    },
+    {
+      "@type": "Question", "name": "Why does the calculator only show Busan rates for ocean freight?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Busan handles ~95% of Korea's container exports and is the canonical reference lane for published indices (FBX, Drewry WCI). Other Korean ports (Incheon, Pyeongtaek, Gwangyang, etc.) typically add 5-12% inland feeder cost. For non-Busan origins, request a real quote from your forwarder or ERGSN's trade team." }
+    },
+    {
+      "@type": "Question", "name": "How accurate are the freight rates?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Rates are quarterly published averages (FBX + Drewry WCI), not real-time spot quotes. Ocean container rates moved 30-300% per quarter in 2024-2025. Use these numbers for planning only — request a real spot quote from ERGSN's trade desk before any binding decision." }
+    },
+    {
+      "@type": "Question", "name": "Does the calculator work for air cargo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pick Incheon Airport (ICN) or Gimhae Airport (PUS-air) as origin and Air mode. The calculator uses chargeable weight = max(actual_kg, volume_cm3 / 6000). PUS-air rates apply a +20% adjustment over ICN and only cover regional lanes (JP, VN, TH, ID, PH)." }
+    },
+    {
+      "@type": "Question", "name": "Can I share my calculation with a colleague?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — every calculation generates a shareable URL with all inputs encoded as query parameters. Copy the URL to send the exact same scenario to anyone. Loading the URL re-runs the calculation instantly." }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
+    --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
+    --bg: #0a0a0a; --bg-2: #141414; --bg-3: #1a1a1a; --border: #2a2a2a;
+    --fd: 'DM Serif Display', 'Times New Roman', serif;
+    --fb: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --fm: 'IBM Plex Mono', Menlo, Monaco, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx-mid); font-family: var(--fb); line-height: 1.65; }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem clamp(16px,4vw,48px) 4rem; }
+  .back { display: inline-flex; gap: 6px; color: var(--tx-lt); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem; }
+
+  .hero { padding: 1.4rem 0 2rem; border-bottom: 1px solid #1e1e1e; margin-bottom: 2rem; }
+  .tag { display: inline-block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--green); font-weight: 700; margin-bottom: 1rem; padding: 4px 10px; background: rgba(21,215,138,.12); border-radius: 12px; }
+  h1 { font-family: var(--fd); font-size: clamp(34px, 5vw, 48px); font-weight: 800; color: var(--white); line-height: 1.12; margin: 0 0 .9rem; letter-spacing: -.01em; }
+  .lead { font-size: 16px; line-height: 1.75; color: var(--tx-mid); max-width: 760px; }
+  .lead strong { color: var(--white); }
+
+  /* Calculator card */
+  .calc { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 1.4rem; }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
+  .calc-grid.full { grid-template-columns: 1fr; }
+  label { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-lt); font-weight: 700; margin-bottom: 6px; }
+  input, select { width: 100%; padding: 11px 13px; background: #1d1d1d; border: 1px solid var(--border); border-radius: 8px; color: var(--white); font-family: inherit; font-size: 14px; outline: none; }
+  input:focus, select:focus { border-color: var(--gold); }
+  input::placeholder { color: #5d5d5d; }
+  .field { margin-bottom: 10px; }
+  .field-help { font-size: 11px; color: var(--tx-lt); margin-top: 4px; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 10px; font-family: var(--fb); font-weight: 700; font-size: 13px; border: 0; cursor: pointer; letter-spacing: .04em; }
+  .btn-gold { background: var(--gold); color: #0a0a0a; }
+  .btn-gold:hover { background: #d4a449; text-decoration: none; }
+  .btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Results */
+  .results { margin-top: 1.6rem; }
+  .results.empty { display: none; }
+  .total-card { padding: 22px 26px; border: 1px solid var(--gold); background: linear-gradient(160deg, #1a1410 0%, #121010 100%); border-radius: 14px; }
+  .total-card .label { font-size: 11px; letter-spacing: .14em; color: var(--tx-lt); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .total-card .value { font-family: var(--fd); font-size: clamp(34px, 5vw, 46px); color: var(--white); font-weight: 800; line-height: 1.1; }
+  .total-card .per-unit { font-size: 13px; color: var(--green); margin-top: 6px; font-family: var(--fm); }
+  .total-card .compare { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--tx-mid); padding: 6px 12px; background: rgba(255,255,255,.04); border-radius: 8px; }
+  .total-card .compare strong { color: var(--green); }
+
+  .breakdown { margin-top: 18px; padding: 18px 20px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 12px; }
+  .breakdown h3 { font-family: var(--fd); font-size: 16px; color: var(--white); margin: 0 0 12px; }
+  .bd-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .bd-table td { padding: 8px 4px; border-bottom: 1px dashed #222; }
+  .bd-table td.lbl { color: var(--tx-mid); }
+  .bd-table td.val { text-align: right; font-family: var(--fm); color: var(--white); font-weight: 700; }
+  .bd-table tr.sub td { padding-left: 16px; color: var(--tx-lt); font-size: 12px; }
+  .bd-table tr.sub td.val { color: var(--tx-mid); }
+  .bd-table tr.total td { padding-top: 12px; font-weight: 800; color: var(--white); font-size: 14px; border-bottom: 0; border-top: 1px solid var(--border); }
+  .bd-table tr.total td.val { color: var(--gold); }
+
+  .fta-card { margin-top: 14px; padding: 14px 18px; background: rgba(21,215,138,.06); border: 1px solid rgba(21,215,138,.2); border-radius: 10px; font-size: 13px; color: var(--tx-mid); line-height: 1.65; }
+  .fta-card strong { color: var(--green); }
+  .fta-card.no-fta { background: rgba(255,255,255,.04); border-color: var(--border); }
+  .fta-card.no-fta strong { color: var(--tx-mid); }
+
+  .share-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+  .share-url { flex: 1; min-width: 200px; padding: 10px 12px; background: #0d0d0d; border: 1px solid var(--border); border-radius: 8px; color: var(--green); font-family: var(--fm); font-size: 12px; }
+  .share-msg { font-size: 12px; color: var(--green); }
+  .share-msg.show { animation: fadeOut 2s forwards; }
+  @keyframes fadeOut { 0%,40% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Sections beneath calc */
+  .section { padding: 2.4rem 0; border-bottom: 1px solid #1e1e1e; }
+  .section:last-of-type { border-bottom: 0; }
+  .section h2 { font-family: var(--fd); font-size: 26px; font-weight: 800; color: var(--white); margin: 0 0 .4rem; }
+  .section .sub { font-size: 13px; color: var(--tx-lt); letter-spacing: .04em; margin-bottom: 1.4rem; }
+
+  /* HowTo steps */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 1rem; }
+  .step { padding: 16px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; }
+  .step .n { font-family: var(--fm); font-size: 11px; color: var(--green); font-weight: 700; margin-bottom: 6px; letter-spacing: .08em; }
+  .step h4 { font-family: var(--fd); font-size: 14px; color: var(--white); margin: 0 0 6px; }
+  .step p { font-size: 12.5px; color: var(--tx-mid); margin: 0; line-height: 1.6; }
+
+  /* FAQ */
+  .faq details { padding: 14px 18px; border: 1px solid var(--border); background: var(--bg-2); border-radius: 10px; margin-bottom: 8px; }
+  .faq summary { cursor: pointer; font-weight: 700; color: var(--white); font-size: 14px; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-size: 22px; font-weight: 400; color: var(--gold); transition: transform .2s; flex-shrink: 0; }
+  .faq details[open] summary::after { content: "−"; }
+  .faq details p { margin: 12px 0 0; font-size: 13.5px; color: var(--tx-mid); line-height: 1.7; }
+
+  /* CTA cluster */
+  .cta-cluster { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 1.4rem; }
+  .cta-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 18px 20px; border: 1px solid var(--gold); background: linear-gradient(160deg, #181410 0%, #121010 100%); border-radius: 12px; text-decoration: none; transition: background .18s, transform .18s; }
+  .cta-tile:hover { background: linear-gradient(160deg, #221a12 0%, #181210 100%); transform: translateY(-2px); text-decoration: none; }
+  .cta-tile .ct-name { font-family: var(--fd); font-size: 15px; font-weight: 800; color: var(--white); }
+  .cta-tile .ct-desc { font-size: 12px; color: var(--tx-mid); }
+  .cta-tile .ct-arr { font-size: 12px; color: var(--gold); font-weight: 700; letter-spacing: .04em; margin-top: 4px; }
+
+  /* Cross-tool nudges (SEO ⑥) */
+  .nudge-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 1.2rem; }
+  .nudge { padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; font-size: 13px; color: var(--tx-mid); }
+  .nudge a { color: var(--gold); font-weight: 700; }
+  .nudge .h { display: block; color: var(--white); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+
+  .fine { font-size: 12px; color: var(--tx-lt); line-height: 1.65; margin-top: 1.6rem; padding: 14px 18px; background: #0d0d0d; border-radius: 10px; border-left: 3px solid var(--gold); }
+
+  .err { padding: 12px 16px; background: rgba(224,106,106,.08); border: 1px solid #5a2a2a; border-radius: 8px; color: #e06a6a; font-size: 13px; margin-top: 12px; }
+
+  .loading { color: var(--tx-lt); font-size: 13px; padding: 18px; text-align: center; font-family: var(--fm); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="back" href="tools.html">← Free Tools</a>
+
+  <header class="hero">
+    <span class="tag">Free · No Signup</span>
+    <h1>Korea Landed Cost Calculator</h1>
+    <p class="lead">
+      Estimate <strong>FOB → CIF landed cost</strong> from any of the 14 Korean ports to 14 destination countries.
+      Includes FTA-applied tariff, ocean/air freight, VAT, and customs processing fees.
+      Built and maintained by <strong>ERGSN's trade desk</strong> from public indices and operational quotes.
+    </p>
+  </header>
+
+  <!-- Calculator -->
+  <div class="calc" id="calc">
+    <div id="calcLoading" class="loading">Loading rate tables…</div>
+    <div id="calcForm" style="display: none;">
+
+      <div class="calc-grid">
+        <div class="field">
+          <label for="hsCode">HS Code (HS6)</label>
+          <input list="hsCodeList" id="hsCode" placeholder="e.g. 3304.99 — Korean cosmetics" autocomplete="off">
+          <datalist id="hsCodeList">
+            <!-- K-Beauty -->
+            <option value="3304.99">Other beauty/skin-care preparations (K-Beauty)</option>
+            <option value="3304.91">Powders (face/eye, K-Beauty)</option>
+            <option value="3304.10">Lip make-up (K-Beauty)</option>
+            <option value="3304.20">Eye make-up (K-Beauty)</option>
+            <option value="3305.10">Shampoos (K-Beauty)</option>
+            <option value="3307.49">Other perfumery / room (K-Beauty)</option>
+            <option value="3401.30">Skin wash organic surface-active (K-Beauty)</option>
+            <!-- K-Bio -->
+            <option value="2106.90">Food preparations incl HFF (K-Bio)</option>
+            <option value="3004.20">Antibiotic medicaments (K-Bio)</option>
+            <option value="3001.20">Extracts of glands (K-Bio)</option>
+            <option value="1302.19">Vegetable saps & extracts (K-Bio)</option>
+            <option value="3001.90">Organotherapeutic substances (K-Bio)</option>
+            <!-- K-Tech -->
+            <option value="8517.62">Machines for receiving/transmitting (K-Tech)</option>
+            <option value="8528.72">Color TV reception apparatus (K-Tech)</option>
+            <option value="9006.10">Cameras for prepress plates (K-Tech)</option>
+            <option value="8543.70">Other electrical machines (K-Tech)</option>
+            <option value="8525.81">Transmission apparatus (K-Tech)</option>
+            <!-- K-Energy -->
+            <option value="8507.60">Lithium-ion batteries (K-Energy)</option>
+            <option value="8541.43">Photovoltaic cells (K-Energy)</option>
+            <option value="8504.40">Static converters (K-Energy)</option>
+            <option value="8507.80">Other batteries (K-Energy)</option>
+            <option value="8501.62">AC generators 75-375kVA (K-Energy)</option>
+            <!-- K-Security -->
+            <option value="8472.90">Office machines incl shredders (K-Security)</option>
+            <option value="8531.10">Burglar/fire alarm apparatus (K-Security)</option>
+            <option value="8525.80">TV cameras incl IP cams (K-Security)</option>
+            <option value="9022.19">X-ray equipment (K-Security)</option>
+            <!-- K-Smart Living -->
+            <option value="8516.50">Microwave ovens (K-Smart Living)</option>
+            <option value="8418.10">Combined refrigerator-freezers (K-Smart Living)</option>
+            <option value="8450.20">Washing machines &gt;10kg (K-Smart Living)</option>
+            <!-- K-Culture Goods -->
+            <option value="6204.43">Women's dresses synthetic (K-Culture Goods)</option>
+            <option value="6911.10">Porcelain tableware (K-Culture Goods)</option>
+            <option value="4823.90">Paper goods other (K-Culture Goods)</option>
+            <option value="9505.90">Festive articles other (K-Culture Goods)</option>
+            <!-- K-Franchise -->
+            <option value="0902.30">Black tea (K-Franchise)</option>
+            <option value="1905.31">Sweet biscuits (K-Franchise)</option>
+            <option value="2202.99">Non-alcoholic beverages other (K-Franchise)</option>
+          </datalist>
+          <div class="field-help">Type any HS6 — chapter-level FTA average applies if not in suggestions.</div>
+        </div>
+
+        <div class="field">
+          <label for="mode">Shipping Mode</label>
+          <select id="mode">
+            <option value="fcl-40hc">FCL · 40ft High Cube</option>
+            <option value="fcl-40">FCL · 40ft Standard</option>
+            <option value="fcl-20">FCL · 20ft Standard</option>
+            <option value="lcl">LCL · per CBM</option>
+            <option value="air">Air · per kg chargeable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc-grid">
+        <div class="field">
+          <label for="port">Origin (Korean Port)</label>
+          <select id="port"></select>
+          <div class="field-help">Sea ports use Busan canonical lane; non-BUS ports add ~5-12% feeder.</div>
+        </div>
+
+        <div class="field">
+          <label for="dest">Destination</label>
+          <select id="dest"></select>
+        </div>
+      </div>
+
+      <div class="calc-grid">
+        <div class="field">
+          <label for="fob">FOB Price (USD, total)</label>
+          <input type="number" id="fob" placeholder="e.g. 12000" min="0" step="0.01">
+        </div>
+
+        <div class="field">
+          <label for="qty">Quantity (units)</label>
+          <input type="number" id="qty" placeholder="e.g. 1000" min="1" step="1">
+        </div>
+      </div>
+
+      <div class="calc-grid" id="cargoFields">
+        <div class="field">
+          <label for="weight">Cargo Weight (kg)</label>
+          <input type="number" id="weight" placeholder="e.g. 800" min="0" step="0.1">
+        </div>
+
+        <div class="field">
+          <label for="volume">Volume (CBM)</label>
+          <input type="number" id="volume" placeholder="e.g. 4.5" min="0" step="0.01">
+          <div class="field-help">Required for LCL; for Air, used to compute volumetric weight.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-gold" id="calcBtn">Calculate Landed Cost</button>
+        <button class="btn btn-ghost" id="resetBtn">Reset</button>
+      </div>
+
+      <div id="errBox" class="err" style="display: none;"></div>
+
+      <div class="results empty" id="results">
+        <div class="total-card">
+          <div class="label">Estimated Total Landed Cost</div>
+          <div class="value" id="totalValue">—</div>
+          <div class="per-unit" id="perUnit"></div>
+          <div class="compare" id="compareBox" style="display: none;"></div>
+        </div>
+
+        <div class="fta-card" id="ftaCard"></div>
+
+        <div class="breakdown">
+          <h3>Cost Breakdown</h3>
+          <table class="bd-table" id="bdTable">
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="share-row">
+          <input class="share-url" id="shareUrl" readonly>
+          <button class="btn btn-ghost" id="shareBtn">Copy Link</button>
+          <span class="share-msg" id="shareMsg" style="display: none;">Copied ✓</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HowTo (visible mirror of JSON-LD) -->
+  <section class="section">
+    <h2>How It Works</h2>
+    <p class="sub">Six steps from FOB price to total landed cost.</p>
+
+    <div class="steps">
+      <div class="step"><div class="n">STEP 1</div><h4>Enter HS6 code</h4><p>Pick from ~40 common Korean export codes or type your own.</p></div>
+      <div class="step"><div class="n">STEP 2</div><h4>Origin + destination</h4><p>14 Korean ports (12 sea + 2 air) × 14 destinations.</p></div>
+      <div class="step"><div class="n">STEP 3</div><h4>FOB + cargo</h4><p>Enter FOB price, quantity, weight, and volume.</p></div>
+      <div class="step"><div class="n">STEP 4</div><h4>FTA vs MFN</h4><p>Calculator shows preferential rate alongside MFN baseline.</p></div>
+      <div class="step"><div class="n">STEP 5</div><h4>Total landed</h4><p>FOB + Freight + Insurance + Tariff + VAT + Customs.</p></div>
+      <div class="step"><div class="n">STEP 6</div><h4>Share or quote</h4><p>Copy share URL or open the RFQ for a real binding quote.</p></div>
+    </div>
+  </section>
+
+  <section class="section faq">
+    <h2>Frequently Asked</h2>
+    <p class="sub">Common questions about landed cost from Korea.</p>
+
+    <details>
+      <summary>What is FOB and how does it differ from CIF?</summary>
+      <p>FOB (Free On Board) is the price at which the seller delivers goods loaded onto the vessel at the named port — buyer pays freight + insurance from there. CIF (Cost, Insurance, Freight) bundles seller-paid freight + marine insurance into the price. Landed cost adds tariff, VAT, and customs fees on top of CIF.</p>
+    </details>
+
+    <details>
+      <summary>Is the KORUS FTA tariff really 0% for most products?</summary>
+      <p>Yes — ~95% of US tariff lines are duty-free for Korean-origin goods under KORUS, either immediately or staged-in by 2026. Notable carve-outs remain for some textiles and certain agricultural categories. Always verify your specific HS6 line with your customs broker.</p>
+    </details>
+
+    <details>
+      <summary>Why does the calculator only show Busan rates for ocean freight?</summary>
+      <p>Busan handles ~95% of Korea's container exports and is the canonical reference lane for published indices (FBX, Drewry WCI). Other Korean ports typically add 5-12% inland feeder cost. For non-Busan origins, request a real quote from your forwarder or ERGSN's trade team.</p>
+    </details>
+
+    <details>
+      <summary>How accurate are the freight rates?</summary>
+      <p>Rates are quarterly published averages (FBX + Drewry WCI), not real-time spot quotes. Ocean container rates moved 30-300% per quarter in 2024-2025. Use these numbers for planning only — request a real spot quote from ERGSN's trade desk before any binding decision.</p>
+    </details>
+
+    <details>
+      <summary>Does the calculator work for air cargo?</summary>
+      <p>Yes. Pick Incheon Airport (ICN) or Gimhae Airport (PUS-air) as origin and Air mode. Calculator uses chargeable weight = max(actual_kg, volume_cm3 / 6000). PUS-air rates apply +20% over ICN and only cover regional lanes (JP, VN, TH, ID, PH).</p>
+    </details>
+
+    <details>
+      <summary>Can I share my calculation with a colleague?</summary>
+      <p>Yes — every calculation generates a shareable URL with all inputs encoded as query parameters. Copy the URL to send the exact same scenario to anyone. Loading the URL re-runs the calculation instantly.</p>
+    </details>
+  </section>
+
+  <!-- Cross-tool nudges (SEO ⑥) -->
+  <section class="section">
+    <h2>Try Next</h2>
+    <p class="sub">Once you have a number, the next questions are usually HS code accuracy and certification.</p>
+
+    <div class="nudge-row">
+      <div class="nudge">
+        <span class="h">Already have a number?</span>
+        Lock the HS6 with <a href="export-docs.html" data-cta="next-export-docs">Export Documents AI</a> — it cross-checks duty rate + required certifications per destination.
+      </div>
+      <div class="nudge">
+        <span class="h">First-time Korea trade?</span>
+        Use <a href="escrow.html" data-cta="next-escrow">ERGSN Escrow Pilot</a> — 1% protected T/T settlement holds your payment until shipment confirms.
+      </div>
+      <div class="nudge">
+        <span class="h">Want to see makers live?</span>
+        Register for <a href="trade-mission.html" data-cta="next-trade-mission">Trade Mission Live</a> — quarterly 90-min broadcast, 5 verified Korean makers × 50+ buyers.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Need 1:1 Sourcing Help?</h2>
+    <p class="sub">The calculator answers the math. ERGSN's trade desk handles the rest.</p>
+
+    <div class="cta-cluster">
+      <a class="cta-tile" href="index.html#rfq" data-cta="rfq">
+        <span class="ct-name">Request a Real Quote</span>
+        <span class="ct-desc">2-step form · ERGSN trade team replies within 1 business day</span>
+        <span class="ct-arr">Open RFQ →</span>
+      </a>
+      <a class="cta-tile" href="index.html#match" data-cta="partner-match">
+        <span class="ct-name">Match with Verified Suppliers</span>
+        <span class="ct-desc">Country + industry → top-3 vetted Korean makers</span>
+        <span class="ct-arr">Open AI Match →</span>
+      </a>
+      <a class="cta-tile" href="https://t.me/ceodon" data-cta="sourcing-call" rel="noopener">
+        <span class="ct-name">Schedule a Sourcing Call</span>
+        <span class="ct-desc">Direct chat with ERGSN trade desk · Telegram</span>
+        <span class="ct-arr">Open Telegram →</span>
+      </a>
+    </div>
+
+    <p class="fine">
+      <strong>Estimates only.</strong> Calculations use quarterly average rates (FBX + Drewry WCI), chapter-level FTA averages, and operational ERGSN quotes — not real-time spot rates or product-specific HS6/HS8 tariff schedules. For binding pricing and rules-of-origin determination, work with your destination customs broker or request a real quote from ERGSN's trade team.
+    </p>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA = { ports: null, destinations: null, ftas: null, rates: null };
+
+  // -----------------------------------------------------------------------
+  // Boot — fetch the four data files in parallel, then render the form.
+  // -----------------------------------------------------------------------
+  function load() {
+    Promise.all([
+      fetch('data/ports.json').then(function (r) { return r.json(); }),
+      fetch('data/destinations.json').then(function (r) { return r.json(); }),
+      fetch('data/ftas.json').then(function (r) { return r.json(); }),
+      fetch('data/shipping-rates.json').then(function (r) { return r.json(); })
+    ]).then(function (j) {
+      DATA.ports        = j[0];
+      DATA.destinations = j[1];
+      DATA.ftas         = j[2];
+      DATA.rates        = j[3];
+      buildSelects();
+      attachHandlers();
+      restoreFromUrl();
+      document.getElementById('calcLoading').style.display = 'none';
+      document.getElementById('calcForm').style.display = '';
+    }).catch(function (err) {
+      var box = document.getElementById('calcLoading');
+      box.innerHTML = '<span style="color:#e06a6a">Could not load rate tables. Refresh, or contact ERGSN trade desk for a manual estimate.</span>';
+      console.error('[landed-cost] load failed', err);
+    });
+  }
+
+  function buildSelects() {
+    var portSel = document.getElementById('port');
+    DATA.ports.ports.forEach(function (p) {
+      var o = document.createElement('option');
+      o.value = p.code;
+      o.textContent = p.name_en + (p.type === 'air' ? ' (Air)' : '') + ' · ' + p.city;
+      portSel.appendChild(o);
+    });
+    portSel.value = 'BUS';
+
+    var destSel = document.getElementById('dest');
+    DATA.destinations.destinations.forEach(function (d) {
+      var o = document.createElement('option');
+      o.value = d.code;
+      o.textContent = d.name_en + ' (' + d.code + ')';
+      destSel.appendChild(o);
+    });
+    destSel.value = 'US';
+  }
+
+  function attachHandlers() {
+    document.getElementById('calcBtn').addEventListener('click', onCalculate);
+    document.getElementById('resetBtn').addEventListener('click', onReset);
+    document.getElementById('shareBtn').addEventListener('click', onShare);
+    // Re-render port dropdown hint when mode toggles between sea/air
+    document.getElementById('mode').addEventListener('change', onModeChange);
+  }
+
+  function onModeChange() {
+    var mode = document.getElementById('mode').value;
+    var portSel = document.getElementById('port');
+    if (mode === 'air' && (portSel.value !== 'ICN' && portSel.value !== 'PUS-air')) {
+      portSel.value = 'ICN';
+    } else if (mode !== 'air' && (portSel.value === 'ICN' || portSel.value === 'PUS-air')) {
+      portSel.value = 'BUS';
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Calculation
+  // -----------------------------------------------------------------------
+  function onCalculate() {
+    hideError();
+    var inputs = readInputs();
+    var v = validate(inputs);
+    if (v) { showError(v); return; }
+
+    var calc = compute(inputs);
+    if (!calc) { showError('Could not compute — rate not available for this port × destination × mode combination.'); return; }
+
+    render(inputs, calc);
+    syncShareUrl(inputs);
+    track('Tool Submit', { tool: 'landed-cost', dest: inputs.dest, mode: inputs.mode, fta_applied: !!calc.fta });
+  }
+
+  function readInputs() {
+    return {
+      hs:     (document.getElementById('hsCode').value || '').trim(),
+      port:   document.getElementById('port').value,
+      dest:   document.getElementById('dest').value,
+      fob:    parseFloat(document.getElementById('fob').value || '0'),
+      qty:    parseFloat(document.getElementById('qty').value || '0'),
+      weight: parseFloat(document.getElementById('weight').value || '0'),
+      volume: parseFloat(document.getElementById('volume').value || '0'),
+      mode:   document.getElementById('mode').value
+    };
+  }
+
+  function validate(i) {
+    if (!i.hs)  return 'Enter an HS6 code.';
+    if (i.fob <= 0) return 'Enter FOB price (must be > 0).';
+    if (i.qty <= 0) return 'Enter quantity (must be > 0).';
+    if (i.mode === 'lcl' && i.volume <= 0) return 'LCL requires cargo volume in CBM.';
+    if (i.mode === 'air' && i.weight <= 0) return 'Air mode requires cargo weight in kg.';
+    return null;
+  }
+
+  function compute(i) {
+    // 1) Freight lookup — canonical BUS for sea, ICN for air. Apply feeder/PUS-air adjustments.
+    var freight = lookupFreight(i);
+    if (freight === null) return null;
+
+    // 2) Insurance — 0.3% of (FOB + Freight), industry standard for marine cargo.
+    var insurance = (i.fob + freight) * 0.003;
+    var cif = i.fob + freight + insurance;
+
+    // 3) Tariff — best applicable FTA pref vs MFN baseline.
+    var ftaInfo = pickFta(i.hs, i.dest);
+    var prefRate = ftaInfo.fta ? ftaInfo.fta.avg_pref_rate_pct : ftaInfo.mfn;
+    var dutyPref = cif * prefRate / 100;
+    var dutyMfn  = cif * ftaInfo.mfn / 100;
+
+    // 4) VAT/GST — applied to (CIF + duty) per most destinations.
+    var dest = byCode(DATA.destinations.destinations, i.dest);
+    var vatPref = (cif + dutyPref) * dest.vat_pct / 100;
+    var vatMfn  = (cif + dutyMfn)  * dest.vat_pct / 100;
+
+    // 5) Customs processing fee — pct of CIF per destinations.json averages.
+    var customsFee = cif * dest.customs_fee_pct_avg / 100;
+
+    var totalPref = cif + dutyPref + vatPref + customsFee;
+    var totalMfn  = cif + dutyMfn  + vatMfn  + customsFee;
+
+    return {
+      freight: freight, insurance: insurance, cif: cif,
+      dutyPref: dutyPref, dutyMfn: dutyMfn, prefRate: prefRate, mfnRate: ftaInfo.mfn,
+      vatPref: vatPref, vatMfn: vatMfn, vatPct: dest.vat_pct,
+      customsFee: customsFee, customsPct: dest.customs_fee_pct_avg,
+      totalPref: totalPref, totalMfn: totalMfn,
+      fta: ftaInfo.fta, dest: dest
+    };
+  }
+
+  function lookupFreight(i) {
+    var rates = DATA.rates;
+    if (i.mode === 'air') {
+      var air = rates.air.rates.find(function (r) { return r.destination === i.dest; });
+      if (!air) return null;
+      var chargeable = Math.max(i.weight, (i.volume * 1000000) / 6000);
+      var perKg = air.per_kg;
+      if (i.port === 'PUS-air') perKg *= 1.2;
+      return chargeable * perKg;
+    }
+
+    if (i.mode === 'lcl') {
+      var lcl = rates.ocean_lcl.rates.find(function (r) { return r.destination === i.dest; });
+      if (!lcl) return null;
+      var feeder = (i.port === 'BUS') ? 1.0 : 1.08; // mid-range adjustment for non-BUS sea
+      return Math.max(i.volume, rates.ocean_lcl._minimum_chargeable_volume_cbm) * lcl.per_cbm * feeder;
+    }
+
+    // FCL
+    var fcl = rates.ocean_fcl.rates.find(function (r) { return r.destination === i.dest; });
+    if (!fcl) return null;
+    var sizeKey = ({ 'fcl-20': '20ft', 'fcl-40': '40ft', 'fcl-40hc': '40hc' })[i.mode];
+    if (!fcl[sizeKey]) return null;
+    var feederFcl = (i.port === 'BUS') ? 1.0 : 1.08;
+    return fcl[sizeKey] * feederFcl;
+  }
+
+  function pickFta(hs, dest) {
+    var ftas = DATA.ftas.ftas;
+    var applicable = ftas.filter(function (f) { return f.destinations.indexOf(dest) !== -1; });
+    if (applicable.length === 0) {
+      // Determine MFN baseline — use first matched destination's typical MFN rate, or fallback 5%
+      return { fta: null, mfn: estimateMfn(dest) };
+    }
+    // Pick best preferential rate (lowest)
+    applicable.sort(function (a, b) { return a.avg_pref_rate_pct - b.avg_pref_rate_pct; });
+    var best = applicable[0];
+    return { fta: best, mfn: best.avg_mfn_rate_pct };
+  }
+
+  function estimateMfn(dest) {
+    // Rough chapter-level fallback for non-FTA destinations
+    var byDest = { 'MX': 7.0, 'BR': 12.0, 'SA': 5.0, 'AE': 5.0 };
+    return byDest[dest] || 5.0;
+  }
+
+  function byCode(arr, code) {
+    return arr.find(function (x) { return x.code === code; });
+  }
+
+  // -----------------------------------------------------------------------
+  // Render
+  // -----------------------------------------------------------------------
+  function render(i, c) {
+    var results = document.getElementById('results');
+    results.classList.remove('empty');
+
+    document.getElementById('totalValue').textContent = fmt$(c.totalPref);
+
+    var perUnit = i.qty > 0 ? c.totalPref / i.qty : 0;
+    document.getElementById('perUnit').textContent = 'Per unit: ' + fmt$(perUnit) + ' (' + i.qty.toLocaleString() + ' units)';
+
+    var compareBox = document.getElementById('compareBox');
+    if (c.fta && c.totalMfn > c.totalPref) {
+      var saved = c.totalMfn - c.totalPref;
+      compareBox.style.display = '';
+      compareBox.innerHTML = 'FTA savings vs MFN baseline: <strong>' + fmt$(saved) + '</strong> (' + ((saved / c.totalMfn) * 100).toFixed(1) + '% lower)';
+    } else {
+      compareBox.style.display = 'none';
+    }
+
+    // FTA card
+    var ftaCard = document.getElementById('ftaCard');
+    if (c.fta) {
+      ftaCard.classList.remove('no-fta');
+      ftaCard.innerHTML = '<strong>' + escapeHTML(c.fta.id) + ' applies</strong> — ' + escapeHTML(c.fta.name) +
+        ' (in force ' + c.fta.in_force_year + '). ' + escapeHTML(c.fta.notes) +
+        ' &nbsp;·&nbsp; <em>Verify your specific HS6 line with destination broker.</em>';
+    } else {
+      ftaCard.classList.add('no-fta');
+      ftaCard.innerHTML = '<strong>No Korea FTA in force for ' + escapeHTML(c.dest.name_en) + '</strong> — MFN tariff applies. ' +
+        escapeHTML(DATA.ftas.no_fta.note);
+    }
+
+    // Breakdown table
+    var tbody = document.querySelector('#bdTable tbody');
+    tbody.innerHTML = '';
+    addRow(tbody, 'FOB Price',        fmt$(i.fob));
+    addRow(tbody, 'Freight (' + modeLabel(i.mode) + ')', fmt$(c.freight));
+    addRow(tbody, 'Insurance (0.3% of FOB+Freight)', fmt$(c.insurance));
+    addRow(tbody, 'CIF Value',        fmt$(c.cif));
+    addRow(tbody, 'Tariff @ ' + c.prefRate.toFixed(1) + '% ' + (c.fta ? '(' + c.fta.id + ' pref)' : '(MFN)'), fmt$(c.dutyPref));
+    if (c.fta && c.mfnRate !== c.prefRate) {
+      addRow(tbody, 'MFN baseline tariff @ ' + c.mfnRate.toFixed(1) + '% (for comparison)', fmt$(c.dutyMfn), true);
+    }
+    addRow(tbody, 'VAT/GST @ ' + c.vatPct.toFixed(0) + '% (' + escapeHTML(c.dest.vat_label) + ')', fmt$(c.vatPref));
+    addRow(tbody, 'Customs Processing Fee @ ' + c.customsPct.toFixed(2) + '%', fmt$(c.customsFee));
+    addTotal(tbody, 'Total Landed Cost (CIF + duties + VAT + customs)', fmt$(c.totalPref));
+
+    // Smooth scroll into view
+    setTimeout(function () { results.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+  }
+
+  function addRow(tbody, lbl, val, sub) {
+    var tr = document.createElement('tr');
+    if (sub) tr.className = 'sub';
+    var c1 = document.createElement('td'); c1.className = 'lbl'; c1.textContent = lbl;
+    var c2 = document.createElement('td'); c2.className = 'val'; c2.textContent = val;
+    tr.appendChild(c1); tr.appendChild(c2); tbody.appendChild(tr);
+  }
+  function addTotal(tbody, lbl, val) {
+    var tr = document.createElement('tr');
+    tr.className = 'total';
+    var c1 = document.createElement('td'); c1.className = 'lbl'; c1.textContent = lbl;
+    var c2 = document.createElement('td'); c2.className = 'val'; c2.textContent = val;
+    tr.appendChild(c1); tr.appendChild(c2); tbody.appendChild(tr);
+  }
+
+  function fmt$(n) {
+    if (!isFinite(n)) return '—';
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function modeLabel(m) {
+    return ({ 'fcl-20': 'FCL 20ft', 'fcl-40': 'FCL 40ft', 'fcl-40hc': 'FCL 40HC', 'lcl': 'LCL', 'air': 'Air' })[m] || m;
+  }
+  function escapeHTML(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // -----------------------------------------------------------------------
+  // Share URL — encodes inputs as querystring
+  // -----------------------------------------------------------------------
+  function syncShareUrl(i) {
+    var qs = new URLSearchParams();
+    qs.set('hs', i.hs); qs.set('port', i.port); qs.set('dest', i.dest);
+    qs.set('fob', i.fob); qs.set('qty', i.qty);
+    if (i.weight) qs.set('weight', i.weight);
+    if (i.volume) qs.set('volume', i.volume);
+    qs.set('mode', i.mode);
+    var url = location.origin + location.pathname + '?' + qs.toString();
+    document.getElementById('shareUrl').value = url;
+    history.replaceState(null, '', '?' + qs.toString());
+  }
+
+  function restoreFromUrl() {
+    var qs = new URLSearchParams(location.search);
+    if (!qs.has('hs')) return;
+    set('hsCode', qs.get('hs'));
+    set('port',   qs.get('port'));
+    set('dest',   qs.get('dest'));
+    set('fob',    qs.get('fob'));
+    set('qty',    qs.get('qty'));
+    set('weight', qs.get('weight'));
+    set('volume', qs.get('volume'));
+    set('mode',   qs.get('mode'));
+    setTimeout(onCalculate, 50);
+  }
+  function set(id, v) { if (v != null) document.getElementById(id).value = v; }
+
+  function onShare() {
+    var url = document.getElementById('shareUrl').value;
+    if (!url) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(showShareMsg);
+    } else {
+      var el = document.getElementById('shareUrl');
+      el.select(); document.execCommand('copy'); showShareMsg();
+    }
+    track('Tool CTA Click', { tool: 'landed-cost', cta: 'share-url' });
+  }
+  function showShareMsg() {
+    var msg = document.getElementById('shareMsg');
+    msg.style.display = ''; msg.classList.remove('show');
+    void msg.offsetWidth; // restart animation
+    msg.classList.add('show');
+    setTimeout(function () { msg.style.display = 'none'; }, 2000);
+  }
+
+  function onReset() {
+    document.getElementById('hsCode').value = '';
+    document.getElementById('fob').value = '';
+    document.getElementById('qty').value = '';
+    document.getElementById('weight').value = '';
+    document.getElementById('volume').value = '';
+    document.getElementById('port').value = 'BUS';
+    document.getElementById('dest').value = 'US';
+    document.getElementById('mode').value = 'fcl-40hc';
+    document.getElementById('results').classList.add('empty');
+    history.replaceState(null, '', location.pathname);
+  }
+
+  function showError(msg) {
+    var box = document.getElementById('errBox');
+    box.textContent = msg;
+    box.style.display = '';
+  }
+  function hideError() {
+    document.getElementById('errBox').style.display = 'none';
+  }
+
+  function track(name, props) {
+    if (window.plausible) window.plausible(name, { props: props });
+  }
+
+  // Plausible page-view event for the tool
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-cta]');
+    if (!el) return;
+    track('Tool CTA Click', { tool: 'landed-cost', cta: el.getAttribute('data-cta') });
+  });
+
+  if (window.plausible) {
+    window.plausible('Tool View', { props: { tool: 'landed-cost' } });
+  }
+
+  load();
+})();
+</script>
+
+<script defer src="scripts/header.js"></script>
+</body>
+</html>
