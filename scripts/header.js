@@ -65,10 +65,8 @@
     },
     {
       title: 'Solutions',
-      href: 'index.html#wanted',
+      href: 'buyers-healthcare.html',
       items: [
-        { href: 'index.html#wanted',       name: 'Wanted Board',           desc: 'Post a sourcing need · anonymous' },
-        { divider: true },
         { href: 'buyers-healthcare.html',  name: 'Healthcare Procurement', desc: 'HIPAA shredders · KFDA HFF · cleanroom' },
         { href: 'buyers-government.html',  name: 'Government Procurement', desc: 'GSA Schedule · Level-3 · ministerial' },
         { href: 'buyers-hospitality.html', name: 'Hospitality & Retail',   desc: 'K-Beauty · K-Bio wellness · duty-free' },
@@ -88,7 +86,6 @@
         { href: 'tools-landed-cost.html',    name: 'Landed Cost Calculator',              desc: '14 Korean ports → 14 destinations · FTA-applied' },
         { href: 'export-docs.html',          name: 'Export Documents AI',                 desc: 'HS code lookup · duty rates · 4 templates' },
         { divider: true },
-        { href: 'index.html#trend',          name: 'Trend Monthly',                       desc: 'Monthly Korea export intelligence' },
         { href: 'tracker.html',              name: 'RFQ Tracker',                         desc: 'Check status of submitted RFQ' }
       ]
     },
@@ -100,8 +97,10 @@
         { href: 'index.html#cases',      name: 'Case Studies',             desc: 'Real shipments · real buyers' },
         { href: 'index.html#verify',     name: 'Verification Process',     desc: '4-step partner qualification' },
         { href: 'verified-partner.html', name: 'Verified Partner Program', desc: 'Official badge & certificate of verification' },
+        { href: 'verified-certificate.html', name: 'Verified Certificate', desc: 'Downloadable certificate · per-partner credential' },
         { href: 'escrow.html',           name: 'Escrow Service',           desc: 'Protected T/T settlement · 1% pilot' },
-        { href: 'index.html#compliance', name: 'Compliance',               desc: 'HIPAA · GSA · DIN 66399' }
+        { href: 'index.html#compliance', name: 'Compliance',               desc: 'HIPAA · GSA · DIN 66399' },
+        { href: 'index.html#trend',      name: 'Trend Monthly',            desc: 'Monthly Korea export intelligence' }
       ]
     },
     {

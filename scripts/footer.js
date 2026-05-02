@@ -86,7 +86,6 @@
           '<div>' +
             '<p class="ef-col-title">Solutions</p>' +
             '<ul class="ef-links">' +
-              '<li><a href="index.html#wanted">Wanted Board</a></li>' +
               '<li><a href="buyers-healthcare.html">Healthcare Procurement</a></li>' +
               '<li><a href="buyers-government.html">Government Procurement</a></li>' +
               '<li><a href="buyers-hospitality.html">Hospitality &amp; Retail</a></li>' +
@@ -103,7 +102,6 @@
               '<li><a href="wanted-board.html">Buyer Wanted Board</a></li>' +
               '<li><a href="tools-landed-cost.html">Landed Cost Calculator</a></li>' +
               '<li><a href="export-docs.html">Export Documents AI</a></li>' +
-              '<li><a href="index.html#trend">Trend Monthly</a></li>' +
               '<li><a href="tracker.html">RFQ Tracker</a></li>' +
             '</ul>' +
           '</div>' +
@@ -114,8 +112,10 @@
               '<li><a href="index.html#cases">Case Studies</a></li>' +
               '<li><a href="index.html#verify">Verification Process</a></li>' +
               '<li><a href="verified-partner.html">Verified Partner Program</a></li>' +
+              '<li><a href="verified-certificate.html">Verified Certificate</a></li>' +
               '<li><a href="escrow.html">Escrow Service</a></li>' +
               '<li><a href="index.html#compliance">Compliance</a></li>' +
+              '<li><a href="index.html#trend">Trend Monthly</a></li>' +
             '</ul>' +
           '</div>' +
           '<div>' +
