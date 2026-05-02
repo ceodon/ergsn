@@ -79,7 +79,7 @@
       title: 'Tools',
       href: 'tools.html',
       items: [
-        { href: 'tools.html',                name: 'Tools Hub',              tag: 'Hub',  desc: '9 free tools · calculators · finders · templates · all in one place' },
+        { href: 'tools.html',                name: 'Tools Hub (8 Free)',     tag: 'Hub',  desc: '8 free tools · calculators · finders · templates · all in one place' },
         { divider: true },
         { href: 'quote-calculator.html',     name: 'Quote Calculator',                    desc: 'Instant CIF/FOB estimate · 5 K-sectors' },
         { href: 'ai-partner-match.html',     name: 'AI Partner Match',                    desc: 'Country + industry → Top-3 verified makers' },
