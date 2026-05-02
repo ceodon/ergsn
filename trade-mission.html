@@ -62,7 +62,7 @@
 
 <style>
   :root {
-    --gold: #c8932a; --green: #15d78a; --navy: #0a1830;
+    --gold: #34d298; --green: #15d78a; --navy: #0a1830;
     --white: #fff; --tx-hi: #f0f0f0; --tx-mid: #cfcfcf; --tx-lt: #8b8b8b;
     --bg: #0a0a0a; --bg-2: #141414; --border: #2a2a2a;
     --fd: 'DM Serif Display', 'Times New Roman', serif;
@@ -75,7 +75,7 @@
   .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem clamp(16px,4vw,48px) 4rem; }
   .back { display: inline-flex; gap: 6px; color: var(--tx-lt); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1rem; }
   .hero { text-align: center; padding: 2rem 0 3rem; border-bottom: 1px solid #1e1e1e; margin-bottom: 2.6rem; }
-  .tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(200,147,42,.12); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border-radius: 20px; margin-bottom: 1.4rem; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(52,210,152,.12); color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border-radius: 20px; margin-bottom: 1.4rem; }
   .tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.6s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
   h1 { font-family: var(--fd); font-size: clamp(40px, 6vw, 64px); font-weight: 800; color: var(--white); line-height: 1.08; margin: 0 0 1rem; letter-spacing: -.02em; }
@@ -119,11 +119,11 @@
   .archive-card .info { font-size: 12px; color: var(--tx-lt); margin-top: 8px; }
   .status-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
   .status-pill.upcoming { background: rgba(21,215,138,.15); color: var(--green); }
-  .status-pill.scheduled { background: rgba(200,147,42,.15); color: var(--gold); }
+  .status-pill.scheduled { background: rgba(52,210,152,.15); color: var(--gold); }
   .toast { position: fixed; top: 72px; right: 20px; background: #1a1a1a; border: 1px solid var(--green); border-left: 3px solid var(--green); color: var(--white); padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateX(120%); transition: transform .3s; z-index: 1000; max-width: 320px; }
   .toast.show { transform: translateX(0); }
   .ergsn-back-bottom{display:block;margin:3rem 0 0;padding-top:2rem;border-top:1px dashed #2a2a2a;font-family:var(--fb,system-ui,sans-serif);font-size:12px;font-weight:600;color:var(--tx-lt,#8b8b8b);letter-spacing:.06em;text-align:right;text-transform:uppercase;text-decoration:none}
-  .ergsn-back-bottom:hover{color:var(--gold,#c8932a)}
+  .ergsn-back-bottom:hover{color:var(--gold,#34d298)}
   @media print{.ergsn-back-bottom{display:none}}
 </style>
 </head>
@@ -253,7 +253,7 @@
     <h2 style="font-size: 22px;">Other Free Korea Trade Tools</h2>
     <p style="font-size: 13px; color: var(--tx-lt); letter-spacing: .04em; margin-bottom: 1rem;">All five tools live in one hub — built and maintained by ERGSN's trade desk.</p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 1rem;">
-      <a href="tools.html" data-cta="next-tools-hub" style="display: block; padding: 14px 18px; background: linear-gradient(160deg, #181410 0%, #121010 100%); border: 1px solid var(--gold); border-radius: 10px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: none;">Tools Hub &rarr;</a>
+      <a href="tools.html" data-cta="next-tools-hub" style="display: block; padding: 14px 18px; background: rgba(52,210,152,.06); border: 1px solid var(--gold); border-radius: 10px; color: var(--gold); font-weight: 700; font-size: 13px; text-decoration: none;">Tools Hub &rarr;</a>
       <a href="tools-landed-cost.html" data-cta="next-landed-cost" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">Landed Cost Calculator &rarr;</strong>14 Korean ports × 14 destinations</a>
       <a href="export-docs.html" data-cta="next-export-docs" style="display: block; padding: 14px 18px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; color: var(--tx-mid); font-size: 13px; text-decoration: none;"><strong style="display:block;color:var(--white);margin-bottom:3px;">Export Documents AI &rarr;</strong>HS lookup · cert checker · 4 templates</a>
     </div>
