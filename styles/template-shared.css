@@ -26,12 +26,23 @@
   }
   /* Hide the brand-image when no logo uploaded (no .show class) */
   .brand-image:not(.show) { display: none !important; }
-  .brand-input, .brand-sub-input {
-    background: transparent !important;
+  /* Force all inputs to drop native appearance — some Chrome builds render
+     <input> as a filled rectangle in print despite background:transparent.
+     appearance:none + explicit white background eliminates the dark box. */
+  input, textarea {
+    background: #fff !important;
     border: 0 !important;
+    border-bottom: .5px dotted #999 !important;
     -webkit-appearance: none !important;
     appearance: none !important;
+    color: #111 !important;
+    -moz-appearance: none !important;
   }
+  /* Restore the table-cell input look (no bottom border inside table rows) */
+  .doc table.lines input { border-bottom: 0 !important; }
+  /* Hide the bottom attribution + its dotted border (common source of a faint
+     line that some users perceive as a thicker band). */
+  .doc .print-attr { display: none !important; }
   /* Brand controls — never show in print */
   .brand-customize-hint, .brand-input, .brand-sub-input {
     /* keep their value visible but strip input affordances */
