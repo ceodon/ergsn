@@ -35,10 +35,9 @@
 
 /* ── RESET ───────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-/* Anchor navigation (top menu · footer · in-page hashes) jumps instantly
-   to keep long-distance nav snappy. Intentional smooth scrolls still
-   work via JS scrollIntoView({ behavior:'smooth' }) for UX flows like
-   "Request Quote", side-dot nav, and Compare modal transitions. */
+/* All scrolls are instant — anchors, Top FAB, RFQ jumps, results panels.
+   No `behavior:'smooth'` anywhere; no `scroll-behavior:smooth` CSS rule.
+   User preference: snappy navigation across menu · Top FAB · in-page hashes. */
 html { font-size: 16px; overflow-x: hidden; }
 body { font-family: var(--fb); color: var(--tx-dark); background: var(--navy); overflow-x: hidden; width: 100%; max-width: 100vw; }
 a { text-decoration: none; }

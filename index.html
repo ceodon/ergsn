@@ -1254,7 +1254,7 @@
             <li>Auto-fill RFQ from match results</li>
             <li>Access to Wanted Board &amp; Q&amp;A Wall</li>
           </ul>
-          <button type="button" class="btn btn-outline" onclick="document.getElementById('matchForm').scrollIntoView({behavior:'smooth',block:'center'})">Use AI Match &rarr;</button>
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('matchForm').scrollIntoView({block:'center'})">Use AI Match &rarr;</button>
         </div>
         <div class="concierge-tier concierge-tier-pro">
           <span class="ct-flag">Recommended</span>
@@ -2111,7 +2111,7 @@ function requestQuote(ids) {
   closeModal();
   closeCompareModal();
   setTimeout(() => {
-    document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('rfq').scrollIntoView();
   }, 120);
   return false;
 }
@@ -2364,7 +2364,7 @@ document.addEventListener('keydown', e => {
 /* ── Scroll progress + side dot nav ──── */
 function sideNavGo(id) {
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (el) el.scrollIntoView({ block: 'start' });
 }
 (function initScrollNav(){
   const bar = document.getElementById('scrollProgress');
@@ -2495,7 +2495,7 @@ function applyMatchToRFQ() {
   if (comingList) lines.push(``, `Interested in upcoming sector items:`, comingList);
   lines.push(``, `Please advise availability, lead times and indicative pricing.`);
   if (msgEl) msgEl.value = lines.join('\n');
-  document.getElementById('rfq').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('rfq').scrollIntoView({ block: 'start' });
 }
 
 document.addEventListener('DOMContentLoaded', function initPageWidgets(){
@@ -2510,7 +2510,7 @@ document.addEventListener('DOMContentLoaded', function initPageWidgets(){
     if (sector && typeof switchSector === 'function') {
       switchSector(sector);
       const el = document.getElementById('products');
-      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+      if (el) setTimeout(() => el.scrollIntoView({ block: 'start' }), 80);
     }
     /* Deep-link from standalone product detail pages:
        /?rfq=hanok-sopunghun,gujwa-share scrolls to #rfq, opens step 2,
@@ -2926,7 +2926,7 @@ function offerMatch(cat) {
   // When a maker (or curious buyer) clicks "I can supply this", jump to RFQ with context.
   const msg = document.getElementById('fMsg');
   if (msg) msg.value = `Responding to Wanted Board post: ${cat}`;
-  document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('rfq').scrollIntoView();
 }
 // Render once the DOM is in place.
 if (document.readyState === 'loading') {
@@ -4346,7 +4346,7 @@ function chatPrefillAndQuote() {
   resetRFQForm();
   toggleChat();
   setTimeout(() => {
-    document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('rfq').scrollIntoView();
     setTimeout(applyQuoteFields, 500);
   }, 150);
 }
@@ -4635,7 +4635,7 @@ function closeCompareOutside(ev) {
 }
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0 });
 }
 function updateBottomStack() {
   const btn = document.getElementById('toTop');
@@ -4998,7 +4998,7 @@ function calcToQuote() {
       if (port) document.getElementById('fPort').value = port;
     }
   }
-  document.getElementById('rfq').scrollIntoView({ behavior:'smooth' });
+  document.getElementById('rfq').scrollIntoView();
 }
 
 (function initCalc(){ onCalcSectorChange(); })();
@@ -5321,9 +5321,9 @@ function rfqNext() {
   if (!first || !last || !company || !email) { toast('Please fill all required contact fields.', 'warn'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Please enter a valid email address.', 'warn'); return; }
   rfqStepTo(2);
-  document.getElementById('rfqStep2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('rfqStep2').scrollIntoView({ block: 'start' });
 }
-function rfqBack() { rfqStepTo(1); document.getElementById('rfqStep1').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+function rfqBack() { rfqStepTo(1); document.getElementById('rfqStep1').scrollIntoView({ block: 'start' }); }
 
 function submitRFQ() {
   const v = (id) => document.getElementById(id).value.trim();

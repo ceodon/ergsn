@@ -38,7 +38,7 @@
 
     var btn = document.getElementById('ehToTop');
     if (!btn) return;
-    btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    btn.addEventListener('click', function () { window.scrollTo({ top: 0 }); });
 
     var ticking = false;
     var docRoot = document.documentElement;

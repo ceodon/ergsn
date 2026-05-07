@@ -731,7 +731,7 @@
     addTotal(tbody, 'Total Landed Cost (CIF + duties + VAT + customs)', fmt$(c.totalPref));
 
     // Smooth scroll into view
-    setTimeout(function () { results.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+    setTimeout(function () { results.scrollIntoView({ block: 'start' }); }, 100);
   }
 
   function addRow(tbody, lbl, val, sub) {

@@ -1341,7 +1341,7 @@ function chatPrefillAndQuote() {
   resetRFQForm();
   toggleChat();
   setTimeout(() => {
-    document.getElementById('rfq').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('rfq').scrollIntoView();
     setTimeout(applyQuoteFields, 500);
   }, 150);
 }
