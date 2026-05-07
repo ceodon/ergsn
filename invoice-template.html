@@ -57,14 +57,6 @@
 <body>
 
 
-<div class="tools">
-  <button class="tb" onclick="window.print()">Save as PDF</button>
-  <button class="tb ghost" type="button" onclick="document.getElementById('logoFile').click()" title="Upload company logo">📷 Logo</button>
-  <button class="tb ghost" type="button" onclick="resetBrand()" title="Reset brand to ERGSN" style="font-size:11px;padding:8px 12px">Reset</button>
-  <a class="tb ghost" href="export-docs.html">&larr; Export Docs</a>
-</div>
-<input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload(event)" style="display:none">
-
 <div class="doc">
   <div class="head">
     <div class="brand-block">
@@ -153,6 +145,14 @@
   <p class="print-attr">Template courtesy of ERGSN &mdash; <a href="https://ergsn.net/export-docs.html">ergsn.net/export-docs.html</a></p>
 </div>
 
+
+<div class="tools">
+  <button class="tb" onclick="window.print()">Save as PDF</button>
+  <button class="tb ghost" type="button" onclick="document.getElementById('logoFile').click()" title="Upload company logo">📷 Logo</button>
+  <button class="tb ghost" type="button" onclick="resetBrand()" title="Reset brand to ERGSN" style="font-size:11px;padding:8px 12px">Reset</button>
+  <a class="tb ghost" href="export-docs.html">&larr; Export Docs</a>
+</div>
+<input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload(event)" style="display:none">
 
 <script defer src="scripts/header.js"></script>
 <script defer src="scripts/template-tools.js"></script>
