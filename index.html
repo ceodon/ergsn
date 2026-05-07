@@ -2989,14 +2989,37 @@ function subscribeNewsletter(e) {
   toast('✓ Subscribed. Welcome to K-Trade Digest.');
 }
 
-/* ── PDF spec sheet (print-to-PDF) ───── */
+/* ── PDF spec sheet (print-to-PDF) ─────
+   Builds a dedicated #printSpecSheet container as a direct body child,
+   independent of the modal overlay (which has fixed positioning, backdrop
+   filter, and animations that confuse Chrome's print engine into emitting
+   repeated identical pages). The print container is constrained to 2 A4
+   pages max via CSS overflow:hidden + max-height. No toast — the native
+   print dialog is enough feedback, and the toast was visually overlapping
+   the PDF preview on mobile. */
 function printSpecSheet() {
-  toast('Opening print dialog — choose "Save as PDF" to download.');
+  const modal = document.getElementById('modalContent');
+  if (!modal) return;
+  // Remove any leftover sheet from a previous failed print
+  const stale = document.getElementById('printSpecSheet');
+  if (stale) stale.remove();
+  const sheet = document.createElement('div');
+  sheet.id = 'printSpecSheet';
+  sheet.innerHTML = modal.innerHTML;
+  // Strip non-printable parts: close X, footer (CTA + RFQ button), commercial strip
+  sheet.querySelectorAll('.modal-close, .modal-ft, .commercial-strip').forEach(el => el.remove());
+  document.body.appendChild(sheet);
   document.body.classList.add('printing-spec');
-  const cleanup = () => { document.body.classList.remove('printing-spec'); window.removeEventListener('afterprint', cleanup); };
+  const cleanup = () => {
+    document.body.classList.remove('printing-spec');
+    const s = document.getElementById('printSpecSheet');
+    if (s) s.remove();
+    window.removeEventListener('afterprint', cleanup);
+  };
   window.addEventListener('afterprint', cleanup);
-  setTimeout(() => window.print(), 400);
-  // Fallback cleanup in case afterprint doesn't fire
+  // Brief defer so the print container is fully painted before the dialog opens
+  setTimeout(() => window.print(), 100);
+  // Fallback cleanup in case afterprint never fires (some mobile browsers)
   setTimeout(cleanup, 30000);
 }
 

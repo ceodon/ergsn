@@ -1,9 +1,11 @@
 // ERGSN Service Worker — offline-first cache for slow/intermittent networks
-// Cache version bumped to v4 on 2026-04-25 to evict v3 cached copies of
-// index.html / partners-kr.html / partners-tourism.html which lacked the
-// Phase 2-C brand-mail dispatch (sendBrandEmail helpers + Promise.allSettled
-// extension). Stale v3 entries silently dropped the new fetch path.
-const CACHE = 'ergsn-v4';
+// Cache version bumped to v5 on 2026-05-08 to evict v4 cached copies of
+// index.html / app.css that still had the old print-from-modal CSS path
+// (which leaked the modal's fixed positioning into Chrome's print engine
+// and produced 20 repeated identical pages). The fix moves print to a
+// dedicated #printSpecSheet container, but only takes effect once the
+// fresh HTML/CSS are fetched — hence the cache bump.
+const CACHE = 'ergsn-v5';
 const CORE = [
   '/',
   '/index.html',
