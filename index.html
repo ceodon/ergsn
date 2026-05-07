@@ -2990,37 +2990,97 @@ function subscribeNewsletter(e) {
 }
 
 /* ── PDF spec sheet (print-to-PDF) ─────
-   Builds a dedicated #printSpecSheet container as a direct body child,
-   independent of the modal overlay (which has fixed positioning, backdrop
-   filter, and animations that confuse Chrome's print engine into emitting
-   repeated identical pages). The print container is constrained to 2 A4
-   pages max via CSS overflow:hidden + max-height. No toast — the native
-   print dialog is enough feedback, and the toast was visually overlapping
-   the PDF preview on mobile. */
+   Renders the spec sheet inside a hidden iframe with its OWN document and
+   inline CSS, then calls iframe.contentWindow.print(). This sidesteps the
+   parent page's @media print rules entirely — important for mobile Chrome,
+   whose PDF pipeline applies @media print rules inconsistently and was
+   leaking the modal overlay's fixed positioning into the printed output
+   (producing 19+ identical pages with the modal footer visible).
+   Because the iframe is a clean document with no inherited CSS, both
+   desktop and mobile produce a single 1–2 page result reliably. */
 function printSpecSheet() {
   const modal = document.getElementById('modalContent');
   if (!modal) return;
-  // Remove any leftover sheet from a previous failed print
-  const stale = document.getElementById('printSpecSheet');
-  if (stale) stale.remove();
-  const sheet = document.createElement('div');
-  sheet.id = 'printSpecSheet';
-  sheet.innerHTML = modal.innerHTML;
-  // Strip non-printable parts: close X, footer (CTA + RFQ button), commercial strip
-  sheet.querySelectorAll('.modal-close, .modal-ft, .commercial-strip').forEach(el => el.remove());
-  document.body.appendChild(sheet);
-  document.body.classList.add('printing-spec');
-  const cleanup = () => {
-    document.body.classList.remove('printing-spec');
-    const s = document.getElementById('printSpecSheet');
-    if (s) s.remove();
-    window.removeEventListener('afterprint', cleanup);
-  };
-  window.addEventListener('afterprint', cleanup);
-  // Brief defer so the print container is fully painted before the dialog opens
-  setTimeout(() => window.print(), 100);
-  // Fallback cleanup in case afterprint never fires (some mobile browsers)
-  setTimeout(cleanup, 30000);
+  const cloneRoot = modal.cloneNode(true);
+  cloneRoot.querySelectorAll('.modal-close, .modal-ft, .commercial-strip').forEach(el => el.remove());
+
+  const printCss = `
+    @page { size: A4 portrait; margin: 8mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000; background: #fff;
+      font-size: 8.5pt; line-height: 1.25;
+    }
+    body { max-height: 562mm; overflow: hidden; padding: 0; margin: 0; }
+
+    .modal-hd {
+      display: block; padding: 0 0 2mm; margin: 0 0 2mm;
+      border-bottom: 0.4mm solid #000;
+      page-break-after: avoid; break-after: avoid;
+    }
+    .modal-hd-text { display: block; }
+    .modal-close { display: none; }
+    .modal-model { font-size: 17pt; line-height: 1; letter-spacing: .02em; font-weight: 800; }
+    .modal-sub { font-size: 9pt; margin: 1mm 0 0; color: #333; }
+    .modal-part { font-size: 7pt; color: #666; margin: 0.8mm 0 0; letter-spacing: .06em; }
+
+    .modal-image-row {
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 0 2mm; max-height: 38mm; overflow: hidden;
+      border: 0.3mm solid #ddd;
+      page-break-inside: avoid; break-inside: avoid;
+    }
+    .modal-image-row img { max-height: 36mm; max-width: 70%; object-fit: contain; display: block; margin: 0 auto; }
+    .modal-image-row.modal-svg-row { background: #fff; }
+    .modal-image-row.modal-svg-row svg { height: 34mm; width: auto; max-width: 70%; display: block; margin: 0 auto; }
+
+    .modal-bd { display: grid; grid-template-columns: 1.05fr 1fr; gap: 3mm; margin: 0; padding: 0; }
+    .modal-bd > div { min-width: 0; }
+    .modal-sec-title {
+      font-size: 8pt; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .04em;
+      margin: 0 0 1mm; padding: 0 0 0.6mm;
+      border-bottom: 0.3mm solid #000; color: #000;
+      page-break-after: avoid; break-after: avoid;
+    }
+
+    .spec-tbl { width: 100%; border-collapse: collapse; font-size: 7.5pt; line-height: 1.2; }
+    .spec-tbl tr { border: 0; page-break-inside: avoid; break-inside: avoid; }
+    .spec-tbl td { padding: 0.5mm 1mm; border-bottom: 0.25mm solid #ccc; vertical-align: top; }
+    .spec-tbl td:first-child { color: #333; width: 44%; font-weight: 500; }
+
+    .feat-list { margin: 0; padding: 0 0 0 3.5mm; font-size: 7.5pt; list-style: disc; line-height: 1.25; }
+    .feat-list li { margin: 0 0 0.7mm; padding: 0; page-break-inside: avoid; break-inside: avoid; }
+    .feat-list li::before { content: none; display: none; }
+
+    .modal-desc-row { margin: 2mm 0 0; padding: 1.5mm 0 0; border-top: 0.3mm solid #888; }
+    .modal-desc { font-size: 7.5pt; line-height: 1.35; color: #222; margin: 1mm 0 0; text-align: justify; orphans: 3; widows: 3; }
+  `;
+
+  const baseHref = location.origin + '/';
+  const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><base href="' + baseHref + '"><title>Spec Sheet</title><style>' + printCss + '</style></head><body>' + cloneRoot.innerHTML + '</body></html>';
+
+  // Drop any leftover iframe from a previous attempt
+  document.querySelectorAll('iframe[data-spec-print]').forEach(f => f.remove());
+
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('data-spec-print', '');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;border:0;visibility:hidden;';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+
+  // 800 ms gives mobile Chrome time to decode the product image before the
+  // print snapshot is taken; otherwise the image area renders as a blank box.
+  setTimeout(function () {
+    try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch (_) {}
+  }, 800);
+  // Cleanup the iframe well after the dialog has had time to capture its
+  // contents. Removing too early on Android closes the dialog mid-render.
+  setTimeout(function () { try { iframe.remove(); } catch (_) {} }, 30000);
 }
 
 /* ── Lazy init deferred sections ────── */

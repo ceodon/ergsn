@@ -1,11 +1,12 @@
 // ERGSN Service Worker — offline-first cache for slow/intermittent networks
-// Cache version bumped to v5 on 2026-05-08 to evict v4 cached copies of
-// index.html / app.css that still had the old print-from-modal CSS path
-// (which leaked the modal's fixed positioning into Chrome's print engine
-// and produced 20 repeated identical pages). The fix moves print to a
-// dedicated #printSpecSheet container, but only takes effect once the
-// fresh HTML/CSS are fetched — hence the cache bump.
-const CACHE = 'ergsn-v5';
+// Cache version bumped to v6 on 2026-05-08 to evict v5 cached copies on
+// mobile browsers where the v5 attempt (in-document #printSpecSheet +
+// @media print) still produced 19 repeated pages — mobile Chrome's PDF
+// pipeline applies @media print rules unreliably. v6 ships an iframe-
+// based print path (index.html printSpecSheet) that doesn't depend on
+// @media print at all; the cache bump is required so mobile users with
+// stale v5 SWs immediately fetch the new HTML/JS.
+const CACHE = 'ergsn-v6';
 const CORE = [
   '/',
   '/index.html',
