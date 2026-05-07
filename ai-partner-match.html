@@ -3,12 +3,8 @@
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-
-<link rel="dns-prefetch" href="//plausible.io">
-<link rel="preconnect" href="https://plausible.io" crossorigin>
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 
 <title>AI Partner Match — Find Verified Korean Suppliers in 60 Seconds | ERGSN</title>
 <link rel="canonical" href="https://ergsn.net/ai-partner-match.html">
@@ -390,13 +386,11 @@ function applyMatchToRFQ() {
   if (m.industry) qs.set('industry', m.industry);
   if (m.scale)    qs.set('volume', m.scale);
   if (m.ranked && m.ranked[0]) qs.set('match', m.ranked.map(function(r){return r.id;}).join(','));
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'ai-partner-match', cta: 'rfq-handoff' } });
   window.location.href = 'index.html?' + qs.toString() + '#rfq';
 }
 
 /* Override expressConciergeInterest — on standalone page, hand off to RFQ with concierge flag */
 function expressConciergeInterest() {
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'ai-partner-match', cta: 'concierge-interest' } });
   window.location.href = 'index.html?intent=concierge-tier-2#rfq';
 }
 
@@ -421,12 +415,6 @@ function expressConciergeInterest() {
     select.appendChild(o);
   });
 })();
-
-document.addEventListener('click', function (e) {
-  var el = e.target.closest('[data-cta]'); if (!el) return;
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'ai-partner-match', cta: el.getAttribute('data-cta') } });
-});
-if (window.plausible) window.plausible('Tool View', { props: { tool: 'ai-partner-match' } });
 </script>
 
 <script defer src="scripts/header.js"></script>

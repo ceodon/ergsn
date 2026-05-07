@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
-<!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
 <title>Free Korea Trade Tools — Landed Cost · HS Codes · Export Docs | ERGSN</title>
 <meta name="description" content="Free trade tools for sourcing from Korea — landed cost from 14 ports, HS code lookup, export document templates, escrow service, trade mission. No signup required.">
@@ -474,22 +472,6 @@
   </section>
 
 </div>
-
-<script>
-  // Plausible custom events for tool index — tracks which tool a user opens
-  // and which trade-desk CTA they choose. No PII captured.
-  document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-cta]');
-    if (!el) return;
-    var cta = el.getAttribute('data-cta');
-    if (window.plausible) {
-      window.plausible('Tool CTA Click', { props: { source: 'tools-index', cta: cta } });
-    }
-  });
-  if (window.plausible) {
-    window.plausible('Tool Index View', { props: { source: 'tools-index' } });
-  }
-</script>
 
 <script defer src="scripts/header.js"></script>
 </body>

@@ -30,7 +30,7 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== 'GET') return;
-  // Skip cross-origin (Telegram proxy, FormSubmit, Plausible, Google Fonts)
+  // Skip cross-origin (Telegram proxy, FormSubmit, Cloudflare Web Analytics, Google Fonts)
   if (url.origin !== location.origin) return;
 
   if (req.mode === 'navigate') {

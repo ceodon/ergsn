@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
-<!-- Plausible (rolling, unversioned) — SRI intentionally omitted; CSP script-src constrains to plausible.io. -->
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
 <title>Korea Landed Cost Calculator — FOB to CIF (14 Ports, Free) | ERGSN</title>
 <meta name="description" content="Calculate landed cost from any Korean port (Busan, Incheon, Pyeongtaek...) to 14 destination countries. Includes FTA-applied tariff, ocean/air freight, VAT, customs. Free, instant, no signup.">
@@ -573,7 +571,6 @@
 
     render(inputs, calc);
     syncShareUrl(inputs);
-    track('Tool Submit', { tool: 'landed-cost', dest: inputs.dest, mode: inputs.mode, fta_applied: !!calc.fta });
   }
 
   function readInputs() {
@@ -804,7 +801,6 @@
       var el = document.getElementById('shareUrl');
       el.select(); document.execCommand('copy'); showShareMsg();
     }
-    track('Tool CTA Click', { tool: 'landed-cost', cta: 'share-url' });
   }
   function showShareMsg() {
     var msg = document.getElementById('shareMsg');
@@ -834,21 +830,6 @@
   }
   function hideError() {
     document.getElementById('errBox').style.display = 'none';
-  }
-
-  function track(name, props) {
-    if (window.plausible) window.plausible(name, { props: props });
-  }
-
-  // Plausible page-view event for the tool
-  document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-cta]');
-    if (!el) return;
-    track('Tool CTA Click', { tool: 'landed-cost', cta: el.getAttribute('data-cta') });
-  });
-
-  if (window.plausible) {
-    window.plausible('Tool View', { props: { tool: 'landed-cost' } });
   }
 
   load();

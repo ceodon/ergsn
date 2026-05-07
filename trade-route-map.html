@@ -6,14 +6,10 @@
      PRIORITY 1 — Charset, viewport, security
      ════════════════════════════════════════════════════════════════════ -->
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
 
 <!-- PRIORITY 2 — Performance hints -->
-<link rel="dns-prefetch" href="//plausible.io">
-<link rel="preconnect" href="https://plausible.io" crossorigin>
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
-
 <!-- PRIORITY 3 — Title + canonical + description -->
 <title>Korea Trade Route Map — Seoul to 16 Global Ports (Busan, LA, Rotterdam) | ERGSN</title>
 <link rel="canonical" href="https://ergsn.net/trade-route-map.html">
@@ -326,14 +322,6 @@
     </p>
   </section>
 </div>
-
-<script>
-  document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-cta]'); if (!el) return;
-    if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'trade-route-map', cta: el.getAttribute('data-cta') } });
-  });
-  if (window.plausible) window.plausible('Tool View', { props: { tool: 'trade-route-map' } });
-</script>
 
 <script defer src="scripts/header.js"></script>
 </body>

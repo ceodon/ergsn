@@ -3,12 +3,8 @@
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-
-<link rel="dns-prefetch" href="//plausible.io">
-<link rel="preconnect" href="https://plausible.io" crossorigin>
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 
 <title>Korea Quote Calculator — Instant CIF/FOB Estimate (5 K-Sectors) | ERGSN</title>
 <link rel="canonical" href="https://ergsn.net/quote-calculator.html">
@@ -496,19 +492,11 @@ function calcToQuote() {
   if (terms)   qs.set('terms', terms);
   if (country) qs.set('country', country);
   if (port)    qs.set('port', port);
-  if (window.plausible) {
-    window.plausible('Tool CTA Click', { props: { tool: 'quote-calculator', cta: 'rfq-handoff' } });
-  }
   window.location.href = 'index.html?' + qs.toString() + '#rfq';
 }
 
 (function initCalc(){ onCalcSectorChange(); })();
 
-document.addEventListener('click', function (e) {
-  var el = e.target.closest('[data-cta]'); if (!el) return;
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'quote-calculator', cta: el.getAttribute('data-cta') } });
-});
-if (window.plausible) window.plausible('Tool View', { props: { tool: 'quote-calculator' } });
 </script>
 
 <script defer src="scripts/header.js"></script>

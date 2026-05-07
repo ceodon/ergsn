@@ -3,12 +3,8 @@
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://plausible.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co https://cool-meadow-ergsn-tg-655a.ceodon.workers.dev https://ergsn-rfq-tracker.ceodon.workers.dev https://ergsn-mail.ceodon.workers.dev https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none';">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, viewport-fit=cover">
-
-<link rel="dns-prefetch" href="//plausible.io">
-<link rel="preconnect" href="https://plausible.io" crossorigin>
-<script defer data-domain="ergsn.net" src="https://plausible.io/js/script.outbound-links.js" crossorigin="anonymous"></script>
 
 <title>Buyer Wanted Board — Anonymous Reverse RFQ for Korea Sourcing | ERGSN</title>
 <link rel="canonical" href="https://ergsn.net/wanted-board.html">
@@ -350,7 +346,6 @@ function openWantedForm() {
   ov.classList.add('open');
   ov.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'wanted-board', cta: 'open-form' } });
 }
 function closeWantedForm() {
   var ov = document.getElementById('wantedOverlay');
@@ -382,7 +377,6 @@ function submitWanted(e) {
   qs.set('timeline', timeline);
   if (detail) qs.set('detail', detail);
   qs.set('email', email);
-  if (window.plausible) window.plausible('Tool Submit', { props: { tool: 'wanted-board', industry: industry, country: country } });
   window.location.href = 'index.html?' + qs.toString() + '#rfq';
 }
 
@@ -391,11 +385,6 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') closeWantedForm();
 });
 
-document.addEventListener('click', function (e) {
-  var el = e.target.closest('[data-cta]'); if (!el) return;
-  if (window.plausible) window.plausible('Tool CTA Click', { props: { tool: 'wanted-board', cta: el.getAttribute('data-cta') } });
-});
-if (window.plausible) window.plausible('Tool View', { props: { tool: 'wanted-board' } });
 </script>
 
 <script defer src="scripts/header.js"></script>
