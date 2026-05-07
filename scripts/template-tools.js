@@ -92,4 +92,38 @@
   } else {
     applyBrand();
   }
+
+  /* ── Defensive print hide ──────────────────────────────────────
+     CSS-based @media print rules can fail to apply when the user's
+     browser is serving a stale cached copy of styles/template-shared.css
+     (CF edge cache, browser HTTP cache, or service worker pre-bump
+     window). Setting inline `style="display: none !important"` via JS
+     at beforeprint runs LIVE — no cache, no specificity escape. We
+     restore the original style attribute on afterprint so the page
+     remains interactive.
+     Targets: the public-chrome elements injected by header.js /
+     footer.js / chat.js / top-fab.js, plus our .tools toolbar. */
+  var PRINT_HIDE_SEL =
+    '.tools, #ehNav, #ergsnFooter, #ehToTop, #chatToggle, #chatPanel, ' +
+    '.wa-fab, .ergsn-back-top, .ergsn-back-bottom';
+
+  window.addEventListener('beforeprint', function () {
+    var nodes = document.querySelectorAll(PRINT_HIDE_SEL);
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      el.setAttribute('data-prev-style', el.getAttribute('style') || '');
+      el.style.setProperty('display', 'none', 'important');
+    }
+  });
+
+  window.addEventListener('afterprint', function () {
+    var nodes = document.querySelectorAll('[data-prev-style]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var prev = el.getAttribute('data-prev-style');
+      if (prev) { el.setAttribute('style', prev); }
+      else { el.removeAttribute('style'); }
+      el.removeAttribute('data-prev-style');
+    }
+  });
 })();
