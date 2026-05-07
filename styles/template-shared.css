@@ -3,10 +3,14 @@
    Loaded by invoice/proforma/packing-list/co templates.
    ───────────────────────────────────────────────────────────────── */
 
-/* ── Print: keep .doc inside A4 printable area (was overflowing) ─── */
+/* ── Print: keep .doc inside A4 printable area + hide body chrome ─── */
 @media print {
-  html { background: #fff !important; }
-  body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+  html, body {
+    background: #fff !important;
+    color-scheme: light !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
   .doc {
     box-shadow: none !important;
     width: 100% !important;
@@ -14,33 +18,20 @@
     margin: 0 !important;
     padding: 0 !important;
     background: #fff !important;
+    color: #111 !important;
   }
   /* Whitelist: hide every body child except .doc and inert tags. */
   body > *:not(.doc):not(script):not(style):not(link):not(noscript) {
     display: none !important;
   }
-  /* Aggressive reset INSIDE .doc — kill any unexpected dark backgrounds
-     that earlier reports showed bleeding into PC print preview as black
-     bars. We then re-apply the intentional dark elements (table header,
-     head bottom border) on top of this reset. */
-  .doc, .doc * {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  /* Hide the brand-image when no logo uploaded (no .show class) */
+  .brand-image:not(.show) { display: none !important; }
+  .brand-input, .brand-sub-input {
+    background: transparent !important;
+    border: 0 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
   }
-  /* Re-apply intentional dark accents */
-  .doc table.lines th {
-    background-color: #0a1830 !important;
-    color: #fff !important;
-  }
-  /* Hide the brand-image when no logo uploaded (.show class absent) */
-  .doc .brand-image:not(.show) { display: none !important; }
-  /* Hide hidden file input */
-  .doc #logoFile, body #logoFile { display: none !important; }
-  /* Remove any focus highlights */
-  .doc input:focus, .doc textarea:focus { background: transparent !important; }
   /* Brand controls — never show in print */
   .brand-customize-hint, .brand-input, .brand-sub-input {
     /* keep their value visible but strip input affordances */
