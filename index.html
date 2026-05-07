@@ -3003,6 +3003,18 @@ function printSpecSheet() {
   if (!modal) return;
   const cloneRoot = modal.cloneNode(true);
   cloneRoot.querySelectorAll('.modal-close, .modal-ft, .commercial-strip').forEach(el => el.remove());
+  // The product image uses loading="lazy" so it stays unloaded inside the
+  // off-screen iframe (which is positioned at left:-9999px and never enters
+  // any viewport). Strip the lazy attribute and convert relative src to an
+  // absolute URL so the image fetches eagerly inside the iframe document.
+  cloneRoot.querySelectorAll('img').forEach(function (img) {
+    img.removeAttribute('loading');
+    img.setAttribute('decoding', 'sync');
+    var src = img.getAttribute('src');
+    if (src && !/^(https?:|data:|blob:)/i.test(src)) {
+      img.setAttribute('src', new URL(src, location.origin + '/').href);
+    }
+  });
 
   const printCss = `
     @page { size: A4 portrait; margin: 8mm; }
@@ -3073,11 +3085,36 @@ function printSpecSheet() {
   const doc = iframe.contentWindow.document;
   doc.open(); doc.write(html); doc.close();
 
-  // 800 ms gives mobile Chrome time to decode the product image before the
-  // print snapshot is taken; otherwise the image area renders as a blank box.
-  setTimeout(function () {
+  // Wait for actual <img> load events before triggering print, so the
+  // image is fully decoded into the iframe document. Fixed-delay waits
+  // (the previous 800 ms) sometimes fired before slower images had
+  // finished fetching, leaving a blank image box in the PDF — most
+  // visibly on the 14 raster-image products (DL series, KT, Rosetta
+  // Plus, Option A–D). 3 s hard fallback so a missing image never
+  // blocks the print indefinitely.
+  var triggered = false;
+  function triggerPrint() {
+    if (triggered) return;
+    triggered = true;
     try { iframe.contentWindow.focus(); iframe.contentWindow.print(); } catch (_) {}
-  }, 800);
+  }
+  var imgs = doc.querySelectorAll('img');
+  if (imgs.length === 0) {
+    setTimeout(triggerPrint, 200);
+  } else {
+    var pending = imgs.length;
+    function onImg() { if (--pending <= 0) triggerPrint(); }
+    imgs.forEach(function (img) {
+      if (img.complete && img.naturalHeight > 0) {
+        onImg();
+      } else {
+        img.addEventListener('load', onImg, { once: true });
+        img.addEventListener('error', onImg, { once: true });
+      }
+    });
+  }
+  // Hard 3 s fallback in case some images never resolve (network failure)
+  setTimeout(triggerPrint, 3000);
   // Cleanup the iframe well after the dialog has had time to capture its
   // contents. Removing too early on Android closes the dialog mid-render.
   setTimeout(function () { try { iframe.remove(); } catch (_) {} }, 30000);
