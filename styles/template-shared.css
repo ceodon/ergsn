@@ -5,6 +5,7 @@
 
 /* ── Print: keep .doc inside A4 printable area (was overflowing) ─── */
 @media print {
+  html { background: #fff !important; }
   body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
   .doc {
     box-shadow: none !important;
@@ -13,19 +14,13 @@
     margin: 0 !important;
     padding: 0 !important;
   }
-  /* Hide every public-chrome element that scripts/header.js +
-     scripts/footer.js + scripts/chat.js + scripts/top-fab.js inject
-     into body. Without these, the injected dark <nav> and <footer>
-     bleed into the PDF as black bars at top/bottom of each page. */
-  #ehNav,
-  #ergsnFooter,
-  #ehToTop,
-  #chatToggle,
-  #chatPanel,
-  .wa-fab,
-  .tools,
-  .ergsn-back-top,
-  .ergsn-back-bottom { display: none !important; }
+  /* Whitelist: hide every body child except .doc and inert tags.
+     Earlier blacklist (#ehNav, #ergsnFooter, …) missed #ehMobileMenu
+     and any other element header.js / footer.js / chat.js inject —
+     missed elements rendered as dark bands at top/bottom of the PDF. */
+  body > *:not(.doc):not(script):not(style):not(link):not(noscript) {
+    display: none !important;
+  }
   /* Brand controls — never show in print */
   .brand-customize-hint, .brand-input, .brand-sub-input {
     /* keep their value visible but strip input affordances */

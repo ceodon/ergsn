@@ -53,15 +53,15 @@
   .print-attr { display: none; text-align: center; font-size: 6.5pt; color: #999; margin-top: 8mm; padding-top: 3mm; border-top: .3px dotted #ccc; font-family: inherit; }
   .print-attr a { color: #999; text-decoration: none; }
   @media print {
+    html, body { background: #fff !important; }
     .print-attr { display: block; }
     input, textarea { background: transparent !important; border-color: #ccc !important; }
-    #ehNav, #ergsnFooter, #ehToTop, #chatToggle, #chatPanel, .wa-fab,
-    .tools, .ergsn-back-top, .ergsn-back-bottom { display: none !important; }
+    body > *:not(.doc):not(script):not(style):not(link):not(noscript) { display: none !important; }
   }
   .ergsn-back-top{position:fixed;left:20px;top:20px;z-index:10;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(20,20,20,.92);color:#34d298!important;text-decoration:none!important;font-family:system-ui,-apple-system,sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;border:1px solid #2a2a2a;border-radius:8px;backdrop-filter:blur(6px)}
   .ergsn-back-top:hover{border-color:#34d298;background:#34d298;color:#0a0a0a!important}
 </style>
-<link rel="stylesheet" href="styles/template-shared.css?v=20260508">
+<link rel="stylesheet" href="styles/template-shared.css?v=20260508c">
 </head>
 <body>
 
@@ -177,6 +177,6 @@
 <input type="file" id="logoFile" accept="image/*" onchange="handleLogoUpload(event)" style="display:none">
 
 <script defer src="scripts/header.js"></script>
-<script defer src="scripts/template-tools.js?v=20260508"></script>
+<script defer src="scripts/template-tools.js?v=20260508c"></script>
 </body>
 </html>

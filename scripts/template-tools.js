@@ -93,24 +93,25 @@
     applyBrand();
   }
 
-  /* ── Defensive print hide ──────────────────────────────────────
-     CSS-based @media print rules can fail to apply when the user's
-     browser is serving a stale cached copy of styles/template-shared.css
-     (CF edge cache, browser HTTP cache, or service worker pre-bump
-     window). Setting inline `style="display: none !important"` via JS
-     at beforeprint runs LIVE — no cache, no specificity escape. We
-     restore the original style attribute on afterprint so the page
-     remains interactive.
-     Targets: the public-chrome elements injected by header.js /
-     footer.js / chat.js / top-fab.js, plus our .tools toolbar. */
-  var PRINT_HIDE_SEL =
-    '.tools, #ehNav, #ergsnFooter, #ehToTop, #chatToggle, #chatPanel, ' +
-    '.wa-fab, .ergsn-back-top, .ergsn-back-bottom';
+  /* ── Defensive print hide (whitelist) ─────────────────────────
+     Earlier versions targeted specific IDs like #ehNav / #ergsnFooter,
+     but header.js also injects #ehMobileMenu (and other scripts inject
+     more); a selector blacklist always misses something and the missed
+     element bleeds into print as a dark band. Switch to a WHITELIST:
+     hide every direct body child except .doc itself, plus inert tags
+     (script/style/link). Inline `display:none !important` beats every
+     cached CSS rule. Restored on afterprint. */
+  function isInert(el) {
+    var t = el.tagName;
+    return t === 'SCRIPT' || t === 'STYLE' || t === 'LINK' || t === 'NOSCRIPT';
+  }
 
   window.addEventListener('beforeprint', function () {
-    var nodes = document.querySelectorAll(PRINT_HIDE_SEL);
-    for (var i = 0; i < nodes.length; i++) {
-      var el = nodes[i];
+    var kids = document.body.children;
+    for (var i = 0; i < kids.length; i++) {
+      var el = kids[i];
+      if (isInert(el)) continue;
+      if (el.classList && el.classList.contains('doc')) continue;
       el.setAttribute('data-prev-style', el.getAttribute('style') || '');
       el.style.setProperty('display', 'none', 'important');
     }
