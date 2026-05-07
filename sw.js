@@ -6,7 +6,7 @@
 // based print path (index.html printSpecSheet) that doesn't depend on
 // @media print at all; the cache bump is required so mobile users with
 // stale v5 SWs immediately fetch the new HTML/JS.
-const CACHE = 'ergsn-v10';
+const CACHE = 'ergsn-v11';
 const CORE = [
   '/',
   '/index.html',
